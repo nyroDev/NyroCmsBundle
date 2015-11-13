@@ -23,6 +23,6 @@
     },
     "target-dir": "NyroDev/NyroCmsBundle",
     "autoload": {
-        "psr-4": { "NyroDev\\NyroCmsBundle": "" }
+        "psr-4": { "NyroDev\\NyroCmsBundle\\": "" }
     }
 }
