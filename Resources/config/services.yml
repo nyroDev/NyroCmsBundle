@@ -1,7 +1,15 @@
 parameters:
-    nyrodev_nyrocms.mainService.class: NyroDev\NyroCmsBundle\Services\MainService
+    nyrocms.mainService.class: NyroDev\NyroCmsBundle\Services\MainService
+    nyrocms.adminService.class: NyroDev\NyroCmsBundle\Services\AdminService
     
 services:
-    nyrodev_nyrocms:
-        class: %nyrodev_nyrocms.mainService.class%
+    nyrocms:
+        class: %nyrocms.mainService.class%
         arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrocms }
+    nyrocms_admin:
+        class: %nyrocms.adminService.class%
+        arguments: [@service_container]
+        tags:
+          - { name: templating.helper, alias: nyrocms_admin }

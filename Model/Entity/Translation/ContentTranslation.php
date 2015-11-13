@@ -1,6 +1,6 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Model\Entity\Log;
+namespace NyroDev\NyroCmsBundle\Model\Entity\Translation;
 
 use NyroDev\NyroCmsBundle\Model\ContentTranslation as ContentTranslationModel;
 

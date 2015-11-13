@@ -18,10 +18,10 @@ class NyroDevNyroCmsBundle extends Bundle
             realpath(__DIR__ . '/Resources/config/doctrine-mapping') => 'NyroDev\NyroCmsBundle\Model',
         );
         if (class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
-            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, array('nyrodev_nyrocms.model_manager_name')));
+            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, array('nyrocms.model_manager_name')));
         }
 		if (class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
-            $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, array('nyrodev_nyrocms.model_manager_name')));
+            $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, array('nyrocms.model_manager_name')));
         }
 	}
 

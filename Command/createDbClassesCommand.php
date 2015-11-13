@@ -10,9 +10,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
-/**
- * Symfony2 command to call every command requested to publish all needed files 
- */
 class createDbClassesCommand extends ContainerAwareCommand {
 	
 	/**
@@ -34,7 +31,7 @@ class createDbClassesCommand extends ContainerAwareCommand {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$force = $input->getOption('force');
 		
-		$db_driver = $this->getContainer()->getParameter('nyroDev_nyroCms.db_driver');
+		$db_driver = $this->getContainer()->getParameter('nyroCms.db_driver');
 		
 		$dirname = null;
 		switch($db_driver) {
@@ -46,7 +43,7 @@ class createDbClassesCommand extends ContainerAwareCommand {
 		if ($dirname) {
 			$sourceDir = realpath(__DIR__.'/../Model/'.$dirname);
 			$converter = new CamelCaseToSnakeCaseNameConverter();
-			$dbService = $this->getContainer()->get('nyrodev_nyrocms_db');
+			$dbService = $this->getContainer()->get('nyrocms_db');
 			$namespace = $dbService->getNamespace();
 			$originalNamespace = 'NyroDev\NyroCmsBundle\Model\\'.$dirname;
 			

@@ -19,8 +19,8 @@
 		<field name="valid" type="boolean" nullable="true" />
 		<field name="validStart" type="date" nullable="true" />
 		<field name="validEnd" type="date" nullable="true" />
-		<field name="passwordKey" type="string" nullable="false" />
-		<field name="passwordKeyEnd" type="datetime" nullable="false" />
+		<field name="passwordKey" type="string" nullable="true" />
+		<field name="passwordKeyEnd" type="datetime" nullable="true" />
 		<field name="inserted" type="datetime" nullable="false" />
 		<field name="updated" type="datetime" nullable="false" />
 		<field name="deleted" type="datetime" nullable="true" />

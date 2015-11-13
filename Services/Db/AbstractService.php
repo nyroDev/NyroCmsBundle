@@ -15,14 +15,14 @@ abstract class AbstractService extends AbstractServiceSrc {
 	}
 	
 	public function getNamespace() {
-		return $this->getParameter('nyroDev_nyroCms.model.namespace');
+		return $this->getParameter('nyroCms.model.namespace');
 	}
 	
 	public function getClass($name, $namespaced = true) {
 		$tmp = explode('\\', $name);
 		$converter = new \Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter();
 		$paramKey = $converter->normalize($tmp[count($tmp) - 1]);
-		return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyroDev_nyroCms.model.classes.'.$paramKey);
+		return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyroCms.model.classes.'.$paramKey);
 	}
 	
 	/**
@@ -67,6 +67,17 @@ abstract class AbstractService extends AbstractServiceSrc {
 	 */
 	public function getRepository($name) {
 		return $this->getObjectManager()->getRepository($this->getClass($name));
+	}
+	
+	public function getNew($name, $persist = true) {
+		$repo = $this->getRepository($name);
+		$classname = $repo->getClassName();
+		$new = new $classname();
+		
+		if ($persist)
+			$this->persist($new);
+		
+		return $new;
 	}
 	
 	public function persist($object) {

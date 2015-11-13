@@ -24,21 +24,23 @@ class NyroDevNyroCmsExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 		
 		// Transform config into parameters usable everywhere
-		$container->setParameter('nyroDev_nyroCms.db_driver', $config['db_driver']);
-		$container->setParameter('nyroDev_nyroCms.model_manager_name', $config['model_manager_name']);
-		$container->setParameter('nyroDev_nyroCms.model.namespace', $config['model']['namespace']);
+		$container->setParameter('nyroCms.db_driver', $config['db_driver']);
+		$container->setParameter('nyroCms.model_manager_name', $config['model_manager_name']);
+		$container->setParameter('nyroCms.model.namespace', $config['model']['namespace']);
 		foreach($config['model']['classes'] as $k=>$v)
-			$container->setParameter('nyroDev_nyroCms.model.classes.'.$k, $v);
+			$container->setParameter('nyroCms.model.classes.'.$k, $v);
+		
+		$container->setParameter('nyroCms.user_types', $config['user_types']);
 		
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('services_'.$config['db_driver'].'.yml');
 		
 		if ('orm' === $config['db_driver']) {
-			$managerService = 'nyroDev_nyrocms.entity_manager';
+			$managerService = 'nyrocms.entity_manager';
 			$doctrineService = 'doctrine';
 		} else {
-			$managerService = 'nyroDev_nyrocms.document_manager';
+			$managerService = 'nyrocms.document_manager';
 			$doctrineService = sprintf('doctrine_%s', $config['db_driver']);
 		}
 		$definition = $container->getDefinition($managerService);

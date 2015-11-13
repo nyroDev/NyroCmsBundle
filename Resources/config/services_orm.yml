@@ -1,10 +1,10 @@
 parameters:
-    nyrodev_nyrocms.ormDbService.class: NyroDev\NyroCmsBundle\Services\Db\OrmService
+    nyrocms.ormDbService.class: NyroDev\NyroCmsBundle\Services\Db\OrmService
     
 services:
-    nyrodev_nyrocms_db:
-        class: %nyrodev_nyrocms.ormDbService.class%
-        arguments: [@service_container, @nyroDev_nyroCms.entity_manager]
-    nyroDev_nyrocms.entity_manager:
+    nyrocms_db:
+        class: %nyrocms.ormDbService.class%
+        arguments: [@service_container, @nyroCms.entity_manager]
+    nyrocms.entity_manager:
         class: Doctrine\ORM\EntityManager
-        arguments: [%nyroDev_nyroCms.model_manager_name%]
+        arguments: [%nyroCms.model_manager_name%]

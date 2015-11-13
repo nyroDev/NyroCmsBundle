@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Content
  *
  * @ORM\Table(name="content")
+ * @Gedmo\Tree(type="nested")
  * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\ContentRepository")
  * @Gedmo\TranslationEntity(class="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentTranslation")
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentLog")
