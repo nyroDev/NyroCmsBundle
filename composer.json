@@ -19,7 +19,7 @@
         "nyrodev/utility-bundle": "dev-master"
     },
     "suggest": {
-        "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly",
+        "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly"
     },
     "target-dir": "NyroDev/NyroCmsBundle",
     "autoload": {
