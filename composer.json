@@ -1,0 +1,28 @@
+{
+    "name": "nyrodev/nyrocms-bundle",
+    "type": "symfony-bundle",
+    "description": "CMS Bundle for Symfony, provide all admin content handling and public controllers",
+    "homepage": "https://github.com/nyroDev/NyroCmsBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Cédric Nirousset",
+            "email": "cedric@nyrodev.com",
+            "homepage": "http://nyrodev.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "symfony/symfony": ">=2.6",
+		"stof/doctrine-extensions-bundle": "^1.2",
+        "nyrodev/utility-bundle": "dev-master"
+    },
+    "suggest": {
+        "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly",
+    },
+    "target-dir": "NyroDev/NyroCmsBundle",
+    "autoload": {
+        "psr-4": { "NyroDev\\NyroCmsBundle": "" }
+    }
+}

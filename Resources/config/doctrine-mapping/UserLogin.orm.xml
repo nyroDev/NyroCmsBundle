@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<mapped-superclass name="NyroDev\NyroCmsBundle\Model\UserLogin">
+		<id name="id" type="bigint" column="id">
+            <generator strategy="AUTO"/>
+			<options>
+				<option name="unsigned">true</option>
+			</options>
+        </id>
+		<field name="ipAddress" type="string" nullable="true" />
+		<field name="place" type="string" nullable="true" />
+		<field name="inserted" type="datetime" nullable="false" />
+		
+		<many-to-one field="user" target-entity="NyroDev\NyroCmsBundle\Model\User" nullable="true">
+			<join-column name="user_id" referenced-column-name="id" on-delete="CASCADE" on-update="CASCADE" />
+		</many-to-one>
+	</mapped-superclass>
+</doctrine-mapping>

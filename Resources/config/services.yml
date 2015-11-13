@@ -1,0 +1,7 @@
+parameters:
+    nyrodev_nyrocms.mainService.class: NyroDev\NyroCmsBundle\Services\MainService
+    
+services:
+    nyrodev_nyrocms:
+        class: %nyrodev_nyrocms.mainService.class%
+        arguments: [@service_container]

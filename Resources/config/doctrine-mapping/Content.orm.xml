@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<mapped-superclass name="NyroDev\NyroCmsBundle\Model\Content">
+		<id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+			<options>
+				<option name="unsigned">true</option>
+			</options>
+        </id>
+		<field name="title" type="string" nullable="false" />
+		<field name="url" type="string" nullable="false" />
+		<field name="theme" type="string" nullable="true" />
+		<field name="content" type="json_array" nullable="true" />
+		<field name="contentText" type="text" nullable="true" />
+		<field name="firstImage" type="string" nullable="true" />
+		<field name="goUrl" type="string" nullable="true" />
+		<field name="goBlank" type="boolean" nullable="true" />
+		<field name="state" type="smallint" nullable="false" />
+		<field name="handler" type="string" nullable="true" />
+		<field name="menuOption" type="string" nullable="true" />
+		<field name="lft" type="integer" nullable="false" />
+		<field name="rgt" type="integer" nullable="false" />
+		<field name="level" type="integer" nullable="false" />
+		<field name="root" type="integer" nullable="true" />
+		<field name="inserted" type="datetime" nullable="false" />
+		<field name="updated" type="datetime" nullable="false" />
+		<field name="deleted" type="datetime" nullable="true" />
+		
+		<many-to-one field="parent" target-entity="NyroDev\NyroCmsBundle\Model\Content" inversedBy="children" nullable="true">
+			<join-column name="parent_id" referenced-column-name="id" on-delete="CASCADE" on-update="CASCADE" />
+            <order-by>
+                <order-by-field name="lft" direction="ASC" />
+            </order-by>
+		</many-to-one>
+		<many-to-one field="contentHandler" target-entity="NyroDev\NyroCmsBundle\Model\ContentHandler" nullable="true">
+			<join-column name="content_handler_id" referenced-column-name="id" on-delete="SET NULL" on-update="CASCADE" />
+		</many-to-one>
+		
+		<indexes>
+			<index name="content_deleted_lookup_idx" columns="deleted" />
+		</indexes>
+	</mapped-superclass>
+</doctrine-mapping>

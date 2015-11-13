@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<mapped-superclass name="NyroDev\NyroCmsBundle\Model\User">
+		<id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+			<options>
+				<option name="unsigned">true</option>
+			</options>
+        </id>
+		<field name="email" type="string" nullable="false" />
+		<field name="firstname" type="string" nullable="false" />
+		<field name="lastname" type="string" nullable="false" />
+		<field name="password" type="string" nullable="false" />
+		<field name="salt" type="string" nullable="false" />
+		<field name="userType" type="string" nullable="false" />
+		<field name="valid" type="boolean" nullable="true" />
+		<field name="validStart" type="date" nullable="true" />
+		<field name="validEnd" type="date" nullable="true" />
+		<field name="passwordKey" type="string" nullable="false" />
+		<field name="passwordKeyEnd" type="datetime" nullable="false" />
+		<field name="inserted" type="datetime" nullable="false" />
+		<field name="updated" type="datetime" nullable="false" />
+		<field name="deleted" type="datetime" nullable="true" />
+		
+		<indexes>
+			<index name="user_deleted_lookup_idx" columns="deleted" />
+		</indexes>
+		
+		<unique-constraints>
+			<unique-constraint columns="email" name="user_email" />
+			<unique-constraint columns="password_key" name="user_password_key" />
+		</unique-constraints>
+		
+        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
+            <option name="fields">email</option>
+            <option name="message">nyrocms_user.email.already_used</option>
+        </constraint>
+	</mapped-superclass>
+</doctrine-mapping>
