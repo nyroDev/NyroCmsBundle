@@ -50,10 +50,6 @@ class createDbClassesCommand extends ContainerAwareCommand {
 			$namespace = $dbService->getNamespace();
 			$originalNamespace = 'NyroDev\NyroCmsBundle\Model\\'.$dirname;
 			
-			$user = $dbService->getRepository('user');
-			echo get_class($user);
-			exit;
-			
 			$srcDir = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/src';
 			
 			$finder = new Finder();
