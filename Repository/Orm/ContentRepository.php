@@ -3,8 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 
-class ContentRepository extends NestedTreeRepository {
+class ContentRepository extends NestedTreeRepository implements ContentRepositoryInterface {
 
 	public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false) {
         $q = $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode);

@@ -34,21 +34,21 @@ abstract class AbstractService extends AbstractServiceSrc {
 	}
 	
 	/**
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return \NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface
 	 */
 	public function getUserRepository() {
 		return $this->getRepository('user');
 	}
 	
 	/**
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return \NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface
 	 */
 	public function getContentRepository() {
 		return $this->getRepository('content');
 	}
 	
 	/**
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return \NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface
 	 */
 	public function getContentSpecRepository() {
 		return $this->getRepository('content_spec');

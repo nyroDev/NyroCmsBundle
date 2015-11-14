@@ -3,12 +3,12 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\NoResultException;
 
-class UserRepository extends EntityRepository implements UserProviderInterface {
+class UserRepository extends EntityRepository implements UserRepositoryInterface {
 	
 	public function loadUserByUsername($username) {
         $q = $this
