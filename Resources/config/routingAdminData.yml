@@ -4,36 +4,36 @@ nyrocms_admin_composer:
     requirements:
         id: \d+
 
-nyrocms_admin_hanlder_contents_add:
+nyrocms_admin_handler_contents_add:
     pattern:  /handlerContents/{chid}/add
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:add }
     requirements:
         chid: \d+
-nyrocms_admin_hanlder_contents_up:
+nyrocms_admin_handler_contents_up:
     pattern:  /handlerContents/{chid}/up/{id}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:move, dir: up }
     requirements:
         chid: \d+
         id: \d+
-nyrocms_admin_hanlder_contents_down:
+nyrocms_admin_handler_contents_down:
     pattern:  /handlerContents/{chid}/down/{id}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:move, dir: down }
     requirements:
         chid: \d+
         id: \d+
-nyrocms_admin_hanlder_contents_edit:
+nyrocms_admin_handler_contents_edit:
     pattern:  /handlerContents/{chid}/edit/{id}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:edit }
     requirements:
         chid: \d+
         id: \d+
-nyrocms_admin_hanlder_contents_delete:
+nyrocms_admin_handler_contents_delete:
     pattern:  /handlerContents/{chid}/delete/{id}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:delete }
     requirements:
         chid: \d+
         id: \d+
-nyrocms_admin_hanlder_contents:
+nyrocms_admin_handler_contents:
     pattern:  /handlerContents/{chid}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:index }
     requirements:

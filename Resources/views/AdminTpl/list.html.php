@@ -5,7 +5,7 @@
 		<h1><?php echo isset($title) ? $title : $view['translator']->trans('admin.'.$name.'.viewTitle') ?></h1>
 		
 		<?php
-		$introKey = 'admin.'.$name.'.intro';
+		$introKey = 'admin.'.$name.'.introList';
 		$intro = $view['translator']->trans($introKey);
 		if ($intro && $intro != $introKey)
 			echo '<p class="intro">'.$intro.'</p>';

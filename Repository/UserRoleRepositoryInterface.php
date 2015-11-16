@@ -4,7 +4,7 @@ namespace NyroDev\NyroCmsBundle\Repository;
 
 interface UserRoleRepositoryInterface {
 
-	public function getQueryBuilder($isDev = false);
+	public function getAdminListQueryBuilder($isDev = false);
 	
 	public function getFormQueryBuilder();
 	

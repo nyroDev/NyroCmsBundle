@@ -109,10 +109,6 @@ admin:
     handler: Handler
     contentHandler: Module associé
     menuOption: Option menu
-    contactEnabled: Contact activé
-    contactTitle: Titre du contact
-    contactIntro: Introduction du contact
-    contactEmail: Email du contact
     inserted: Ajouté le
     updated: Mis à jour le
     

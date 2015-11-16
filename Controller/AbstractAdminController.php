@@ -6,7 +6,7 @@ use NyroDev\UtilityBundle\Controller\AbstractAdminController as SrcAbstractAdmin
 
 class AbstractAdminController extends SrcAbstractAdminController {
 	
-	protected function canAdminContentHandler(\NyroDev\NyroCmsBundle\Model\Content $contentHandler) {
+	protected function canAdminContentHandler(\NyroDev\NyroCmsBundle\Model\ContentHandler $contentHandler) {
 		$canAdmin = false;
 		$nyrocmsAdmin = $this->get('nyrocms_admin');
 		foreach($contentHandler->getContents() as $content)

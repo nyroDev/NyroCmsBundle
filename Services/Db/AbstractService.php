@@ -62,7 +62,7 @@ abstract class AbstractService extends AbstractServiceSrc {
 	}
 	
 	/**
-	 * @return \Doctrine\Common\Persistence\ObjectRepository
+	 * @return \NyroDev\NyroCmsBundle\Repository\ContentHandlerRepositoryInterface
 	 */
 	public function getContentHandlerRepository() {
 		return $this->getRepository('content_handler');

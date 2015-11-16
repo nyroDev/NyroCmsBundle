@@ -32,7 +32,7 @@ abstract class AbstractHandler {
 	}
 	
 	public function getAdminRouteName() {
-		return 'nyrocms_admin_hanlder_contents';
+		return 'nyrocms_admin_handler_contents';
 	}
 	
 	public function getAdminRoutePrm() {
@@ -75,8 +75,8 @@ abstract class AbstractHandler {
 	 * @param string $parameter
 	 * @return mixed
 	 */
-	public function getParameter($parameter) {
-		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+	public function getParameter($parameter, $default = null) {
+		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter, $default) : $default;
 	}
 	
 	/**
@@ -271,6 +271,11 @@ abstract class AbstractHandler {
 			}
 		}
 		return $this->contentSpec[$id];
+	}
+	
+	public function getContentSpecs(Content $content = null, $start = null, $limit = null, array $where = array(), $state = ContentSpec::STATE_ACTIVE) {
+		return $this->getContentSpecRespository()
+						->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, array('position'=>$this->isReversePositionOrder() ? 'DESC' : 'ASC'), $start, $limit);
 	}
 	
 	public function getTotalContentSpec(Content $content = null, $state = ContentSpec::STATE_ACTIVE) {

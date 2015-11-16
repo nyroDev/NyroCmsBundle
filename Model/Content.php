@@ -149,16 +149,16 @@ abstract class Content implements Composable {
      * @var \DateTime
      */
     protected $deleted;
-	
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $translations;
 
 	/**
      * @var \Doctrine\Common\Collections\Collection
 	 */
 	protected $relateds;
+	
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $translations;
 
     /**
      * @var string
@@ -181,8 +181,8 @@ abstract class Content implements Composable {
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->relateds = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -684,39 +684,6 @@ abstract class Content implements Composable {
     }
 
     /**
-     * Add translations
-     *
-     * @param object $translations
-     * @return Content
-     */
-    public function addTranslation($translations)
-    {
-        $this->translations[] = $translations;
-
-        return $this;
-    }
-
-    /**
-     * Remove translations
-     *
-     * @param object $translations
-     */
-    public function removeTranslation($translations)
-    {
-        $this->translations->removeElement($translations);
-    }
-
-    /**
-     * Get translations
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
      * Add relateds
      *
      * @param Content $relateds
@@ -747,6 +714,39 @@ abstract class Content implements Composable {
     public function getRelateds()
     {
         return $this->relateds;
+    }
+
+    /**
+     * Add translations
+     *
+     * @param object $translations
+     * @return Content
+     */
+    public function addTranslation($translations)
+    {
+        $this->translations[] = $translations;
+
+        return $this;
+    }
+
+    /**
+     * Remove translations
+     *
+     * @param object $translations
+     */
+    public function removeTranslation($translations)
+    {
+        $this->translations->removeElement($translations);
+    }
+
+    /**
+     * Get translations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTranslations()
+    {
+        return $this->translations;
     }
 	
 	

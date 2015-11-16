@@ -17,6 +17,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentLog")
  */
 class Content extends ContentModel {
+
+    /**
+     * @ORM\OneToMany(targetEntity="Content", mappedBy="parent")
+     * @ORM\OrderBy({"lft" = "ASC"})
+     */
+    protected $children;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
+	 * @ORM\JoinTable(name="content_related")
+	 */
+	protected $relateds;
 	
     /**
      * @ORM\OneToMany(
@@ -26,11 +38,5 @@ class Content extends ContentModel {
      * )
      */
     protected $translations;
-	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
-	 * @ORM\JoinTable(name="content_related")
-	 */
-	protected $relateds;
 
 }

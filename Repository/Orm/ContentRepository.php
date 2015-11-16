@@ -100,4 +100,5 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 			$qb->andWhere('c.id <> :id')->setParameter('id', $ignoreId);
 		return $qb;
 	}
+	
 }

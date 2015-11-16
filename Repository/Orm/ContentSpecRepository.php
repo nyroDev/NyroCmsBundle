@@ -3,9 +3,18 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
+use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Model\ContentHandler;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
 
 class ContentSpecRepository extends SortableRepository implements ContentSpecRepositoryInterface {
+	
+	public function getAdminListQueryBuilder(ContentHandler $contentHandler) {
+		return $this->createQueryBuilder('cs')
+				->andWhere('cs.contentHandler = :chid')
+					->setParameter('chid', $contentHandler->getId());
+	}
 	
 	/**
 	 * 
@@ -38,7 +47,12 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
 		
 		if (count($where)) {
 			foreach($where as $k=>$v) {
-				$qb->andWhere('cs.'.$k.' = :'.$k.'_wh')
+				$operator = '=';
+				if ($k[0] == '!') {
+					$operator = '<>';
+					$k = substr($k, 1);
+				}
+				$qb->andWhere('cs.'.$k.' '.$operator.' :'.$k.'_wh')
 					->setParameter($k.'_wh', $v);
 			}
 		}
@@ -61,10 +75,17 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
 				->setParameters($qb->getParameters())
 				->getQuery()->getSingleScalarResult();
 	}
-	public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array()) {
-		return $this
-				->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)
+	public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array(), $start = null, $limit = null) {
+		$qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order);
+		
+		if (!is_null($start))
+			$qb->setFirstResult($start);
+		if (!is_null($limit))
+			$qb->setMaxResults($limit);
+		
+		return $qb
 				->getQuery()
+				->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
 				->getResult();
 	}
 	
@@ -72,7 +93,19 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
 		return $this
 				->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)
 				->getQuery()
+				->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
 				->getOneOrNullResult();
+	}
+
+	public function getAfters(ContentSpec $contentSpec) {
+		return $this->createQueryBuilder('cs')
+					->andWhere('cs.contentHandler = :chid')
+						->setParameter('chid', $contentSpec->getContentHandler()->getId())
+					->andWhere('cs.position > :position')
+						->setParameter('position', $contentSpec->getPosition())
+					->addOrderBy('cs.position', 'ASC')
+					->getQuery()
+					->getResult();
 	}
 
 }

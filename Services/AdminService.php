@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Model\User;
 
 class AdminService extends AbstractService {
@@ -126,6 +127,14 @@ class AdminService extends AbstractService {
 			Content::STATE_ACTIVE=>$this->trans('admin.state.state_'.Content::STATE_ACTIVE),
 			Content::STATE_INVISIBLE=>$this->trans('admin.state.state_'.Content::STATE_INVISIBLE),
 			Content::STATE_DISABLED=>$this->trans('admin.state.state_'.Content::STATE_DISABLED),
+		);
+	}
+	
+	public function getContentSpecStateChoices() {
+		return array(
+			ContentSpec::STATE_ACTIVE=>$this->trans('admin.state.state_'.ContentSpec::STATE_ACTIVE),
+			ContentSpec::STATE_INVISIBLE=>$this->trans('admin.state.state_'.ContentSpec::STATE_INVISIBLE),
+			ContentSpec::STATE_DISABLED=>$this->trans('admin.state.state_'.ContentSpec::STATE_DISABLED),
 		);
 	}
 	

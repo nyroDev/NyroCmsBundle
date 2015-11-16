@@ -111,7 +111,7 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	public function contentAddAction($pid = null) {
-		$row = $this->get('nyrocms_db')->getNew('content');
+		$row = $this->get('nyrocms_db')->getNew('content', false);
 		
 		if ($pid) {
 			$parent = $this->get('nyrocms_db')->getContentRepository()->find($pid);
@@ -175,6 +175,12 @@ class AdminDataController extends AbstractAdminController {
 		if ($this->get('nyrocms_admin')->isDeveloper()) {
 			$fields[] = 'contentHandler';
 			$fields[] = 'menuOption';
+			$repoContentHandler = $this->get('nyrocms_db')->getContentHandlerRepository();
+			$moreOptions['contentHandler'] = array(
+				'query_builder'=>function($er) use ($repoContentHandler) {
+					return $repoContentHandler->getFormQueryBuilder();
+				}
+			);
 		}
 		
 		$adminForm = $this->createAdminForm('content', $action, $row, $fields, 'nyrocms_admin_data_content_tree', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush', $this->get('nyrocms_db')->getObjectManager());
@@ -259,7 +265,7 @@ class AdminDataController extends AbstractAdminController {
 		$isDev = $this->get('nyrocms_admin')->isDeveloper();
 		
 		$repo = $this->get('nyrocms_db')->getUserRoleRepository();
-		$qb = $repo->getQueryBuilder($isDev);
+		$qb = $repo->getAdminListQueryBuilder($isDev);
 		$route = 'nyrocms_admin_data_userRole';
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
 				array_merge(
@@ -287,7 +293,7 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	public function userRoleAddAction() {
-		$row = $this->get('nyrocms_db')->getNew('user_role');
+		$row = $this->get('nyrocms_db')->getNew('user_role', false);
 		return $this->userRoleForm(self::ADD, $row);
 	}
 	
@@ -380,7 +386,7 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	public function contentHandlerAddAction() {
-		$row = $this->get('nyrocms_db')->getNew('content_handler');
+		$row = $this->get('nyrocms_db')->getNew('content_handler', false);
 		return $this->contentHandlerForm(self::ADD, $row);
 	}
 	
@@ -466,7 +472,7 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	public function userAddAction(Request $request) {
-		$row = $this->get('nyrocms_db')->getNew('user');
+		$row = $this->get('nyrocms_db')->getNew('user', false);
 		return $this->userForm($request, self::ADD, $row);
 	}
 	

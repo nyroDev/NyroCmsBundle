@@ -29,13 +29,13 @@
 		<field name="updated" type="datetime" nullable="false" />
 		<field name="deleted" type="datetime" nullable="true" />
 		
-		<many-to-one field="parent" target-entity="NyroDev\NyroCmsBundle\Model\Content" inversedBy="children" nullable="true">
+		<many-to-one field="parent" target-entity="NyroDev\NyroCmsBundle\Model\Content" inversed-by="children" nullable="true">
 			<join-column name="parent_id" referenced-column-name="id" on-delete="CASCADE" on-update="CASCADE" />
             <order-by>
                 <order-by-field name="lft" direction="ASC" />
             </order-by>
 		</many-to-one>
-		<many-to-one field="contentHandler" target-entity="NyroDev\NyroCmsBundle\Model\ContentHandler" nullable="true">
+		<many-to-one field="contentHandler" target-entity="NyroDev\NyroCmsBundle\Model\ContentHandler" inversed-by="contents" nullable="true">
 			<join-column name="content_handler_id" referenced-column-name="id" on-delete="SET NULL" on-update="CASCADE" />
 		</many-to-one>
 		
