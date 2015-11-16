@@ -233,3 +233,7 @@ nyrocms:
         Pour choisir un mot de passe at vous connecter, cliquez sur le lien suivant :
         <strong><a href="%url%">%url%</a></strong>
         Ce lien sera valide pendant 1 semaine.
+  handler:
+    news:
+      more: En savoir plus
+      empty: Il n'y a aucune actualité à afficher.
