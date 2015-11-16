@@ -16,6 +16,7 @@
 		<field name="password" type="string" nullable="false" />
 		<field name="salt" type="string" nullable="false" />
 		<field name="userType" type="string" nullable="false" />
+		<field name="developper" type="boolean" nullable="true" />
 		<field name="valid" type="boolean" nullable="true" />
 		<field name="validStart" type="date" nullable="true" />
 		<field name="validEnd" type="date" nullable="true" />
@@ -34,9 +35,5 @@
 			<unique-constraint columns="password_key" name="user_password_key" />
 		</unique-constraints>
 		
-        <constraint name="Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity">
-            <option name="fields">email</option>
-            <option name="message">nyrocms_user.email.already_used</option>
-        </constraint>
 	</mapped-superclass>
 </doctrine-mapping>

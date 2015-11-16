@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * User
  *
  * @ORM\Table(name="user_role")
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\UserRoleRepository")
  */
 class UserRole extends UserRoleModel {
 	

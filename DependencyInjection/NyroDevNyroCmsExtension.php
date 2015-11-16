@@ -31,6 +31,14 @@ class NyroDevNyroCmsExtension extends Extension
 			$container->setParameter('nyroCms.model.classes.'.$k, $v);
 		
 		$container->setParameter('nyroCms.user_types', $config['user_types']);
+
+		$container->setParameter('nyroCms.content.maxlevel', $config['content']['maxlevel']);
+		$container->setParameter('nyroCms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
+		
+		$composable = $config['composable']['classes'];
+		$composable['default'] = $config['composable']['default'];
+		
+		$container->setParameter('nyroCms.composable', $composable);
 		
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');

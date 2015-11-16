@@ -32,7 +32,7 @@ abstract class AbstractHandler {
 	}
 	
 	public function getAdminRouteName() {
-		return 'sis_admin_hanlder_contents';
+		return 'nyrocms_admin_hanlder_contents';
 	}
 	
 	public function getAdminRoutePrm() {

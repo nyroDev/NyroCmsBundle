@@ -18,4 +18,6 @@ interface ContentRepositoryInterface extends RepositoryInterface {
 	
 	public function findByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null);
 	
+	public function getFormQueryBuilder($root, $ignoreId = null);
+
 }

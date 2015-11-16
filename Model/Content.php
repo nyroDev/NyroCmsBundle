@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class Content {
+abstract class Content implements Composable {
 	
 	const STATE_DISABLED = 0;
 	const STATE_ACTIVE = 1;
@@ -686,10 +686,10 @@ abstract class Content {
     /**
      * Add translations
      *
-     * @param ContentTranslation $translations
+     * @param object $translations
      * @return Content
      */
-    public function addTranslation(ContentTranslation $translations)
+    public function addTranslation($translations)
     {
         $this->translations[] = $translations;
 
@@ -699,9 +699,9 @@ abstract class Content {
     /**
      * Remove translations
      *
-     * @param ContentTranslation $translations
+     * @param object $translations
      */
-    public function removeTranslation(ContentTranslation $translations)
+    public function removeTranslation($translations)
     {
         $this->translations->removeElement($translations);
     }

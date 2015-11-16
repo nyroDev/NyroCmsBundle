@@ -471,10 +471,10 @@ abstract class ContentSpec {
     /**
      * Add translations
      *
-     * @param ContentSpecTranslation $translations
+     * @param object $translations
      * @return ContentSpec
      */
-    public function addTranslation(ContentSpecTranslation $translations)
+    public function addTranslation($translations)
     {
         $this->translations[] = $translations;
 
@@ -484,9 +484,9 @@ abstract class ContentSpec {
     /**
      * Remove translations
      *
-     * @param ContentSpecTranslation $translations
+     * @param object $translations
      */
-    public function removeTranslation(ContentSpecTranslation $translations)
+    public function removeTranslation($translations)
     {
         $this->translations->removeElement($translations);
     }

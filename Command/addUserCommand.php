@@ -23,6 +23,7 @@ class addUserCommand extends ContainerAwareCommand {
             ->addArgument('lastname', InputArgument::OPTIONAL, 'User lastname', null)
             ->addArgument('password', InputArgument::OPTIONAL, 'User password', null)
             ->addArgument('usertype', InputArgument::OPTIONAL, 'User type', null)
+            ->addArgument('developper', InputArgument::OPTIONAL, 'developper', null)
             ->addArgument('userroles', InputArgument::OPTIONAL, 'User roles', null);
 	}
 	
@@ -38,6 +39,7 @@ class addUserCommand extends ContainerAwareCommand {
 		$lastname = $input->getArgument('lastname');
 		$password = $input->getArgument('password');
 		$usertype = $input->getArgument('usertype');
+		$developper = $input->getArgument('developper');
 		$userroles = $input->getArgument('userroles');
 		
 		$dbService = $this->getContainer()->get('nyrocms_db');
@@ -72,6 +74,15 @@ class addUserCommand extends ContainerAwareCommand {
 				$userTypes
 			);
 			$usertype = $helper->ask($input, $output, $question);
+		}
+		
+		if (is_null($developper)) {
+			$question = new ChoiceQuestion(
+				'Is developper?',
+				array('false', 'true'),
+				0
+			);
+			$developper = $helper->ask($input, $output, $question);
 		}
 		
 		if ($userroles) {
@@ -124,6 +135,7 @@ class addUserCommand extends ContainerAwareCommand {
 		$newUser->setSalt($salt);
 		
 		$newUser->setUserType($usertype);
+		$newUser->setDevelopper($developper === 'true');
 		
 		if (count($userroles)) {
 			foreach($userroles as $ur) {

@@ -63,6 +63,13 @@ abstract class User implements UserInterface, \Symfony\Component\Security\Core\U
      *
 	 * @Gedmo\Versioned
      */
+	protected $developper = false;
+
+    /**
+     * @var boolean
+     *
+	 * @Gedmo\Versioned
+     */
 	protected $valid = true;
 
     /**
@@ -258,6 +265,29 @@ abstract class User implements UserInterface, \Symfony\Component\Security\Core\U
     public function getUserType()
     {
         return $this->userType;
+    }
+
+    /**
+     * Set developper
+     *
+     * @param boolean $developper
+     * @return User
+     */
+    public function setDevelopper($developper)
+    {
+        $this->developper = $developper;
+
+        return $this;
+    }
+
+    /**
+     * Get developper
+     *
+     * @return boolean 
+     */
+    public function getDevelopper()
+    {
+        return $this->developper;
     }
 
     /**

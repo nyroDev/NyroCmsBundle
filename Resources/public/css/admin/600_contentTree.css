@@ -1,0 +1,110 @@
+.tree {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	width: 680px;
+}
+.tree li {
+	margin-bottom: 5px;
+}
+.tree ul {
+	margin-top: 5px;
+}
+.tree .disabled {
+	opacity: 0.4;
+}
+.nodeCont {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	height: 30px;
+	font-weight: 900;
+	text-transform: uppercase;
+	color: #fff;
+}
+.tree ul {
+	display: none;
+}
+.reduce {
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: none;
+}
+.expanded > ul {
+	display: block;
+}
+.expanded > .nodeCont .reduce {
+	display: block;
+}
+.tree .ui-state-highlight {
+	display: block;
+	min-height: 30px;
+}
+.nodeCont span {
+	position: relative;
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+}
+.nodeCont strong {
+	padding: 5px 0 5px 5px;
+	-webkit-flex-grow: 2;
+	-moz-flex-grow: 2;
+	-ms-flex-grow: 2;
+	flex-grow: 2;
+}
+.nodeCont span {
+	-webkit-flex-grow: 2;
+	-moz-flex-grow: 2;
+	-ms-flex-grow: 2;
+	flex-grow: 2;
+	background: #cf2630;
+}
+.nodeCont > a {
+	margin-left: 5px;
+}
+.tree ul .nodeCont span, .tree ul .nodeCont span .icon {
+	background: #000;
+}
+.tree ul .nodeCont span a:hover .icon {
+	background: #cf2630;
+}
+.tree .tree ul .nodeCont span, .tree .tree ul .nodeCont span .icon {
+	background: #e5e5e5;
+	color: #000;
+	text-transform: none;
+	fill: #000;
+	stroke: #000;
+}
+.tree .tree ul .nodeCont span a:hover .icon {
+	background: #000;
+	text-transform: none;
+	fill: #fff;
+	stroke: #fff;
+}
+.tree .tree .tree ul .nodeCont span, .tree .tree .tree ul .nodeCont span .icon {
+	background: #f6f6f6;
+	color: #000;
+}
+.tree .tree .tree ul .nodeCont strong {
+	font-weight: normal;
+}
+.empty {
+	font-size: 12px;
+	font-style: italic;
+	padding-left: 25px;
+}
+.node + .empty {
+	display: none;
+}
+.node_2 {
+	opacity: 0.8;
+}
+.node_0 {
+	opacity: 0.6;
+}

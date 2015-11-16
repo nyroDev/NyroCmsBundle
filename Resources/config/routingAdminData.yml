@@ -1,0 +1,154 @@
+nyrocms_admin_composer:
+    pattern:  /composer/{type}/{id}/{lang}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminComposer:composer, lang: %locale% }
+    requirements:
+        id: \d+
+
+nyrocms_admin_hanlder_contents_add:
+    pattern:  /handlerContents/{chid}/add
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:add }
+    requirements:
+        chid: \d+
+nyrocms_admin_hanlder_contents_up:
+    pattern:  /handlerContents/{chid}/up/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:move, dir: up }
+    requirements:
+        chid: \d+
+        id: \d+
+nyrocms_admin_hanlder_contents_down:
+    pattern:  /handlerContents/{chid}/down/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:move, dir: down }
+    requirements:
+        chid: \d+
+        id: \d+
+nyrocms_admin_hanlder_contents_edit:
+    pattern:  /handlerContents/{chid}/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:edit }
+    requirements:
+        chid: \d+
+        id: \d+
+nyrocms_admin_hanlder_contents_delete:
+    pattern:  /handlerContents/{chid}/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:delete }
+    requirements:
+        chid: \d+
+        id: \d+
+nyrocms_admin_hanlder_contents:
+    pattern:  /handlerContents/{chid}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminHandlerContents:index }
+    requirements:
+        chid: \d+
+
+nyrocms_admin_data_content_add:
+    pattern:  /content/add/{pid}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentAdd, pid: null }
+    requirements:
+        pid: \d+
+nyrocms_admin_data_content_edit:
+    pattern:  /content/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentEdit }
+    requirements:
+        id: \d+
+nyrocms_admin_data_content_delete:
+    pattern:  /content/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentDelete }
+    requirements:
+        id: \d+
+nyrocms_admin_data_content_fix:
+    pattern:  /content/fix/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentFix, id: null }
+    requirements:
+        id: \d+
+nyrocms_admin_data_content_tree:
+    pattern:  /content/tree/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentTree, id: null }
+    requirements:
+        id: \d+
+nyrocms_admin_data_content:
+    pattern:  /content
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:content }
+
+
+nyrocms_admin_data_translation_add:
+    pattern:  /translation/add
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:translationAdd }
+nyrocms_admin_data_translation_edit:
+    pattern:  /translation/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:translationEdit }
+    requirements:
+        id: \d+
+nyrocms_admin_data_translation_quickEdit:
+    pattern:  /trQuickEdit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:translationEdit, quick: true }
+    requirements:
+        id: \d+
+nyrocms_admin_data_translation_delete:
+    pattern:  /translation/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:translationDelete }
+    requirements:
+        id: \d+
+nyrocms_admin_data_translation:
+    pattern:  /translation
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:translation }
+    requirements:
+        page: \d+
+
+
+nyrocms_admin_data_contentHandler_add:
+    pattern:  /contentHandler/add
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentHandlerAdd }
+nyrocms_admin_data_contentHandler_edit:
+    pattern:  /contentHandler/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentHandlerEdit }
+    requirements:
+        id: \d+
+nyrocms_admin_data_contentHandler_delete:
+    pattern:  /contentHandler/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentHandlerDelete }
+    requirements:
+        id: \d+
+nyrocms_admin_data_contentHandler:
+    pattern:  /contentHandler
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contentHandler }
+    requirements:
+        page: \d+
+
+
+nyrocms_admin_data_userRole_add:
+    pattern:  /userRole/add
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userRoleAdd }
+nyrocms_admin_data_userRole_edit:
+    pattern:  /userRole/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userRoleEdit }
+    requirements:
+        id: \d+
+nyrocms_admin_data_userRole_delete:
+    pattern:  /userRole/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userRoleDelete }
+    requirements:
+        id: \d+
+nyrocms_admin_data_userRole:
+    pattern:  /userRole
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userRole }
+    requirements:
+        page: \d+
+
+
+nyrocms_admin_data_user_add:
+    pattern:  /user/add
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userAdd }
+nyrocms_admin_data_user_edit:
+    pattern:  /user/edit/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userEdit }
+    requirements:
+        id: \d+
+nyrocms_admin_data_user_delete:
+    pattern:  /user/delete/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userDelete }
+    requirements:
+        id: \d+
+nyrocms_admin_data_user:
+    pattern:  /user
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:user }
+    requirements:
+        page: \d+

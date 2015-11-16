@@ -41,6 +41,13 @@ abstract class AbstractService extends AbstractServiceSrc {
 	}
 	
 	/**
+	 * @return \NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface
+	 */
+	public function getUserRoleRepository() {
+		return $this->getRepository('user_role');
+	}
+	
+	/**
 	 * @return \NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface
 	 */
 	public function getContentRepository() {

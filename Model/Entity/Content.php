@@ -18,4 +18,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Content extends ContentModel {
 	
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    protected $translations;
+	
+	/**
+	 * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
+	 * @ORM\JoinTable(name="content_related")
+	 */
+	protected $relateds;
+
 }

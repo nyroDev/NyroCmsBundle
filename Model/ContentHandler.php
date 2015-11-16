@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class ContentHandler {
@@ -29,6 +30,18 @@ abstract class ContentHandler {
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $contents;
+
+    /**
+     * @var \DateTime
+	 * @Gedmo\Timestampable(on="create")
+     */
+    protected $inserted;
+
+    /**
+     * @var \DateTime
+	 * @Gedmo\Timestampable(on="update")
+     */
+    protected $updated;
 	
 
     /**
@@ -145,6 +158,52 @@ abstract class ContentHandler {
     public function getContents()
     {
         return $this->contents;
+    }
+
+    /**
+     * Set inserted
+     *
+     * @param \DateTime $inserted
+     * @return ContentHandler
+     */
+    public function setInserted($inserted)
+    {
+        $this->inserted = $inserted;
+
+        return $this;
+    }
+
+    /**
+     * Get inserted
+     *
+     * @return \DateTime 
+     */
+    public function getInserted()
+    {
+        return $this->inserted;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return ContentHandler
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime 
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
     }
 
 	

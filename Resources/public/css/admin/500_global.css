@@ -1,0 +1,295 @@
+html, body {
+	min-height: 100vh;
+}
+body {
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
+	font-family: 'Roboto', sans-serif;
+}
+.icon {
+	width: 30px;
+	height: 30px;
+	fill: #fff;
+	stroke: #fff;
+	background: #cf2630;
+	transition: background 300ms, fill 300ms, stroke 300ms;
+}
+.button, .form_button button {
+	display: inline-block;
+	padding: 0 14px;
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	background: #cf2630;
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 900;
+	float: none;
+	border-radius: 0;
+	text-transform: uppercase;
+	transition: background 300ms;
+}
+.button .icon {
+	margin: -10px -4px -8px -8px;
+	vertical-align: middle;
+}
+.import svg, .export svg, .back svg {
+	width: 20px;
+	padding-right: 5px;
+}
+.button:hover {
+	text-decoration: none;
+	color: #fff;
+	background: #000;
+}
+a:hover .icon, .button:hover .icon {
+	background: #000;
+}
+
+aside {
+	font-weight: 900;
+	color: #fff;
+	width: 307px;
+	background: #000;
+	min-height: 100%;
+}
+aside header {
+	position: relative;
+	padding: 40px 0 25px 45px;
+	overflow: hidden;
+	background: url(images/admin/menuBg.jpg) top center;
+}
+aside header:after {
+	right: 0;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(255, 255, 255, 0);
+	border-right-color: #ffffff;
+	border-width: 8px;
+	margin-top: -8px;
+}
+aside header h1 {
+	margin: 0 0 20px 0;
+	width: 222px;
+	height: 52px;
+	text-indent: -999em;
+	background: url(images/admin/bigAdmin.png);
+}
+aside header strong {
+	color: #cf2630;
+}
+aside header .button {
+	margin-bottom: 10px;
+}
+aside header .button:hover {
+	color: #000;
+	background: #fff;
+}
+aside a {
+	color: #fff;
+	text-decoration: none;
+}
+aside a:hover {
+	color: #cf2630;
+}
+aside nav {
+	position: relative;
+	padding: 0 20px 30px;
+}
+aside nav:after {
+	left: 100%;
+	top: 35px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(0, 0, 0, 0);
+	border-left-color: #000000;
+	border-width: 8px;
+	margin-top: -8px;
+}
+aside nav h2 {
+	color: #cf2630;
+	font-size: 14px;
+	text-transform: uppercase;
+	font-weight: 900;
+	line-height: 1em;
+	margin: 30px 0 15px;
+}
+aside nav ul {
+	margin: 0 0 0 -8px;
+	padding: 0;
+	list-style-type: none;
+}
+aside nav a {
+	display: inline-block;
+	padding: 6px 8px;
+	font-size: 12px;
+	margin-bottom: 3px;
+	transition: background 200ms, color 200ms;
+}
+aside nav .active, aside nav a:hover {
+	color: #cf2630;
+	background: #fff;
+}
+
+main {
+	margin: 80px 30px 50px 30px;
+}
+main h1 {
+	font-size: 18px;
+	line-height: 1em;
+	font-weight: 900;
+	margin: 0 0 0.8em;
+	text-transform: uppercase;
+}
+main a {
+	color: #cf2630;
+	text-decoration: none;
+}
+main a:hover {
+	text-decoration: underline;
+}
+
+
+.intro {
+	max-width: 540px;
+}
+.listButtons {
+	text-align: right;
+	margin: 10px 0;
+}
+.listButtons a {
+	font-size: 14px;
+}
+
+
+main table.data td, main table.data th {
+	font-size: 12px;
+	padding: 6px 8px;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+}
+main table.data th {
+	background: #000;
+	color: #fff;
+	font-weight: 900;
+	text-transform: uppercase;
+	text-align: center;
+}
+main table.data th.actions {
+	font-size: 10px;
+}
+.listSort {
+	position: relative;
+	display: inline-block;
+	width: 12px;
+	height: 10px;
+	text-indent: -999em;
+	margin-left: 5px;
+	top: -5px;
+}
+.listSort:after {
+	left: 0;
+	top: 50%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(0, 0, 0, 0);
+	border-bottom-color: #fff;
+	border-width: 6px;
+	margin-top: -6px;
+	transition: border-color 300ms;
+}
+.listSortDesc:after {
+	border-color: rgba(0, 0, 0, 0);
+	border-top-color: #fff;
+}
+.listSort + .listSort {
+	top: 10px;
+	margin-bottom: -2px;
+	margin-left: -12px;
+}
+.listSortAsc.active:after, .listSortAsc:hover:after {
+	border-bottom-color: #cf2630;
+}
+.listSortDesc.active:after, .listSortDesc:hover:after {
+	border-top-color: #cf2630;
+}
+main table.data td {
+	background: #e5e5e5;
+	transition: background 300ms;
+}
+main table.data tr:nth-child(even) td {
+	background: #f5f5f5;
+}
+main table.data .actions {
+	padding: 6px 0;
+	min-width: 64px;
+}
+main table.data td.actions {
+	padding: 0;
+}
+main table.data td.actions .icon, main table.data td.actions .up, main table.data td.actions .down {
+	float: left;
+	margin-right: 4px;
+}
+
+main table.data td.actions .up, main table.data td.actions .down {
+	position: relative;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	background: #cf2630;
+	text-indent: -999em;
+	transition: background 300ms;
+}
+main table.data td.actions .up:hover, main table.data td.actions .down:hover {
+	background: #000;
+	text-transform: none;
+}
+main table.data td.actions .up:after, main table.data td.actions .down:after {
+	content: '';
+	left: 50%;
+	top: 50%;
+	margin-top: -15px;
+	margin-left: -10px;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-color: rgba(0, 0, 0, 0);
+	border-width: 10px;
+}
+main table.data td.actions .up:after {
+	border-bottom-color: #fff;
+}
+main table.data td.actions .down:after {
+	border-top-color: #fff;
+	margin-top: -5px;
+}
+main table.data td.actions a:last-child .icon {
+	margin-right: 0;
+}
+main table.data tr:hover td {
+	background: #cbcbcb;
+}
+.form_row_file .currentFile, .form_row_file .currentFileDelete {
+	margin: 3px 0;
+}

@@ -1,0 +1,87 @@
+#loginpage {
+	background: url(images/admin/home.jpg) no-repeat center center;
+	background-size: cover;
+}
+#loginpage h1 {
+	display: inline-block;
+	width: 273px;
+	height: 64px;
+	text-indent: -999em;
+	background: url(images/admin/bigAdminHome.png);
+}
+#loginpage main {
+	width: 100%;
+	margin: 125px 0;
+	text-align: center;
+}
+#loginpage .formCentered {
+	position: relative;
+	margin: 20px auto;
+	padding: 35px 55px;
+	width: 265px;
+	color: #fff;
+	background: #000;
+	background: rgba(0, 0, 0, 0.6);;
+}
+#loginpage #sisLogo {
+	display: inline-block;
+	width: 100px;
+	height: 100px;
+	text-indent: -999em;
+	background-image: url(images/sisLogo.png);
+	background-size: cover;
+}
+#loginpage .formCentered form {
+	position: static;
+}
+#loginpage .formCentered label {
+	display: none;
+}
+#loginpage input {
+	width: 100%;
+	margin-bottom: 5px;
+}
+#loginpage .formCentered button {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -30px;
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+	border: none;
+	margin: 0;
+	color: #fff;
+	background: #000;
+	font-size: 14px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 900;
+	text-transform: uppercase;
+	transition: background 300ms;
+}
+#loginpage .formCentered button:hover {
+	background: #cf2630;
+}
+#loginpage .form_errors {
+	color: #cf2630;
+	margin-bottom: 15px;
+}
+.forgotLink {
+	color: #fff;
+	text-decoration: underline;
+	font-style: italic;
+	font-size: 14px;
+}
+.forgotLink:hover {
+	text-decoration: none;
+}
+#loginpage .formCentered .form_row {
+	width: auto;
+}
+#loginpage .formCentered .formIndicator, #loginpage .formCentered .formRequiredFields {
+	display: none;
+}
+#loginpage .formCentered .form_button {
+	overflow: visible;
+	position: static;
+}

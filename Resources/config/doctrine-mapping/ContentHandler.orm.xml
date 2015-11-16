@@ -13,5 +13,7 @@
 		<field name="name" type="string" nullable="false" />
 		<field name="class" type="string" nullable="false" />
 		<field name="hasAdmin" type="boolean" nullable="true" />
+		<field name="inserted" type="datetime" nullable="false" />
+		<field name="updated" type="datetime" nullable="false" />
 	</mapped-superclass>
 </doctrine-mapping>

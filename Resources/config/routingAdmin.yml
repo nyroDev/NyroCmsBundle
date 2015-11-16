@@ -1,0 +1,39 @@
+nyrocms_admin_homepage:
+    pattern: /
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:index }
+
+nyrocms_admin_login:
+    pattern: /login
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:login }
+
+nyrocms_admin_forgot:
+    pattern: /forgot/{id}/{key}
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, id: null, key: null }
+
+nyrocms_admin_welcome:
+    pattern: /welcome/{id}/{key}
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, welcome: true }
+
+nyrocms_admin_account:
+    pattern: /account
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:account }
+
+nyrocms_admin_cc:
+    pattern: /cc
+    defaults: { _controller: NyroDevNyroCmsBundle:Admin:cc }
+
+nyrocms_admin_security_check:
+    pattern: /login_check
+
+nyrocms_admin_security_logout:
+    pattern: /logout
+
+nyrocms_admin_tinymce_browser:
+    pattern:  /tinymceBrowser/{file}
+    defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
+    requirements:
+        file: .+
+
+nyrocms_admin_data:
+    resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdminData.yml"
+    prefix:   /

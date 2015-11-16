@@ -17,6 +17,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class ContentSpec extends ContentSpecModel {
 	
+    /**
+     * @ORM\OneToMany(
+     *   targetEntity="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentSpecTranslation",
+     *   mappedBy="object",
+     *   cascade={"persist", "remove"}
+     * )
+     */
+    protected $translations;
+	
 	/**
 	 * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
 	 * @ORM\JoinTable(name="content_spec_content")

@@ -1,0 +1,239 @@
+admin:
+  misc:
+    title: Administration
+    headline: Administration
+    loginIntro: |
+      Connectez-vous à la console
+      <strong>d'administration de votre site web</strong>
+    login: Connexion
+    logout: Déconnexion
+    admin: Administration
+    site: site
+    filter: Filtrer
+    sortAsc: Trier par ordre Croissant
+    sortDesc: Trier par ordre Décroissant
+    send: Enregistrer
+    waitch: Voir
+    handlerContents: Contenus
+    account: Mon compte
+    back: Retour
+  menu:
+    contents: Gestion des contenus
+    access: Gestion des accès
+    homes: Gestion des pages d'accueil
+    modules: Gestion des modules
+  state:
+    state_0: Désactivé
+    state_1: Activé
+    state_2: Invisible
+  themes:
+    public: Public
+  composer:
+    title: Composer
+    home_pos: Tableau
+    home_move: Déplacer
+    home_move_up: Monter
+    home_move_down: Descendre
+    action:
+      confirm: Confirmer
+      cancel: Annuler
+      save: Enregistrer
+      drag: Glisser / déposer
+      delete: Supprimer
+      addPhoto: Ajouter des photos
+      slideshowTitle: Titre de la photo
+      slideshowDelete: Êtes-vous sûr de vouloir supprimer cette image ?
+      langChange: Si vous changez de langue, vous perdrez les modifications actuelles.
+      posChange: Si vous changez de tableau, vous perdrez les modifications actuelles.
+      moveChange: Si vous déplacez ce tableau, vous perdrez les modifications actuelles.
+      cancelConfirm: Si vous quittez la page, vous perdrez les modifications actuelles.
+      deleteBlock: Êtes-vous sûr de vouloir supprimer ce bloc ?
+      deleteImgConfirm: Êtes-vous sûr de vouloir supprimer cette image ?
+      video: Sélectionner une URL vidéo
+      home_linkUrl: Modifier la destination
+      home_title_bg: Modifier la couleur de fond du titre
+      home_text_bg: Modifier la couleur de fond du texte
+      home_theme: Modifier le thème du bloc
+      home_image: Changer l'image
+      home_image_delete: Supprimer l'image
+      home_imageBig: Changer l'image grand format
+      home_imageMove: Changer l'image animée
+      home_imageMobile: Changer l'image mobile
+    blocks:
+      title: Titre
+      intro: Introduction
+      text: Texte
+      image: Image
+      image2: 2 images
+      image3: 3 images
+      video: Vidéo
+      column2: 2 colonnes
+      column3: 3 colonnes
+      slideshow: Galerie
+      newsletter_news: News
+      newsletter_jobs: Offres d'emploi
+    default:
+      subtitle: Sous-titre
+      text: |
+        <p><strong>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</strong> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      textNewsletter: |
+        <h3>édito</h3>
+        <p><strong>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</strong> Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      mediumText: |
+        <h3>lorem ipsum</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      shortText: |
+        <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  userTypes:
+    admin: Admin
+    superadmin: Superadmin
+  content:
+    viewTitle: Site internet
+    drag: Glisser / déposer
+    emptyTree: Aucun contenu
+    expandAll: Tout déplier
+    reduceAll: Tout replier
+    id: ID
+    parent: Contenu parent
+    title: Titre
+    theme: Thème
+    lang: Langue
+    themeEmpty: Thème parent
+    state: État
+    goUrl: Redirection URL
+    goBlank: Nouvel onglet
+    relateds: Contenus associés
+    relatedsPlaceholder: Entrer le titre de la page
+    handler: Handler
+    contentHandler: Module associé
+    menuOption: Option menu
+    contactEnabled: Contact activé
+    contactTitle: Titre du contact
+    contactIntro: Introduction du contact
+    contactEmail: Email du contact
+    inserted: Ajouté le
+    updated: Mis à jour le
+    
+  contentHandler:
+    viewTitle: Module associé
+    id: ID
+    name: Nom
+    class: Class
+    hasAdmin: Administration ?
+    inserted: Ajouté le
+    updated: Mis à jour le
+  contentSpec:
+    viewTitle: Contenus spécifiques
+    id: ID
+    title: Titre
+    intro: Introduction
+    position: Position
+    featured: Mis en avant
+    state: État
+    validStart: Début validité
+    validEnd: Fin validité
+    inserted: Ajouté le
+    updated: Mis à jour le
+  user:
+    viewTitle: Utilisateurs
+    id: ID
+    email: Email
+    firstname: Prénom
+    lastname: Nom
+    function: Fonction
+    password: Mot de passe
+    passwordConfirm: Confirmation
+    valid: Valide
+    validStart: Début validité
+    validEnd: Fin validité
+    userType: Type d'utilisateur
+    userRoles: Droits
+    inserted: Ajouté le
+    updated: Mis à jour le
+    
+    curPassword: Mot de passe actuel
+    wrongPassword: Le mot de passe n'est pas bon
+    newPassword: Nouveau mot de passe
+    samePassword: Le mot de passe et la confirmation doivent être identique.
+    accountFields: Informations personelles
+    accountFieldsSaved: |
+      Les informations de votre compte ont bien été enregistrées.
+    accountPassword: Mot de passe
+    accountPasswordSaved: |
+      Le nouveau mot de passe a bien été enregistré.
+  userRole:
+    viewTitle: Rôles Utilisateurs
+    id: ID
+    name: Name
+    internal: Usage interne
+    contents: Contenus
+    inserted: Ajouté le
+    updated: Mis à jour le
+nyrocms:
+  user:
+    email_already_used: Cette adresse email existe déjà.
+  header:
+    menu: menu
+    search: Rechercher
+    searchBut: OK
+  content:
+    home: Accueil
+    relateds: À découvrir
+  search:
+    title: Rechecher "%q%"
+    empty: Aucun élément ne correspond à votre recherche.
+    results: %total% résultats.
+    resultsContents: Contenus (%nb%)
+  forgot:
+    link: Mot de passe oublié ?
+    intro: |
+      Pour récupérer votre mot de passe,
+      renseignez votre email.
+    notFound: |
+      L'email renseigné n'existe pas
+      ou n'est pas valide.
+    submit: Envoyer
+    cancel: Annuler
+    back: Retour
+    sent: |
+      Un email vous a été envoyé
+      avec les instructions de récupération de votre mot de passe.
+    notFoundKey: |
+      Le lien utilisé n'est pas valide.
+    introPassword: |
+      Choisissez votre nouveau mot de passe ci-dessous :
+    saved: |
+      Votre nouveau mot de passe a bien été enregistré.
+      Vous pouvez l'utiliser dès maintenant.
+    email:
+      subject: "Récupération de mot de passe"
+      content: |
+        <strong>Bonjour %name%,</strong>
+        
+        Vous venez de demandé la récupération de votre mot passe.
+        Pour en choisir un nouveau, cliquez sur le lien suivant :
+        <strong><a href="%url%">%url%</a></strong>
+        Ce lien sera valide pendant 24 heures.
+        
+        Si vous n'avez rien demandé, vous pouvez ignorer ce message.
+  changedPassword:
+    email:
+      subject: "Modification de mot de passe"
+      content: |
+        <strong>Bonjour %name%,</strong>
+        
+        Votre mot de passe vient d'être modifié.
+        <strong>Si vous n'êtes pas à l'origine de cette modification,
+        contactez immédiatement l'administrateur du site.</strong>
+  welcome:
+    email:
+      subject: "Création de compte"
+      content: |
+        <strong>Bonjour %name%,</strong>
+        
+        Votre compte vient d'être activé.
+        Pour choisir un mot de passe at vous connecter, cliquez sur le lien suivant :
+        <strong><a href="%url%">%url%</a></strong>
+        Ce lien sera valide pendant 1 semaine.

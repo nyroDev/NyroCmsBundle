@@ -1,3 +1,0 @@
-nyro_dev_nyro_cms_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: NyroDevNyroCmsBundle:Default:index }

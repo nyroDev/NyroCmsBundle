@@ -91,4 +91,13 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $this->getQueryMenuOption($menuOption, $root)->getResult();
 	}
 	
+	public function getFormQueryBuilder($root, $ignoreId = null) {
+		$qb = $this->createQueryBuilder('c')
+			->andWhere('c.root = :root')
+				->setParameter('root', $root)
+			->addOrderBy('c.lft', 'ASC');
+		if ($ignoreId)
+			$qb->andWhere('c.id <> :id')->setParameter('id', $ignoreId);
+		return $qb;
+	}
 }
