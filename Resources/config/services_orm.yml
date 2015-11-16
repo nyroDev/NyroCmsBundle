@@ -1,10 +1,16 @@
 parameters:
     nyrocms.ormDbService.class: NyroDev\NyroCmsBundle\Services\Db\OrmService
+    nyrocms.ormDbListener.class: NyroDev\NyroCmsBundle\Listener\OrmListener
     
 services:
     nyrocms_db:
         class: %nyrocms.ormDbService.class%
         arguments: [@service_container, @nyroCms.entity_manager]
+    nyrocms_ormListener:
+        class: %nyrocms.ormDbListener.class%
+        arguments: [@service_container]
+        tags:
+            - { name: doctrine.event_subscriber }
     nyrocms.entity_manager:
         class: Doctrine\ORM\EntityManager
         arguments: [%nyroCms.model_manager_name%]

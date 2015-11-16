@@ -19,8 +19,68 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nyro_dev_nyro_cms');
+		/* @var $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition */
 
 		$supportedDrivers = array('orm');
+		
+		$defaultBlocks = array(
+			'intro'=>array(
+				'title'=>'OBJECT::getTitle',
+				'subtitle'=>'admin.composer.default.subtitle',
+				'text'=>'admin.composer.default.text',
+			),
+			'text'=>array(
+				'text'=>'admin.composer.default.text',
+			),
+			'column2'=>array(
+				'text1'=>'admin.composer.default.mediumText',
+				'text2'=>'admin.composer.default.mediumText',
+			),
+			'column3'=>array(
+				'text1'=>'admin.composer.default.mediumText',
+				'text2'=>'admin.composer.default.mediumText',
+				'text3'=>'admin.composer.default.mediumText',
+			),
+			'image'=>array(
+				'image'=>null,
+			),
+			'image2'=>array(
+				'image1'=>null,
+				'image2'=>null,
+				'text'=>'admin.composer.default.shortText',
+			),
+			'image3'=>array(
+				'image1'=>null,
+				'image2'=>null,
+				'image3'=>null,
+				'text'=>'admin.composer.default.shortText',
+			),
+			'slideshow'=>array(
+				'images'=>null,
+			),
+			'video'=>array(
+				'url'=>null,
+				'embed'=>null,
+			)
+		);
+		
+		$defaultConfigs = array(
+			'image'=>array(
+				'image'=>array('w'=>500, 'h'=>500),
+			),
+			'image2'=>array(
+				'image1'=>array('w'=>500, 'h'=>500),
+				'image2'=>array('w'=>500, 'h'=>500),
+			),
+			'image3'=>array(
+				'image1'=>array('w'=>500, 'h'=>500),
+				'image2'=>array('w'=>500, 'h'=>500),
+				'image3'=>array('w'=>500, 'h'=>500),
+			),
+			'slideshow'=>array(
+				'images'=>array('w'=>1500, 'h'=>1000),
+			)
+		);
 		
 		$rootNode
 			->children()
@@ -77,7 +137,34 @@ class Configuration implements ConfigurationInterface
 							->children()
 								->booleanNode('change_lang')->defaultTrue()->end()
 								->booleanNode('change_theme')->defaultTrue()->end()
-								->arrayNode('themes')->defaultValue(array('theme'))->prototype('scalar')->end()->end()
+								->arrayNode('themes')
+									->defaultValue(array('theme'))
+									->prototype('scalar')->end()
+								->end()
+								->arrayNode('available_blocks')
+									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image2', 'image3', 'slideshow', 'video'))
+									->prototype('scalar')->end()
+								->end()
+								->arrayNode('default_blocks')
+									->defaultValue($defaultBlocks)
+									->useAttributeAsKey('name')
+									->beforeNormalization()
+										->always(function($config) use($defaultBlocks) {
+											return array_replace_recursive($defaultBlocks, $config);
+										})
+									->end()
+									->prototype('variable')->end()
+								->end()
+								->arrayNode('config_blocks')
+									->defaultValue($defaultConfigs)
+									->useAttributeAsKey('name')
+									->beforeNormalization()
+										->always(function($config) use($defaultConfigs) {
+											return array_replace_recursive($defaultConfigs, $config);
+										})
+									->end()
+									->prototype('variable')->end()
+								->end()
 							->end()
 						->end()
 						->arrayNode('classes')
@@ -87,6 +174,15 @@ class Configuration implements ConfigurationInterface
 									->booleanNode('change_lang')->end()
 									->booleanNode('change_theme')->end()
 									->arrayNode('themes')->prototype('scalar')->end()->end()
+									->arrayNode('available_blocks')->prototype('scalar')->end()->end()
+									->arrayNode('default_blocks')
+										->useAttributeAsKey('name')
+										->prototype('variable')->end()
+									->end()
+									->arrayNode('config_blocks')
+										->useAttributeAsKey('name')
+										->prototype('variable')->end()
+									->end()
 								->end()
 							->end()
 						->end()

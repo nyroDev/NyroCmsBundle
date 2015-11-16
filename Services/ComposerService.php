@@ -19,10 +19,17 @@ class ComposerService extends AbstractService {
 			$composableConfig = $this->getParameter('nyroCms.composable');
 
 			$ret = isset($composableConfig[$class]) ? $composableConfig[$class] : array();
-			if (isset($ret['themes']) && count($ret['themes']) === 0)
-				unset($ret['themes']);
-
+			$cfgArrays = array('themes', 'available_blocks');
+			$cfgArraysMerge = array('default_blocks', 'config_blocks');
+			
+			foreach($cfgArrays as $cfg) {
+				if (isset($ret[$cfg]) && count($ret[$cfg]) === 0)
+					unset($ret[$cfg]);
+			}
+			
 			$this->configs[$class] = array_merge($composableConfig['default'], $ret);
+			foreach($cfgArraysMerge as $cfg)
+				$this->configs[$class][$cfg] = array_replace_recursive($composableConfig['default'][$cfg], isset($ret[$cfg]) ? $ret[$cfg] : array());
 		}
 		return $this->configs[$class];
 	}
@@ -46,6 +53,21 @@ class ComposerService extends AbstractService {
 			$ret[$theme] = $tr && $tr != $trIdent ? $tr : ucfirst($theme);
 		}
 		return $ret;
+	}
+	
+	public function getAvailableBlocks(Composable $row) {
+		$cfg = $this->getConfig($row);
+		return $cfg['available_blocks'];
+	}
+	
+	public function getDefaultBlocks(Composable $row) {
+		$cfg = $this->getConfig($row);
+		return $cfg['default_blocks'];
+	}
+	
+	public function getConfigBlocks(Composable $row) {
+		$cfg = $this->getConfig($row);
+		return $cfg['config_blocks'];
 	}
 	
 	public function getCssTheme(Composable $row) {
@@ -80,54 +102,18 @@ class ComposerService extends AbstractService {
 		$images = array();
 		foreach($blocks as $content) {
 			$contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : array();
-			switch($content['type']) {
-				case 'image3':
-					if (isset($contents['image3']) && isset($contents['image3']['file']))
-						$images[] = $contents['image3']['file'];
-				case 'image2':
-					if (isset($contents['image2']) && isset($contents['image2']['file']))
-						$images[] = $contents['image2']['file'];
-				case 'image':
-					if (isset($contents['image']) && isset($contents['image']['file']))
-						$images[] = $contents['image']['file'];
-					break;
-				case 'slideshow':
-					if (isset($contents['images']) && is_array($contents['images'])) {
-						foreach($contents['images'] as $img) {
-							if (isset($img['file']))
-								$images[] = $img['file'];
-						}
+			foreach($contents as $name=>$c) {
+				if ($name == 'images') {
+					foreach($c as $img) {
+						if (isset($img['file']))
+							$images[] = $img['file'];
 					}
-					break;
+				} else if (isset($c['file']) && $c['file']) {
+					$images[] = $c['file'];
+				}
 			}
 		}
 		return $images;
-	}
-	
-	public function getAvailableBlocks(Composable $row) {
-		if ($row->getContentType() == 'newsletter') {
-			$ret = array(
-				'intro',
-				'text',
-				'image',
-				'newsletter_news',
-				'newsletter_jobs',
-			);
-		} else {
-			$ret = array(
-				'intro',
-				'text',
-				'column2',
-				'column3',
-				'image',
-				'image2',
-				'image3',
-				'slideshow',
-				'video',
-			);
-		}
-		
-		return $ret;
 	}
 	
 	public function getBlock(Composable $row, $block, array $defaults = array()) {

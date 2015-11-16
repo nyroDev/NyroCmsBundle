@@ -37,7 +37,6 @@ class NyroDevNyroCmsExtension extends Extension
 		
 		$composable = $config['composable']['classes'];
 		$composable['default'] = $config['composable']['default'];
-		
 		$container->setParameter('nyroCms.composable', $composable);
 		
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));

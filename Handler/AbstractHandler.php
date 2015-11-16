@@ -76,7 +76,8 @@ abstract class AbstractHandler {
 	 * @return mixed
 	 */
 	public function getParameter($parameter, $default = null) {
-		return $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter, $default) : $default;
+		$value = $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
+		return !is_null($value) ? $value : $default;
 	}
 	
 	/**

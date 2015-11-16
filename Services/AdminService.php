@@ -5,7 +5,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\NyroCmsBundle\Model\User;
+use NyroDev\NyroCmsBundle\Model\Composable;
 
 class AdminService extends AbstractService {
 	
@@ -82,6 +82,17 @@ class AdminService extends AbstractService {
 	
 	public function isDeveloper() {
 		return $this->get('nyrodev_member')->getUser()->getDevelopper();
+	}
+	
+	public function canAdmin(Composable $row) {
+		$canAdmin = false;
+		if ($this->get('nyrocms_db')->isA($row, 'content')) {
+			$canAdmin = $this->canAdminContent($row);
+		} else if ($this->get('nyrocms_db')->isA($row, 'content_spec')) {
+			foreach($row->getContentHandler()->getContents() as $content)
+				$canAdmin = $canAdmin || $this->get('nyrocms_admin')->canAdmin($content);
+		}
+		return $canAdmin;
 	}
 	
 	public function canAdminContent(Content $content) {

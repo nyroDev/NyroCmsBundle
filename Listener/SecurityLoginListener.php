@@ -10,7 +10,7 @@ class SecurityLoginListener extends AbstractService {
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event) {
 		$user = $event->getAuthenticationToken()->getUser();
 		
-		if (is_a($user, $this->get('nyrocms_db')->getClass('user')) && method_exists($event->getAuthenticationToken(), 'getProviderKey')) {
+		if ($this->get('nyrocms_db')->isA($user, 'user') && method_exists($event->getAuthenticationToken(), 'getProviderKey')) {
 			$userLogin = $this->get('nyrocms_db')->getNew('user_login');
 			/* @var $userLogin \NyroDev\NyroCmsBundle\Model\UserLogin */
 			$userLogin->setUser($user);

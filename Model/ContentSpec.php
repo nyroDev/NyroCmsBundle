@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class ContentSpec {
+abstract class ContentSpec implements Composable {
 	
 	const STATE_DISABLED = 0;
 	const STATE_ACTIVE = 1;
@@ -346,7 +346,7 @@ abstract class ContentSpec {
     /**
      * Get contentHandler
      *
-     * @return ContentSpecHandler 
+     * @return ContentHandler 
      */
     public function getContentHandler()
     {
@@ -549,6 +549,22 @@ abstract class ContentSpec {
 	public function getInContent($key) {
 		$content = $this->getContent();
 		return isset($content[$key]) ? $content[$key] : null;
+	}
+	
+	/**
+	 * 
+	 * @return Content
+	 */
+	public function getParent() {
+		return $this->getContentHandler()->getContents()->get(0);
+	}
+
+	public function getTheme() {
+		return $this->getParent()->getTheme();
+	}
+
+	public function getVeryParent() {
+		return $this->getParent()->getVeryParent();
 	}
 	
 }

@@ -22,7 +22,11 @@ abstract class AbstractService extends AbstractServiceSrc {
 		$tmp = explode('\\', $name);
 		$converter = new \Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter();
 		$paramKey = $converter->normalize($tmp[count($tmp) - 1]);
-		return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyroCms.model.classes.'.$paramKey);
+		return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyroCms.model.classes.'.$paramKey, $name);
+	}
+	
+	public function isA($object, $name) {
+		return is_a($object, $this->getClass($name));
 	}
 	
 	/**

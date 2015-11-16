@@ -31,5 +31,5 @@ class ContentSpec extends ContentSpecModel {
      * )
      */
     protected $translations;
-	
+
 }

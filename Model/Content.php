@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class Content implements Composable {
+abstract class Content implements Composable, ComposableHandler {
 	
 	const STATE_DISABLED = 0;
 	const STATE_ACTIVE = 1;
