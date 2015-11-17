@@ -1,0 +1,1 @@
+<img src="<?php echo $image ? $view['nyrocms_composer']->imageResize($image, $config['w'], $config['h']) : 'https://placehold.it/'.$config['w'].'x'.$config['h'] ?>" alt="<?php echo $view->escape($title) ?>" class="<?php echo $class ?>" />

@@ -3,7 +3,7 @@ parameters:
     nyrocms.userService.class: NyroDev\NyroCmsBundle\Services\UserService
     nyrocms.adminService.class: NyroDev\NyroCmsBundle\Services\AdminService
     nyrocms.composerService.class: NyroDev\NyroCmsBundle\Services\ComposerService
-    
+
 services:
     nyrocms:
         class: %nyrocms.mainService.class%

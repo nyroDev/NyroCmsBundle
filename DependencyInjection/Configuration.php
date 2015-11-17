@@ -65,21 +65,83 @@ class Configuration implements ConfigurationInterface
 		);
 		
 		$defaultConfigs = array(
+			'intro'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_intro.html.php'
+			),
+			'text'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_text.html.php'
+			),
+			'column2'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_column2.html.php'
+			),
+			'column3'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_column3.html.php'
+			),
 			'image'=>array(
-				'image'=>array('w'=>500, 'h'=>500),
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_image.html.php',
+				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
 			),
 			'image2'=>array(
-				'image1'=>array('w'=>500, 'h'=>500),
-				'image2'=>array('w'=>500, 'h'=>500),
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
+				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image2'=>array('image'=>true, 'w'=>500, 'h'=>500),
 			),
 			'image3'=>array(
-				'image1'=>array('w'=>500, 'h'=>500),
-				'image2'=>array('w'=>500, 'h'=>500),
-				'image3'=>array('w'=>500, 'h'=>500),
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_image3.html.php',
+				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image2'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image3'=>array('image'=>true, 'w'=>500, 'h'=>500),
 			),
 			'slideshow'=>array(
-				'images'=>array('w'=>1500, 'h'=>1000),
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_slideshow.html.php',
+				'images'=>array(
+					'image'=>true,
+					'multiple'=>true,
+					'big'=>array(
+						'w'=>1500,
+						'h'=>1000
+					),
+					'thumb'=>array(
+						'w'=>100,
+						'h'=>100
+					)
+				),
+			),
+			'video'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_video.html.php'
+			),
+		);
+		
+		$defaultTinymce = array(
+			'plugins'=>'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount',
+			'toolbar'=>'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
+			'menubar'=>'insert edit view table tools',
+			'link_class_list'=>array(
+				array('title'=>'admin.composer.tinymce.linkClass.nothing', 'value'=>''),
+				array('title'=>'admin.composer.tinymce.linkClass.button', 'value'=>'but'),
+			),
+			'style_formats'=>array(
+				array('title'=>'admin.composer.tinymce.styleFormats.blocks', 'items'=>array(
+					array('title'=>'admin.composer.tinymce.styleFormats.block.title1', 'block'=>'h1'),
+					array('title'=>'admin.composer.tinymce.styleFormats.block.title2', 'block'=>'h2'),
+					array('title'=>'admin.composer.tinymce.styleFormats.block.title3', 'block'=>'h3'),
+					array('title'=>'admin.composer.tinymce.styleFormats.block.title4', 'block'=>'h4'),
+					array('title'=>'admin.composer.tinymce.styleFormats.block.paragraph', 'block'=>'p'),
+				)),
+				array('title'=>'admin.composer.tinymce.styleFormats.formatting', 'items'=>array(
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.bold', 'icon'=>'bold', 'format'=>'bold'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.italic', 'icon'=>'italic', 'format'=>'italic'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.underline', 'icon'=>'underline', 'format'=>'underline'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.strikethrough', 'icon'=>'strikethrough', 'format'=>'strikethrough'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.superscript', 'icon'=>'superscript', 'format'=>'superscript'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.subscript', 'icon'=>'subscript', 'format'=>'subscript'),
+					array('title'=>'admin.composer.tinymce.styleFormats.formats.code', 'icon'=>'code', 'format'=>'code'),
+				)),
 			)
+		);
+		
+		$defaultTinymceSimple = array(
+			'toolbar'=>'undo redo',
 		);
 		
 		$rootNode
@@ -137,6 +199,18 @@ class Configuration implements ConfigurationInterface
 							->children()
 								->booleanNode('change_lang')->defaultTrue()->end()
 								->booleanNode('change_theme')->defaultTrue()->end()
+								->scalarNode('global_composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composer.html.php')->end()
+								->scalarNode('composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composerTemplate.html.php')->end()
+								->scalarNode('block_template')->defaultValue('NyroDevNyroCmsBundle:Composer:block.html.php')->end()
+								->scalarNode('css_template')->defaultValue('NyroDevNyroCmsBundle:Composer:cssTemplate.html.php')->end()
+								->arrayNode('cancel_url')
+									->addDefaultsIfNotSet()
+									->children()
+										->scalarNode('route')->defaultValue('nyrocms_admin_data_content_tree')->end()
+										->booleanNode('need_id')->defaultFalse()->end()
+										->variableNode('route_prm')->defaultValue(array())->end()
+									->end()
+								->end()
 								->arrayNode('themes')
 									->defaultValue(array('theme'))
 									->prototype('scalar')->end()
@@ -144,6 +218,14 @@ class Configuration implements ConfigurationInterface
 								->arrayNode('available_blocks')
 									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image2', 'image3', 'slideshow', 'video'))
 									->prototype('scalar')->end()
+								->end()
+								->arrayNode('tinymce')
+									->defaultValue($defaultTinymce)
+									->prototype('variable')->end()
+								->end()
+								->arrayNode('tinymce_simple')
+									->defaultValue($defaultTinymceSimple)
+									->prototype('variable')->end()
 								->end()
 								->arrayNode('default_blocks')
 									->defaultValue($defaultBlocks)
@@ -173,8 +255,25 @@ class Configuration implements ConfigurationInterface
 								->children()
 									->booleanNode('change_lang')->end()
 									->booleanNode('change_theme')->end()
+									->scalarNode('global_composer_template')->end()
+									->scalarNode('composer_template')->end()
+									->scalarNode('block_template')->end()
+									->scalarNode('css_template')->end()
+									->arrayNode('cancel_url')
+										->children()
+											->scalarNode('route')->end()
+											->booleanNode('need_id')->end()
+											->variableNode('route_prm')->end()
+										->end()
+									->end()
 									->arrayNode('themes')->prototype('scalar')->end()->end()
 									->arrayNode('available_blocks')->prototype('scalar')->end()->end()
+									->arrayNode('tinymce')
+										->prototype('variable')->end()
+									->end()
+									->arrayNode('tinymce_simple')
+										->prototype('variable')->end()
+									->end()
 									->arrayNode('default_blocks')
 										->useAttributeAsKey('name')
 										->prototype('variable')->end()

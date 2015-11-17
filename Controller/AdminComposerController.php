@@ -115,7 +115,10 @@ class AdminComposerController extends AbstractAdminController {
 			
 			$this->get('nyrocms_db')->flush();
 			return $this->redirect($url);
-		} else if ($request->query->has('block') && in_array($request->query->get('block'), $availableBlocks)) {
+		} else if ($request->query->has('block')) {
+			if (!in_array($request->query->get('block'), $availableBlocks))
+				throw $this->createNotFoundException();
+			
 			$html = $composerService->renderNew($row, $request->query->get('block'), true);
 			return new \Symfony\Component\HttpFoundation\Response($html);
 		}
@@ -128,7 +131,7 @@ class AdminComposerController extends AbstractAdminController {
 				return $contentHandler;
 		}
 		
-		return $this->render('NyroDevNyroCmsBundle:Composer:composer.html.php', array(
+		return $this->render($this->get('nyrocms_composer')->globalComposerTemplate($row), array(
 			'type'=>$type,
 			'id'=>$id,
 			'composerUrl'=>$url,

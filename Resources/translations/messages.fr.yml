@@ -34,6 +34,27 @@ admin:
     home_move: Déplacer
     home_move_up: Monter
     home_move_down: Descendre
+    tinymce:
+      linkClass:
+        nothing: Aucun
+        button: Bouton
+      styleFormats:
+        blocks: Blocs
+        block:
+          title1: Titre 1
+          title2: Titre 2
+          title3: Titre 3
+          title4: Titre 4
+          paragraph: Paragraphe
+        formatting: Formattage
+        formats:
+          bold: Gras
+          italic: Italique
+          underline: Souligné
+          strikethrough: Barré
+          superscript: Exposant
+          subscript: Indice
+          code: Code
     action:
       confirm: Confirmer
       cancel: Annuler

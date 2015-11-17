@@ -124,7 +124,7 @@
 	display: none;
 }
 .nmConfirm {
-	min-width: 25rem;
+	min-width: 250px;
 }
 .nmConfirm p {
 	margin-top: 0;
@@ -132,7 +132,7 @@
 .nmConfirm button {
 	display: inline-block;
 	width: 48%;
-	max-width: 12rem;
+	max-width: 120px;
 	text-align: center;
 	color: #fff;
 	font-family: 'Roboto', sans-serif;
@@ -142,9 +142,10 @@
 	padding: 0;
 	background: #cf2630;
 	transition: background 300ms;
-	margin-right: 1rem;
+	margin-right: 10px;
 	float: none;
 	border-radius: 0;
+	cursor: pointer;
 }
 .nmConfirm button:hover {
 	background: #000;
@@ -153,15 +154,15 @@
 	margin-right: 0; 
 }
 .nmConfirm input {
-	max-width: 25rem;
+	max-width: 250px;
 	font-family: 'Roboto', sans-serif;
 	color: #000;
-	margin-bottom: 2rem;
+	margin-bottom: 20px;
 	text-align: left;
 }
 .nmConfirm select {
 	font-family: 'Roboto', sans-serif;
 	color: #000;
 	width: 150px;
-	margin-bottom: 2rem;
+	margin-bottom: 20px;
 }
