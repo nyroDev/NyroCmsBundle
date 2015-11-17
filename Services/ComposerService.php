@@ -347,89 +347,11 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function getBlockCustomClass(Composable $row, array $block, $admin = false) {
-		$ret = null;
-		
-		switch($block['type']) {
-			case 'home_public_square':
-				if (isset($block['contents']) && isset($block['contents']['theme']) && $block['contents']['theme'])
-					$ret = 'home_public_square_'.$block['contents']['theme'];
-				break;
-			case 'home_public_wide':
-			case 'home_public_large':
-			case 'home_public_parallax':
-			case 'home_public_small':
-				$ret = '';
-				if (isset($block['contents']['titleBg']) && $block['contents']['titleBg'] && $block['contents']['titleBg'] != 'transparent')
-					$ret.= 'homeTitleBg_'.$block['contents']['titleBg'];
-				if (isset($block['contents']['textBg']) && $block['contents']['textBg'] && $block['contents']['textBg'] != 'transparent')
-					$ret.= ' homeTextBg_'.$block['contents']['textBg'];
-				break;
-			case 'home_extranet':
-				$ret = implode(' ', array_filter(array(
-					'home_extranet_size_'.$block['contents']['size'],
-					'home_extranet_form_'.$block['contents']['form'],
-					'home_extranet_theme_'.$block['contents']['theme'],
-					'home_extranet_type_'.$block['contents']['type'],
-					$block['contents']['size'] != '1x1' ? 'home_extranet_imagePos_'.$block['contents']['imagePos'] : null
-				)));
-				break;
-		}
-		
-		return $ret;
+		return null;
 	}
 	
 	public function getBlockCustomAttrs(Composable $row, array $block, $admin = false) {
-		$ret = null;
-		
-		switch($block['type']) {
-			case 'home_public_square':
-				if (isset($block['contents']) && isset($block['contents']['image']) && $block['contents']['image']['file'])
-					$ret = $this->getBgImage($block['contents']['image']);
-				break;
-			case 'home_public_wide':
-			case 'home_public_large':
-			case 'home_public_small':
-			case 'home_public_parallax':
-				$ret = '';
-				//$ret = 'data-top-top="transform: translate3d(0px, 0px, 0px);" data-top-bottom="transform: translate3d(0px, 250%, 0px)" ';
-				if (isset($block['contents']) && isset($block['contents']['image']) && $block['contents']['image']['file'])
-					$ret.= $this->getBgImage($block['contents']['image']);
-				break;
-			case 'home_extranet':
-				$ret = '';
-				$sizes = explode('x', $block['contents']['size']);
-				$pos = explode('x', $block['contents']['pos']);
-				$ret.= ' data-col="'.$pos[0].'" data-row="'.$pos[1].'" data-sizex="'.$sizes[0].'" data-sizey="'.$sizes[1].'"';
-				if (isset($block['contents']) && isset($block['contents']['image']) && $block['contents']['image']['file']) {
-					$file = array(
-						'file'=>$block['contents']['image']['file']
-					);
-					$ret.= $this->getBgImage(array_merge($this->getHomeExtranetImageSizes($block['contents']['size'], $block['contents']['imagePos']), $file));
-					if ($admin) {
-						// Prepare all possible images
-						$tmp = $this->getExtranetImages($block['contents']['image']['file'], $block['contents']['size']);
-						foreach($tmp as $k=>$v)
-							$ret.= ' data-image_'.$k.'="'.$v.'"';
-					}
-				}
-				break;
-		}
-		
-		return $ret;
-	}
-	
-	public function getBgImage(array $image, $urlOnly = false) {
-		$imageUrl = $imageUrlOrig = $this->imageResize($image['file'], $image['w'], $image['h']);
-		/*
-		if ($image['w'] > 1024) {
-			$newW = 1024;
-			$newH = round($newW * $image['h'] / $image['w']);
-			$imageUrl = $this->imageResize($image['file'], $newW, $newH);
-		}
-		 */
-		if ($urlOnly)
-			return $imageUrl;
-		return ' style="background-image: url('.$imageUrl.')"'.($imageUrlOrig != $imageUrl ? ' data-bigimg="url('.$imageUrlOrig.')"' : '');
+		return null;
 	}
 	
 	public function getImageDir() {
@@ -478,49 +400,5 @@ class ComposerService extends AbstractService {
 		return $ret;
 	}
 
-	public function getExtranetImages($file, $size) {
-		$fileA = array('file'=>$file);
-		$ret = array(
-			'full'=>$this->getBgImage(array_merge($this->getHomeExtranetImageSizes($size, 'full'), $fileA), true)
-		);
-		$tmp = explode('x', $size);
-		if ($tmp[0] == '2') {
-			$image = $this->getBgImage(array_merge($this->getHomeExtranetImageSizes($size, 'left'), $fileA), true);
-			$ret['left'] = $image;
-			$ret['right'] = $image;
-		}
-		if ($tmp[1] == '2') {
-			$image = $this->getBgImage(array_merge($this->getHomeExtranetImageSizes($size, 'top'), $fileA), true);
-			$ret['top'] = $image;
-			$ret['bottom'] = $image;
-		}
-		return $ret;
-	}
-	
-	public function getHomeExtranetImageSizes($size, $imagePos) {
-		$ret = array(
-			'w'=>500,
-			'h'=>450
-		);
-		
-		switch($size.'-'.$imagePos) {
-			case '1x2-full':
-			case '2x2-right':
-			case '2x2-left':
-				$ret['h'] = $ret['h'] * 2 + 30;
-				break;
-			case '2x1-full':
-			case '2x2-top':
-			case '2x2-bottom':
-				$ret['w'] = $ret['w'] * 2 + 30;
-				break;
-			case '2x2-full':
-				$ret['w'] = $ret['w'] * 2 + 30;
-				$ret['h'] = $ret['h'] * 2 + 30;
-				break;
-		}
-		
-		return $ret;
-	}
 }
 
