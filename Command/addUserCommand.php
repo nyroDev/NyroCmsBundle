@@ -43,7 +43,7 @@ class addUserCommand extends ContainerAwareCommand {
 		$userroles = $input->getArgument('userroles');
 		
 		$dbService = $this->getContainer()->get('nyrocms_db');
-		$userTypes = $this->getContainer()->get('nyrocms_admin')->getUserTypes();
+		$userTypes = $this->getContainer()->get('nyrocms_admin')->getUserTypeChoices();
 		$userRolesDb = $this->getContainer()->get('nyrocms_admin')->getUserRoles();
 		
 		$helper = $this->getHelper('question');
