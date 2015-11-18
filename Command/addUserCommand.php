@@ -71,8 +71,7 @@ class addUserCommand extends ContainerAwareCommand {
 		if (!$usertype) {
 			$question = new ChoiceQuestion(
 				'User type for the user?',
-				$userTypes
-			);
+				$userTypes);
 			$usertype = $helper->ask($input, $output, $question);
 		}
 		
@@ -80,8 +79,7 @@ class addUserCommand extends ContainerAwareCommand {
 			$question = new ChoiceQuestion(
 				'Is developper?',
 				array('false', 'true'),
-				0
-			);
+				0);
 			$developper = $helper->ask($input, $output, $question);
 		}
 		
@@ -112,8 +110,7 @@ class addUserCommand extends ContainerAwareCommand {
 			$question = new ChoiceQuestion(
 				'User roles for the user?',
 				$userRolesDbList,
-				'0'
-			);
+				'0');
 			$question->setMultiselect(true);
 			$tmp = $helper->ask($input, $output, $question);
 			foreach($tmp as $tmp2) {

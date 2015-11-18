@@ -40,8 +40,7 @@ class addRoleCommand extends ContainerAwareCommand {
 			$question = new ChoiceQuestion(
 				'Is this role internal?',
 				array('false', 'true'),
-				0
-			);
+				0);
 			$internal = $helper->ask($input, $output, $question);
 		}
 		
