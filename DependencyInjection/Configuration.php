@@ -110,6 +110,9 @@ class Configuration implements ConfigurationInterface
 			'video'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_video.html.php'
 			),
+			'handler'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_handler.html.php'
+			),
 		);
 		
 		$defaultTinymce = array(

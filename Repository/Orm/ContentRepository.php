@@ -34,6 +34,21 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $q->getResult();
 	}
 	
+	public function findByUrl($url, $rootId, array $states = array()) {
+		$qb = $this->createQueryBuilder('c')
+			->andWhere('c.root = :root')->setParameter('root', $rootId)
+			->andWhere('c.url = :url')->setParameter('url', $url);
+		
+		if (count($states))
+			$qb->andWhere('c.state IN (:states)')->setParameter('states', $states);
+		
+		return $qb
+			->setMaxResults(1)
+			->getQuery()
+			->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+			->getOneOrNullResult();
+	}
+	
 	public function findByLog($field, $value) {
 		$search = 's:'.strlen($field).':"'.$field.'";s:'.strlen($value).':"'.$value.'";';
 		$logValues = $this->getEntityManager()->getRepository('NyroDevNyroCmsBundle:ContentLog')
@@ -54,6 +69,40 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 			}
 		}
 		return $ret;
+	}
+	
+	public function search(array $searches, $rootId = null, $state = null) {
+		$query = $parameters = array();
+		foreach($searches as $k=>$v) {
+			$query[] = 'c.contentText LIKE :text'.$k;
+			$parameters['text'.$k] = '%'.$v.'%';
+		}
+			
+		$qb = $this->createQueryBuilder('c')
+				->andWhere('('.implode(' AND ', $query).')')->setParameters($parameters);
+		
+		if (!is_null($rootId))
+			$qb->andWhere('c.root = :root')->setParameter('root', $rootId);
+		
+		if (!is_null($state))
+			$qb->andWhere('c.state = :state')->setParameter('state', $state);
+		
+		return $qb->getQuery()
+				->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+				->getResult();
+	}
+	
+	public function findWithContentHandler($rootId = null, $state = null) {
+		$qb = $this->createQueryBuilder('c')
+				->andWhere('c.contentHandler IS NOT NULL');
+		
+		if (!is_null($rootId))
+			$qb->andWhere('c.root = :root')->setParameter('root', $rootId);
+		
+		if (!is_null($state))
+			$qb->andWhere('c.state = :state')->setParameter('state', $state);
+		
+		return $qb->getQuery()->getResult();
 	}
 	
 	public function findOneByContentHandlerCode($code, \NyroDev\NyroCmsBundle\Model\Content $root = null) {

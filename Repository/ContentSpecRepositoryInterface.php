@@ -18,4 +18,8 @@ interface ContentSpecRepositoryInterface {
 	
 	public function getAfters(ContentSpec $contentSpec);
 	
+	public function findForAction($id, $contentHandlerId, array $states = array());
+	
+	public function search(array $searches, array $contentHandlersIds = array(), $state = null);
+	
 }

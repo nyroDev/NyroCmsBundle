@@ -26,10 +26,57 @@ class MainService extends AbstractService {
 		return $this->activeIds;
 	}
 	
-	public function getUrlFor($object, $absolute = false, array $prm = array()) {
-		$ret = '#';
-		
-		return $ret;
+	protected $contentRoots = array();
+	
+	/**
+	 * 
+	 * @param type $id
+	 * @return \Sis\DbBundle\Entity\Content
+	 */
+	public function getContentRoot($id) {
+		if (!isset($this->contentRoots[$id]))
+			$this->contentRoots[$id] = $this->get('nyrocms_db')->getContentRepository()->find($id);
+		return $this->contentRoots[$id];
+	}
+	
+	public function getUrlFor($object, $absolute = false, array $prm = array(), $parent = null) {
+		$routeCfg = $this->getRouteFor($object, $prm, $parent);
+		return $routeCfg['route'] ? $this->generateUrl($routeCfg['route'], $routeCfg['prm'], $absolute) : '#';
+	}
+	
+	public function getRouteFor($object, array $prm = array(), $parent = null) {
+		$routeName = null;
+		if ($object instanceof \NyroDev\NyroCmsBundle\Model\Content) {
+			$root = $this->getContentRoot($object->getRoot());
+			if ($root->getId() == $object->getId()) {
+				$routeName = $root->getHandler().'_homepage';
+			} else {
+				$routeName = $root->getHandler().'_content';
+				if (isset($prm['handler']) && $prm['handler'])
+					$routeName.= '_handler';
+				$prm = array_merge($prm, array(
+					'url'=>trim($object->getUrl(), '/'),
+				));
+			}
+		} else if ($object instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
+			$parent = is_null($parent) ? $object->getParent() : $parent;
+			if (!$this->getHandler($object->getContentHandler())->hasContentSpecUrl())
+				return $this->getUrlFor($parent, $absolute, $prm);
+			
+			$root = $this->getContentRoot($parent->getRoot());
+			$routeName = $root->getHandler().'_content_spec';
+			if (isset($prm['handler']) && $prm['handler'])
+				$routeName.= '_handler';
+			$prm = array_merge($prm, array(
+				'url'=>trim($parent->getUrl(), '/'),
+				'id'=>$object->getId(),
+				'title'=>$this->get('nyrodev')->urlify($object->getTitle())
+			));
+		}
+		return array(
+			'route'=>$routeName,
+			'prm'=>$prm
+		);
 	}
 
 	
@@ -40,81 +87,6 @@ class MainService extends AbstractService {
 			'attr'=>array(
 				'class'=>'datepicker',
 			)
-		);
-	}
-	
-	public function getTinymceOptions() {
-		return array(
-			'tinymcePlugins'=>'template,importcss',
-			'tinymce'=>array(
-				'width'=>787,
-				'body_class'=>'cont',
-				'content_css'=>json_encode(array(
-					$this->container->get('templating.helper.assets')->getUrl('css/global.css'),
-					$this->container->get('templating.helper.assets')->getUrl('css/responsiveGlobal.css'),
-				)),
-				'importcss_append'=>true,
-				'importcss_selector_filter'=>'.ed_',
-				'style_formats'=>array(
-					array('title'=>'Titre', 'block'=>'h1'),
-					array('title'=>'Sous-Titre', 'block'=>'h2'),
-					array('title'=>'Sous-Titre 2', 'block'=>'h3'),
-					array('title'=>'Paragraphe', 'block'=>'p'),
-					array('title'=>'Légende', 'inline'=>'small'),
-				),
-				'link_class_list'=>array(
-					array('title'=>'Aucun', 'value'=>''),
-					array('title'=>'Bouton', 'value'=>'but'),
-				),
-				/*
-				'templates'=>json_encode(array(
-					array(
-						'title'=>'Onglet',
-						'description'=>'Onglet dans une page',
-						'content'=>'<p>&nbsp;</p><section class="tabbed switchable">'
-						. '<nav><a href="#content1">Contenu 1</a><a href="#content2">Contenu 2</a><a href="#content3">Contenu 3</a></nav>'
-						. '<div id="content1"><h3>Contenu 1</h3><p>Le contenu 1<br />Le contenu 1<br />Le contenu 1<br />Le contenu 1<br /></p></div>'
-						. '<div id="content2"><h3>Contenu 2</h3><p>Le contenu 2<br />Le contenu 2<br />Le contenu 2<br />Le contenu 2<br /></p></div>'
-						. '<div id="content3"><h3>Contenu 3</h3><p>Le contenu 3<br />Le contenu 3<br />Le contenu 3<br />Le contenu 3<br /></p></div>'
-						. '</section><br /><p>&nbsp;</p>',
-					),
-					array(
-						'title'=>'2 colonnes',
-						'description'=>'Texte affiché sur 2 colonnes',
-						'content'=>'<p>&nbsp;</p><section class="columns_2">'
-						. '<div class="col">'
-						. '<p>Le contenu 1<br />Le contenu 1<br />Le contenu 1<br />Le contenu 1<br /></p>'
-						. '<p>Le contenu 2<br />Le contenu 2<br />Le contenu 2<br />Le contenu 2<br /></p>'
-						. '<p>Le contenu 3<br />Le contenu 3<br />Le contenu 3<br />Le contenu 3<br /></p>'
-						. '</div>'
-						. '<div class="col">'
-						. '<p>Le contenu 1<br />Le contenu 1<br />Le contenu 1<br />Le contenu 1<br /></p>'
-						. '<p>Le contenu 2<br />Le contenu 2<br />Le contenu 2<br />Le contenu 2<br /></p>'
-						. '<p>Le contenu 3<br />Le contenu 3<br />Le contenu 3<br />Le contenu 3<br /></p>'
-						. '</div>'
-						. '</section><br /><p>&nbsp;</p>'
-					),
-				)),
-				 */
-			),
-		);
-	}
-	
-	public function getLightTinymceOptions() {
-		return array(
-			'tinymce'=>array(
-				'width'=>'100%',
-				'height'=>200,
-				'menubar'=>'false',
-				'statusbar'=>'false',
-				'toolbar'=>'undo redo | styleselect | bold italic | bullist numlist outdent indent',
-				'valid_elements'=>'h1,h2,p,br,ul,ol,li,strong,em',
-				'style_formats'=>array(
-					array('title'=>'Titre', 'block'=>'h1'),
-					array('title'=>'Sous-Titre', 'block'=>'h2'),
-					array('title'=>'Paragraphe', 'block'=>'p'),
-				),
-			),
 		);
 	}
 	

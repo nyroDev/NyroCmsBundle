@@ -107,5 +107,43 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
 					->getQuery()
 					->getResult();
 	}
+	
+	public function findForAction($id, $contentHandlerId, array $states = array()) {
+		$qb = $this->createQueryBuilder('cs')
+				->andWhere('cs.id = :id')
+					->setParameter('id', $id)
+				->andWhere('cs.contentHandler = :chid')
+					->setParameter('chid', $contentHandlerId);
+		
+		if (count($states))
+			$qb->andWhere('cs.state IN (:states)')->setParameter('states', $states);
+		
+		return $qb
+				->setMaxResults(1)
+				->getQuery()
+				->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+				->getOneOrNullResult();
+	}
+	
+	public function search(array $searches, array $contentHandlersIds = array(), $state = null) {
+		$query = $parameters = array();
+		foreach($searches as $k=>$v) {
+			$query[] = 'cs.contentText LIKE :text'.$k;
+			$parameters['text'.$k] = '%'.$v.'%';
+		}
+		
+		$qb = $this->createQueryBuilder('cs')
+			->andWhere('('.implode(' AND ', $query).')')->setParameters($parameters);
+		
+		if (count($contentHandlersIds))
+			$qb->andWhere('cs.contentHandler IN (:ctids)')->setParameter('ctids', $contentHandlersIds);
+		
+		if (!is_null($state))
+			$qb->andWhere('cs.state = :state')->setParameter('state', $state);
+		
+		return $qb->getQuery()
+			->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
+			->getResult();
+	}
 
 }

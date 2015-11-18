@@ -10,7 +10,13 @@ interface ContentRepositoryInterface extends RepositoryInterface {
 	
 	public function getPathForBreacrumb($node, $excludeNode = true);
 	
+	public function findByUrl($url, $rootId, array $states = array());
+	
 	public function findByLog($field, $value);
+	
+	public function search(array $searches, $rootId = null, $state = null);
+	
+	public function findWithContentHandler($rootId = null, $state = null);
 	
 	public function findOneByContentHandlerCode($code, \NyroDev\NyroCmsBundle\Model\Content $root = null);
 	

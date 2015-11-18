@@ -40,11 +40,11 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function canChangeLang(Composable $row) {
-		return $this->getQuickConfig($row, 'change_lang');
+		return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'change_lang');
 	}
 	
 	public function canChangeTheme(Composable $row) {
-		return $this->getQuickConfig($row, 'change_theme');
+		return is_callable(array($row, 'setTheme')) && $this->getQuickConfig($row, 'change_theme');
 	}
 	
 	public function cssTemplate(Composable $row) {
