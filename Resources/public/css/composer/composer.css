@@ -3,7 +3,7 @@ body {
 }
 main {
 	margin: 0 auto;
-	max-width: 1575px;
+	max-width: 1500px;
 	overflow: hidden;
 }
 .icon {
@@ -52,6 +52,7 @@ header {
 	top: 0;
 	left: 0;
 	right: 0;
+	font-size: 14px;
 	height: 140px;
 	background: #000;
 	font-family: 'Roboto', sans-serif;
@@ -403,4 +404,8 @@ header {
 		width: 65%;
 		height: 3vw;
 	}
+}
+
+.bg_public {
+	background: #fff;
 }

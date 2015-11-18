@@ -79,12 +79,12 @@ class Configuration implements ConfigurationInterface
 			),
 			'image'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image.html.php',
-				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image'=>array('image'=>true, 'w'=>1500, 'h'=>600),
 			),
 			'image2'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
 				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500),
-				'image2'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image2'=>array('image'=>true, 'w'=>1000, 'h'=>500),
 			),
 			'image3'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image3.html.php',

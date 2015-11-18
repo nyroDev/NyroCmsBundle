@@ -53,8 +53,8 @@ class addRootContentCommand extends ContainerAwareCommand {
 		
 		$newContent->setTitle($title);
 		$newContent->setUrl('/');
-		$newContent->setHandler($title);
-		$newContent->setTheme($title);
+		$newContent->setHandler($handler);
+		$newContent->setTheme($theme);
 		
 		$dbService->flush();
 		

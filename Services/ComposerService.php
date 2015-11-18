@@ -60,11 +60,18 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function cancelUrl(Composable $row) {
-		$cfg = $this->getConfig($row);
-		$routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
-		if ($cfg['cancel_url']['need_id'])
-			$routePrm['id'] = $row->getId();
-		return $this->get('nyrodev')->generateUrl($cfg['cancel_url']['route'], $routePrm);
+		$ret = '#';
+		if ($row instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
+			$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+			$ret = $this->get('nyrodev')->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+		} else {
+			$cfg = $this->getConfig($row);
+			$routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
+			if ($cfg['cancel_url']['need_id'])
+				$routePrm['id'] = $row->getId();
+			$ret = $this->get('nyrodev')->generateUrl($cfg['cancel_url']['route'], $routePrm);
+		}
+		return $ret;
 	}
 	
 	public function getThemes(Composable $row) {
