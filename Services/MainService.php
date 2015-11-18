@@ -18,6 +18,14 @@ class MainService extends AbstractService {
 		return $this->handlers[$contentHandler->getId()];
 	}
 	
+	protected $activeIds = array();
+	public function setActiveIds($activeIds) {
+		$this->activeIds = $activeIds;
+	}
+	public function getActiveIds() {
+		return $this->activeIds;
+	}
+	
 	public function getUrlFor($object, $absolute = false, array $prm = array()) {
 		$ret = '#';
 		

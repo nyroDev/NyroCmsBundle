@@ -14,7 +14,7 @@ body {
 	height: 30px;
 	fill: #fff;
 	stroke: #fff;
-	background: #cf2630;
+	background: #7495c2;
 	transition: background 300ms, fill 300ms, stroke 300ms;
 }
 .button, .form_button button {
@@ -23,7 +23,7 @@ body {
 	height: 30px;
 	line-height: 30px;
 	color: #fff;
-	background: #cf2630;
+	background: #7495c2;
 	font-size: 14px;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 900;
@@ -60,7 +60,11 @@ aside header {
 	position: relative;
 	padding: 40px 0 25px 45px;
 	overflow: hidden;
-	background: url(images/admin/menuBg.jpg) top center;
+	background: #7495c2;
+	background: -moz-linear-gradient(top, #7495c2 0%, #000000 100%);
+	background: -webkit-linear-gradient(top, #7495c2 0%,#000000 100%);
+	background: linear-gradient(to bottom, #7495c2 0%,#000000 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7495c2', endColorstr='#000000',GradientType=0 );
 }
 aside header:after {
 	right: 0;
@@ -77,14 +81,10 @@ aside header:after {
 	margin-top: -8px;
 }
 aside header h1 {
-	margin: 0 0 20px 0;
-	width: 222px;
-	height: 52px;
-	text-indent: -999em;
-	background: url(images/admin/bigAdmin.png);
+	margin-top: 0;
 }
 aside header strong {
-	color: #cf2630;
+	color: #9BC3FF;
 }
 aside header .button {
 	margin-bottom: 10px;
@@ -98,7 +98,7 @@ aside a {
 	text-decoration: none;
 }
 aside a:hover {
-	color: #cf2630;
+	color: #9BC3FF;
 }
 aside nav {
 	position: relative;
@@ -119,7 +119,7 @@ aside nav:after {
 	margin-top: -8px;
 }
 aside nav h2 {
-	color: #cf2630;
+	color: #9BC3FF;
 	font-size: 14px;
 	text-transform: uppercase;
 	font-weight: 900;
@@ -139,7 +139,7 @@ aside nav a {
 	transition: background 200ms, color 200ms;
 }
 aside nav .active, aside nav a:hover {
-	color: #cf2630;
+	color: #7495c2;
 	background: #fff;
 }
 
@@ -154,7 +154,7 @@ main h1 {
 	text-transform: uppercase;
 }
 main a {
-	color: #cf2630;
+	color: #7495c2;
 	text-decoration: none;
 }
 main a:hover {
@@ -224,10 +224,10 @@ main table.data th.actions {
 	margin-left: -12px;
 }
 .listSortAsc.active:after, .listSortAsc:hover:after {
-	border-bottom-color: #cf2630;
+	border-bottom-color: #7495c2;
 }
 .listSortDesc.active:after, .listSortDesc:hover:after {
-	border-top-color: #cf2630;
+	border-top-color: #7495c2;
 }
 main table.data td {
 	background: #e5e5e5;
@@ -254,7 +254,7 @@ main table.data td.actions .up, main table.data td.actions .down {
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
-	background: #cf2630;
+	background: #7495c2;
 	text-indent: -999em;
 	transition: background 300ms;
 }

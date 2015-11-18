@@ -63,29 +63,29 @@
 	-moz-flex-grow: 2;
 	-ms-flex-grow: 2;
 	flex-grow: 2;
-	background: #cf2630;
+	background: #7495c2;
 }
 .nodeCont > a {
 	margin-left: 5px;
 }
 .tree ul .nodeCont span, .tree ul .nodeCont span .icon {
-	background: #000;
+	background: #d7d7d7;
+	color: #000;
+	fill: #000;
+	stroke: #000;
 }
 .tree ul .nodeCont span a:hover .icon {
-	background: #cf2630;
+	background: #000;
+	fill: #fff;
+	stroke: #fff;
 }
 .tree .tree ul .nodeCont span, .tree .tree ul .nodeCont span .icon {
 	background: #e5e5e5;
 	color: #000;
 	text-transform: none;
-	fill: #000;
-	stroke: #000;
 }
 .tree .tree ul .nodeCont span a:hover .icon {
 	background: #000;
-	text-transform: none;
-	fill: #fff;
-	stroke: #fff;
 }
 .tree .tree .tree ul .nodeCont span, .tree .tree .tree ul .nodeCont span .icon {
 	background: #f6f6f6;

@@ -1,13 +1,9 @@
 #loginpage {
-	background: url(images/admin/home.jpg) no-repeat center center;
-	background-size: cover;
-}
-#loginpage h1 {
-	display: inline-block;
-	width: 273px;
-	height: 64px;
-	text-indent: -999em;
-	background: url(images/admin/bigAdminHome.png);
+	background: #7495c2;
+	background: -moz-linear-gradient(top, #7495c2 0%, #ffffff 100%);
+	background: -webkit-linear-gradient(top, #7495c2 0%,#ffffff 100%);
+	background: linear-gradient(to bottom, #7495c2 0%,#ffffff 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7495c2', endColorstr='#ffffff',GradientType=0 );
 }
 #loginpage main {
 	width: 100%;
@@ -23,13 +19,8 @@
 	background: #000;
 	background: rgba(0, 0, 0, 0.6);;
 }
-#loginpage #sisLogo {
-	display: inline-block;
-	width: 100px;
-	height: 100px;
-	text-indent: -999em;
-	background-image: url(images/sisLogo.png);
-	background-size: cover;
+#loginpage #adminLogo {
+	display: none;
 }
 #loginpage .formCentered form {
 	position: static;
@@ -60,10 +51,10 @@
 	transition: background 300ms;
 }
 #loginpage .formCentered button:hover {
-	background: #cf2630;
+	background: #7495c2;
 }
 #loginpage .form_errors {
-	color: #cf2630;
+	color: #9BC3FF;
 	margin-bottom: 15px;
 }
 .forgotLink {

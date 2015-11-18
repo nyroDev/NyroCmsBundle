@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\User;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserService extends AbstractService {
 	
@@ -160,7 +161,7 @@ class UserService extends AbstractService {
 	}
 	
 	public function handleAccount($place, Request $request) {
-		$this->setActiveIds(array('account'=>'account'));
+		$this->get('nyrocms')->setActiveIds(array('account'=>'account'));
 		$ret = array(
 			'fields'=>false,
 			'password'=>false,

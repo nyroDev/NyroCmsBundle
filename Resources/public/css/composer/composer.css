@@ -11,7 +11,7 @@ main {
 	height: 30px;
 	fill: #fff;
 	stroke: #fff;
-	background: #cf2630;
+	background: #7495c2;
 	transition: all 300ms;
 }
 #composer {
@@ -58,12 +58,15 @@ header {
 	text-align: center;
 	z-index: 10;
 }
+#composerTools a {
+	text-decoration: none;
+}
 #composerTools #availableBlocks, #composerTools .select {
 	position: relative;
 	display: inline-block;
 }
 #composerTools span {
-	color: #cf2630;
+	color: #7495c2;
 	font-weight: 900;
 }
 #composerTools .selectLink, #composerTools #availableBlocks a, #addBlockExtranet {
@@ -113,16 +116,16 @@ header {
 }
 .selecterLink .selectList a:hover {
 	text-decoration: none;
-	color: #cf2630;
+	color: #7495c2;
 }
 #composerTools .selectLink:hover {
 	text-decoration: none;
 }
 #composerTools .selectLink:hover:after, #composerTools .opened .selectLink:after {
-	border-top-color: #cf2630;
+	border-top-color: #7495c2;
 }
 #composerTools #availableBlocks a:hover, #addBlockExtranet:hover {
-	border-top-color: #cf2630;
+	border-top-color: #7495c2;
 }
 #composerTools .selectLink {
 	background: #e1e1e1; 
@@ -211,7 +214,8 @@ header {
 	z-index: 2;
 }
 .composerButtons a {
-	background: #cf2630;
+	text-decoration: none;
+	background: #7495c2;
 	color: #fff;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 900;
@@ -247,7 +251,7 @@ header {
 	font-weight: 900;
 	text-transform: uppercase;
 	padding: 10px 14px;
-	background: #cf2630;
+	background: #7495c2;
 	border: none;
 	-webkit-border-radius: 0;
 	border-radius: 0;
@@ -317,7 +321,7 @@ header {
 	text-transform: uppercase;
 	line-height: 30px;
 	padding: 0 22px;
-	background: #cf2630;
+	background: #7495c2;
 	border-radius: 0;
 	transition: background 300ms;
 }
@@ -358,38 +362,6 @@ header {
 	background: url(images/admin/stripe.png);
 	opacity: 0.5;
 	z-index: 1;
-}
-.homeText .composableHomeTextBg {
-	left: 0;
-	top: -55px;
-}
-.block_home_public_wide .composableHomeTitleBg,
-.block_home_public_large .composableHomeTitleBg,
-.block_home_public_parallax .composableHomeTitleBg
-{
-	left: auto;
-	right: 75px;
-	top: 20px;
-}
-.block_home_public_small .composableHomeTitleBg
-{
-	left: auto;
-	right: 10px;
-	top: 100px;
-	z-index: 1;
-}
-.block_newsletter_news .composableSel, .block_newsletter_jobs .composableSel {
-	left: 0;
-	width: 30px;
-	height: 30px;
-	display: none;
-}
-.block_newsletter_news:hover .composableSel, .block_newsletter_jobs:hover .composableSel {
-	display: block;
-}
-.block_newsletter_news .composableSel strong, .block_newsletter_jobs .composableSel strong {
-	font-size: 20px;
-	line-height: 30px;
 }
 @media all and (max-width: 1460px) {
 	#composerTools {
