@@ -129,8 +129,9 @@ class MainService extends AbstractService {
 	}
 	
 	public function getDefaultLocale($rootContent = null) {
-		$rootContent = $rootContent->getVeryParent();
-		if ($rootContent->getLocales()) {
+		if ($rootContent)
+			$rootContent = $rootContent->getVeryParent();
+		if ($rootContent && $rootContent->getLocales()) {
 			$tmp = explode('|', $rootContent->getLocales());
 			return $tmp[0];
 		} else {
@@ -139,7 +140,8 @@ class MainService extends AbstractService {
 	}
 	
 	public function getLocales($rootContent = null, $asString = false) {
-		$rootContent = $rootContent->getVeryParent();
+		if ($rootContent)
+			$rootContent = $rootContent->getVeryParent();
 		$locales = $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
 		return $asString ? $locales : explode('|', $locales);
 	}
