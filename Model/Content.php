@@ -86,6 +86,18 @@ abstract class Content implements Composable, ComposableHandler {
     protected $handler;
 
     /**
+     * @var string
+	 * @Gedmo\Versioned
+     */
+    protected $host;
+
+    /**
+     * @var boolean
+	 * @Gedmo\Versioned
+     */
+    protected $xmlSitemap;
+
+    /**
      * @var ContentHandler
 	 * @Gedmo\Versioned
      */
@@ -418,6 +430,52 @@ abstract class Content implements Composable, ComposableHandler {
     public function getHandler()
     {
         return $this->handler;
+    }
+
+    /**
+     * Set host
+     *
+     * @param string $host
+     * @return Content
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+
+        return $this;
+    }
+
+    /**
+     * Get host
+     *
+     * @return string 
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * Set xmlSitemap
+     *
+     * @param boolean $xmlSitemap
+     * @return Content
+     */
+    public function setXmlSitemap($xmlSitemap)
+    {
+        $this->xmlSitemap = $xmlSitemap;
+
+        return $this;
+    }
+
+    /**
+     * Get xmlSitemap
+     *
+     * @return boolean 
+     */
+    public function getXmlSitemap()
+    {
+        return $this->xmlSitemap;
     }
 
     /**

@@ -18,7 +18,9 @@ class addRootContentCommand extends ContainerAwareCommand {
 			->setDescription('Create DB root content role according to configuration')
             ->addArgument('title', InputArgument::OPTIONAL, 'Content title', null)
             ->addArgument('handler', InputArgument::OPTIONAL, 'Content handler', null)
-            ->addArgument('theme', InputArgument::OPTIONAL, 'Content theme', null);
+            ->addArgument('theme', InputArgument::OPTIONAL, 'Content theme', null)
+            ->addArgument('host', InputArgument::OPTIONAL, 'Host constraint', null)
+            ->addArgument('xmlSitemap', InputArgument::OPTIONAL, 'Xml sitemap enabling', null);
 	}
 	
 	/**
@@ -31,6 +33,8 @@ class addRootContentCommand extends ContainerAwareCommand {
 		$title = $input->getArgument('title');
 		$handler = $input->getArgument('handler');
 		$theme = $input->getArgument('theme');
+		$host = $input->getArgument('host');
+		$xmlSitemap = $input->getArgument('xmlSitemap');
 		
 		$helper = $this->getHelper('question');
 		if (!$title) {
@@ -45,6 +49,17 @@ class addRootContentCommand extends ContainerAwareCommand {
 			$question = new Question('Please enter the theme of the root content: ');
 			$theme = $helper->ask($input, $output, $question);
 		}
+		if (!$host) {
+			$question = new Question('Please enter the host of the root content: ');
+			$host = $helper->ask($input, $output, $question);
+		}
+		if (is_null($xmlSitemap)) {
+			$question = new ChoiceQuestion(
+				'Is Xml sitemap enabled?',
+				array('false', 'true'),
+				1);
+			$xmlSitemap = $helper->ask($input, $output, $question);
+		}
 		
 		$dbService = $this->getContainer()->get('nyrocms_db');
 		$newContent = $dbService->getNew('content');
@@ -55,6 +70,8 @@ class addRootContentCommand extends ContainerAwareCommand {
 		$newContent->setUrl('/');
 		$newContent->setHandler($handler);
 		$newContent->setTheme($theme);
+		$newContent->setHost($host);
+		$newContent->setXmlSitemap($xmlSitemap === 'true');
 		
 		$dbService->flush();
 		
