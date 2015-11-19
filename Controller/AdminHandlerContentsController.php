@@ -181,8 +181,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	 */
 	protected $contentForm;
 	protected function contentFormClb($action, \NyroDev\NyroCmsBundle\Model\ContentSpec $row, \Symfony\Component\Form\FormBuilder $form) {
-		$langs = $this->getLangs();
-		unset($langs[$this->getParameter('locale')]);
+		$langs = $this->get('nyrocms')->getLocaleNames($row);
+		$defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
+		unset($langs[$defaultLocale]);
 		
 		$this->translations = array();
 		foreach($row->getTranslations() as $tr) {
@@ -226,8 +227,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	protected function contentAfterFlush($response, $action, $row) {
 		$this->get('nyrocms')->getHandler($row->getContentHandler())->afterFlushClb($response, $action, $row);
 		
-		$langs = $this->getLangs();
-		unset($langs[$this->getParameter('locale')]);
+		$langs = $this->get('nyrocms')->getLocaleNames($row);
+		$defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
+		unset($langs[$defaultLocale]);
 		
 		$om = $this->get('nyrocms_db')->getObjectManager();
 		$propertyAccess = PropertyAccess::createPropertyAccessor();

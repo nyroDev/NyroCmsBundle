@@ -2,12 +2,15 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Model\ContentHandler;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\UtilityBundle\Services\AbstractService;
 
 class MainService extends AbstractService {
 	
 	protected $handlers = array();
-	public function getHandler(\NyroDev\NyroCmsBundle\Model\ContentHandler $contentHandler) {
+	public function getHandler(ContentHandler $contentHandler) {
 		if (!isset($this->handlers[$contentHandler->getId()])) {
 			$class = $contentHandler->getClass();
 			if (!class_exists($class))
@@ -26,12 +29,21 @@ class MainService extends AbstractService {
 		return $this->activeIds;
 	}
 	
+	protected $rootContent;
+	
+	public function setRootContent(Content $content) {
+		$this->rootContent = $content;
+	}
+	public function getRootContent() {
+		return $this->rootContent;
+	}
+	
 	protected $contentRoots = array();
 	
 	/**
 	 * 
 	 * @param type $id
-	 * @return \Sis\DbBundle\Entity\Content
+	 * @return \NyroDev\NyroCmsBundle\Entity\Content
 	 */
 	public function getContentRoot($id) {
 		if (!isset($this->contentRoots[$id]))
@@ -46,7 +58,7 @@ class MainService extends AbstractService {
 	
 	public function getRouteFor($object, array $prm = array(), $parent = null) {
 		$routeName = null;
-		if ($object instanceof \NyroDev\NyroCmsBundle\Model\Content) {
+		if ($object instanceof Content) {
 			$root = $this->getContentRoot($object->getRoot());
 			if ($root->getId() == $object->getId()) {
 				$routeName = $root->getHandler().'_homepage';
@@ -58,7 +70,7 @@ class MainService extends AbstractService {
 					'url'=>trim($object->getUrl(), '/'),
 				));
 			}
-		} else if ($object instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
+		} else if ($object instanceof ContentSpec) {
 			$parent = is_null($parent) ? $object->getParent() : $parent;
 			if (!$this->getHandler($object->getContentHandler())->hasContentSpecUrl())
 				return $this->getUrlFor($parent, $absolute, $prm);
@@ -116,12 +128,29 @@ class MainService extends AbstractService {
 		return $this->getRequest()->getLocale();
 	}
 	
-	public function getDefaultLocale() {
-		return $this->getParameter('locale');
+	public function getDefaultLocale($rootContent = null) {
+		$rootContent = $rootContent->getVeryParent();
+		if ($rootContent->getLocales()) {
+			$tmp = explode('|', $rootContent->getLocales());
+			return $tmp[0];
+		} else {
+			return $this->getParameter('locale');
+		}
 	}
 	
-	public function getLocales() {
-		return explode('|', $this->getParameter('locales'));
+	public function getLocales($rootContent = null) {
+		$rootContent = $rootContent->getVeryParent();
+		return explode('|', $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales'));
+	}
+	
+	public function getLocaleNames($rootContent = null) {
+		$names = $this->container->getParameter('localeNames');
+		$ret = array();
+		foreach($this->getLocales($rootContent) as $locale) {
+			if (isset($names[$locale]))
+				$ret[$locale] = $names[$locale];
+		}
+		return $ret;
 	}
 	
 	protected $pathInfoObject;
@@ -140,13 +169,16 @@ class MainService extends AbstractService {
 	
 	public function getLocalesUrl($pathInfo, $absolute = false, $onlyLangs = null) {
 		$ret = array();
-		$defaultLocale = $this->getDefaultLocale();
-		$locales = $this->getLocales();
+		$isObjectPage = isset($pathInfo['object']) && $pathInfo['object'];
+		
+		$objectLocale = $isObjectPage ? $pathInfo['object'] : $this->getRootContent();
+		
+		$defaultLocale = $this->getDefaultLocale($objectLocale);
+		$locales = $this->getLocales($objectLocale);
 		$curLocale = $this->getLocale();
 		if ($onlyLangs && !is_array($onlyLangs))
 			$onlyLangs = explode(',', $onlyLangs);
 		
-		$isObjectPage = isset($pathInfo['object']) && $pathInfo['object'];
 		
 		foreach($locales as $locale) {
 			if ($locale != $curLocale && ($locale == $defaultLocale || empty($onlyLangs) || in_array($locale, $onlyLangs))) {

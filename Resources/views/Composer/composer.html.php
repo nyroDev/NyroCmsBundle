@@ -89,7 +89,7 @@ foreach ($attrs as $k=>$v)
 		--><div class="select">
 			<a href="#langSelect" class="selectLink">
 				<span><?php echo $view['nyrodev']->trans('admin.content.lang') ?></span>
-				<strong><?php echo $row->getTranslatableLocale() ? $row->getTranslatableLocale() : $view['nyrodev']->getParameter('locale') ?></strong>
+				<strong><?php echo $row->getTranslatableLocale() ? $row->getTranslatableLocale() : $view['nyrocms']->getDefaultLocale($row); ?></strong>
 			</a>
 			<div id="langSelect" class="selecter selecterLink" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.langChange') ?>">
 				<div class="selectList">

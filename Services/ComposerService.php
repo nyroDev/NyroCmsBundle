@@ -132,7 +132,7 @@ class ComposerService extends AbstractService {
 	public function initComposerFor(Composable $row, $lang, $contentFieldName = 'content') {
 		$this->existingImages = array();
 		
-		if ($lang != $this->getParameter('locale'))
+		if ($lang != $this->get('nyrocms')->getDefaultLocale($row))
 			$this->existingImages = $this->getImages($row->getContent());
 		
 		foreach($row->getTranslations() as $tr) {

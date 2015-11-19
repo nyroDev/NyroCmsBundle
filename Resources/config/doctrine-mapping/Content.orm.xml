@@ -21,6 +21,7 @@
 		<field name="state" type="smallint" nullable="false" />
 		<field name="handler" type="string" nullable="true" />
 		<field name="host" type="string" nullable="true" />
+		<field name="locales" type="string" nullable="true" />
 		<field name="xmlSitemap" type="boolean" nullable="true" />
 		<field name="menuOption" type="string" nullable="true" />
 		<field name="lft" type="integer" nullable="false" />

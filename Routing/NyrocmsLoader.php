@@ -34,8 +34,8 @@ class NyrocmsLoader extends Loader {
 		
 		$routes = new RouteCollection();
 		
-		$locale = $this->container->get('nyrocms')->getDefaultLocale();
-		$locales = implode('|', $this->container->get('nyrocms')->getLocales());
+		$locale = $this->container->get('nyrocms')->getDefaultLocale($rootContent);
+		$locales = $this->container->get('nyrocms')->getLocales($rootContent);
 		
 		$routes->add($res[0].'_homepage_noLocale', new Route(
 				'/',

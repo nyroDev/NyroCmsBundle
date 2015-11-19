@@ -15,7 +15,7 @@ class AdminComposerController extends AbstractAdminController {
 			throw $this->createAccessDeniedException();
 		
 		/* @var $row \NyroDev\NyroCmsBundle\Model\Composable */
-		$locale = $this->getParameter('locale');
+		$locale = $this->get('nyrocms')->getDefaultLocale($row);
 		if (!$lang)
 			$lang = $locale;
 		
@@ -24,7 +24,7 @@ class AdminComposerController extends AbstractAdminController {
 		$canChangeLang = $composerService->canChangeLang($row);
 		$canChangeTheme = $composerService->canChangeTheme($row);
 		
-		$langs = $this->getLangs();
+		$langs = $this->get('nyrocms')->getLocaleNames($row);
 		if ($canChangeLang) {
 			if ($lang != $locale) {
 				$row->setTranslatableLocale($lang);

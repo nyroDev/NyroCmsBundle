@@ -92,6 +92,12 @@ abstract class Content implements Composable, ComposableHandler {
     protected $host;
 
     /**
+     * @var string
+	 * @Gedmo\Versioned
+     */
+    protected $locales;
+
+    /**
      * @var boolean
 	 * @Gedmo\Versioned
      */
@@ -453,6 +459,29 @@ abstract class Content implements Composable, ComposableHandler {
     public function getHost()
     {
         return $this->host;
+    }
+
+    /**
+     * Set locales
+     *
+     * @param string $locales
+     * @return Content
+     */
+    public function setLocales($locales)
+    {
+        $this->locales = $locales;
+
+        return $this;
+    }
+
+    /**
+     * Get locales
+     *
+     * @return string 
+     */
+    public function getLocales()
+    {
+        return $this->locales;
     }
 
     /**

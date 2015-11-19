@@ -32,6 +32,10 @@ abstract class AbstractController extends NyroDevAbstractController {
 		return $this->rootContent;
 	}
 	
+	protected function setGlobalRootContent() {
+		$this->get('nyrocms')->setRootContent($this->getRootContent());
+	}
+	
 	protected $enabledStates = array(
 		Content::STATE_ACTIVE,
 		Content::STATE_INVISIBLE,
@@ -59,11 +63,13 @@ abstract class AbstractController extends NyroDevAbstractController {
 	}
 	
 	public function contentAction(Request $request, $url, $handler = null) {
+		$this->setGlobalRootContent();
 		$content = $this->getContentByUrl($url);
 		return $this->handleContent($request, $content, null, $handler);
 	}
 	
 	public function contentSpecAction(Request $request, $url, $id, $handler = null) {
+		$this->setGlobalRootContent();
 		$content = $this->getContentByUrl($url);
 		
 		$contentSpec = $this->get('nyrocms_db')->getContentSpecRepository()->findForAction($id, $content->getContentHandler()->getId(), $this->enabledStates);
@@ -133,6 +139,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 	abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null);
 	
 	public function searchAction(Request $request) {
+		$this->setGlobalRootContent();
 		$q = strip_tags($request->query->get('q'));
 		
 		$title = $this->trans('public.header.search');
@@ -183,8 +190,9 @@ abstract class AbstractController extends NyroDevAbstractController {
 	abstract protected function handleSearchView(Request $request, $q, array $results, $title);
 	
 	public function sitemapIndexXmlAction() {
+		$this->setGlobalRootContent();
 		$urls = array();
-		foreach($this->get('nyrocms')->getLocales() as $locale)
+		foreach($this->get('nyrocms')->getLocales($this->getRootContent()) as $locale)
 			$urls[] = $this->generateUrl($this->getRootHandler().'_sitemapXml', array('_locale'=>$locale, '_format'=>'xml'), true);
 		return $this->render('NyroDevNyroCmsBundle:Default:sitemapIndex.xml.php', array(
 			'urls'=>$urls
@@ -192,6 +200,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 	}
 	
 	public function sitemapXmlAction(Request $request) {
+		$this->setGlobalRootContent();
 		$urls = array(
 			$this->get('nyrodev')->generateUrl($this->getRootHandler().'_homepage'.($request->getLocale() == 'fr' ? '_noLocale' : ''), array(), true)
 		);

@@ -20,6 +20,7 @@ class addRootContentCommand extends ContainerAwareCommand {
             ->addArgument('handler', InputArgument::OPTIONAL, 'Content handler', null)
             ->addArgument('theme', InputArgument::OPTIONAL, 'Content theme', null)
             ->addArgument('host', InputArgument::OPTIONAL, 'Host constraint', null)
+            ->addArgument('locales', InputArgument::OPTIONAL, 'Locales enabled (| separated)', null)
             ->addArgument('xmlSitemap', InputArgument::OPTIONAL, 'Xml sitemap enabling', null);
 	}
 	
@@ -34,6 +35,7 @@ class addRootContentCommand extends ContainerAwareCommand {
 		$handler = $input->getArgument('handler');
 		$theme = $input->getArgument('theme');
 		$host = $input->getArgument('host');
+		$locales = $input->getArgument('locales');
 		$xmlSitemap = $input->getArgument('xmlSitemap');
 		
 		$helper = $this->getHelper('question');
@@ -53,6 +55,10 @@ class addRootContentCommand extends ContainerAwareCommand {
 			$question = new Question('Please enter the host of the root content: ');
 			$host = $helper->ask($input, $output, $question);
 		}
+		if (!$locales) {
+			$question = new Question('Please enter the locales of the root content: ');
+			$locales = $helper->ask($input, $output, $question);
+		}
 		if (is_null($xmlSitemap)) {
 			$question = new ChoiceQuestion(
 				'Is Xml sitemap enabled?',
@@ -71,6 +77,7 @@ class addRootContentCommand extends ContainerAwareCommand {
 		$newContent->setHandler($handler);
 		$newContent->setTheme($theme);
 		$newContent->setHost($host);
+		$newContent->setLocales($locales);
 		$newContent->setXmlSitemap($xmlSitemap === 'true');
 		
 		$dbService->flush();
