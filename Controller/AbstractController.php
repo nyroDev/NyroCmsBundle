@@ -58,7 +58,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 		throw $this->createNotFoundException();
 	}
 	
-	public function pageAction(Request $request, $url, $handler = null) {
+	public function contentAction(Request $request, $url, $handler = null) {
 		$content = $this->getContentByUrl($url);
 		return $this->handleContent($request, $content, null, $handler);
 	}

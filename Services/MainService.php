@@ -116,6 +116,10 @@ class MainService extends AbstractService {
 		return $this->getRequest()->getLocale();
 	}
 	
+	public function getDefaultLocale() {
+		return $this->getParameter('locale');
+	}
+	
 	public function getLocales() {
 		return explode('|', $this->getParameter('locales'));
 	}
@@ -136,7 +140,7 @@ class MainService extends AbstractService {
 	
 	public function getLocalesUrl($pathInfo, $absolute = false, $onlyLangs = null) {
 		$ret = array();
-		$defaultLocale = $this->getParameter('locale');
+		$defaultLocale = $this->getDefaultLocale();
 		$locales = $this->getLocales();
 		$curLocale = $this->getLocale();
 		if ($onlyLangs && !is_array($onlyLangs))

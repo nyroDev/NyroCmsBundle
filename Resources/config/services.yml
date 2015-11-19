@@ -3,6 +3,7 @@ parameters:
     nyrocms.userService.class: NyroDev\NyroCmsBundle\Services\UserService
     nyrocms.adminService.class: NyroDev\NyroCmsBundle\Services\AdminService
     nyrocms.composerService.class: NyroDev\NyroCmsBundle\Services\ComposerService
+    nyrocms.routingLoader.class: NyroDev\NyroCmsBundle\Routing\NyrocmsLoader
 
 services:
     nyrocms:
@@ -25,3 +26,8 @@ services:
         arguments: [@service_container]
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
+    nyrocms.routing_loader:
+        class: %nyrocms.routingLoader.class%
+        arguments: [@service_container]
+        tags:
+            - { name: routing.loader }
