@@ -138,9 +138,10 @@ class MainService extends AbstractService {
 		}
 	}
 	
-	public function getLocales($rootContent = null) {
+	public function getLocales($rootContent = null, $asString = false) {
 		$rootContent = $rootContent->getVeryParent();
-		return explode('|', $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales'));
+		$locales = $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
+		return $asString ? $locales : explode('|', $locales);
 	}
 	
 	public function getLocaleNames($rootContent = null) {
