@@ -215,7 +215,7 @@ class Configuration implements ConfigurationInterface
 									->end()
 								->end()
 								->arrayNode('themes')
-									->defaultValue(array('theme'))
+									->defaultValue()
 									->prototype('scalar')->end()
 								->end()
 								->arrayNode('available_blocks')

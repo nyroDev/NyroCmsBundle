@@ -65,7 +65,7 @@ foreach ($attrs as $k=>$v)
 ?>
 <form id="composer" <?php echo $attrsHtml ?> method="post" enctype="multipart/form-data">
 	<div id="composerTools"><!--
-		<?php if ($canChangeTheme): ?>
+		<?php if ($canChangeTheme && count($themes) > 1): ?>
 		--><div class="select">
 			<a href="#themeSelect" class="selectLink">
 				<span><?php echo $view['nyrodev']->trans('admin.content.theme') ?></span>
@@ -85,7 +85,7 @@ foreach ($attrs as $k=>$v)
 			</div>
 		</div><!--
 		<?php endif; ?>
-		<?php if ($canChangeLang): ?>
+		<?php if ($canChangeLang && count($langs) > 1 ): ?>
 		--><div class="select">
 			<a href="#langSelect" class="selectLink">
 				<span><?php echo $view['nyrodev']->trans('admin.content.lang') ?></span>
