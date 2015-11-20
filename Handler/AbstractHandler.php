@@ -173,6 +173,8 @@ abstract class AbstractHandler {
 					if ($type == 'date')
 						$cfg['data'] = new \DateTime($cfg['data']['date']);
 				}
+				if ($type == 'file' && isset($cfg['data']))
+					unset($cfg['data']);
 				$cfg['position'] = array('after'=>$after);
 				$form->add($k, $type, $cfg);
 				$after = $k;
@@ -184,6 +186,8 @@ abstract class AbstractHandler {
 						$data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
 						if ($data && $type == 'date' && !is_object($data))
 							$data = new \DateTime($data['date']);
+						if ($type == 'file')
+							$data = null;
 						$form->add($fieldName, $type, array_merge($cfg, array(
 							'label'=>$cfg['label'].' '.strtoupper($lg),
 							'data'=>$data
