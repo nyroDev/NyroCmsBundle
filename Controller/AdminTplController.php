@@ -2,11 +2,18 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
-use NyroDev\UtilityBundle\Controller\AbstractController;
+use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
-class AdminTplController extends AbstractController {
+class AdminTplController extends NyroDevAbstractController {
 
+	protected $sessionRootName = 'rootContent';
+	
+	public function switchRootContentAction(Request $request, $id) {
+		$request->getSession()->set($this->sessionRootName, $id);
+		return $this->redirectToRoute('nyrocms_admin_data_content_tree', array('id'=>$id));
+	}
+	
     public function headerAction(Request $request) {
 		$vars = array(
 			'logged'=>$this->get('nyrodev_member')->isLogged()
@@ -17,15 +24,40 @@ class AdminTplController extends AbstractController {
 			$tmpUri = substr($tmpUriInit, strpos($tmpUriInit, $adminPrefix) + strlen($adminPrefix));
 			$tmp = array_merge(explode('/', trim($tmpUri, '/')), array_fill(0, 2, false));
 			
+			$adminPerRoot = $this->getParameter('nyroCms.content.admin_per_root');
+			$rootContents = array();
+			$tmp = $this->get('nyrocms_db')->getContentRepository()->findBy(array('level'=>0), array('title'=>'ASC'));
+			$firstRoot = null;
+			foreach($tmp as $t) {
+				$rootContents[$t->getId()] = $t;
+				if (!$firstRoot)
+					$firstRoot = $t->getId();
+			}
+			$curRootId = $request->getSession()->get($this->sessionRootName, $firstRoot);
+			
 			$vars['menu'] = array(
 				'contents'=>array(
-					'content'=>array(
-						'uri'=>$this->generateUrl('nyrocms_admin_data_content_tree'),
-						'name'=>$this->trans('admin.content.viewTitle'),
-						'active'=>$tmp[0] == 'content' && $this->get('nyrocms_admin')->getContentParentId() == 1,
-					),
 				),
 			);
+			
+			$vars['adminPerRoot'] = $adminPerRoot;
+			if ($adminPerRoot) {
+				$vars['menu']['contents']['root_'.$curRootId] = array(
+					'uri'=>$this->generateUrl('nyrocms_admin_data_content_tree', array('id'=>$curRootId)),
+					'name'=>$rootContents[$curRootId]->getTitle(),
+					'active'=>$tmp[0] == 'content' && $this->get('nyrocms_admin')->getContentParentId() == $curRootId,
+				);
+				$vars['rootContents'] = $rootContents;
+				$vars['curRootId'] = $curRootId;
+			} else {
+				foreach($rootContents as $rootContent) {
+					$vars['menu']['contents']['root_'.$rootContent->getId()] = array(
+						'uri'=>$this->generateUrl('nyrocms_admin_data_content_tree', array('id'=>$rootContent->getId())),
+						'name'=>$rootContent->getTitle(),
+						'active'=>$tmp[0] == 'content' && $this->get('nyrocms_admin')->getContentParentId() == $rootContent->getId(),
+					);
+				}
+			}
 			
 			$nyrocms = $this->get('nyrocms');
 			$nyrocmsAdmin = $this->get('nyrocms_admin');
@@ -34,7 +66,7 @@ class AdminTplController extends AbstractController {
 			foreach($contentHandlers as $contentHandler) {
 				$canAdmin = false;
 				foreach($contentHandler->getContents() as $content) {
-					$canAdmin = $canAdmin || $nyrocmsAdmin->canAdminContent($content);
+					$canAdmin = $canAdmin || $nyrocmsAdmin->canAdminContent($content) && (!$adminPerRoot || $content->getRoot() == $curRootId);
 				}
 				if ($canAdmin) {
 					if (!isset($vars['menu']['modules']))
@@ -48,7 +80,6 @@ class AdminTplController extends AbstractController {
 					);
 				}
 			}
-			
 			
 			if ($nyrocmsAdmin->isSuperAdmin()) {
 				// Don't forget to protect these URLs in security.yml!

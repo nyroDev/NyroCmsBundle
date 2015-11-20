@@ -33,6 +33,7 @@ class NyroDevNyroCmsExtension extends Extension
 		$container->setParameter('nyroCms.user_types', $config['user_types']);
 
 		$container->setParameter('nyroCms.content.maxlevel', $config['content']['maxlevel']);
+		$container->setParameter('nyroCms.content.admin_per_root', $config['content']['admin_per_root']);
 		$container->setParameter('nyroCms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
 		
 		$composable = $config['composable']['classes'];

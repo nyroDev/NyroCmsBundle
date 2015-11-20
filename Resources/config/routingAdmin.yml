@@ -18,6 +18,10 @@ nyrocms_admin_account:
     pattern: /account
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:account }
 
+nyrocms_admin_switch_rootContent:
+    pattern: /switchRootContent/{id}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminTpl:switchRootContent }
+
 nyrocms_admin_cc:
     pattern: /cc
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:cc }

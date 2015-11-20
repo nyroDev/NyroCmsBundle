@@ -11,6 +11,18 @@
 		<br />
 		<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_account') ?>" class="button"><?php echo $view['nyrodev']->trans('admin.misc.account') ?></a>
 		
+		<?php if ($adminPerRoot): ?>
+			<div class="selectCont">
+				<select class="selectRedirect">
+					<?php foreach($rootContents as $id=>$rootContent): ?>
+					<option value="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_switch_rootContent', array('id'=>$id)) ?>"<?php echo $id == $curRootId ? ' selected="selected"' : '' ?>>
+						<?php echo $rootContent->getTitle() ?>
+					</option>
+					<?php endforeach; ?>
+				</select>
+			</div>
+		<?php endif; ?>
+		
 		<?php foreach($menu as $ident=>$mm): ?>
 			<h2><?php echo $view['nyrodev']->trans('admin.menu.'.$ident) ?></h2>
 			<ul>

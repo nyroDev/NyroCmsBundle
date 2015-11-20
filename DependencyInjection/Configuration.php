@@ -203,6 +203,7 @@ class Configuration implements ConfigurationInterface
 				->arrayNode('content')->addDefaultsIfNotSet()
 					->children()
 						->integerNode('maxlevel')->defaultValue(4)->end()
+						->booleanNode('admin_per_root')->defaultFalse()->end()
 					->end()
 				->end()
 				->arrayNode('user_roles')->addDefaultsIfNotSet()

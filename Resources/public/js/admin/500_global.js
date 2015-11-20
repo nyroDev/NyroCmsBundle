@@ -1,8 +1,10 @@
 jQuery(function($) {
-	var contentTree = $('#contentTree'),
-		form_contactEnabled = $('#form_contactEnabled'),
-		deletes = $('.delete'),
-		switcher = $('.switcher');
+	var $b = $('body'),
+		contentTree = $b.find('#contentTree'),
+		form_contactEnabled = $b.find('#form_contactEnabled'),
+		deletes = $b.find('.delete'),
+		switcher = $b.find('.switcher'),
+		selectRedirect = $b.find('.selectRedirect');
 	
 	if (contentTree.length) {
 		var updateLevels = function(elt) {
@@ -83,5 +85,11 @@ jQuery(function($) {
 				if (hasData)
 					filter.show();
 			});
+	}
+	
+	if (selectRedirect.length) {
+		selectRedirect.on('change', function() {
+			document.location.href = $(this).val();
+		});
 	}
 });
