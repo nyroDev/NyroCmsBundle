@@ -187,6 +187,8 @@ header {
 #availableBlocks .column2 { background-position: -780px 0; }
 #availableBlocks .column3 { background-position: -910px 0; }
 #availableBlocks .slideshow { background-position: -1040px 0; }
+#availableBlocks .image_text { background-position: -1170px 0; }
+#availableBlocks .text_image { background-position: -1300px 0; }
 #composerTools #availableBlocks a:hover {
 	text-decoration: none;
  	background-color: #000;
@@ -377,7 +379,7 @@ header {
 		width: 8.6vw;
 		height: 9.2vw;
 		box-sizing: border-box;
-		background-size: 77.4vw 9.2vw;
+		background-size: 94vw 9.2vw;
 	}
 	#composerTools .selectLink, #composerTools #availableBlocks a {
 		padding-top: 15px;
@@ -391,6 +393,8 @@ header {
 	#availableBlocks .column2 { background-position: -51.6vw 0; }
 	#availableBlocks .column3 { background-position: -60.2vw 0; }
 	#availableBlocks .slideshow { background-position: -68.8vw 0; }
+	#availableBlocks .image_text { background-position: -77.4vw 0; }
+	#availableBlocks .text_image { background-position: -86vw 0; }
 	#composerTools .selecter {
 		top: 9.2vw;
 	}

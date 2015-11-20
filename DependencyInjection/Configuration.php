@@ -41,6 +41,14 @@ class Configuration implements ConfigurationInterface
 				'text2'=>'admin.composer.default.mediumText',
 				'text3'=>'admin.composer.default.mediumText',
 			),
+			'image_text'=>array(
+				'text'=>'admin.composer.default.mediumText',
+				'image'=>null,
+			),
+			'text_image'=>array(
+				'text'=>'admin.composer.default.mediumText',
+				'image'=>null,
+			),
 			'image'=>array(
 				'image'=>null,
 			),
@@ -80,6 +88,14 @@ class Configuration implements ConfigurationInterface
 			'image'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image.html.php',
 				'image'=>array('image'=>true, 'w'=>1500, 'h'=>600),
+			),
+			'image_text'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_image_text.html.php',
+				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
+			),
+			'text_image'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_text_image.html.php',
+				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
 			),
 			'image2'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
@@ -215,11 +231,10 @@ class Configuration implements ConfigurationInterface
 									->end()
 								->end()
 								->arrayNode('themes')
-									->defaultValue()
 									->prototype('scalar')->end()
 								->end()
 								->arrayNode('available_blocks')
-									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image2', 'image3', 'slideshow', 'video'))
+									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image_text', 'text_image', 'image2', 'image3', 'slideshow', 'video'))
 									->prototype('scalar')->end()
 								->end()
 								->arrayNode('tinymce')

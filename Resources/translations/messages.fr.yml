@@ -85,6 +85,8 @@ admin:
       intro: Introduction
       text: Texte
       image: Image
+      image_text: Image Texte
+      text_image: Texte Image
       image2: 2 images
       image3: 3 images
       video: Vidéo
