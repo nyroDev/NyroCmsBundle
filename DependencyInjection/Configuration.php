@@ -20,8 +20,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('nyro_dev_nyro_cms');
 		/* @var $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition */
-
-		$supportedDrivers = array('orm');
 		
 		$defaultBlocks = array(
 			'intro'=>array(
@@ -165,16 +163,6 @@ class Configuration implements ConfigurationInterface
 		
 		$rootNode
 			->children()
-                ->scalarNode('db_driver')
-                    ->validate()
-                        ->ifNotInArray($supportedDrivers)
-                        ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
-                    ->end()
-                    ->cannotBeOverwritten()
-                    ->isRequired()
-                    ->cannotBeEmpty()
-				->end()
-				->scalarNode('model_manager_name')->defaultNull()->end()
 				->arrayNode('user_types')
 					->defaultValue(array('admin', 'superadmin'))
 					->prototype('scalar')->end()

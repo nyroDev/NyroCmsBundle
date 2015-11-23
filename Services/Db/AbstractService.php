@@ -3,15 +3,11 @@
 namespace NyroDev\NyroCmsBundle\Services\Db;
 
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
-use Doctrine\Common\Persistence\ObjectManager;
 
 abstract class AbstractService extends AbstractServiceSrc {
 	
-	protected $objectManager;
-	
-	public function __construct($container, ObjectManager $objectManager) {
+	public function __construct($container) {
 		parent::__construct($container);
-		$this->objectManager = $objectManager;
 	}
 	
 	public function getNamespace() {
@@ -34,7 +30,7 @@ abstract class AbstractService extends AbstractServiceSrc {
 	 * @return ObjectManager
 	 */
 	public function getObjectManager() {
-		return $this->objectManager;
+		return $this->get('nyrodev_db')->getObjectManager();
 	}
 	
 	/**
@@ -77,34 +73,27 @@ abstract class AbstractService extends AbstractServiceSrc {
 	 * @return \Doctrine\Common\Persistence\ObjectRepository
 	 */
 	public function getRepository($name) {
-		return $this->getObjectManager()->getRepository($this->getClass($name));
+		return $this->get('nyrodev_db')->getRepository($this->getClass($name));
 	}
 	
 	public function getNew($name, $persist = true) {
-		$repo = $this->getRepository($name);
-		$classname = $repo->getClassName();
-		$new = new $classname();
-		
-		if ($persist)
-			$this->persist($new);
-		
-		return $new;
+		return $this->get('nyrodev_db')->getNew($this->getRepository($name), $persist);
 	}
 	
 	public function persist($object) {
-		$this->getObjectManager()->persist($object);
+		$this->get('nyrodev_db')->persist($object);
 	}
 	
 	public function remove($object) {
-		$this->getObjectManager()->remove($object);
+		$this->get('nyrodev_db')->remove($object);
 	}
 	
 	public function refresh($object) {
-		$this->getObjectManager()->refresh($object);
+		$this->get('nyrodev_db')->refresh($object);
 	}
 	
 	public function flush() {
-		$this->getObjectManager()->flush();
+		$this->get('nyrodev_db')->flush();
 	}
 	
 }
