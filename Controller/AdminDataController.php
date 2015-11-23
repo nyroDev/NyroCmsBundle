@@ -20,7 +20,7 @@ class AdminDataController extends AbstractAdminController {
 	public function contentTreeAction(Request $request, $id = null) {
 		$repo = $this->get('nyrocms_db')->getContentRepository();
 		
-		$parent = $id ? $repo->find($id) : $repo->findOneBy(array('handler'=>'public'));
+		$parent = $id ? $repo->find($id) : $repo->findOneBy(array('level'=>0));
 		if (!$parent)
 			throw $this->createNotFoundException();
 		
@@ -78,7 +78,7 @@ class AdminDataController extends AbstractAdminController {
 		$repo->recover();
 		$this->get('nyrocms_db')->flush();
 		
-		$parent = $id ? $repo->find($id) : $repo->findOneBy(array('handler'=>'public'));
+		$parent = $id ? $repo->find($id) : $repo->findOneBy(array('level'=>0));
 		if (!$parent)
 			throw $this->createNotFoundException();
 		
