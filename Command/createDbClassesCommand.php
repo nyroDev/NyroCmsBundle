@@ -31,7 +31,7 @@ class createDbClassesCommand extends ContainerAwareCommand {
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$force = $input->getOption('force');
 		
-		$db_driver = $this->getContainer()->getParameter('nyroCms.db_driver');
+		$db_driver = $this->getContainer()->getParameter('nyroDev_utility.db_driver');
 		
 		$dirname = null;
 		switch($db_driver) {

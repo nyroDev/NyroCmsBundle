@@ -9,11 +9,11 @@ use Symfony\Component\Config\Resource\FileResource;
 class ValidationPass implements CompilerPassInterface {
 	
     public function process(ContainerBuilder $container) {
-        if (!$container->hasParameter('nyroCms.db_driver')) {
+        if (!$container->hasParameter('nyroDev_utility.db_driver')) {
             return;
         }
 
-        $driver = $container->getParameter('nyroCms.db_driver');
+        $driver = $container->getParameter('nyroDev_utility.db_driver');
 
         $validationFile = __DIR__ . '/../../Resources/config/doctrine-validation/'.$driver.'.xml';
 

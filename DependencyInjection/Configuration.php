@@ -184,6 +184,7 @@ class Configuration implements ConfigurationInterface
 								->scalarNode('content_spec_log')->defaultValue('Log\\ContentSpecLog')->end()
 								->scalarNode('content_spec_translation')->defaultValue('Translation\\ContentSpecTranslation')->end()
 								->scalarNode('content_handler')->defaultValue('ContentHandler')->end()
+								->scalarNode('translation')->defaultValue('Translation')->end()
 							->end()
 						->end()
 					->end()
