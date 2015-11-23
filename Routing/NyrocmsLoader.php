@@ -39,7 +39,7 @@ class NyrocmsLoader extends Loader {
 		
 		$routes->add($res[0].'_homepage_noLocale', new Route(
 				'/',
-				array('_controller'=>$res[1].':index', '_locale'=>$locale),
+				array('_controller'=>$res[1].':index', '_locale'=>$locale, '_config'=>$res[0]),
 				array(),
 				array(),
 				$rootContent->getHost()
@@ -48,7 +48,7 @@ class NyrocmsLoader extends Loader {
 		
 		$routes->add($res[0].'_homepage', new Route(
 				'/{_locale}/',
-				array('_controller'=>$res[1].':index', '_locale'=>$locale),
+				array('_controller'=>$res[1].':index', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales),
 				array(),
 				$rootContent->getHost()
@@ -56,7 +56,7 @@ class NyrocmsLoader extends Loader {
 		);
 		$routes->add($res[0].'_search', new Route(
 				'/{_locale}/search',
-				array('_controller'=>$res[1].':search', '_locale'=>$locale),
+				array('_controller'=>$res[1].':search', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales),
 				array(),
 				$rootContent->getHost()
@@ -64,7 +64,7 @@ class NyrocmsLoader extends Loader {
 		);
 		$routes->add($res[0].'_content_spec_handler', new Route(
 				'/{_locale}/{url}/{id}/{title}/handler/{handler}',
-				array('_controller'=>$res[1].':contentSpec', '_locale'=>$locale),
+				array('_controller'=>$res[1].':contentSpec', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales, 'url'=>'.+', 'id'=>'\d+', 'handler'=>'.+'),
 				array(),
 				$rootContent->getHost()
@@ -72,7 +72,7 @@ class NyrocmsLoader extends Loader {
 		);
 		$routes->add($res[0].'_content_spec', new Route(
 				'/{_locale}/{url}/{id}/{title}',
-				array('_controller'=>$res[1].':contentSpec', '_locale'=>$locale),
+				array('_controller'=>$res[1].':contentSpec', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales, 'url'=>'.+', 'id'=>'\d+'),
 				array(),
 				$rootContent->getHost()
@@ -80,7 +80,7 @@ class NyrocmsLoader extends Loader {
 		);
 		$routes->add($res[0].'_content_handler', new Route(
 				'/{_locale}/{url}/handler/{handler}',
-				array('_controller'=>$res[1].':content', '_locale'=>$locale),
+				array('_controller'=>$res[1].':content', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales, 'url'=>'.+', 'handler'=>'.+'),
 				array(),
 				$rootContent->getHost()
@@ -88,7 +88,7 @@ class NyrocmsLoader extends Loader {
 		);
 		$routes->add($res[0].'_content', new Route(
 				'/{_locale}/{url}',
-				array('_controller'=>$res[1].':content', '_locale'=>$locale),
+				array('_controller'=>$res[1].':content', '_locale'=>$locale, '_config'=>$res[0]),
 				array('_locale'=>$locales, 'url'=>'.+'),
 				array(),
 				$rootContent->getHost()
@@ -98,7 +98,7 @@ class NyrocmsLoader extends Loader {
 		if ($rootContent->getXmlSitemap()) {
 			$routes->add($res[0].'_sitemap_xml_index', new Route(
 						'/sitemap.{_format}',
-						array('_controller'=>$res[1].':sitemapIndexXml'),
+						array('_controller'=>$res[1].':sitemapIndexXml', '_config'=>$res[0]),
 						array('_format'=>'xml'),
 						array(),
 						$rootContent->getHost()
@@ -106,7 +106,7 @@ class NyrocmsLoader extends Loader {
 				);
 			$routes->add($res[0].'_sitemapXml', new Route(
 						'/{_locale}/sitemap.{_format}',
-						array('_controller'=>$res[1].':sitemapXml', '_locale'=>$locale),
+						array('_controller'=>$res[1].':sitemapXml', '_locale'=>$locale, '_config'=>$res[0]),
 						array('_locale'=>$locales, '_format'=>'xml'),
 						array(),
 						$rootContent->getHost()

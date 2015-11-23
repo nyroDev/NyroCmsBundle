@@ -27,8 +27,11 @@ abstract class AbstractController extends NyroDevAbstractController {
 	 * @return \NyroDev\NyroCmsBundle\Model\Content
 	 */
 	protected function getRootContent() {
-		if (is_null($this->rootContent))
+		if (is_null($this->rootContent)) {
 			$this->rootContent = $this->getContentRepo()->findOneBy(array('level'=>0, 'handler'=>$this->getRootHandler()));
+			if (!$this->rootContent)
+				throw new \RuntimeException('Cannot find rootContent "'.$this->getRootHandler().'"');
+		}
 		return $this->rootContent;
 	}
 	
@@ -62,13 +65,15 @@ abstract class AbstractController extends NyroDevAbstractController {
 		throw $this->createNotFoundException();
 	}
 	
-	public function contentAction(Request $request, $url, $handler = null) {
+	public function contentAction(Request $request, $url, $handler = null, $_config = null) {
+		$this->get('nyrocms')->setRouteConfig($_config);
 		$this->setGlobalRootContent();
 		$content = $this->getContentByUrl($url);
 		return $this->handleContent($request, $content, null, $handler);
 	}
 	
-	public function contentSpecAction(Request $request, $url, $id, $handler = null) {
+	public function contentSpecAction(Request $request, $url, $id, $handler = null, $_config = null) {
+		$this->get('nyrocms')->setRouteConfig($_config);
 		$this->setGlobalRootContent();
 		$content = $this->getContentByUrl($url);
 		
@@ -138,7 +143,8 @@ abstract class AbstractController extends NyroDevAbstractController {
 	
 	abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null);
 	
-	public function searchAction(Request $request) {
+	public function searchAction(Request $request, $_config = null) {
+		$this->get('nyrocms')->setRouteConfig($_config);
 		$this->setGlobalRootContent();
 		$q = strip_tags($request->query->get('q'));
 		
@@ -189,7 +195,8 @@ abstract class AbstractController extends NyroDevAbstractController {
 	
 	abstract protected function handleSearchView(Request $request, $q, array $results, $title);
 	
-	public function sitemapIndexXmlAction() {
+	public function sitemapIndexXmlAction($_config = null) {
+		$this->get('nyrocms')->setRouteConfig($_config);
 		$this->setGlobalRootContent();
 		$urls = array();
 		foreach($this->get('nyrocms')->getLocales($this->getRootContent()) as $locale)
@@ -199,7 +206,8 @@ abstract class AbstractController extends NyroDevAbstractController {
 		));
 	}
 	
-	public function sitemapXmlAction(Request $request) {
+	public function sitemapXmlAction(Request $request, $_config = null) {
+		$this->get('nyrocms')->setRouteConfig($_config);
 		$this->setGlobalRootContent();
 		$urls = array(
 			$this->get('nyrodev')->generateUrl($this->getRootHandler().'_homepage'.($request->getLocale() == 'fr' ? '_noLocale' : ''), array(), true)

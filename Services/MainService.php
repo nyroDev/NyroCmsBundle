@@ -21,6 +21,14 @@ class MainService extends AbstractService {
 		return $this->handlers[$contentHandler->getId()];
 	}
 	
+	protected $routeConfig;
+	public function setRouteConfig($routeConfig) {
+		$this->routeConfig = $routeConfig;
+	}
+	public function getRouteConfig() {
+		return $this->routeConfig;
+	}
+	
 	protected $activeIds = array();
 	public function setActiveIds($activeIds) {
 		$this->activeIds = $activeIds;
