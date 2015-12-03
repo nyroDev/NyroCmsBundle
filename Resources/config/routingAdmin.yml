@@ -1,39 +1,39 @@
 nyrocms_admin_homepage:
-    pattern: /
+    path: /
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:index }
 
 nyrocms_admin_login:
-    pattern: /login
+    path: /login
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:login }
 
 nyrocms_admin_forgot:
-    pattern: /forgot/{id}/{key}
+    path: /forgot/{id}/{key}
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, id: null, key: null }
 
 nyrocms_admin_welcome:
-    pattern: /welcome/{id}/{key}
+    path: /welcome/{id}/{key}
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, welcome: true }
 
 nyrocms_admin_account:
-    pattern: /account
+    path: /account
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:account }
 
 nyrocms_admin_switch_rootContent:
-    pattern: /switchRootContent/{id}
+    path: /switchRootContent/{id}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminTpl:switchRootContent }
 
 nyrocms_admin_cc:
-    pattern: /cc
+    path: /cc
     defaults: { _controller: NyroDevNyroCmsBundle:Admin:cc }
 
 nyrocms_admin_security_check:
-    pattern: /login_check
+    path: /login_check
 
 nyrocms_admin_security_logout:
-    pattern: /logout
+    path: /logout
 
 nyrocms_admin_tinymce_browser:
-    pattern:  /tinymceBrowser/{file}
+    path:  /tinymceBrowser/{file}
     defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
     requirements:
         file: .+
