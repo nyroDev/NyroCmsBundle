@@ -29,7 +29,8 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$handler = $this->get('nyrocms')->getHandler($ch);
 		
 		$repo = $this->get('nyrocms_db')->getContentSpecRepository();
-		$qb = $repo->getAdminListQueryBuilder($ch);
+		$qb = $this->get('nyrodev_db')->getQueryBuilder($repo)
+				->addWhere('contentHandler', '=', $ch->getId());
 		
 		$route = 'nyrocms_admin_handler_contents';
 		$routePrm = array(

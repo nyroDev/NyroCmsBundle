@@ -267,7 +267,9 @@ class AdminDataController extends AbstractAdminController {
 		$isDev = $this->get('nyrocms_admin')->isDeveloper();
 		
 		$repo = $this->get('nyrocms_db')->getUserRoleRepository();
-		$qb = $repo->getAdminListQueryBuilder($isDev);
+		$qb = $this->get('nyrodev_db')->getQueryBuilder($repo);
+		if (!$isDev)
+			$qb->addWhere('internal' ,'<>', 1);
 		$route = 'nyrocms_admin_data_userRole';
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
 				array_merge(

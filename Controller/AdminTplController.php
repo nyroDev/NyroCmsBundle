@@ -36,8 +36,7 @@ class AdminTplController extends NyroDevAbstractController {
 			$curRootId = $request->getSession()->get($this->sessionRootName, $firstRoot);
 			
 			$vars['menu'] = array(
-				'contents'=>array(
-				),
+				'contents'=>array(),
 			);
 			
 			$vars['adminPerRoot'] = $adminPerRoot;
@@ -75,7 +74,7 @@ class AdminTplController extends NyroDevAbstractController {
 					$uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
 					$vars['menu']['modules']['module_'.$contentHandler->getId()] = array(
 						'uri'=>$uri,
-						'name'=>$contentHandler->getName(),
+						'name'=>$adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName(),
 						'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
 					);
 				}

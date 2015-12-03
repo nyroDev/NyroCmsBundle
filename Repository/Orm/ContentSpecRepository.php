@@ -4,17 +4,10 @@ namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
-use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
 
 class ContentSpecRepository extends SortableRepository implements ContentSpecRepositoryInterface {
-	
-	public function getAdminListQueryBuilder(ContentHandler $contentHandler) {
-		return $this->createQueryBuilder('cs')
-				->andWhere('cs.contentHandler = :chid')
-					->setParameter('chid', $contentHandler->getId());
-	}
 	
 	/**
 	 * 

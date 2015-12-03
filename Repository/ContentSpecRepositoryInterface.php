@@ -3,12 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Repository;
 
 use NyroDev\NyroCmsBundle\Model\Content;
-use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 
 interface ContentSpecRepositoryInterface {
-	
-	public function getAdminListQueryBuilder(ContentHandler $contentHandler);
 	
 	public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array());
 	

@@ -136,7 +136,7 @@ admin:
     updated: Mis à jour le
     
   contentHandler:
-    viewTitle: Module associé
+    viewTitle: Modules associés
     id: ID
     name: Nom
     class: Class

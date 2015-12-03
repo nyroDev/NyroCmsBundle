@@ -25,7 +25,7 @@
 						<?php echo $view['nyrocms_admin']->getIcon('pencil') ?>
 					</a>
 				<?php endif; ?>
-				<a href="<?php echo $view['nyrocms']->getUrlFor($content) ?>" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.misc.watch') ?>">
+				<a href="<?php echo $view['nyrocms']->getUrlFor($content, true, array('_locale'=>$view['nyrocms']->getDefaultLocale($content))) ?>" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.misc.watch') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('eye') ?>
 				</a>
 			</span>
