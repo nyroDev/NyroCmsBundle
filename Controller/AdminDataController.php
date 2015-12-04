@@ -530,37 +530,9 @@ class AdminDataController extends AbstractAdminController {
 	protected function userFormUpdate($action, $row, \Symfony\Component\Form\FormBuilder $form) {
 		$this->origUserPassword = $row->getPassword();
 		$form->get('valid')->setRequired(false);
-		/*
-		$form
-			->remove('password')
-			->add('password', 'repeated', array(
-				'first_options'=>array('label'=>$this->trans('admin.user.password')),
-				'second_options'=>array(
-					'label'=>$this->trans('admin.user.passwordConfirm'),
-					'constraints'=>$action == self::ADD ? array(
-						new Constraints\NotBlank(),
-					) : null
-				),
-				'type'=>'password',
-				'position'=>array('after'=>'email'),
-				'required'=>$action == self::ADD,
-				'invalid_message'=>$this->trans('admin.user.samePassword')
-			));
-		 */
 	}
 	
 	protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form) {
-		/*
-		$password = $form->get('password')->getData();
-		if ($password) {
-			$salt = sha1(uniqid());
-			$password = $this->get('security.encoder_factory')->getEncoder($row)->encodePassword($password, $salt);
-			$row->setPassword($password);
-			$row->setSalt($salt);
-		} else {
-			$row->setPassword($this->origUserPassword);
-		}
-		 */
 	}
 	
 	protected function userFormAfterFlush($response, $action, $row) {

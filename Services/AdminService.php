@@ -89,6 +89,7 @@ class AdminService extends AbstractService {
 		if ($this->get('nyrocms_db')->isA($row, 'content')) {
 			$canAdmin = $this->canAdminContent($row);
 		} else if ($this->get('nyrocms_db')->isA($row, 'content_spec')) {
+			/* @var $row \Luxepack\DbBundle\Entity\ContentSpec */
 			foreach($row->getContentHandler()->getContents() as $content)
 				$canAdmin = $canAdmin || $this->get('nyrocms_admin')->canAdmin($content);
 		}
