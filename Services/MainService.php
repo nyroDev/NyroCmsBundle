@@ -169,6 +169,11 @@ class MainService extends AbstractService {
 		$this->pathInfoObject = $object;
 	}
 	
+	protected $pathInfoSearch;
+	public function setPathInfoSearch($search) {
+		$this->pathInfoSearch = $search;
+	}
+	
 	public function getPathInfo() {
 		$request = $this->getRequest();
 		return array(
@@ -200,6 +205,8 @@ class MainService extends AbstractService {
 					$ret[$locale] = $this->generateUrl('_homepage', array_merge($pathInfo['routePrm'], $prm), $absolute);
 				} else if ($pathInfo['route'] == '_homepage' && $locale == $defaultLocale) {
 					$ret[$locale] = $this->generateUrl('_homepage_noLocale', array(), $absolute);
+				}  else if ($this->pathInfoSearch && preg_match('/_search$/', $pathInfo['route'])) {
+					$ret[$locale] = $this->generateUrl($pathInfo['route'], array_merge($pathInfo['routePrm'], $prm, array('q'=>$this->pathInfoSearch)), $absolute);
 				} else if ($isObjectPage) {
 					$pathInfo['object']->setTranslatableLocale($locale);
 					$this->get('nyrocms_db')->refresh($pathInfo['object']);
