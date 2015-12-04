@@ -85,7 +85,7 @@ foreach ($attrs as $k=>$v)
 			</div>
 		</div><!--
 		<?php endif; ?>
-		<?php if ($canChangeLang && count($langs) > 1 ): ?>
+		<?php if ($canChangeLang && count($langs) > 0): ?>
 		--><div class="select">
 			<a href="#langSelect" class="selectLink">
 				<span><?php echo $view['nyrodev']->trans('admin.content.lang') ?></span>
