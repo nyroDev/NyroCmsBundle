@@ -17,10 +17,20 @@ class OrmListener extends AbstractService implements EventSubscriber {
 	public function postLoad(LifecycleEventArgs $args = null) {
 		$object = $args->getObject();
 		if ($this->get('nyrocms_db')->isA($object, 'content_spec')) {
+			/* @var $object \NyroDev\NyroCmsBundle\Model\ContentSpec */
+			
+			// Reload contentHandler to correctly fill contents
 			if ($object->getContentHandler()) {
 				$ch = $this->get('nyrocms_db')->getContentHandlerRepository()->find($object->getContentHandler()->getId());
 				$object->setContentHandler($ch);
 			}
+			
+			// Reload content parent to be in the same locale, useful for translated URLs
+			if ($object->getParent() && $object->getTranslatableLocale() != $object->getParent()->getTranslatableLocale()) {
+				$object->getParent()->setTranslatableLocale($object->getTranslatableLocale());
+				$this->get('nyrocms_db')->refresh($object->getParent());
+			}
+			
 		}
 	}
 	

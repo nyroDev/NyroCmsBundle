@@ -81,7 +81,7 @@ class MainService extends AbstractService {
 		} else if ($object instanceof ContentSpec) {
 			$parent = is_null($parent) ? $object->getParent() : $parent;
 			if (!$this->getHandler($object->getContentHandler())->hasContentSpecUrl())
-				return $this->getUrlFor($parent, $absolute, $prm);
+				return $this->getRouteFor($parent, $prm);
 			
 			$root = $this->getContentRoot($parent->getRoot());
 			$routeName = $root->getHandler().'_content_spec';
