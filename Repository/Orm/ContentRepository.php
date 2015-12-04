@@ -51,7 +51,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 	
 	public function findByLog($field, $value) {
 		$search = 's:'.strlen($field).':"'.$field.'";s:'.strlen($value).':"'.$value.'";';
-		$logValues = $this->getEntityManager()->getRepository('NyroDevNyroCmsBundle:ContentLog')
+		$logValues = $this->getEntityManager()->getRepository(str_replace('\Entity\Content', '\Entity\Log\Content', $this->getClassName()).'Log')
 					->createQueryBuilder('cl')
 						->andWhere('cl.data LIKE :search')
 							->setParameter('search', '%'.$search.'%')
