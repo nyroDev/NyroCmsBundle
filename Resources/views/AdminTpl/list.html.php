@@ -57,7 +57,7 @@
 						<th><?php
 						echo $label;
 						echo '<a href="'.$linkAsc.'" class="listSort listSortAsc'.($current === 'asc' ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortAsc').'">↓</a>';
-						echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.($current === 'desc' ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDec').'">↑</a>';
+						echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.($current === 'desc' ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDesc').'">↑</a>';
 						?></th>
 					<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>

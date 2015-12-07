@@ -5,6 +5,9 @@ namespace NyroDev\NyroCmsBundle\Controller;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class AdminHandlerContentsController extends AbstractAdminController {
 	
@@ -24,7 +27,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		return $contentHandler;
 	}
 	
-	public function indexAction($chid) {
+	public function indexAction(Request $request, $chid) {
 		$ch = $this->getContentHandler($chid);
 		$handler = $this->get('nyrocms')->getHandler($ch);
 		
@@ -72,7 +75,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 							) : false
 						))
 					),
-					$this->createList($repo, $route, $routePrm, 'position', $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
+					$this->createList($request, $repo, $route, $routePrm, 'position', $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
 				));
 	}
 	
@@ -138,7 +141,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$routePrm = array('chid'=>$row->getContentHandler()->getId());
 		$moreOptions = array(
 			'state'=>array(
-				'type'=>'choice',
+				'type'=>ChoiceType::class,
 				'choices'=>$this->get('nyrocms_admin')->getContentSpecStateChoices()
 			),
 			'validStart'=>$this->get('nyrocms')->getDateFormOptions(),
@@ -153,7 +156,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 		$handler->init($request, true);
 		
-		$adminForm = $this->createAdminForm('contentSpec', $action, $row, array(
+		$adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, array(
 					'title',
 					'intro',
 					'featured',
@@ -167,11 +170,11 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	}
 	protected $translationFields = array(
 		'title'=>array(
-			'type'=>'text',
+			'type'=>TextType::class,
 			'required'=>true,
 		),
 		'intro'=>array(
-			'type'=>'textarea',
+			'type'=>TextareaType::class,
 			'required'=>false,
 		),
 	);

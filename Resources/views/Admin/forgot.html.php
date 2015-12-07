@@ -15,13 +15,13 @@
 				<?php else: ?>
 					<?php if ($sent): ?>
 						<p><strong><?php echo nl2br($view['nyrodev']->trans('public.forgot.saved')) ?></strong></p>
-						<a href="<?php echo $view['router']->generate('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.back') ?></a>
+						<a href="<?php echo $view['router']->path('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.back') ?></a>
 					<?php else: ?>
 						<p><?php echo nl2br($view['nyrodev']->trans('public.forgot.introPassword')) ?></p>
 
 						<?php echo $view['form']->form($form) ?>
 						
-						<a href="<?php echo $view['router']->generate('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.cancel') ?></a>
+						<a href="<?php echo $view['router']->path('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.cancel') ?></a>
 					<?php endif; ?>
 				<?php endif; ?>
 			<?php else: ?>
@@ -36,7 +36,7 @@
 
 					<?php echo $view['form']->form($form) ?>
 
-					<a href="<?php echo $view['router']->generate('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.cancel') ?></a>
+					<a href="<?php echo $view['router']->path('nyrocms_admin_login') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('public.forgot.cancel') ?></a>
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>

@@ -11,6 +11,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 abstract class AbstractHandler {
 	
@@ -205,8 +208,11 @@ abstract class AbstractHandler {
 			foreach($this->getFormFields($action) as $k=>$cfg) {
 				$data = $form->get($k)->getData();
 				$newContents[$k] = $data;
-				if ($cfg['type'] == 'text' || $cfg['type'] == 'textarea' || $cfg['type'] == 'choice')
-					$newContentTexts[] = $data;
+				if ($cfg['type'] == TextType::class ||
+					$cfg['type'] == TextareaType::class ||
+					$cfg['type'] == ChoiceType::class) {
+						$newContentTexts[] = $data;
+				}
 			}
 			$row->setContent($newContents);
 			$row->setContentText(implode("\n", array_filter($newContentTexts)));
@@ -227,8 +233,11 @@ abstract class AbstractHandler {
 						$data = $dataLg;
 				}
 				$newContents[$k] = $data;
-				if ($cfg['type'] == 'text' || $cfg['type'] == 'textarea' || $cfg['type'] == 'choice')
-					$newContentTexts[] = $data;
+				if ($cfg['type'] == TextType::class ||
+					$cfg['type'] == TextareaType::class ||
+					$cfg['type'] == ChoiceType::class) {
+						$newContentTexts[] = $data;
+				}
 			}
 			$row->setContent($newContents);
 			$row->setContentText(implode("\n", array_filter($newContentTexts)));

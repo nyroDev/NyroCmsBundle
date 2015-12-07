@@ -15,7 +15,7 @@
 				<p class="form_errors"><?php echo $view['nyrodev']->trans('login.errors.'.$error->getMessage()) ?></p>
 			<?php endif; ?>
 
-			<form action="<?php echo $view['router']->generate('nyrocms_admin_security_check') ?>" method="post">
+			<form action="<?php echo $view['router']->path('nyrocms_admin_security_check') ?>" method="post">
 				<label for="username"><?php echo $view['nyrodev']->trans('admin.user.email') ?> :</label>
 				<input type="email" id="username" name="_username" value="<?php echo $last_username ?>" required="required" placeholder="<?php echo $view['nyrodev']->trans('admin.user.email') ?>" />
 
@@ -24,7 +24,7 @@
 				
 				<button type="submit"><?php echo $view['nyrodev']->trans('admin.misc.login') ?></button>
 			</form>
-			<a href="<?php echo $view['router']->generate('nyrocms_admin_forgot') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('nyrocms.forgot.link') ?></a>
+			<a href="<?php echo $view['router']->path('nyrocms_admin_forgot') ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('nyrocms.forgot.link') ?></a>
 		</div>
 	</article>
 <?php $view['slots']->stop() ?>
