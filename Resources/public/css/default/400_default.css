@@ -150,3 +150,6 @@ body {
 .block_slideshow_arrow:hover:after {
 	opacity: 1;
 }
+.block_separator {
+	padding: 1.5rem 0;
+}
