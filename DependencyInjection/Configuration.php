@@ -67,6 +67,8 @@ class Configuration implements ConfigurationInterface
 			'video'=>array(
 				'url'=>null,
 				'embed'=>null,
+			),
+			'separator'=>array(
 			)
 		);
 		
@@ -126,6 +128,9 @@ class Configuration implements ConfigurationInterface
 			),
 			'handler'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_handler.html.php'
+			),
+			'separator'=>array(
+				'template'=>'NyroDevNyroCmsBundle:Composer:block_separator.html.php'
 			),
 		);
 		
@@ -224,7 +229,7 @@ class Configuration implements ConfigurationInterface
 									->prototype('scalar')->end()
 								->end()
 								->arrayNode('available_blocks')
-									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image_text', 'text_image', 'image2', 'image3', 'slideshow', 'video'))
+									->defaultValue(array('intro', 'text', 'column2', 'column3', 'image', 'image_text', 'text_image', 'image2', 'image3', 'slideshow', 'video', 'separator'))
 									->prototype('scalar')->end()
 								->end()
 								->arrayNode('tinymce')

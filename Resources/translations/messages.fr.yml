@@ -93,8 +93,7 @@ admin:
       column2: 2 colonnes
       column3: 3 colonnes
       slideshow: Galerie
-      newsletter_news: News
-      newsletter_jobs: Offres d'emploi
+      separator: Séparateur
     default:
       subtitle: Sous-titre
       text: |
