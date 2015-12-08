@@ -1,0 +1,9 @@
+parameters:
+    nyrocms.form.userFilter.class: NyroDev\NyroCmsBundle\Form\Type\UserFilterType
+
+services:
+    nyrocms.userFilter.form.type:
+        class: %nyrocms.form.userFilter.class%
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }

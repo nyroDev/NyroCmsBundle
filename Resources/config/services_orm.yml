@@ -5,9 +5,9 @@ parameters:
 services:
     nyrocms_db:
         class: %nyrocms.ormDbService.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
     nyrocms_ormListener:
         class: %nyrocms.ormDbListener.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
             - { name: doctrine.event_subscriber }

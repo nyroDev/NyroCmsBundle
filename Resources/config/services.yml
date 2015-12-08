@@ -8,26 +8,26 @@ parameters:
 services:
     nyrocms:
         class: %nyrocms.mainService.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms }
     nyrocms_user:
         class: %nyrocms.userService.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_user }
     nyrocms_admin:
         class: %nyrocms.adminService.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_admin }
     nyrocms_composer:
         class: %nyrocms.composerService.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
     nyrocms.routing_loader:
         class: %nyrocms.routingLoader.class%
-        arguments: [@service_container]
+        arguments: ['@service_container']
         tags:
             - { name: routing.loader }

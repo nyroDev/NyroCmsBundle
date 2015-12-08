@@ -9,6 +9,7 @@ use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 
 class AdminDataController extends AbstractAdminController {
 	
@@ -447,7 +448,7 @@ class AdminDataController extends AbstractAdminController {
 		$route = 'nyrocms_admin_data_user';
 		
 		$repo = $this->get('nyrocms_db')->getUserRepository();
-		$filter = new \NyroDev\NyroCmsBundle\Form\Type\UserFilterType($this->container);
+		$filter = UserFilterType::class;
 		
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
 				array_merge(

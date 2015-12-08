@@ -4,7 +4,6 @@ namespace NyroDev\NyroCmsBundle\Form\Type;
 use NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 
-
 class UserFilterType extends Type\AbstractFilterType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
