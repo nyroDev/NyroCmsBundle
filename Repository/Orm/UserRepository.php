@@ -53,5 +53,16 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 	public function supportsClass($class) {
         return $this->getEntityName() === $class;
 	}
+	
+	public function getForWelcomeEmails() {
+		return $this->createQueryBuilder('u')
+						->andWhere('u.valid = 1')
+						->andWhere('u.password = :password')
+							->setParameter('password', 'dummy')
+						->andWhere('(u.validStart LIKE :today OR u.passwordKeyEnd LIKE :today')
+							->setParameter('today', date('Y-m-d').'%')
+						->getQuery()
+						->execute();
+	}
 
 }
