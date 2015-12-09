@@ -189,7 +189,10 @@ class MainService extends AbstractService {
 		$ret = array();
 		$isObjectPage = isset($pathInfo['object']) && $pathInfo['object'];
 		
-		$objectLocale = $isObjectPage ? $pathInfo['object'] : $this->getRootContent();
+		$rootContent = $this->getRootContent();
+		$objectLocale = $isObjectPage ? $pathInfo['object'] : $rootContent;
+		
+		$prefixRoute = $rootContent ? $rootContent->getHandler() : null;
 		
 		$defaultLocale = $this->getDefaultLocale($objectLocale);
 		$locales = $this->getLocales($objectLocale);
@@ -202,11 +205,11 @@ class MainService extends AbstractService {
 			if ($locale != $curLocale && ($locale == $defaultLocale || empty($onlyLangs) || in_array($locale, $onlyLangs))) {
 				$prm = array('_locale'=>$locale);
 				if (!$pathInfo['route']) {
-					$ret[$locale] = $this->generateUrl('_homepage_noLocale', array(), $absolute);
-				} else if ($pathInfo['route'] == '_homepage_noLocale' && $curLocale == $defaultLocale) {
-					$ret[$locale] = $this->generateUrl('_homepage', array_merge($pathInfo['routePrm'], $prm), $absolute);
-				} else if ($pathInfo['route'] == '_homepage' && $locale == $defaultLocale) {
-					$ret[$locale] = $this->generateUrl('_homepage_noLocale', array(), $absolute);
+					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage_noLocale', array(), $absolute);
+				} else if ($pathInfo['route'] == $prefixRoute.'_homepage_noLocale' && $curLocale == $defaultLocale) {
+					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage', array_merge($pathInfo['routePrm'], $prm), $absolute);
+				} else if ($pathInfo['route'] == $prefixRoute.'_homepage' && $locale == $defaultLocale) {
+					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage_noLocale', array(), $absolute);
 				}  else if ($this->pathInfoSearch && preg_match('/_search$/', $pathInfo['route'])) {
 					$ret[$locale] = $this->generateUrl($pathInfo['route'], array_merge($pathInfo['routePrm'], $prm, array('q'=>$this->pathInfoSearch)), $absolute);
 				} else if ($isObjectPage) {
