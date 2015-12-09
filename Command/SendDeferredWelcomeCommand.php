@@ -26,7 +26,7 @@ class SendDeferredWelcomeCommand extends ContainerAwareCommand {
 			$context = $this->getContainer()->get('router')->getContext();
 			$context->setScheme($this->getContainer()->getParameter('nyroCms.email.router_scheme'));
 			$context->setHost($this->getContainer()->getParameter('nyroCms.email.router_host'));
-			$context->setBaseUrl($this->getContainer()->getParameter('nyroCms.email.router_baseUrl'));
+			$context->setBaseUrl($this->getContainer()->getParameter('nyroCms.email.router_base_url'));
 
 			$users = $this->getContainer()->get('nyrocms_db')->getUserRepository()->getForWelcomeEmails();
 			$nbUsers = count($users);

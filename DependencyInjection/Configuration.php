@@ -212,7 +212,7 @@ class Configuration implements ConfigurationInterface
 						->scalarNode('body_template')->defaultValue('NyroDevNyroCmsBundle:Tpl:emailBody.html.php')->end()
 						->scalarNode('router_scheme')->defaultValue('http')->end()
 						->scalarNode('router_host')->defaultValue('localhost')->end()
-						->scalarNode('router_baseUrl')->end()
+						->scalarNode('router_base_url')->defaultValue('')->end()
 					->end()
 				->end()
 				->arrayNode('composable')
