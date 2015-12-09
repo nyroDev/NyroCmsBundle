@@ -111,7 +111,9 @@ class MainService extends AbstractService {
 	}
 	
 	public function sendEmail($to, $subject, $content, $from = null, $locale = null) {
-        $response = $this->get('templating')->renderResponse('NyroDevNyroCmsBundle:Tpl:email.html.php', array(
+        $response = $this->get('templating')->renderResponse($this->getParameter('nyroCms.email.global_template'), array(
+			'stylesTemplate'=>$this->getParameter('nyroCms.email.styles_template'),
+			'bodyTemplate'=>$this->getParameter('nyroCms.email.body_template'),
 			'subject'=>$subject,
 			'locale'=>$locale ? $locale : $this->getLocale(),
 			'content'=>$content,

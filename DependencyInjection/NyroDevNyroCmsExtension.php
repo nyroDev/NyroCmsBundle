@@ -32,6 +32,9 @@ class NyroDevNyroCmsExtension extends Extension
 		$container->setParameter('nyroCms.content.maxlevel', $config['content']['maxlevel']);
 		$container->setParameter('nyroCms.content.admin_per_root', $config['content']['admin_per_root']);
 		$container->setParameter('nyroCms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
+		$container->setParameter('nyroCms.email.global_template', $config['email']['global_template']);
+		$container->setParameter('nyroCms.email.styles_template', $config['email']['styles_template']);
+		$container->setParameter('nyroCms.email.body_template', $config['email']['body_template']);
 		
 		$composable = $config['composable']['classes'];
 		$composable['default'] = $config['composable']['default'];
