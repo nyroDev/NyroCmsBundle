@@ -7,13 +7,17 @@ use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
+use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 abstract class AbstractHandler {
 	
@@ -49,6 +53,10 @@ abstract class AbstractHandler {
 	}
 	
 	public function hasIntro() {
+		return false;
+	}
+	
+	public function isIntroRequired() {
 		return false;
 	}
 	
@@ -176,7 +184,7 @@ abstract class AbstractHandler {
 					if ($type == 'date')
 						$cfg['data'] = new \DateTime($cfg['data']['date']);
 				}
-				if ($type == 'file' && isset($cfg['data']))
+				if ($type == FileType::class && isset($cfg['data']))
 					unset($cfg['data']);
 				$cfg['position'] = array('after'=>$after);
 				$form->add($k, $type, $cfg);
@@ -189,7 +197,7 @@ abstract class AbstractHandler {
 						$data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
 						if ($data && $type == 'date' && !is_object($data))
 							$data = new \DateTime($data['date']);
-						if ($type == 'file')
+						if ($type == FileType::class)
 							$data = null;
 						$form->add($fieldName, $type, array_merge($cfg, array(
 							'label'=>$cfg['label'].' '.strtoupper($lg),
@@ -202,16 +210,38 @@ abstract class AbstractHandler {
 		}
 	}
 	
+	/**
+	 * Get the upload directory
+	 *
+	 * @return string
+	 */
+	public function getUploadRootDir() {
+		return $this->getParameter('kernel.root_dir').'/../web/'.$this->getUploadDir();
+	}
+
+	/**
+	 * Get the upload directory web name
+	 *
+	 * @return string 
+	 */
+	public function getUploadDir() {
+		return 'uploads/contentHandler';
+	}
+	
 	public function flushClb($action, ContentSpec $row, Form $form) {
 		if (!$this->hasComposer()) {
 			$newContents = $newContentTexts = array();
 			foreach($this->getFormFields($action) as $k=>$cfg) {
 				$data = $form->get($k)->getData();
-				$newContents[$k] = $data;
-				if ($cfg['type'] == TextType::class ||
-					$cfg['type'] == TextareaType::class ||
-					$cfg['type'] == ChoiceType::class) {
-						$newContentTexts[] = $data;
+				if ($cfg['type'] == FileType::class) {
+					$newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
+				} else {
+					$newContents[$k] = $data;
+					if ($cfg['type'] == TextType::class ||
+						$cfg['type'] == TextareaType::class ||
+						$cfg['type'] == ChoiceType::class) {
+							$newContentTexts[] = $data;
+					}
 				}
 			}
 			$row->setContent($newContents);
@@ -225,18 +255,23 @@ abstract class AbstractHandler {
 		if (!$this->hasComposer()) {
 			$newContents = $newContentTexts = array();
 			foreach($this->getFormFields($action) as $k=>$cfg) {
-				$data = $form->get($k)->getData();
+				$data = $dataLg = $form->get($k)->getData();
+				$fieldName = $k;
 				if (isset($cfg['translatable']) && $cfg['translatable']) {
 					$fieldName = 'lang_'.$lg.'_'.$k;
 					$dataLg = $form->get($fieldName)->getData();
 					if ($dataLg)
 						$data = $dataLg;
 				}
-				$newContents[$k] = $data;
-				if ($cfg['type'] == TextType::class ||
-					$cfg['type'] == TextareaType::class ||
-					$cfg['type'] == ChoiceType::class) {
-						$newContentTexts[] = $data;
+				if ($cfg['type'] == FileType::class) {
+					$newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
+				} else {
+					$newContents[$k] = $data;
+					if ($cfg['type'] == TextType::class ||
+						$cfg['type'] == TextareaType::class ||
+						$cfg['type'] == ChoiceType::class) {
+							$newContentTexts[] = $data;
+					}
 				}
 			}
 			$row->setContent($newContents);
@@ -244,7 +279,52 @@ abstract class AbstractHandler {
 		}
 	}
 	
-	public function deleteClb(ContentSpec $row) {}
+	protected $fileUploaded = array();
+	protected function handleFileUpload($field, $data, $action, ContentSpec $row, $fieldForm = null) {
+		$fieldForm = is_null($fieldForm) ? $fieldForm : $field;
+		if (!isset($this->fileUploaded[$fieldForm])) {
+			$this->fileUploaded[$fieldForm] = $row->getInContent($field);
+			/* @var $data UploadedFile */
+			if ($data) {
+				// We have a file upload, handle it
+				$rootDir = $this->getUploadRootDir();
+
+				$fs = new Filesystem();
+				if (!$fs->exists($rootDir))
+					$fs->mkdir($rootDir);
+
+				// Remove current files
+				$this->deleteFileClb($row, $field);
+
+				// Transfer new File
+				$destPath = $this->get('nyrodev')->getUniqFileName($rootDir, $data->getClientOriginalName());
+				$data->move($rootDir, $destPath);
+
+				$this->fileUploaded[$fieldForm] = $destPath;
+			}
+		}
+		return $this->fileUploaded[$fieldForm];
+	}
+	
+	public function deleteClb(ContentSpec $row) {
+		foreach($this->getFormFields(AbstractAdminController::ADD) as $k=>$cfg) {
+			if ($cfg['type'] == FileType::class) {
+				$this->deleteFileClb($row, $k);
+			}
+		}
+	}
+	
+	protected function deleteFileClb(ContentSpec $row, $field) {
+		$file = $row->getInContent($field);
+		if ($file) {
+			$fs = new Filesystem();
+			$filePath = $this->getUploadRootDir().'/'.$file;
+			if ($fs->exists($filePath)) {
+				$fs->remove($filePath);
+				$this->get('nyrodev_image')->removeCache($filePath);
+			}
+		}
+	}
 	
 	/**
 	 *

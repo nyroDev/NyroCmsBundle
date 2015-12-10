@@ -259,3 +259,7 @@ nyrocms:
     news:
       more: En savoir plus
       empty: Il n'y a aucune actualité à afficher.
+    files:
+      file: Fichier
+      download: Télécharger
+      empty: Il n'y a aucun fichier à afficher.

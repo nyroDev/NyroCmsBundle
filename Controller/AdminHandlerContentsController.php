@@ -156,6 +156,16 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 		$handler->init($request, true);
 		
+		if ($handler->isIntroRequired()) {
+			$moreOptions['intro'] = array(
+				'required'=>true,
+				'constraints'=>array(
+					new Constraints\NotBlank()
+				)
+			);
+			$this->translationFields['intro']['required'] = true;
+		}
+		
 		$adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, array(
 					'title',
 					'intro',
@@ -198,7 +208,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		
 		/* @var $form \Ivory\OrderedForm\Builder\OrderedFormBuilder */
 		
-		if (!$this->get('nyrocms')->getHandler($row->getContentHandler())->hasIntro()) {
+		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+		
+		if (!$handler->hasIntro()) {
 			$form->remove('intro');
 			unset($this->translationFields['intro']);
 		}
@@ -221,7 +233,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 				)));
 			}
 		}
-		$this->get('nyrocms')->getHandler($row->getContentHandler())->formClb($action, $row, $form, $langs, $this->translations);
+		$handler->formClb($action, $row, $form, $langs, $this->translations);
 	}
 	protected function contentFlush($action, $row, $form) {
 		$this->contentForm = $form;
