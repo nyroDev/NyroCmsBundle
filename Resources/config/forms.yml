@@ -1,9 +1,15 @@
 parameters:
     nyrocms.form.userFilter.class: NyroDev\NyroCmsBundle\Form\Type\UserFilterType
+    nyrocms.handler.form.contact.class: NyroDev\NyroCmsBundle\Form\Type\ContactType
 
 services:
     nyrocms.userFilter.form.type:
         class: %nyrocms.form.userFilter.class%
+        arguments: ['@service_container']
+        tags:
+          - { name: form.type }
+    nyrocms.handler.contact.form.type:
+        class: %nyrocms.handler.form.contact.class%
         arguments: ['@service_container']
         tags:
           - { name: form.type }

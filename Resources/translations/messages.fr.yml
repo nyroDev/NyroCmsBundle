@@ -263,3 +263,19 @@ nyrocms:
       file: Fichier
       download: Télécharger
       empty: Il n'y a aucun fichier à afficher.
+    contact:
+      subject: Message depuis le site
+      defaultTo:
+        email: email@domain.com
+        name: Contact
+      to: Pour
+      firstname: Prénom
+      lastname: Nom
+      company: Société
+      phone: Téléphone
+      email: E-mail
+      message: Message
+      send: OK
+      sent: |
+        Votre message a bien été envoyé.
+        Nous y répondrons dans les plus brefs délais.

@@ -2,11 +2,12 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use NyroDev\NyroCmsBundle\Model\Content;
-use NyroDev\NyroCmsBundle\Model\ContentSpec;
 
 abstract class AbstractController extends NyroDevAbstractController {
 	
@@ -14,7 +15,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 	
 	/**
 	 * 
-	 * @return \NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface
+	 * @return ContentRepositoryInterface
 	 */
 	public function getContentRepo() {
 		return $this->get('nyrocms_db')->getContentRepository();
@@ -24,7 +25,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 	
 	/**
 	 * 
-	 * @return \NyroDev\NyroCmsBundle\Model\Content
+	 * @return Content
 	 */
 	protected function getRootContent() {
 		if (is_null($this->rootContent)) {
@@ -118,7 +119,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 			$handler = $this->get('nyrocms')->getHandler($content->getContentHandler());
 			$handler->init($request);
 			$contentHandler = $handler->prepareView($content, $contentSpec, $handlerAction);
-			if ($contentHandler instanceof \Symfony\Component\HttpFoundation\Response)
+			if ($contentHandler instanceof Response)
 				return $contentHandler;
 		}
 		
