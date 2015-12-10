@@ -20,9 +20,11 @@ class OrmListener extends AbstractService implements EventSubscriber {
 			/* @var $object \NyroDev\NyroCmsBundle\Model\ContentSpec */
 			
 			// Reload contentHandler to correctly fill contents
-			if ($object->getContentHandler()) {
+			if ($object->getContentHandler() && is_null($object->getContentHandler()->getContents())) {
 				$ch = $this->get('nyrocms_db')->getContentHandlerRepository()->find($object->getContentHandler()->getId());
-				$object->setContentHandler($ch);
+				$object->getContentHandler()->setContents($ch->getContents());
+				unset($ch);
+				$ch = null;
 			}
 			
 			// Reload content parent to be in the same locale, useful for translated URLs
@@ -30,7 +32,6 @@ class OrmListener extends AbstractService implements EventSubscriber {
 				$object->getParent()->setTranslatableLocale($object->getTranslatableLocale());
 				$this->get('nyrocms_db')->refresh($object->getParent());
 			}
-			
 		}
 	}
 	

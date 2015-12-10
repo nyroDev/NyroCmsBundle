@@ -151,6 +151,18 @@ abstract class ContentHandler {
     }
 
     /**
+     * Set contents
+     *
+     * @param \Doctrine\Common\Collections\Collection $contents
+     * @return ContentHandler
+     */
+    public function setContents(\Doctrine\Common\Collections\Collection $contents) {
+        $this->contents = $contents;
+
+        return $this;
+    }
+
+    /**
      * Get contents
      *
      * @return \Doctrine\Common\Collections\Collection 
