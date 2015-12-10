@@ -549,7 +549,7 @@ abstract class User implements UserInterface, \Symfony\Component\Security\Core\U
 		);
 		if ($this->getValid()) {
 			foreach($this->getUserRoles() as $role) {
-				$ret[] = $role->getRoleName();
+				$ret[] = $role->getSecurityRoleName();
 			}
 		}
 		return $ret;

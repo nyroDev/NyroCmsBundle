@@ -185,6 +185,7 @@ admin:
     viewTitle: Rôles Utilisateurs
     id: ID
     name: Name
+    roleName: Nom du rôle interne
     internal: Usage interne
     contents: Contenus
     inserted: Ajouté le

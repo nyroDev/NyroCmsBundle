@@ -17,6 +17,11 @@ abstract class UserRole {
     protected $name;
 
 	/**
+     * @var string
+     */
+    protected $roleName;
+
+	/**
      * @var boolean
      */
     protected $internal = false;
@@ -70,6 +75,29 @@ abstract class UserRole {
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set roleName
+     *
+     * @param string $roleName
+     * @return UserRole
+     */
+    public function setRoleName($roleName)
+    {
+        $this->roleName = $roleName;
+
+        return $this;
+    }
+
+    /**
+     * Get roleName
+     *
+     * @return string 
+     */
+    public function getRoleName()
+    {
+        return $this->roleName;
     }
 
     /**
@@ -179,8 +207,9 @@ abstract class UserRole {
 		return $this->getName();
 	}
 	
-	public function getRoleName() {
-		return 'ROLE_'.strtoupper(str_replace(' ', '_', iconv('UTF-8', 'ASCII//TRANSLIT', $this->getName())));
+	public function getSecurityRoleName() {
+		$name = $this->getRoleName() ? $this->getRoleName() : $this->getName();
+		return 'ROLE_'.strtoupper(str_replace(' ', '_', iconv('UTF-8', 'ASCII//TRANSLIT', $name)));
 	}
 	
 }

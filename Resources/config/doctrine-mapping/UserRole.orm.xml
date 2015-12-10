@@ -11,6 +11,7 @@
 			</options>
         </id>
 		<field name="name" type="string" nullable="false" />
+		<field name="roleName" type="string" nullable="true" />
 		<field name="internal" type="boolean" nullable="true" />
 		<field name="inserted" type="datetime" nullable="false" />
 		<field name="updated" type="datetime" nullable="false" />

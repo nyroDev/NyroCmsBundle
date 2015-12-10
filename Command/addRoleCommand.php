@@ -18,6 +18,7 @@ class addRoleCommand extends ContainerAwareCommand {
 			->setName('nyrocms:addRole')
 			->setDescription('Create DB user role according to configuration')
             ->addArgument('name', InputArgument::OPTIONAL, 'Role name', null)
+            ->addArgument('roleName', InputArgument::OPTIONAL, 'Internal role name', null)
             ->addArgument('internal', InputArgument::OPTIONAL, 'Internal', null);
 	}
 	
@@ -29,12 +30,17 @@ class addRoleCommand extends ContainerAwareCommand {
 	 */
 	protected function execute(InputInterface $input, OutputInterface $output) {
 		$name = $input->getArgument('name');
+		$roleName = $input->getArgument('roleName');
 		$internal = $input->getArgument('internal');
 		
 		$helper = $this->getHelper('question');
 		if (!$name) {
 			$question = new Question('Please enter the name of the user role: ', 'Admin');
 			$name = $helper->ask($input, $output, $question);
+		}
+		if (!$roleName) {
+			$question = new Question('Please enter the name of the internal role name, if needed: ');
+			$roleName = $helper->ask($input, $output, $question);
 		}
 		if (is_null($internal)) {
 			$question = new ChoiceQuestion(
@@ -50,6 +56,7 @@ class addRoleCommand extends ContainerAwareCommand {
 		/* @var $newRole \NyroDev\NyroCmsBundle\Model\UserRole */
 		
 		$newRole->setName($name);
+		$newRole->setRoleName($roleName);
 		$newRole->setInternal($internal === 'true');
 		
 		$dbService->flush();

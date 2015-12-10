@@ -282,6 +282,7 @@ class AdminDataController extends AbstractAdminController {
 						'fields'=>array_filter(array(
 							'id',
 							'name',
+							$isDev ? 'roleName' : null,
 							$isDev ? 'internal' : null,
 							'updated'
 						))
@@ -348,9 +349,11 @@ class AdminDataController extends AbstractAdminController {
 			),
 		);
 		
+		$isDev = $this->get('nyrocms_admin')->isDeveloper();
 		$adminForm = $this->createAdminForm($request, 'userRole', $action, $row, array_filter(array(
 					'name',
-					$this->get('nyrocms_admin')->isDeveloper() ? 'internal' : null,
+					$isDev ? 'roleName' : null,
+					$isDev ? 'internal' : null,
 					'contents',
 				)), 'nyrocms_admin_data_userRole', array(), null, null, null, $moreOptions);
 		if (!is_array($adminForm))
