@@ -68,6 +68,38 @@ class AdminService extends AbstractService {
 		return $this->administrableContentIds;
 	}
 	
+	protected $administrableRootContentIds = array();
+	
+	public function getAdministrableRootContentIds($rolePrefix = 'complete') {
+		if (!isset($this->administrableRootContentIds[$rolePrefix])) {
+			$this->administrableRootContentIds[$rolePrefix] = array();
+			$fullRootIds = $this->isSuperAdmin() || $this->isDeveloper();
+
+			if (!$fullRootIds) {
+				$rolePrefixLn = strlen($rolePrefix);
+				foreach($this->get('nyrodev_member')->getUser()->getUserRoles() as $role) {
+					if ($rolePrefix == 'complete' || ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')) {
+						// This is an corresponding role, check it against
+						if ($role->getContents()->count() > 0) {
+							foreach($role->getContents() as $content) {
+								$this->administrableRootContentIds[$rolePrefix][$content->getRoot()] = true;
+							}
+						} else {
+							$fullRootIds = true;
+						}
+					}
+				}
+			}
+
+			if ($fullRootIds) {
+				$this->administrableRootContentIds[$rolePrefix] = array();
+				foreach($this->get('nyrocms_db')->getContentRepository()->children(null, true) as $content)
+					$this->administrableRootContentIds[$rolePrefix][$content->getId()] = true;
+			}
+		}
+		return $this->administrableRootContentIds[$rolePrefix];
+	}
+	
 	public function isAdmin() {
 		return $this->hasRole('ROLE_ADMIN');
 	}
@@ -172,7 +204,7 @@ class AdminService extends AbstractService {
 	
 	protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0, array $limitRootIds = array()) {
 		foreach($this->get('nyrocms_db')->getContentRepository()->children($parent, true) as $child) {
-			$canUse = count($limitRootIds) > 0 ? in_array($child->getId(), $limitRootIds) : true;
+			$canUse = count($limitRootIds) > 0 ? isset($limitRootIds[$child->getId()]) && $limitRootIds[$child->getId()] : true;
 			if ($canUse) {
 				$contents[$child->getId()] = $child;
 				$contentsLevel[$child->getId()] = $curLevel;
