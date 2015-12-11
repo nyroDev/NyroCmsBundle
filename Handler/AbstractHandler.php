@@ -167,7 +167,7 @@ abstract class AbstractHandler {
 	
 	public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = array(), array $translations = array()) {
 		if (!$this->hasComposer()) {
-			$after = 'validEnd';
+			$after = $this->hasValidDates() ? 'validEnd' : 'state';
 			$content = $row->getContent();
 			$translationsContent = array();
 			foreach($translations as $lg=>$trs) {
@@ -233,7 +233,7 @@ abstract class AbstractHandler {
 	 * @return string 
 	 */
 	public function getUploadDir() {
-		return 'uploads/contentHandler';
+		return 'uploads/contentHandler/'.$this->contentHandler->getId();
 	}
 	
 	public function flushClb($action, ContentSpec $row, Form $form) {
