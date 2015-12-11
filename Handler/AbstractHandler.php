@@ -68,6 +68,10 @@ abstract class AbstractHandler {
 		return false;
 	}
 	
+	public function needTranslations() {
+		return true;
+	}
+	
 	public function hasComposer() {
 		return true;
 	}
@@ -198,7 +202,7 @@ abstract class AbstractHandler {
 				$form->add($k, $type, $cfg);
 				$after = $k;
 				
-				if ($translatable && count($langs)) {
+				if ($this->needTranslations() && $translatable && count($langs)) {
 					foreach($langs as $lg=>$lang) {
 						$fieldName = 'lang_'.$lg.'_'.$k;
 						$cfg['position']['after'] = $after;

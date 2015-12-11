@@ -215,24 +215,27 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 		
-		$propertyAccess = PropertyAccess::createPropertyAccessor();
-		foreach($langs as $lg=>$lang) {
-			foreach($this->translationFields as $field=>$options) {
-				$type = $options['type'];
-				unset($options['type']);
-				$fieldName = 'lang_'.$lg.'_'.$field;
-				
-				if (isset($options['required']) && $options['required'])
-					$options['constraints'] = array(new Constraints\NotBlank());
-				
-				$form->add($fieldName, $type, array_merge($options, array(
-					'label'=>$this->trans('admin.contentSpec.'.$field).' '.strtoupper($lg),
-					'mapped'=>false,
-					'data'=>isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
-					'position'=>array('after'=>$field)
-				)));
+		if ($handler->needTranslations()) {
+			$propertyAccess = PropertyAccess::createPropertyAccessor();
+			foreach($langs as $lg=>$lang) {
+				foreach($this->translationFields as $field=>$options) {
+					$type = $options['type'];
+					unset($options['type']);
+					$fieldName = 'lang_'.$lg.'_'.$field;
+
+					if (isset($options['required']) && $options['required'])
+						$options['constraints'] = array(new Constraints\NotBlank());
+
+					$form->add($fieldName, $type, array_merge($options, array(
+						'label'=>$this->trans('admin.contentSpec.'.$field).' '.strtoupper($lg),
+						'mapped'=>false,
+						'data'=>isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
+						'position'=>array('after'=>$field)
+					)));
+				}
 			}
 		}
+		
 		$handler->formClb($action, $row, $form, $langs, $this->translations);
 	}
 	protected function contentFlush($action, $row, $form) {
@@ -243,25 +246,29 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	protected function contentAfterFlush($response, $action, $row) {
 		$this->get('nyrocms')->getHandler($row->getContentHandler())->afterFlushClb($response, $action, $row);
 		
-		$langs = $this->get('nyrocms')->getLocaleNames($row);
-		$defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
-		unset($langs[$defaultLocale]);
+		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 		
-		$om = $this->get('nyrocms_db')->getObjectManager();
-		$propertyAccess = PropertyAccess::createPropertyAccessor();
-		
-		foreach($langs as $lg=>$lang) {
-			$row->setTranslatableLocale($lg);
-			$om->refresh($row);
-			
-			foreach($this->translationFields as $field=>$options) {
-				$fieldName = 'lang_'.$lg.'_'.$field;
-				$propertyAccess->setValue($row, $field, $this->contentForm->get($fieldName)->getData());
+		if ($handler->needTranslations()) {
+			$langs = $this->get('nyrocms')->getLocaleNames($row);
+			$defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
+			unset($langs[$defaultLocale]);
+
+			$om = $this->get('nyrocms_db')->getObjectManager();
+			$propertyAccess = PropertyAccess::createPropertyAccessor();
+
+			foreach($langs as $lg=>$lang) {
+				$row->setTranslatableLocale($lg);
+				$om->refresh($row);
+
+				foreach($this->translationFields as $field=>$options) {
+					$fieldName = 'lang_'.$lg.'_'.$field;
+					$propertyAccess->setValue($row, $field, $this->contentForm->get($fieldName)->getData());
+				}
+
+				$handler->flushLangClb($action, $row, $this->contentForm, $lg);
+
+				$om->flush();
 			}
-			
-			$this->get('nyrocms')->getHandler($row->getContentHandler())->flushLangClb($action, $row, $this->contentForm, $lg);
-			
-			$om->flush();
 		}
 	}
 	
