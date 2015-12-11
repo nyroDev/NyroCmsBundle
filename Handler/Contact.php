@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Contact extends AbstractHandler {
 	
-	protected function getEmails() {
+	protected function getEmails(Content $content) {
 		return array(
 			'contact'=>array(
 				'email'=>$this->trans('nyrocms.handler.contact.defaultTo.email'),
@@ -18,24 +18,24 @@ class Contact extends AbstractHandler {
 		);
 	}
 	
-	protected function getFormType() {
+	protected function getFormType(Content $content) {
 		return ContactType::class;
 	}
 	
-	protected function getFormOptions() {
+	protected function getFormOptions(Content $content) {
 		return array();
 	}
 	
 	protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null) {
-		$contactEmails = $this->getEmails();
+		$contactEmails = $this->getEmails($content);
 		
-		$form = $this->get('form.factory')->create($this->getFormType(), null, array_merge(array(
+		$form = $this->get('form.factory')->create($this->getFormType($content), null, array_merge(array(
 			'attr'=>array(
 				'id'=>'contactForm',
 				'class'=>'publicForm',
 			),
-			'contacts'=>$this->getEmails(),
-		), $this->getFormOptions()));
+			'contacts'=>$contactEmails,
+		), $this->getFormOptions($content)));
 		$this->get('nyrodev_form')->addDummyCaptcha($form);
 		
 		$form->handleRequest($this->request);
