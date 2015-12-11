@@ -139,9 +139,13 @@ class MainService extends AbstractService {
 	}
 	
 	public function getDefaultLocale($rootContent = null) {
-		if ($rootContent)
-			$rootContent = $rootContent->getVeryParent();
-		if ($rootContent && $rootContent->getLocales()) {
+		$isComposable = false;
+		if ($rootContent) {
+			$isComposable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\Composable;
+			if ($isComposable)
+				$rootContent = $rootContent->getVeryParent();
+		}
+		if ($isComposable && $rootContent && $rootContent->getLocales()) {
 			$tmp = explode('|', $rootContent->getLocales());
 			return $tmp[0];
 		} else {
@@ -150,9 +154,13 @@ class MainService extends AbstractService {
 	}
 	
 	public function getLocales($rootContent = null, $asString = false) {
-		if ($rootContent)
-			$rootContent = $rootContent->getVeryParent();
-		$locales = $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
+		$isComposable = false;
+		if ($rootContent) {
+			$isComposable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\Composable;
+			if ($isComposable)
+				$rootContent = $rootContent->getVeryParent();
+		}
+		$locales = $isComposable && $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
 		return $asString ? $locales : explode('|', $locales);
 	}
 	

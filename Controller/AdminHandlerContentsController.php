@@ -14,7 +14,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	/**
 	 * 
 	 * @param type $chid
-	 * @return \Sis\DbBundle\Entity\ContentHandler
+	 * @return \NyroDev\NyroCmsBundle\Model\ContentHandler
 	 * @throws type
 	 */
 	protected function getContentHandler($chid) {
@@ -183,6 +183,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 			return $adminForm;
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
 	}
+	
 	protected $translationFields = array(
 		'title'=>array(
 			'type'=>TextType::class,
@@ -244,9 +245,8 @@ class AdminHandlerContentsController extends AbstractAdminController {
 	}
 	
 	protected function contentAfterFlush($response, $action, $row) {
-		$this->get('nyrocms')->getHandler($row->getContentHandler())->afterFlushClb($response, $action, $row);
-		
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+		$handler->afterFlushClb($response, $action, $row);
 		
 		if ($handler->needTranslations()) {
 			$langs = $this->get('nyrocms')->getLocaleNames($row);
