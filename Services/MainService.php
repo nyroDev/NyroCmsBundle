@@ -139,13 +139,13 @@ class MainService extends AbstractService {
 	}
 	
 	public function getDefaultLocale($rootContent = null) {
-		$isComposable = false;
+		$isContentRootable = false;
 		if ($rootContent) {
-			$isComposable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\Composable;
-			if ($isComposable)
+			$isContentRootable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\ContentRootable;
+			if ($isContentRootable)
 				$rootContent = $rootContent->getVeryParent();
 		}
-		if ($isComposable && $rootContent && $rootContent->getLocales()) {
+		if ($isContentRootable && $rootContent && $rootContent->getLocales()) {
 			$tmp = explode('|', $rootContent->getLocales());
 			return $tmp[0];
 		} else {
@@ -154,13 +154,13 @@ class MainService extends AbstractService {
 	}
 	
 	public function getLocales($rootContent = null, $asString = false) {
-		$isComposable = false;
+		$isContentRootable = false;
 		if ($rootContent) {
-			$isComposable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\Composable;
-			if ($isComposable)
+			$isContentRootable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\ContentRootable;
+			if ($isContentRootable)
 				$rootContent = $rootContent->getVeryParent();
 		}
-		$locales = $isComposable && $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
+		$locales = $isContentRootable && $rootContent && $rootContent->getLocales() ? $rootContent->getLocales() : $this->getParameter('locales');
 		return $asString ? $locales : explode('|', $locales);
 	}
 	

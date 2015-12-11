@@ -2,7 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
-interface Composable {
+interface Composable extends ContentRootable {
 	
 	public function getId();
 	
@@ -23,7 +23,6 @@ interface Composable {
 	public function setFirstImage($firstImage);
 	
 	public function getParent();
-	public function getVeryParent();
 	
 	public function getTheme();
 	
