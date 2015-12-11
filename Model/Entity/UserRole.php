@@ -7,7 +7,7 @@ use NyroDev\NyroCmsBundle\Model\UserRole as UserRoleModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * UserRole
  *
  * @ORM\Table(name="user_role")
  * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\UserRoleRepository")

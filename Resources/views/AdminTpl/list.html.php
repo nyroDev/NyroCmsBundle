@@ -1,11 +1,12 @@
 <?php $view->extend('NyroDevNyroCmsBundle:Admin:_layout.html.php') ?>
 
 <?php $view['slots']->start('content') ?>
+	<?php $prefix = isset($prefix) && $prefix ? $prefix : 'admin'; ?>
 	<article id="<?php echo $name ?>" class="list">
-		<h1><?php echo isset($title) ? $title : $view['translator']->trans('admin.'.$name.'.viewTitle') ?></h1>
+		<h1><?php echo isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle') ?></h1>
 		
 		<?php
-		$introKey = 'admin.'.$name.'.introList';
+		$introKey = $prefix.'.'.$name.'.introList';
 		$intro = $view['translator']->trans($introKey);
 		if ($intro && $intro != $introKey)
 			echo '<p class="intro">'.$intro.'</p>';
@@ -46,7 +47,7 @@
 					<tr>
 					<?php foreach($fields as $field): ?>
 						<?php
-						$label = $view['translator']->trans('admin.'.$name.'.'.$field);
+						$label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
 						$prm = $routePrm;
 						$prm['page'] = 1;
 						$prm['sort'] = $field;

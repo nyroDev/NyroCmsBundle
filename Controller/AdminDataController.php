@@ -312,36 +312,9 @@ class AdminDataController extends AbstractAdminController {
 		return $this->userRoleForm($request, self::EDIT, $row);
 	}
 	
-	protected function getContentsOptions($maxLevel = 3) {
-		$contents = array();
-		$contentsLevel = array();
-		$this->getContentsOptionsChoices($contents, $contentsLevel, null, $maxLevel);
-		return array(
-			'expanded'=>true,
-			'choices'=>$contents,
-			'attr'=>array(
-				'class'=>'contentsList'
-			),
-			'choice_attr'=>function($choice, $key) use ($contentsLevel) {
-				return array(
-					'class'=>'contentLvl'.$contentsLevel[$key].($choice->getParent() ? ' contentPar'.$choice->getParent()->getId() : ' contentRoot')
-				);
-			}
-		);
-	}
-	
-	protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0) {
-		foreach($this->get('nyrocms_db')->getContentRepository()->children($parent, true) as $child) {
-			$contents[$child->getId()] = $child;
-			$contentsLevel[$child->getId()] = $curLevel;
-			if ($maxLevel > 0)
-				$this->getContentsOptionsChoices($contents, $contentsLevel, $child, $maxLevel - 1, $curLevel + 1);
-		}
-	}
-	
 	public function userRoleForm(Request $request, $action, $row) {
 		$moreOptions = array(
-			'contents'=>$this->getContentsOptions($this->getParameter('nyroCms.user_roles.maxlevel_content')),
+			'contents'=>$this->get('nyrocms_admin')->getContentsChoiceTypeOptions($this->getParameter('nyroCms.user_roles.maxlevel_content')),
 			'submit'=>array(
 				'attr'=>array(
 					'data-cancelurl'=>$this->container->get('nyrodev')->generateUrl('nyrocms_admin_data_userRole')

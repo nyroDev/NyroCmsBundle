@@ -150,6 +150,38 @@ class AdminService extends AbstractService {
 		);
 	}
 	
+	public function getContentsChoiceTypeOptions($maxLevel = null, array $limitRootIds = array()) {
+		if (is_null($maxLevel))
+			$maxLevel = $this->getParameter('nyroCms.content.maxlevel');
+		$contents = array();
+		$contentsLevel = array();
+		$this->getContentsOptionsChoices($contents, $contentsLevel, null, $maxLevel, 0, $limitRootIds);
+		return array(
+			'expanded'=>true,
+			'choices'=>$contents,
+			'attr'=>array(
+				'class'=>'contentsList'
+			),
+			'choice_attr'=>function($choice, $key) use ($contentsLevel) {
+				return array(
+					'class'=>'contentLvl'.$contentsLevel[$key].($choice->getParent() ? ' contentPar'.$choice->getParent()->getId() : ' contentRoot')
+				);
+			}
+		);
+	}
+	
+	protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0, array $limitRootIds = array()) {
+		foreach($this->get('nyrocms_db')->getContentRepository()->children($parent, true) as $child) {
+			$canUse = count($limitRootIds) > 0 ? in_array($child->getId(), $limitRootIds) : true;
+			if ($canUse) {
+				$contents[$child->getId()] = $child;
+				$contentsLevel[$child->getId()] = $curLevel;
+				if ($maxLevel > 0)
+					$this->getContentsOptionsChoices($contents, $contentsLevel, $child, $maxLevel - 1, $curLevel + 1);
+			}
+		}
+	}
+	
 	public function getIcon($name) {
 		return '<svg class="icon icon-'.$name.'">'.
 					'<use xlink:href="'.$this->get('templating.helper.assets')->getUrl('bundles/nyrodevnyrocms/images/icons.svg').'#'.$name.'"></use>'.
