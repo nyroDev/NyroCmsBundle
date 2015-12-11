@@ -56,6 +56,10 @@ abstract class AbstractHandler {
 		return false;
 	}
 	
+	public function hasFeatured() {
+		return true;
+	}
+	
 	public function hasValidDates() {
 		return true;
 	}

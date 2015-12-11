@@ -169,7 +169,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$fields = array_filter(array(
 			'title',
 			$handler->hasIntro() ? 'intro' : null,
-			'featured',
+			$handler->hasFeatured() ? 'featured' : null,
 			'state',
 			$handler->hasValidDates() ? 'validStart' : null,
 			$handler->hasValidDates() ? 'validEnd' : null,
