@@ -110,6 +110,17 @@ class MainService extends AbstractService {
 		);
 	}
 	
+	public function getDateTimeFormOptions($stepMinutes = 5) {
+		return array(
+			'widget'=>'single_text',
+			'format'=>'dd/MM/yyyy HH:mm',
+			'attr'=>array(
+				'class'=>'datepicker datetimepicker',
+				'data-stepminute'=>$stepMinutes
+			)
+		);
+	}
+	
 	public function sendEmail($to, $subject, $content, $from = null, $locale = null) {
         $response = $this->get('templating')->renderResponse($this->getParameter('nyroCms.email.global_template'), array(
 			'stylesTemplate'=>$this->getParameter('nyroCms.email.styles_template'),

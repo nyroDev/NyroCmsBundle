@@ -22,7 +22,7 @@ jQuery(function($) {
 				options.hourText = 'Heure';
 				options.minuteText = 'Minute';
 				options.closeText = 'OK';
-				options.stepMinute = 15;
+				options.stepMinute = me.data('stepminute');
 				me.datetimepicker(options);
 			} else {
 				me.datepicker(options);

@@ -100,7 +100,10 @@ input[type="checkbox"][disabled] + label:before {
 	background-position: 0 -123px;
 	cursor: auto;
 }
-
+.form_row_tinymce label, .form_row_rawhtml label {
+	float: none;
+	margin-right: 0;
+}
 .form_button {
 	width: 407px;
 }
