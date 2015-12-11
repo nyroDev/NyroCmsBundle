@@ -166,14 +166,19 @@ class AdminHandlerContentsController extends AbstractAdminController {
 			$this->translationFields['intro']['required'] = true;
 		}
 		
-		$adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, array(
-					'title',
-					'intro',
-					'featured',
-					'state',
-					'validStart',
-					'validEnd',
-				), 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
+		$fields = array_filter(array(
+			'title',
+			$handler->hasIntro() ? 'intro' : null,
+			'featured',
+			'state',
+			$handler->hasValidDates() ? 'validStart' : null,
+			$handler->hasValidDates() ? 'validEnd' : null,
+		));
+		
+		if (!$handler->hasIntro())
+			unset($this->translationFields['intro']);
+		
+		$adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
 		if (!is_array($adminForm))
 			return $adminForm;
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
@@ -209,11 +214,6 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		/* @var $form \Ivory\OrderedForm\Builder\OrderedFormBuilder */
 		
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
-		
-		if (!$handler->hasIntro()) {
-			$form->remove('intro');
-			unset($this->translationFields['intro']);
-		}
 		
 		$propertyAccess = PropertyAccess::createPropertyAccessor();
 		foreach($langs as $lg=>$lang) {

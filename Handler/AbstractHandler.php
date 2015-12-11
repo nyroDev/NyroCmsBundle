@@ -56,6 +56,10 @@ abstract class AbstractHandler {
 		return false;
 	}
 	
+	public function hasValidDates() {
+		return true;
+	}
+	
 	public function isIntroRequired() {
 		return false;
 	}
