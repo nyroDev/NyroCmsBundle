@@ -141,10 +141,11 @@ class AdminDataController extends AbstractAdminController {
 			'id'=>$row->getVeryParent()->getId()
 		);
 		
+		$themes = $this->get('nyrocms_composer')->getThemes($row->getParent());
 		$moreOptions = array(
 			'theme'=>array(
 				'type'=>ChoiceType::class,
-				'choices'=>$this->get('nyrocms_composer')->getThemes($row->getParent())
+				'choices'=>$themes
 			),
 			'state'=>array(
 				'type'=>ChoiceType::class,
@@ -166,14 +167,14 @@ class AdminDataController extends AbstractAdminController {
 			),
 		);
 		
-		$fields = array(
+		$fields = array_filter(array(
 			'title',
-			'theme',
+			count($themes) > 1 ? 'theme' : null,
 			'state',
 			'goUrl',
 			'goBlank',
 			'relateds'
-		);
+		));
 		
 		if ($this->get('nyrocms_admin')->isDeveloper()) {
 			$fields[] = 'contentHandler';
