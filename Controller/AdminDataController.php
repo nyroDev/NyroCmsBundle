@@ -495,8 +495,8 @@ class AdminDataController extends AbstractAdminController {
 				)
 			),
 		);
-		
-		$adminForm = $this->createAdminForm($request, 'user', $action, $row, array(
+			
+		$adminForm = $this->createAdminForm($request, 'user', $action, $row, array_filter(array(
 					'email',
 					'firstname',
 					'lastname',
@@ -505,8 +505,9 @@ class AdminDataController extends AbstractAdminController {
 					'valid',
 					'validStart',
 					'validEnd',
+					$this->get('nyrocms_admin')->isDeveloper() ? 'developper' : null,
 					'userRoles',
-				), 'nyrocms_admin_data_user', array(), 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
+				)), 'nyrocms_admin_data_user', array(), 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
 		if (!is_array($adminForm))
 			return $adminForm;
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
