@@ -381,6 +381,9 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	public function contentHandlerForm(Request $request, $action, $row) {
+		
+		$classes = $this->get('nyrocms')->getFoundHandlers();
+		
 		$moreOptions = array(
 			'class'=>array(
 				'constraints'=>array(
@@ -404,6 +407,11 @@ class AdminDataController extends AbstractAdminController {
 				)
 			)
 		);
+		
+		if (count($classes)) {
+			$moreOptions['class']['type'] = ChoiceType::class;
+			$moreOptions['class']['choices'] = array_combine($classes, $classes);
+		}
 		
 		$adminForm = $this->createAdminForm($request, 'contentHandler', $action, $row, array(
 					'name',

@@ -243,4 +243,22 @@ class MainService extends AbstractService {
 		return $ret;
 	}
 	
+	
+	protected $foundHandlers;
+	public function getFoundHandlers() {
+		if (is_null($this->foundHandlers)) {
+			$this->foundHandlers = array();
+			if (isset($GLOBALS['loader']) && $GLOBALS['loader'] instanceof \Composer\Autoload\ClassLoader) {
+				$classes = array_keys($GLOBALS['loader']->getClassMap());
+				foreach($classes as $class) {
+					if (strpos($class, '\\Handler\\') && is_subclass_of($class, \NyroDev\NyroCmsBundle\Handler\AbstractHandler::class, true)) {
+						$this->foundHandlers[] = '\\'.$class;
+					}
+				}
+				sort($this->foundHandlers);
+			}
+		}
+		return $this->foundHandlers;
+	}
+	
 }
