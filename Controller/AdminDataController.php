@@ -29,7 +29,8 @@ class AdminDataController extends AbstractAdminController {
 		
 		$this->get('nyrocms_admin')->setContentParentId($parent->getVeryParent()->getId());
 		
-		if ($request->isMethod('post')) {
+		$canAdminContent = $this->get('nyrocms_admin')->canAdminContent($parent);
+		if ($canAdminContent && $request->isMethod('post')) {
 			$tree = $request->request->get('tree');
 			$treeLevel = $request->request->get('treeLevel');
 			$treeChanged = $request->request->get('treeChanged');
@@ -70,7 +71,7 @@ class AdminDataController extends AbstractAdminController {
 		
 		return $this->render('NyroDevNyroCmsBundle:AdminData:contentTree.html.php', array(
 			'parent'=>$parent,
-			'candDirectAdd'=>$this->get('nyrocms_admin')->canAdminContent($parent) && $this->get('nyrocms_admin')->canHaveSub($parent)
+			'candDirectAdd'=>$canAdminContent && $this->get('nyrocms_admin')->canHaveSub($parent)
 		));
 	}
 	
@@ -106,7 +107,7 @@ class AdminDataController extends AbstractAdminController {
 	
 	public function contentDeleteAction($id) {
 		$row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-		if ($row && !$row->getHandler()) {
+		if ($row && !$row->getHandler() && $this->get('nyrocms_admin')->canAdminContent($row)) {
 			$this->get('nyrocms_db')->remove($row);
 			$this->get('nyrocms_db')->flush();
 		}
@@ -118,7 +119,7 @@ class AdminDataController extends AbstractAdminController {
 		
 		if ($pid) {
 			$parent = $this->get('nyrocms_db')->getContentRepository()->find($pid);
-			if (!$parent)
+			if (!$parent || !$this->get('nyrocms_admin')->canAdminContent($parent))
 				throw $this->createNotFoundException();
 			$row->setParent($parent);
 			$this->get('nyrocms_admin')->setContentParentId($parent->getVeryParent()->getId());
@@ -129,7 +130,7 @@ class AdminDataController extends AbstractAdminController {
 	
 	public function contentEditAction(Request $request, $id) {
 		$row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-		if (!$row)
+		if (!$row || !$this->get('nyrocms_admin')->canAdminContent($row))
 			throw $this->createNotFoundException();
 		$this->get('nyrocms_admin')->setContentParentId($row->getVeryParent()->getId());
 		return $this->contentForm($request, self::EDIT, $row);
