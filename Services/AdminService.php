@@ -54,11 +54,13 @@ class AdminService extends AbstractService {
 				$repoContent = $this->get('nyrocms_db')->getContentRepository();
 				foreach($user->getUserRoles() as $userRole) {
 					/* @var $userRole \NyroDev\NyroCmsBundle\Model\UserRole */
-					foreach($userRole->getContents() as $content) {
-						if (!isset($this->administrableContentIds[$content->getId()])) {
-							$this->administrableContentIds[$content->getId()] = 'root';
-							foreach($repoContent->children($content) as $c) {
-								$this->administrableContentIds[$c->getId()] = true;
+					if (!$userRole->getInternal()) {
+						foreach($userRole->getContents() as $content) {
+							if (!isset($this->administrableContentIds[$content->getId()])) {
+								$this->administrableContentIds[$content->getId()] = 'root';
+								foreach($repoContent->children($content) as $c) {
+									$this->administrableContentIds[$c->getId()] = true;
+								}
 							}
 						}
 					}
@@ -78,7 +80,7 @@ class AdminService extends AbstractService {
 			if (!$fullRootIds) {
 				$rolePrefixLn = strlen($rolePrefix);
 				foreach($this->get('nyrodev_member')->getUser()->getUserRoles() as $role) {
-					if ($rolePrefix == 'complete' || ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')) {
+					if (($rolePrefix == 'complete' && !$role->getInternal()) || ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')) {
 						// This is an corresponding role, check it against
 						if ($role->getContents()->count() > 0) {
 							foreach($role->getContents() as $content) {
@@ -131,8 +133,8 @@ class AdminService extends AbstractService {
 	public function canAdminContent(Content $content) {
 		if ($this->isSuperAdmin())
 			return true;
-		$this->getAdministrableContentIds();
-		return isset($this->administrableContentIds[$content->getId()]) ? $this->administrableContentIds[$content->getId()] : false;
+		$contentIds = $this->getAdministrableContentIds();
+		return isset($contentIds[$content->getId()]) ? $contentIds[$content->getId()] : false;
 	}
 	
 	public function canHaveSub(Content $content) {
