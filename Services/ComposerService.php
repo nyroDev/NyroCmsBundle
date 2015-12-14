@@ -193,11 +193,15 @@ class ComposerService extends AbstractService {
 		return $config['template'];
 	}
 	
-	public function getBlock(Composable $row, $block, array $defaults = array()) {
+	public function getBlock(Composable $row, $block, array $defaults = array(), $addExtract = false) {
 		$ret = array(
 			'type'=>$block,
-			'contents'=>array()
+			'contents'=>array(),
 		);
+		if ($addExtract) {
+			$ret['texts'] = array();
+			$ret['images'] = array();
+		}
 		$cfg = $this->getConfig($row);
 		if (isset($cfg['default_blocks']) && isset($cfg['default_blocks'][$block])) {
 			$tmp = $cfg['default_blocks'][$block];
@@ -211,10 +215,13 @@ class ComposerService extends AbstractService {
 								$deletes = isset($defaults['deletes']) ? $defaults['deletes'] : array();
 								foreach($defaults[$k] as $kk=>$img) {
 									if (!isset($deletes[$kk]) || !$deletes[$kk]) {
+										$image = $this->handleDefaultImage($img);
 										$ret['contents'][$k][] = array(
 											'title'=>isset($defaults['titles']) && isset($defaults['titles'][$k]) ? $defaults['titles'][$k] : null,
-											'file'=>$this->handleDefaultImage($img)
+											'file'=>$image
 										);
+										if ($addExtract)
+											$ret['images'][] = $image;
 									} else {
 										// deletion here
 										$images = array_filter(explode("\n", trim($img)));
@@ -224,9 +231,13 @@ class ComposerService extends AbstractService {
 							}
 						} else {
 							$ret['contents'][$k] = $this->handleDefaultImage($defaults[$k]);
+							if ($addExtract)
+								$ret['images'][] = $ret['contents'][$k];
 						}
 					} else {
 						$ret['contents'][$k] = $defaults[$k];
+						if ($addExtract)
+							$ret['texts'][] = $ret['contents'][$k];
 					}
 				} else if (strpos($v, 'OBJECT::') === 0) {
 					$fct = substr($v, 8);
@@ -236,6 +247,7 @@ class ComposerService extends AbstractService {
 				}
 			}
 		}
+		
 		return $ret;
 	}
 	

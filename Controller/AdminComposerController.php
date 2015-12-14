@@ -86,25 +86,14 @@ class AdminComposerController extends AbstractAdminController {
 						// Delete this block
 						$composerService->deleteBlock($row, $contentsType[$key], $contents[$key]);
 					} else {
-						$block = $composerService->getBlock($row, $contentsType[$key], $contents[$key]);
+						$block = $composerService->getBlock($row, $contentsType[$key], $contents[$key], true);
+						foreach($block['texts'] as $t)
+							$newTexts[] = html_entity_decode(strip_tags($t));
+						if (is_null($firstImage) && count($block['images']) && isset($block['images'][0]))
+							$firstImage = $block['images'][0];
+						unset($block['texts']);
+						unset($block['images']);
 						$newContents[] = $block;
-						foreach($block['contents'] as $b) {
-							if (is_array($b)) {
-								if (is_null($firstImage)) {
-									if (isset($b['file']) && $b['file']) {
-										$firstImage = $b['file'];
-									} else if (count($b)) {
-										foreach($b as $img) {
-											if (is_null($firstImage) && isset($img['file']) && $img['file']) {
-												$firstImage = $img['file'];
-											} 
-										}
-									}
-								}
-							} else {
-								$newTexts[] = html_entity_decode(strip_tags($b));
-							}
-						}
 					}
 				}
 			}
