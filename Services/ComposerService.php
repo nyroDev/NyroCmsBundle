@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use Symfony\Component\HttpFoundation\Request;
+use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 
 class ComposerService extends AbstractService {
 	
@@ -110,6 +111,12 @@ class ComposerService extends AbstractService {
 			return $row->getTheme();
 		
 		return $row->getTheme() ? $row->getTheme() : $this->getCssTheme($row->getParent());
+	}
+	
+	public function getWrapperCssTheme(Composable $row) {
+		$wrapperCssThemeEvent = new WrapperCssThemeEvent($row);
+		$this->get('event_dispatcher')->dispatch('nyrocms.events.wrapperCssTheme', $wrapperCssThemeEvent);
+		return $wrapperCssThemeEvent->getWrapperCssTheme();
 	}
 	
 	public function tinymceAttrs(Composable $row, $prefix, $simple = false) {
@@ -311,7 +318,7 @@ class ComposerService extends AbstractService {
 	public function render(Composable $row, $handlerContent = null, $admin = false) {
 		$ret = null;
 		$showAll = false;
-		$ret = '<div class="composer composer_'.$this->getCssTheme($row).'"'.($admin ? ' id="composerCont"' : '').'>';
+		$ret = '<div class="composer composer_'.$this->getCssTheme($row).' '.$this->getWrapperCssTheme($row).'"'.($admin ? ' id="composerCont"' : '').'>';
 		$blockName = 'div';
 		
 		$hasHandler = $row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler();

@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use NyroDev\NyroCmsBundle\Event\AdminMenuEvent;
 
 class AdminTplController extends NyroDevAbstractController {
 
@@ -108,7 +109,7 @@ class AdminTplController extends NyroDevAbstractController {
 				);
 			}
 			
-			$adminMenuEvent = new \NyroDev\NyroCmsBundle\Event\AdminMenuEvent($tmpUri, $adminPerRoot, $rootContents, $curRootId);
+			$adminMenuEvent = new AdminMenuEvent($tmpUri, $adminPerRoot, $rootContents, $curRootId);
 			$adminMenuEvent->setMenu($menu);
 			$this->get('event_dispatcher')->dispatch('nyrocms.events.adminMenu', $adminMenuEvent);
 			
