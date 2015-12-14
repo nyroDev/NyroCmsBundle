@@ -48,6 +48,14 @@ abstract class AbstractHandler {
 		);
 	}
 	
+	public function hasAdminMenuLink() {
+		return true;
+	}
+	
+	public function hasAdminTreeLink() {
+		return true;
+	}
+	
 	public function isReversePositionOrder() {
 		return true;
 	}

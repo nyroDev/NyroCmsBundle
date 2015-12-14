@@ -17,9 +17,11 @@
 				<?php if ($canEdit): ?>
 					<?php if ($content->getContentHandler() && $content->getContentHandler()->getHasAdmin()): ?>
 						<?php $handler = $view['nyrocms']->getHandler($content->getContentHandler()) ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm()) ?>" class="handlerContents" title="<?php echo $view['nyrodev']->trans('admin.misc.handlerContents') ?>">
-							<?php echo $view['nyrocms_admin']->getIcon('arrow') ?>
-						</a>
+						<?php if ($handler->hasAdminTreeLink()): ?>
+							<a href="<?php echo $view['nyrodev']->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm()) ?>" class="handlerContents" title="<?php echo $view['nyrodev']->trans('admin.misc.handlerContents') ?>">
+								<?php echo $view['nyrocms_admin']->getIcon('arrow') ?>
+							</a>
+						<?php endif; ?>
 					<?php endif; ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type'=>'Content', 'id'=>$content->getId())) ?>" class="edit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title') ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('pencil') ?>

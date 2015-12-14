@@ -72,12 +72,14 @@ class AdminTplController extends NyroDevAbstractController {
 					if (!isset($menu['modules']))
 						$menu['modules'] = array();
 					$handler = $nyrocms->getHandler($contentHandler);
-					$uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
-					$menu['modules']['module_'.$contentHandler->getId()] = array(
-						'uri'=>$uri,
-						'name'=>$adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName(),
-						'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
-					);
+					if ($handler->hasAdminMenuLink()) {
+						$uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+						$menu['modules']['module_'.$contentHandler->getId()] = array(
+							'uri'=>$uri,
+							'name'=>$adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName(),
+							'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
+						);
+					}
 				}
 			}
 			

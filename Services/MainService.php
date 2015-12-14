@@ -16,6 +16,9 @@ class MainService extends AbstractService {
 			if (!class_exists($class))
 				throw new \RuntimeException($class.' not found when trying to create handler.');
 			
+			if (strpos(get_class($contentHandler), 'Proxies') === 0)
+				$contentHandler = $this->get('nyrocms_db')->getContentHandlerRepository()->find($contentHandler->getId());
+			
 			$this->handlers[$contentHandler->getId()] = new $class($contentHandler, $this->container);
 		}
 		return $this->handlers[$contentHandler->getId()];
