@@ -51,6 +51,14 @@ class ComposerService extends AbstractService {
 		return $this->getQuickConfig($row, 'css_template');
 	}
 	
+	public function cssTabletWidth(Composable $row) {
+		return $this->getQuickConfig($row, 'css_tablet_width');
+	}
+	
+	public function cssDesktopWidth(Composable $row) {
+		return $this->getQuickConfig($row, 'css_desktop_width');
+	}
+	
 	public function composerTemplate(Composable $row) {
 		return $this->getQuickConfig($row, 'composer_template');
 	}

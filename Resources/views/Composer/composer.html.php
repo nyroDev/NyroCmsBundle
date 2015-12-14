@@ -7,6 +7,8 @@
 	
 	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), array(
 		'row'=>$row,
+		'tabletWidth'=>$view['nyrocms_composer']->cssTabletWidth($row),
+		'desktopWidth'=>$view['nyrocms_composer']->cssDesktopWidth($row),
 	)) ?>
 	
 	<?php foreach ($view['assetic']->stylesheets(

@@ -227,6 +227,8 @@ class Configuration implements ConfigurationInterface
 								->scalarNode('composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composerTemplate.html.php')->end()
 								->scalarNode('block_template')->defaultValue('NyroDevNyroCmsBundle:Composer:block.html.php')->end()
 								->scalarNode('css_template')->defaultValue('NyroDevNyroCmsBundle:Composer:cssTemplate.html.php')->end()
+								->scalarNode('css_tablet_width')->defaultValue('800px')->end()
+								->scalarNode('css_desktop_width')->defaultValue('1000px')->end()
 								->arrayNode('cancel_url')
 									->addDefaultsIfNotSet()
 									->children()
