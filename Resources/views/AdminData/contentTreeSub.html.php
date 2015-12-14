@@ -6,7 +6,7 @@
 		<input type="hidden" name="treeChanged[<?php echo $content->getId() ?>]" value="0" />
 		
 		<?php
-		$canEdit = $view['nyrocms_admin']->canAdminContent($content) === true;
+		$canEdit = $view['nyrocms_admin']->canAdminContent($content);
 		?>
 		
 		<span class="nodeCont">
@@ -29,24 +29,12 @@
 					<?php echo $view['nyrocms_admin']->getIcon('eye') ?>
 				</a>
 			</span>
-			<?php if ($canEdit): ?>
+			<?php if ($canEdit === true): ?>
 				<a href="#" class="move" title="<?php echo $view['nyrodev']->trans('admin.content.drag') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('drag') ?>
 				</a>
 				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array('id'=>$content->getId())) ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('edit') ?>
-				</a>
-				<?php if ($canHaveSub): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', array('pid'=>$content->getId())) ?>" class="addNode" title="<?php echo $view['translator']->trans('admin.misc.add') ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('add') ?>
-					</a>
-				<?php else: ?>
-					<a href="#" class="addNodeDisabled disabled" title="<?php echo $view['translator']->trans('admin.misc.add') ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('add') ?>
-					</a>
-				<?php endif; ?>
-				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array('id'=>$content->getId())) ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete') ?>">
-					<?php echo $view['nyrocms_admin']->getIcon('delete') ?>
 				</a>
 			<?php else: ?>
 				<a href="#" class="moveDisabled disabled" title="<?php echo $view['nyrodev']->trans('admin.content.drag') ?>">
@@ -55,9 +43,21 @@
 				<a href="#" class="editDisabled disabled" title="<?php echo $view['translator']->trans('admin.misc.edit') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('edit') ?>
 				</a>
+			<?php endif; ?>
+			<?php if ($canEdit && $canHaveSub): ?>
+				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', array('pid'=>$content->getId())) ?>" class="addNode" title="<?php echo $view['translator']->trans('admin.misc.add') ?>">
+					<?php echo $view['nyrocms_admin']->getIcon('add') ?>
+				</a>
+			<?php else: ?>
 				<a href="#" class="addNodeDisabled disabled" title="<?php echo $view['translator']->trans('admin.misc.add') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('add') ?>
 				</a>
+			<?php endif; ?>
+			<?php if ($canEdit === true): ?>
+				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array('id'=>$content->getId())) ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete') ?>">
+					<?php echo $view['nyrocms_admin']->getIcon('delete') ?>
+				</a>
+			<?php else: ?>
 				<a href="#" class="deleteDisabled disabled" title="<?php echo $view['translator']->trans('admin.misc.delete') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('delete') ?>
 				</a>

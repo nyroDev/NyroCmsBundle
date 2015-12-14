@@ -108,7 +108,7 @@ class AdminDataController extends AbstractAdminController {
 	
 	public function contentDeleteAction($id) {
 		$row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-		if ($row && !$row->getHandler() && $this->get('nyrocms_admin')->canAdminContent($row)) {
+		if ($row && !$row->getHandler() && $this->get('nyrocms_admin')->canAdminContent($row) === true) {
 			$this->get('nyrocms_db')->remove($row);
 			$this->get('nyrocms_db')->flush();
 		}
@@ -131,7 +131,7 @@ class AdminDataController extends AbstractAdminController {
 	
 	public function contentEditAction(Request $request, $id) {
 		$row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-		if (!$row || !$this->get('nyrocms_admin')->canAdminContent($row))
+		if (!$row || !$this->get('nyrocms_admin')->canAdminContent($row) === true)
 			throw $this->createNotFoundException();
 		$this->get('nyrocms_admin')->setContentParentId($row->getVeryParent()->getId());
 		return $this->contentForm($request, self::EDIT, $row);
