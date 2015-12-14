@@ -6,16 +6,107 @@ use NyroDev\NyroCmsBundle\Form\Type\ContactType;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class Contact extends AbstractHandler {
 	
+	public function hasComposer() {
+		return false;
+	}
+	
+	public function hasValidDates() {
+		return false;
+	}
+	
+	public function hasFeatured() {
+		return false;
+	}
+	
+	public function hasStateInvisible() {
+		return false;
+	}
+	
+	public function isReversePositionOrder() {
+		return false;
+	}
+	
+	protected $validatedEmails;
+	
+	protected function getFormFields($action) {
+		$ret = array();
+		if ($this->contentHandler->getHasAdmin()) {
+			$ret['emails'] = array(
+				'type'=>TextareaType::class,
+				'translatable'=>false,
+				'label'=>$this->trans('nyrocms.handler.contact.emails'),
+				'required'=>true,
+				'constraints'=>array(
+					new Constraints\NotBlank(),
+					new Constraints\Callback(array(
+						'callback'=>function($data, ExecutionContextInterface $context) {
+							$emails = array_filter(array_map('trim', preg_split('/[\ \n\,;]+/', $data)));
+							$errors = array();
+							foreach($emails as $email) {
+								if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+									$errors[] = $email;
+								}
+							}
+							
+							if (count($errors)) {
+								 $context->buildViolation('nyrocms.handler.contact.emailsError')
+									->setParameter('%emails%', implode(', ', $errors))
+									->setTranslationDomain('messages')
+									->atPath('emails')
+									->addViolation();
+							} else {
+								$this->validatedEmails = implode(', ', $emails);
+							}
+						}
+					))
+				),
+				'position'=>array('before'=>'state'),
+			);
+		}
+		return $ret;
+	}
+	
+	public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = array(), array $translations = array()) {
+		parent::formClb($action, $row, $form, $langs, $translations);
+	}
+	
+	public function flushClb($action, ContentSpec $row, Form $form) {
+		parent::flushClb($action, $row, $form);
+		$content = $row->getContent();
+		$content['emails'] = $this->validatedEmails;
+		$row->setContent($content);
+	}
+	
 	protected function getEmails(Content $content) {
-		return array(
-			'contact'=>array(
-				'email'=>$this->trans('nyrocms.handler.contact.defaultTo.email'),
-				'name'=>$this->trans('nyrocms.handler.contact.defaultTo.name')
-			),
-		);
+		$ret = array();
+		
+		if ($this->contentHandler->getHasAdmin()) {
+			foreach($this->getContentSpecs() as $spec) {
+				$ret['spec_'.$spec->getId()] = array(
+					'emails'=>array_map('trim', explode(',', $spec->getInContent('emails'))),
+					'name'=>$spec->getTitle()
+				);
+			}
+		}
+		
+		if (count($ret) == 0) {
+			$ret = array(
+				'contact'=>array(
+					'emails'=>array($this->trans('nyrocms.handler.contact.defaultTo.email')),
+					'name'=>$this->trans('nyrocms.handler.contact.defaultTo.name')
+				),
+			);
+		}
+		
+		return $ret;
 	}
 	
 	protected function getFormType(Content $content) {
@@ -47,9 +138,9 @@ class Contact extends AbstractHandler {
 			
 			$data = $form->getData();
 			if (isset($data['to']) && isset($contactEmails[$data['to']])) {
-				$to = $contactEmails[$data['to']]['email'];
+				$to = $contactEmails[$data['to']]['emails'];
 			} else {
-				$to = $contactEmails[key($contactEmails)]['email'];
+				$to = $contactEmails[key($contactEmails)]['emails'];
 			}
 			foreach($data as $k=>$v) {
 				if ($k == 'to' && $v)

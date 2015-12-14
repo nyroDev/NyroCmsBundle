@@ -60,6 +60,10 @@ abstract class AbstractHandler {
 		return true;
 	}
 	
+	public function hasStateInvisible() {
+		return true;
+	}
+	
 	public function hasValidDates() {
 		return true;
 	}
@@ -198,9 +202,12 @@ abstract class AbstractHandler {
 				}
 				if ($type == FileType::class && isset($cfg['data']))
 					unset($cfg['data']);
-				$cfg['position'] = array('after'=>$after);
+				if (!isset($cfg['position'])) {
+					$cfg['position'] = array('after'=>$after);
+					$after = $k;
+				}
+				
 				$form->add($k, $type, $cfg);
-				$after = $k;
 				
 				if ($this->needTranslations() && $translatable && count($langs)) {
 					foreach($langs as $lg=>$lang) {

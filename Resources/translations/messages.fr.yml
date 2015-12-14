@@ -266,6 +266,8 @@ nyrocms:
       download: Télécharger
       empty: Il n'y a aucun fichier à afficher.
     contact:
+      emails: Adresses emails
+      emailsError: "Ces adresses emails sont erronées : %emails%."
       subject: Message depuis le site
       defaultTo:
         email: email@domain.com

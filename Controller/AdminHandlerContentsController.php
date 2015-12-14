@@ -8,6 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
 
 class AdminHandlerContentsController extends AbstractAdminController {
 	
@@ -156,6 +157,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 		$handler->init($request, true);
 		
+		if (!$handler->hasStateInvisible())
+			unset($moreOptions['state']['choices'][ContentSpec::STATE_INVISIBLE]);
+		
 		if ($handler->isIntroRequired()) {
 			$moreOptions['intro'] = array(
 				'required'=>true,
@@ -181,6 +185,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
 		if (!is_array($adminForm))
 			return $adminForm;
+		
+		$adminForm['title'] = $row->getContentHandler()->getName();
+		
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
 	}
 	
