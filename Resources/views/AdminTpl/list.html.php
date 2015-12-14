@@ -16,7 +16,7 @@
 			<a href="#filter" class="switcher filterSwitcher"><?php echo $view['translator']->trans('admin.misc.filter') ?></a>
 			<div id="filter">
 				<?php echo $view['form']->form($filter) ?>
-				<a href="<?php echo $pager->getUrl(1, false, array('clearFilter'=>1)) ?>" class="clearFilter"><?php echo $view['translator']->trans('admin.misc.clearFilter') ?></a>
+				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, array('clearFilter'=>1))) ?>" class="clearFilter"><?php echo $view['translator']->trans('admin.misc.clearFilter') ?></a>
 			</div>
 		<?php endif; ?>
 		
