@@ -10,6 +10,7 @@ use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
+use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 
 class AdminDataController extends AbstractAdminController {
 	
@@ -237,6 +238,9 @@ class AdminDataController extends AbstractAdminController {
 				)));
 			}
 		}
+		
+		$adminFormEvent = new AdminFormEvent($action, $row, $form);
+		$this->get('event_dispatcher')->dispatch('nyrocms.events.admin.form.update.content', $adminFormEvent);
 	}
 	protected function contentFlush($action, $row, $form) {
 		$this->contentForm = $form;
@@ -520,6 +524,9 @@ class AdminDataController extends AbstractAdminController {
 	protected function userFormUpdate($action, $row, \Symfony\Component\Form\FormBuilder $form) {
 		$this->origUserPassword = $row->getPassword();
 		$form->get('valid')->setRequired(false);
+		
+		$adminFormEvent = new AdminFormEvent($action, $row, $form);
+		$this->get('event_dispatcher')->dispatch('nyrocms.events.admin.form.update.user', $adminFormEvent);
 	}
 	
 	protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form) {

@@ -167,6 +167,7 @@ admin:
     validStart: Début validité
     validEnd: Fin validité
     userType: Type d'utilisateur
+    developper: Développeur
     userRoles: Droits
     inserted: Ajouté le
     updated: Mis à jour le
