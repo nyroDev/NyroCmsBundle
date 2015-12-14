@@ -20,6 +20,7 @@ class NyrocmsLoader extends Loader {
 	}
 	
 	public function load($resource, $type = null) {
+		$typCfg = explode('_', $type);
 		$res = explode('@', $resource);
         if (isset($this->loaded[$res[0]]))
             throw new \RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
@@ -38,7 +39,7 @@ class NyrocmsLoader extends Loader {
 		$locales = $this->container->get('nyrocms')->getLocales($rootContent, true);
 		
 		$routes->add($res[0].'_homepage_noLocale', new Route(
-				'/',
+				'/'.(in_array('forceLang', $typCfg, true) ? $locale.'/' : ''),
 				array('_controller'=>$res[1].':index', '_locale'=>$locale, '_config'=>$res[0]),
 				array(),
 				array(),
@@ -120,7 +121,7 @@ class NyrocmsLoader extends Loader {
 	}
 
 	public function supports($resource, $type = null) {
-		return 'nyrocms' === $type;
+		return 'nyrocms' === substr($type, 0, 7);
 	}
 
 }
