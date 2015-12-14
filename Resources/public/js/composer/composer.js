@@ -458,7 +458,7 @@ jQuery(function($) {
 		
 		tools
 			.children('#availableBlocks')
-				.find('a')
+				.find('a.availableBlock')
 					.on('click', function(e) {
 						e.preventDefault();
 						addBlock($(this).attr('href'));

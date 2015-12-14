@@ -64,6 +64,9 @@ $attrs['data-icon'] = $view['nyrocms_admin']->getIcon('TPL');
 $attrsHtml = null;
 foreach ($attrs as $k=>$v)
 	$attrsHtml.= sprintf('%s="%s" ', $view->escape($k), $view->escape($v));
+
+$nbButtons = 0;
+$maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 ?>
 <form id="composer" <?php echo $attrsHtml ?> method="post" enctype="multipart/form-data">
 	<div id="composerTools"><!--
@@ -86,7 +89,7 @@ foreach ($attrs as $k=>$v)
 				</div>
 			</div>
 		</div><!--
-		<?php endif; ?>
+		<?php $nbButtons++; endif; ?>
 		<?php if ($canChangeLang && count($langs) > 0): ?>
 		--><div class="select">
 			<a href="#langSelect" class="selectLink">
@@ -101,13 +104,25 @@ foreach ($attrs as $k=>$v)
 				</div>
 			</div>
 		</div><!--
-		<?php endif; ?>
+		<?php $nbButtons++; endif; ?>
 		--><nav id="availableBlocks"><!--
 			<?php foreach($availableBlocks as $b): ?>
-			--><a href="<?php echo $composerUrl.'?block='.$b ?>" class="<?php echo $b ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b) ?>">
+			<?php if ($nbButtons == $maxButtons): ?>
+				--><div class="select">
+					<a href="#moreBlocksSelect" class="selectLink" id="moreBlocks">
+						<span><?php echo $view['nyrodev']->trans('admin.content.moreBlocks') ?></span>
+						<strong>+</strong>
+					</a>
+					<div id="moreBlocksSelect" class="selecter"><!--
+			<?php endif; ?>
+			--><a href="<?php echo $composerUrl.'?block='.$b ?>" class="availableBlock <?php echo $b ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b) ?>">
 				<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b) ?></span>
 			</a><!--
-			<?php endforeach; ?>
+			<?php $nbButtons++; endforeach; ?>
+			<?php if ($nbButtons-1 >= $maxButtons): ?>
+					--></div><!--
+				--></div><!--
+			<?php endif; ?>
 		--></nav>
 	</div>
 	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), array(

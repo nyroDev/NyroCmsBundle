@@ -60,6 +60,10 @@ class ComposerService extends AbstractService {
 		return $this->getQuickConfig($row, 'css_desktop_width');
 	}
 	
+	public function getMaxComposerButtons(Composable $row) {
+		return $this->getQuickConfig($row, 'max_composer_buttons');
+	}
+	
 	public function composerTemplate(Composable $row) {
 		return $this->getQuickConfig($row, 'composer_template');
 	}

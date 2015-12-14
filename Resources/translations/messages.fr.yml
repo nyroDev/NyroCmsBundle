@@ -123,6 +123,7 @@ admin:
     theme: Thème
     lang: Langue
     themeEmpty: Thème parent
+    moreBlocks: Plus de blocs
     state: État
     goUrl: Redirection URL
     goBlank: Nouvel onglet
