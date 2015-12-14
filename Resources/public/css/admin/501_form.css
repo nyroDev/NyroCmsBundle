@@ -104,6 +104,9 @@ input[type="checkbox"][disabled] + label:before {
 	float: none;
 	margin-right: 0;
 }
+.form_row_file .formIndicator {
+	position: static;
+}
 .form_button {
 	width: 407px;
 }
