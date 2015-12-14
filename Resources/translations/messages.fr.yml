@@ -263,6 +263,7 @@ nyrocms:
       empty: Il n'y a aucune actualité à afficher.
     files:
       file: Fichier
+      date: Date
       download: Télécharger
       empty: Il n'y a aucun fichier à afficher.
     contact:

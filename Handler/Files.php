@@ -6,6 +6,7 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 
 class Files extends AbstractHandler {
@@ -26,9 +27,23 @@ class Files extends AbstractHandler {
 		return false;
 	}
 	
+	public function hasValidDates() {
+		return false;
+	}
+	
+	public function hasStateInvisible() {
+		return false;
+	}
+	
 	protected function getFormFields($action) {
 		$isAdd = $action == AbstractAdminController::ADD;
 		return array(
+			'date'=>array_merge($this->get('nyrocms')->getDateFormOptions(), array(
+				'type'=>DateType::class,
+				'translatable'=>false,
+				'label'=>$this->trans('nyrocms.handler.files.date'),
+				'required'=>false,
+			)),
 			'file'=>array(
 				'type'=>FileType::class,
 				'translatable'=>true,
