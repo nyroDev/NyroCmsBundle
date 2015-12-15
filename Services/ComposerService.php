@@ -6,6 +6,7 @@ use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
+use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 
 class ComposerService extends AbstractService {
 	
@@ -73,7 +74,10 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function getTinymceConfig(Composable $row, $simple = false) {
-		return $this->tinymceAttrsTrRec($this->getQuickConfig($row, 'tinymce'.($simple ? '_simple' : '')));
+		$cfg = $this->getQuickConfig($row, 'tinymce'.($simple ? '_simple' : ''));
+		$tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
+		$this->get('event_dispatcher')->dispatch('nyrocms.events.tinymceConfig', $tinymceConfigEvent);
+		return $this->tinymceAttrsTrRec($tinymceConfigEvent->getConfig());
 	}
 	
 	public function cancelUrl(Composable $row) {
