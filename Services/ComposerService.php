@@ -72,6 +72,10 @@ class ComposerService extends AbstractService {
 		return $this->getQuickConfig($row, 'global_composer_template');
 	}
 	
+	public function getTinymceConfig(Composable $row, $simple = false) {
+		return $this->tinymceAttrsTrRec($this->getQuickConfig($row, 'tinymce'.($simple ? '_simple' : '')));
+	}
+	
 	public function cancelUrl(Composable $row) {
 		$ret = '#';
 		if ($row instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
@@ -124,10 +128,9 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function tinymceAttrs(Composable $row, $prefix, $simple = false) {
-		$cfg = $this->getConfig($row);
 		$ret = array();
-		foreach($cfg['tinymce'.($simple ? '_simple' : null)] as $k=>$v) {
-			$ret[$prefix.$k] = is_array($v) ? json_encode($this->tinymceAttrsTrRec($v)) : $v;
+		foreach($this->getTinymceConfig($row, $simple) as $k=>$v) {
+			$ret[$prefix.$k] = is_array($v) ? json_encode($v) : $v;
 		}
 		return $ret;
 	}
