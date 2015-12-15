@@ -136,8 +136,8 @@ class Configuration implements ConfigurationInterface
 		
 		$defaultTinymce = array(
 			'plugins'=>'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount',
-			'toolbar'=>'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
 			'menubar'=>'insert edit view table tools',
+			'toolbar'=>'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
 			'link_class_list'=>array(
 				array('title'=>'admin.composer.tinymce.linkClass.nothing', 'value'=>''),
 				array('title'=>'admin.composer.tinymce.linkClass.button', 'value'=>'but'),
@@ -247,10 +247,20 @@ class Configuration implements ConfigurationInterface
 								->end()
 								->arrayNode('tinymce')
 									->defaultValue($defaultTinymce)
+									->beforeNormalization()
+										->always(function($config) use($defaultTinymce) {
+											return array_replace_recursive($defaultTinymce, $config);
+										})
+									->end()
 									->prototype('variable')->end()
 								->end()
 								->arrayNode('tinymce_simple')
 									->defaultValue($defaultTinymceSimple)
+									->beforeNormalization()
+										->always(function($config) use($defaultTinymceSimple) {
+											return array_replace_recursive($defaultTinymceSimple, $config);
+										})
+									->end()
 									->prototype('variable')->end()
 								->end()
 								->arrayNode('default_blocks')
