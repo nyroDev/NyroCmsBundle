@@ -80,11 +80,15 @@ class AdminService extends AbstractService {
 			if (!$fullRootIds) {
 				$rolePrefixLn = strlen($rolePrefix);
 				foreach($this->get('nyrodev_member')->getUser()->getUserRoles() as $role) {
-					if (($rolePrefix == 'complete' && !$role->getInternal()) || ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')) {
+					if (
+							(($rolePrefix == 'complete' || $rolePrefix == 'root') && !$role->getInternal()) ||
+							($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
+						) {
 						// This is an corresponding role, check it against
 						if ($role->getContents()->count() > 0) {
 							foreach($role->getContents() as $content) {
-								$this->administrableRootContentIds[$rolePrefix][$content->getRoot()] = true;
+								if ($rolePrefix != 'root' || $content->getRoot() == $content->getId())
+									$this->administrableRootContentIds[$rolePrefix][$content->getRoot()] = true;
 							}
 						} else {
 							$fullRootIds = true;
