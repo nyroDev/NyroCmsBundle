@@ -24,7 +24,7 @@
 			<div class="listButtons">
 				<?php if (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions)): ?>
 					<?php foreach($moreGlobalActions as $k=>$action): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'],(isset($action['routePrm']) ? $action['routePrm'] : array())) ?>" class="button <?php echo $k ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null ?>>
+						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'],(isset($action['routePrm']) ? $action['routePrm'] : array())) ?>" class="button <?php echo $k ?> <?php echo isset($action['class']) ? $action['class'] : null ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null ?>>
 							<?php if (isset($action['icon']) && $action['icon']): ?>
 								<?php echo $view['nyrocms_admin']->getIcon($action['icon']) ?>
 							<?php endif; ?>
