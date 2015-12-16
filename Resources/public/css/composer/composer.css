@@ -23,6 +23,9 @@ main {
 #composer textarea {
 	display: none;
 }
+#composer .composer_handler textarea {
+	display: inline;
+}
 .composableImgCont .pluploadCont {
 	position: absolute !important;
 	top: 0;
