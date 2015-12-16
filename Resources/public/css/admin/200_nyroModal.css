@@ -120,6 +120,9 @@
 	padding: 20px;
 	font-family: 'Roboto', sans-serif;
 }
+.nyroModalConfirmCont .nyroModalCont .nmButtons {
+	margin-bottom: 20px;
+}
 #nmAlert {
 	display: none;
 }
