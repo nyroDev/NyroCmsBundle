@@ -29,7 +29,7 @@ jQuery(function($) {
 					});
 					contentHtml+= '</select>';
 				} else {
-					contentHtml+= '<input type="'+opts.input+'" value="'+opts.inputValue+'" placeholder="'+opts.inputPlaceholder+'" />';
+					contentHtml+= '<input type="'+opts.input+'" value="'+(opts.inputValue !== false ? opts.inputValue : '')+'" placeholder="'+(opts.inputPlaceholder !== false ? opts.inputPlaceholder : '')+'" />';
 				}	
 			}
 			if (opts.ok || opts.cancel) {
