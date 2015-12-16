@@ -1,6 +1,6 @@
 nyrocms_admin_composer:
     path:  /composer/{type}/{id}/{lang}
-    defaults: { _controller: NyroDevNyroCmsBundle:AdminComposer:composer, lang: %locale% }
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminComposer:composer, lang: null }
     requirements:
         id: \d+
 
