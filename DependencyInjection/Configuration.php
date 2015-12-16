@@ -138,10 +138,6 @@ class Configuration implements ConfigurationInterface
 			'plugins'=>'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount',
 			'menubar'=>'insert edit view table tools',
 			'toolbar'=>'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
-			'link_class_list'=>array(
-				array('title'=>'admin.composer.tinymce.linkClass.nothing', 'value'=>''),
-				array('title'=>'admin.composer.tinymce.linkClass.button', 'value'=>'but'),
-			),
 			'style_formats'=>array(
 				array('title'=>'admin.composer.tinymce.styleFormats.blocks', 'items'=>array(
 					array('title'=>'admin.composer.tinymce.styleFormats.block.title1', 'block'=>'h1'),
@@ -249,7 +245,18 @@ class Configuration implements ConfigurationInterface
 									->defaultValue($defaultTinymce)
 									->beforeNormalization()
 										->always(function($config) use($defaultTinymce) {
-											return array_replace_recursive($defaultTinymce, $config);
+											$ret = $defaultTinymce;
+											foreach($config as $k=>$v) {
+												if (is_array($v)) {
+													$hasReplace = array_search('REPLACE', $v);
+													if ($hasReplace !== false)
+														unset($v[$hasReplace]);
+													$ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+												} else {
+													$ret[$k] = $v;
+												}
+											}
+											return $ret;
 										})
 									->end()
 									->prototype('variable')->end()
@@ -258,7 +265,18 @@ class Configuration implements ConfigurationInterface
 									->defaultValue($defaultTinymceSimple)
 									->beforeNormalization()
 										->always(function($config) use($defaultTinymceSimple) {
-											return array_replace_recursive($defaultTinymceSimple, $config);
+											$ret = $defaultTinymceSimple;
+											foreach($config as $k=>$v) {
+												if (is_array($v)) {
+													$hasReplace = array_search('REPLACE', $v);
+													if ($hasReplace !== false)
+														unset($v[$hasReplace]);
+													$ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+												} else {
+													$ret[$k] = $v;
+												}
+											}
+											return $ret;
 										})
 									->end()
 									->prototype('variable')->end()
@@ -268,7 +286,18 @@ class Configuration implements ConfigurationInterface
 									->useAttributeAsKey('name')
 									->beforeNormalization()
 										->always(function($config) use($defaultBlocks) {
-											return array_replace_recursive($defaultBlocks, $config);
+											$ret = $defaultBlocks;
+											foreach($config as $k=>$v) {
+												if (is_array($v)) {
+													$hasReplace = array_search('REPLACE', $v);
+													if ($hasReplace !== false)
+														unset($v[$hasReplace]);
+													$ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+												} else {
+													$ret[$k] = $v;
+												}
+											}
+											return $ret;
 										})
 									->end()
 									->prototype('variable')->end()
@@ -278,7 +307,18 @@ class Configuration implements ConfigurationInterface
 									->useAttributeAsKey('name')
 									->beforeNormalization()
 										->always(function($config) use($defaultConfigs) {
-											return array_replace_recursive($defaultConfigs, $config);
+											$ret = $defaultConfigs;
+											foreach($config as $k=>$v) {
+												if (is_array($v)) {
+													$hasReplace = array_search('REPLACE', $v);
+													if ($hasReplace !== false)
+														unset($v[$hasReplace]);
+													$ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+												} else {
+													$ret[$k] = $v;
+												}
+											}
+											return $ret;
 										})
 									->end()
 									->prototype('variable')->end()
