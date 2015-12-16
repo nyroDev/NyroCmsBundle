@@ -10,6 +10,7 @@ use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
+use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 
 class AdminDataController extends AbstractAdminController {
@@ -361,7 +362,7 @@ class AdminDataController extends AbstractAdminController {
 							'updated'
 						)
 					),
-					$this->createList($request, $repo, $route, array(), 'name', 'asc', null, null)
+					$this->createList($request, $repo, $route, array(), 'name', 'asc', ContentHandlerFilterType::class)
 				));
 	}
 	
