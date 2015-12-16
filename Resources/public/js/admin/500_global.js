@@ -2,7 +2,6 @@ jQuery(function($) {
 	var $b = $('body'),
 		contentTree = $b.find('#contentTree'),
 		form_contactEnabled = $b.find('#form_contactEnabled'),
-		deletes = $b.find('.delete'),
 		switcher = $b.find('.switcher'),
 		selectRedirect = $b.find('.selectRedirect');
 	
@@ -55,19 +54,17 @@ jQuery(function($) {
 		});
 	}
 	
-	if (deletes.length) {
-		deletes.on('click', function(e) {
-			e.preventDefault();
-			var me = $(this);
-			$.nmConfirm({
-				text: me.data('deletetxt') || 'Êtes-vous sûr de vouloir supprimer cet élément ?',
-				cancel: 'Annuler',
-				clbOk: function() {
-					document.location.href = me.attr('href');
-				}
-			});
+	$b.on('click', '.delete, .confirmLinks',  function(e) {
+		e.preventDefault();
+		var me = $(this);
+		$.nmConfirm({
+			text: me.is('.confirmLinks') ? me.data('confirmtxt') : me.data('deletetxt') || 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+			cancel: 'Annuler',
+			clbOk: function() {
+				document.location.href = me.attr('href');
+			}
 		});
-	}
+	});
 	
 	if (switcher.length) {
 		switcher
