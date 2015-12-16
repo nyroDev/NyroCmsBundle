@@ -86,6 +86,10 @@ abstract class AbstractHandler {
 		return true;
 	}
 	
+	public function hasMoveActions() {
+		return true;
+	}
+	
 	public function hasComposer() {
 		return true;
 	}

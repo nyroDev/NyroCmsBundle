@@ -56,16 +56,16 @@ class AdminHandlerContentsController extends AbstractAdminController {
 							'updated'
 						),
 						'moreActions'=>array_filter(array(
-							'up'=>array(
+							'up'=>$handler->hasMoveActions() ? array(
 								'name'=>'↑',
 								'route'=>'nyrocms_admin_handler_contents_up',
 								'routePrm'=>$routePrm
-							),
-							'down'=>array(
+							) : false,
+							'down'=>$handler->hasMoveActions() ? array(
 								'name'=>'↓',
 								'route'=>'nyrocms_admin_handler_contents_down',
 								'routePrm'=>$routePrm
-							),
+							) : false,
 							'composer'=>$handler->hasComposer() ? array(
 								'name'=>$this->get('nyrocms_admin')->getIcon('pencil'),
 								'_blank'=>true,

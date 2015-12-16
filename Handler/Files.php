@@ -19,6 +19,10 @@ class Files extends AbstractHandler {
 		return true;
 	}
 	
+	public function hasMoveActions() {
+		return false;
+	}
+	
 	public function hasComposer() {
 		return false;
 	}
