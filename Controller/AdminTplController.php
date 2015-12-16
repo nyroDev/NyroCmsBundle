@@ -62,6 +62,7 @@ class AdminTplController extends NyroDevAbstractController {
 			$nyrocms = $this->get('nyrocms');
 			$nyrocmsAdmin = $this->get('nyrocms_admin');
 			
+			$modules = $modulesIdent = array();
 			$contentHandlers = $this->get('nyrocms_db')->getContentHandlerRepository()->findBy(array('hasAdmin'=>1));
 			foreach($contentHandlers as $contentHandler) {
 				$canAdmin = false;
@@ -69,18 +70,26 @@ class AdminTplController extends NyroDevAbstractController {
 					$canAdmin = $canAdmin || $nyrocmsAdmin->canAdminContent($content) && (!$adminPerRoot || $content->getRoot() == $curRootId);
 				}
 				if ($canAdmin) {
-					if (!isset($menu['modules']))
-						$menu['modules'] = array();
 					$handler = $nyrocms->getHandler($contentHandler);
 					if ($handler->hasAdminMenuLink()) {
 						$uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
-						$menu['modules']['module_'.$contentHandler->getId()] = array(
+						$name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName();
+						$modulesIdent['module_'.$contentHandler->getId()] = $name;
+						$modules['module_'.$contentHandler->getId()] = array(
 							'uri'=>$uri,
-							'name'=>$adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName(),
+							'name'=>$name,
 							'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
 						);
 					}
 				}
+			}
+			
+			if (count($modules)) {
+				if (!isset($menu['modules']))
+					$menu['modules'] = array();
+				ksort($modulesIdent);
+				foreach($modulesIdent as $k=>$name)
+					$menu['modules'][$k] = $modules[$k];
 			}
 			
 			if ($nyrocmsAdmin->isSuperAdmin()) {
