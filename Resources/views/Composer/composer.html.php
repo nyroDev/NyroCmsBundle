@@ -47,12 +47,6 @@ $attrs = array_merge(
 	$view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymceSimple, true)
 );
 
-// Add filemanager plugin and configuration needed
-$attrs[$prefixTinymce.'plugins'].= ',responsivefilemanager';
-$attrs[$prefixTinymce.'external_filemanager_path'] = $view['nyrodev']->generateUrl($view['nyrodev']->getParameter('nyrodev_utility.browser.defaultRoute')).'/';
-$attrs[$prefixTinymce.'filemanager_title'] = $view['translator']->trans('nyrodev.browser.title');
-$attrs[$prefixTinymce.'external_plugins'] = json_encode(array('filemanager'=>$attrs[$prefixTinymce.'external_filemanager_path'].'plugin.min.js'));
-
 $attrs['data-confirm'] = $view['nyrodev']->trans('admin.composer.action.confirm');
 $attrs['data-cancel'] = $view['nyrodev']->trans('admin.composer.action.cancel');
 $attrs['data-addphoto'] = $view['nyrodev']->trans('admin.composer.action.addPhoto');

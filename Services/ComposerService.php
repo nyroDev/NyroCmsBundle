@@ -76,6 +76,23 @@ class ComposerService extends AbstractService {
 	
 	public function getTinymceConfig(Composable $row, $simple = false) {
 		$cfg = $this->getQuickConfig($row, 'tinymce'.($simple ? '_simple' : ''));
+		
+		if (!$simple && $this->getQuickConfig($row, 'tinymce_browser')) {
+			// Browser enable, add elements for it
+			$cfg['plugins'].= ',responsivefilemanager';
+			$normalUrl = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route'));
+			if ($this->getQuickConfig($row, 'tinymce_browser')) {
+				$url = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route_per_root'), array(
+					'dirName'=>'tinymce_'.$row->getVeryParent()->getId()
+				));
+			} else {
+				$url = $normalUrl;
+			}
+			$cfg['external_filemanager_path'] = $url.'/';
+			$cfg['filemanager_title'] = $this->trans('nyrodev.browser.title');
+			$cfg['external_plugins'] = array('filemanager'=>$normalUrl.'/plugin.min.js');
+		}
+		
 		$tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
 		$this->get('event_dispatcher')->dispatch('nyrocms.events.tinymceConfig', $tinymceConfigEvent);
 		return $this->tinymceAttrsTrRec($tinymceConfigEvent->getConfig());

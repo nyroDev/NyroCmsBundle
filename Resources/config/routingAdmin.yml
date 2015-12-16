@@ -32,6 +32,12 @@ nyrocms_admin_security_check:
 nyrocms_admin_security_logout:
     path: /logout
 
+nyrocms_admin_tinymce_browser_dirname:
+    path:  /tinymceBrowser_{dirName}/{file}
+    defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
+    requirements:
+        file: .+
+
 nyrocms_admin_tinymce_browser:
     path:  /tinymceBrowser/{file}
     defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
