@@ -54,11 +54,11 @@ jQuery(function($) {
 		});
 	}
 	
-	$b.on('click', '.delete, .confirmLinks',  function(e) {
+	$b.on('click', '.delete, .confirmLink',  function(e) {
 		e.preventDefault();
 		var me = $(this);
 		$.nmConfirm({
-			text: me.is('.confirmLinks') ? me.data('confirmtxt') : me.data('deletetxt') || 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+			text: me.is('.confirmLink') ? me.data('confirmtxt') : me.data('deletetxt') || 'Êtes-vous sûr de vouloir supprimer cet élément ?',
 			cancel: 'Annuler',
 			clbOk: function() {
 				document.location.href = me.attr('href');
