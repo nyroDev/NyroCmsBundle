@@ -21,6 +21,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHandler {
 	
+	const TEMPLATE_INDICATOR = 'HANDLER_INDICATOR';
+	
 	/**
 	 *
 	 * @var ContentHandler
@@ -402,6 +404,14 @@ abstract class AbstractHandler {
 	public function getTotalContentSpec(Content $content = null, $state = ContentSpec::STATE_ACTIVE) {
 		return $this->getContentSpecRespository()
 						->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null);
+	}
+	
+	public function isWrapped() {
+		return false;
+	}
+	
+	public function isWrappedAs() {
+		return false;
 	}
 	
 	protected $preparedView;

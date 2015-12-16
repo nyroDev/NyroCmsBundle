@@ -7,6 +7,7 @@ use NyroDev\NyroCmsBundle\Model\Composable;
 use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
+use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 
 class ComposerService extends AbstractService {
 	
@@ -349,8 +350,15 @@ class ComposerService extends AbstractService {
 			// Handle empty content
 			if ($admin) {
 				$content = array($this->getBlock($row, 'intro'));
-				if ($hasHandler)
-					$content[] = $this->getBlock($row, 'handler');
+				if ($hasHandler) {
+					$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+					if ($handler->isWrapped() && $handler->isWrappedAs()) {
+						$tmp = array($handler->isWrappedAs()=>AbstractHandler::TEMPLATE_INDICATOR);
+						$content[] = $this->getBlock($row, $handler->isWrapped(), $tmp);
+					} else {
+						$content[] = $this->getBlock($row, 'handler');
+					}
+				}
 				
 				$row->setContent($content);
 			} else if ($hasHandler) {

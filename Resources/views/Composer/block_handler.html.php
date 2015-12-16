@@ -1,7 +1,8 @@
 <?php
 if ($admin) {
 	echo '<div class="composer_handler">';
-	echo '<input type="hidden" name="contents['.$nb.'][handler]" value="handler" />';
+	if (!isset($isWrapped) || !$isWrapped)
+		echo '<input type="hidden" name="contents['.$nb.'][handler]" value="handler" />';
 }
 if ($row->getContentHandler()) {
 	$viewPrm = $view['nyrocms']->getHandler($row->getContentHandler())->prepareView($row, $handlerContent);
