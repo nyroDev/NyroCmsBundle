@@ -7,6 +7,7 @@
 		
 		<?php
 		$canEdit = $view['nyrocms_admin']->canAdminContent($content);
+		$curCanHavSub = $view['nyrocms_admin']->canHaveSub($content);
 		?>
 		
 		<span class="nodeCont">
@@ -46,7 +47,7 @@
 					<?php echo $view['nyrocms_admin']->getIcon('edit') ?>
 				</a>
 			<?php endif; ?>
-			<?php if ($canEdit && $canHaveSub): ?>
+			<?php if ($canEdit && $curCanHavSub): ?>
 				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', array('pid'=>$content->getId())) ?>" class="addNode" title="<?php echo $view['translator']->trans('admin.misc.add') ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('add') ?>
 				</a>
@@ -66,7 +67,9 @@
 			<?php endif; ?>
 		</span>
 		
-		<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDevNyroCmsBundle:AdminData:contentTreeSub', array('parent'=>$content))) ?>
+		<?php if ($curCanHavSub): ?>
+			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDevNyroCmsBundle:AdminData:contentTreeSub', array('parent'=>$content))) ?>
+		<?php endif; ?>
 	</li>
 	<?php endforeach; ?>
 	<?php if ($canHaveSub): ?>
