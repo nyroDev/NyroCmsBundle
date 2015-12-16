@@ -35,24 +35,6 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 
         return $user;
 	}
-
-	public function refreshUser(\Symfony\Component\Security\Core\User\UserInterface $user) {
-        $class = get_class($user);
-        if (!$this->supportsClass($class)) {
-            throw new UnsupportedUserException(
-                sprintf(
-                    'Instances of "%s" are not supported.',
-                    $class
-                )
-            );
-        }
-
-        return $this->find($user->getId());
-	}
-
-	public function supportsClass($class) {
-        return $this->getEntityName() === $class;
-	}
 	
 	public function getForWelcomeEmails() {
 		return $this->createQueryBuilder('u')

@@ -32,7 +32,7 @@
 	</main>
 		
 	<?php if ($view['session']->hasFlash('confirm')): ?>
-		<div id="confirmMsg"><?php echo $view['session']->getFlash('confirm') ?></div>
+		<div id="confirmMsg"><?php echo implode('<br />', $view['session']->getFlash('confirm')) ?></div>
 	<?php endif; ?>
 </body>
 </html>

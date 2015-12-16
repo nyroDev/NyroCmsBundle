@@ -301,3 +301,33 @@ main table.data tr:hover td {
 .form_row_file .currentFile, .form_row_file .currentFileDelete {
 	margin: 3px 0;
 }
+
+#confirmMsg {
+	position: fixed;
+	top: 20%;
+	left: 50%;
+	width: 30rem;
+	margin-left: -16rem;
+	text-align: center;
+	padding: 1rem;
+	color: #fff;
+	font-weight: bold;
+	-webkit-border-radius: 0.5rem;
+	border-radius: 0.5rem;
+	-webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,0.6);
+	box-shadow: 0 0 10px 0 rgba(0,0,0,0.6);
+	background: #3e3e3f;
+	opacity: 0;
+	-webkit-animation: confirmHide 6s linear;
+	animation: confirmHide 6s linear;
+}
+@-webkit-keyframes confirmHide {
+	0% {opacity: 1}
+	66% {opacity: 1}
+	100% {opacity: 0}
+}
+@keyframes confirmHide {
+	0% {opacity: 1}
+	66% {opacity: 1}
+	100% {opacity: 0}
+}

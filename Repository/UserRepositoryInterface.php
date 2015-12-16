@@ -2,9 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Repository;
 
-use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 
-interface UserRepositoryInterface extends UserProviderInterface {
+interface UserRepositoryInterface extends UserLoaderInterface {
 
 	/**
 	 * Should return users that are:
