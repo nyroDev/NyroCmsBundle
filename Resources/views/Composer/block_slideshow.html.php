@@ -1,8 +1,10 @@
 <?php if ($admin): ?>
 <div class="composableSlideshow"
 	data-nb="<?php echo $nb ?>"
-	data-sizebig="<?php echo $config['images']['big']['w'].'x'.$config['images']['big']['h'] ?>"
-	data-sizethumb="<?php echo $config['images']['thumb']['w'].'x'.$config['images']['thumb']['h'] ?>"
+	data-sizebig="<?php echo (isset($config['images']['big']['placeholdW']) ? $config['images']['big']['placeholdW'] : $config['images']['big']['w']).'x'.(isset($config['images']['big']['placeholdH']) ? $config['images']['big']['placeholdH'] : $config['images']['big']['h']) ?>"
+	data-sizebigcfg="<?php echo $view->escape(json_encode($config['images']['big'])) ?>"
+	data-sizethumb="<?php echo (isset($config['images']['thumb']['placeholdW']) ? $config['images']['thumb']['placeholdW'] : $config['images']['thumb']['w']).'x'.(isset($config['images']['thumb']['placeholdH']) ? $config['images']['thumb']['placeholdH'] : $config['images']['thumb']['h']) ?>"
+	data-sizethumbcfg="<?php echo $view->escape(json_encode($config['images']['thumb'])) ?>"
 	data-placehold="https://placehold.it/">
 <?php endif; ?>
 <?php if (count($contents['images']) || $admin): ?>
@@ -13,8 +15,8 @@
 	$addThumbOrig = $admin ? '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">'.$view['nyrocms_admin']->getIcon('drag').'</a><a href="#" class="composableSlideshowEdit">'.$view['nyrocms_admin']->getIcon('pencil').'</a><a href="#" class="composableSlideshowDelete">'.$view['nyrocms_admin']->getIcon('delete').'</a>' : null;
 	if (is_array($contents['images'])) {
 		foreach($contents['images'] as $img) {
-			$bigSrc = $view['nyrocms_composer']->imageResize($img['file'], $config['images']['big']['w'], $config['images']['big']['h']);
-			$thumbSrc = $view['nyrocms_composer']->imageResize($img['file'], $config['images']['thumb']['w'], $config['images']['thumb']['h']);
+			$bigSrc = $view['nyrocms_composer']->imageResizeConfig($img['file'], $config['images']['big']);
+			$thumbSrc = $view['nyrocms_composer']->imageResizeConfig($img['file'], $config['images']['thumb']);
 			if (!$big) {
 				$big = '<div class="block_slideshow_big">';
 					$big.= '<img src="'.$bigSrc.'" alt="'.$view->escape($img['title']).'" />';

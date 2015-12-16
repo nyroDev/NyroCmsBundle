@@ -1,5 +1,5 @@
 <?php if ($admin): ?>
-	<div data-name="contents_<?php echo $nb ?>_image" class="composableImgCont image1" data-w="<?php echo $config['image']['w'] ?>" data-h="<?php echo $config['image']['h'] ?>">
+	<div data-name="contents_<?php echo $nb ?>_image" class="composableImgCont image1" data-cfg="<?php echo $view->escape(json_encode($config['image'])) ?>">
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
 			'image'=>$contents['image'],
 			'title'=>$row->getTitle(),

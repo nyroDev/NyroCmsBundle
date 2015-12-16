@@ -200,11 +200,11 @@ header {
 #composerTools #availableBlocks .availableBlock:hover:after {
 	border-top-color: #000;
 }
-.composerBlock:first-child, #backgroundTable {
+#composerContents {
 	margin-top: 150px;
 }
-#backgroundTable .composerBlock:first-child {
-	margin-top: 0;
+#backgroundTable {
+	margin-top: 150px;
 }
 .composerBlock {
 	position: relative;

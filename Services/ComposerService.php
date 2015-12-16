@@ -289,11 +289,11 @@ class ComposerService extends AbstractService {
 		$file = $this->imageUpload($image);
 		$ret = array(
 			'file'=>$file,
-			'resized'=>$this->imageResize($file, $request->request->get('w'), $request->request->get('h'))
+			'resized'=>$this->imageResizeConfig($file, $request->request->get('cfg'))
 		);
 
-		if ($request->request->get('w2') && $request->request->get('h2'))
-			$ret['resized2'] = $this->imageResize($file, $request->request->get('w2'), $request->request->get('h2'));
+		if ($request->request->get('cfg2'))
+			$ret['resized2'] = $this->imageResizeConfig($file, $request->request->get('cfg2'));
 
 		if ($request->request->has('more')) {
 			// We have a size defined here, it's for home_extranet block
@@ -430,17 +430,26 @@ class ComposerService extends AbstractService {
 	}
 	
 	public function imageResize($file, $w, $h = null) {
+		return $this->imageResizeConfig($file, array(
+			'name'=>$w.'_'.$h,
+			'w'=>$w,
+			'h'=>$h,
+			'fit'=>true,
+			'quality'=>80,
+		));
+	}
+	
+	public function imageResizeConfig($file, array $config) {
 		$absoluteFile = $this->getRootImageDir().'/'.$file;
 		$ret = null;
+		
 		if (file_exists($absoluteFile)) {
 			try {
-				$resizedPath = $this->get('nyrodev_image')->_resize($absoluteFile, array(
-					'name'=>$w.'_'.$h,
-					'w'=>$w,
-					'h'=>$h,
-					'fit'=>true,
-					'quality'=>80,
-				));
+				
+				if (!isset($config['name']))
+					$config['name'] = md5(json_encode($config));
+				
+				$resizedPath = $this->get('nyrodev_image')->_resize($absoluteFile, $config);
 
 				$tmp = explode('/web/', $resizedPath);
 				$ret = $this->get('templating.helper.assets')->getUrl($tmp[1]);

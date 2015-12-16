@@ -36,11 +36,11 @@ jQuery(function($) {
 				events: {
 					BeforeUpload: function(up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
+						console.log(compImg.data('cfg'));
 						up.settings.file_data_name = 'image',
 						up.settings.multipart_params = {
 							imageUpload: 1,
-							w: compImg.data('w'),
-							h: compImg.data('h')
+							cfg: compImg.data('cfg')
 						};
 						if (compImg.data('more'))
 							up.settings.multipart_params.more = compImg.data('more');
@@ -219,19 +219,16 @@ jQuery(function($) {
 							nav = me.children('ul'),
 							nbLi = nav.children().length,
 							sizebig = me.data('sizebig'),
-							sizebigA = sizebig.split('x'),
-							sizethumb = me.data('sizethumb'),
-							sizethumbA = sizethumb.split('x'),
+							sizebigCfg = me.data('sizebigcfg'),
+							sizethumbCfg = me.data('sizethumbcfg'),
 							placehold = me.data('placehold');
 						
 						myPluploadOptions.events.BeforeUpload = function(up, file) {
 							up.settings.file_data_name = 'image',
 							up.settings.multipart_params = {
 								imageUpload: 1,
-								w: sizebigA[0],
-								h: sizebigA[1],
-								w2: sizethumbA[0],
-								h2: sizethumbA[1]
+								cfg: sizebigCfg,
+								cfg2: sizethumbCfg
 							};
 						};
 						myPluploadOptions.events.FileUploaded = function(up, file, data) {
@@ -322,7 +319,7 @@ jQuery(function($) {
 							big.find('img').attr('src', placehold+sizebig);
 						}
 						
-						if (!parent.is('#composer'))
+						if (!parent.is('#composer') && $.fn.extend.slideshow)
 							me.closest('.block_slideshow').slideshow();
 					});
 				if (window.svg4everybody)
@@ -345,7 +342,7 @@ jQuery(function($) {
 					if (inserter)
 						inserter(html);
 					else
-						main.append(html);
+						cont.append(html);
 					
 					initComposable(html);
 					changed();
@@ -439,7 +436,7 @@ jQuery(function($) {
 			});
 			
 		if (!composer.is('.composerNoDrag')) {
-			composer.sortable({
+			cont.sortable({
 				items: '.composerBlock',
 				handle: '.composerDrag',
 				placeholder: 'ui-state-highlight',
@@ -465,7 +462,7 @@ jQuery(function($) {
 					})
 					.draggable({
 						revert: true,
-						connectToSortable: composer,
+						connectToSortable: cont,
 						helper: function() {
 							return $(this).clone();
 						}

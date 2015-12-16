@@ -1,5 +1,5 @@
 <?php if ($admin): ?>
-	<div data-name="contents_<?php echo $nb ?>_image1" class="composableImgCont image1" data-w="<?php echo $config['image1']['w'] ?>" data-h="<?php echo $config['image1']['h'] ?>">
+	<div data-name="contents_<?php echo $nb ?>_image1" class="composableImgCont image1" data-cfg="<?php echo $view->escape(json_encode($config['image1'])) ?>">
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
 			'image'=>$contents['image1'],
 			'title'=>$row->getTitle(),
@@ -8,7 +8,7 @@
 		)) ?>
 		<textarea name="contents[<?php echo $nb ?>][image1]" id="contents_<?php echo $nb ?>_image1"><?php echo $contents['image1'] ?></textarea>
 	</div>
-	<div data-name="contents_<?php echo $nb ?>_image2" class="composableImgCont image2" data-w="<?php echo $config['image2']['w'] ?>" data-h="<?php echo $config['image2']['h'] ?>">
+	<div data-name="contents_<?php echo $nb ?>_image2" class="composableImgCont image2" data-cfg="<?php echo $view->escape(json_encode($config['image2'])) ?>">
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
 			'image'=>$contents['image2'],
 			'title'=>$row->getTitle(),
@@ -17,7 +17,7 @@
 		)) ?>
 		<textarea name="contents[<?php echo $nb ?>][image2]" id="contents_<?php echo $nb ?>_image2"><?php echo $contents['image2'] ?></textarea>
 	</div>
-	<div data-name="contents_<?php echo $nb ?>_image3" class="composableImgCont image3" data-w="<?php echo $config['image3']['w'] ?>" data-h="<?php echo $config['image3']['h'] ?>">
+	<div data-name="contents_<?php echo $nb ?>_image3" class="composableImgCont image3" data-cfg="<?php echo $view->escape(json_encode($config['image3'])) ?>">
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
 			'image'=>$contents['image3'],
 			'title'=>$row->getTitle(),

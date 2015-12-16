@@ -21,7 +21,6 @@ assetic:
                 - '@NyroDevUtilityBundle/Resources/public/js/*_tinymce.js'
                 - '@NyroDevUtilityBundle/Resources/public/js/plupload/*.js'
                 - '@NyroDevNyroCmsBundle/Resources/public/js/public/200_utilities.js'
-                - '@NyroDevNyroCmsBundle/Resources/public/js/public/501_slideshow.js'
                 - '@NyroDevNyroCmsBundle/Resources/public/js/composer/*.js'
         nyrocms_css_admin_composer:
             inputs:

@@ -87,26 +87,26 @@ class Configuration implements ConfigurationInterface
 			),
 			'image'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image.html.php',
-				'image'=>array('image'=>true, 'w'=>1500, 'h'=>600),
+				'image'=>array('image'=>true, 'w'=>1500, 'h'=>600, 'name'=>'image', 'fit'=>true, 'quality'=>80),
 			),
 			'image_text'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image_text.html.php',
-				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image', 'fit'=>true, 'quality'=>80),
 			),
 			'text_image'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_text_image.html.php',
-				'image'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image', 'fit'=>true, 'quality'=>80),
 			),
 			'image2'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
-				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500),
-				'image2'=>array('image'=>true, 'w'=>1000, 'h'=>500),
+				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image1', 'fit'=>true, 'quality'=>80),
+				'image2'=>array('image'=>true, 'w'=>1000, 'h'=>500, 'name'=>'image2', 'fit'=>true, 'quality'=>80),
 			),
 			'image3'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_image3.html.php',
-				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500),
-				'image2'=>array('image'=>true, 'w'=>500, 'h'=>500),
-				'image3'=>array('image'=>true, 'w'=>500, 'h'=>500),
+				'image1'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image1', 'fit'=>true, 'quality'=>80),
+				'image2'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image2', 'fit'=>true, 'quality'=>80),
+				'image3'=>array('image'=>true, 'w'=>500, 'h'=>500, 'name'=>'image3', 'fit'=>true, 'quality'=>80),
 			),
 			'slideshow'=>array(
 				'template'=>'NyroDevNyroCmsBundle:Composer:block_slideshow.html.php',
@@ -115,11 +115,17 @@ class Configuration implements ConfigurationInterface
 					'multiple'=>true,
 					'big'=>array(
 						'w'=>1500,
-						'h'=>1000
+						'h'=>1000,
+						'name'=>'big',
+						'fit'=>true,
+						'quality'=>80
 					),
 					'thumb'=>array(
 						'w'=>100,
-						'h'=>100
+						'h'=>100,
+						'name'=>'thumb',
+						'fit'=>true,
+						'quality'=>80
 					)
 				),
 			),
