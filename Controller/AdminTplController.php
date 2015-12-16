@@ -74,7 +74,7 @@ class AdminTplController extends NyroDevAbstractController {
 					if ($handler->hasAdminMenuLink()) {
 						$uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
 						$name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName();
-						$modulesIdent['module_'.$contentHandler->getId()] = $name;
+						$modulesIdent['module_'.$contentHandler->getId()] = mb_strtolower($name);
 						$modules['module_'.$contentHandler->getId()] = array(
 							'uri'=>$uri,
 							'name'=>$name,
@@ -87,7 +87,7 @@ class AdminTplController extends NyroDevAbstractController {
 			if (count($modules)) {
 				if (!isset($menu['modules']))
 					$menu['modules'] = array();
-				ksort($modulesIdent);
+				asort($modulesIdent);
 				foreach($modulesIdent as $k=>$name)
 					$menu['modules'][$k] = $modules[$k];
 			}
