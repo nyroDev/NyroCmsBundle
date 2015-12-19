@@ -66,6 +66,10 @@ abstract class AbstractHandler {
 		return false;
 	}
 	
+	public function isIntroRequired() {
+		return false;
+	}
+	
 	public function hasFeatured() {
 		return true;
 	}
@@ -76,10 +80,6 @@ abstract class AbstractHandler {
 	
 	public function hasValidDates() {
 		return true;
-	}
-	
-	public function isIntroRequired() {
-		return false;
 	}
 	
 	public function needTranslations() {

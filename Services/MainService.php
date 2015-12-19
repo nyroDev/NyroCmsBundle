@@ -178,12 +178,12 @@ class MainService extends AbstractService {
 		return $asString ? $locales : explode('|', $locales);
 	}
 	
-	public function getLocaleNames($rootContent = null) {
+	public function getLocaleNames($rootContent = null, $prefixTranslation = null) {
 		$names = $this->container->getParameter('localeNames');
 		$ret = array();
 		foreach($this->getLocales($rootContent) as $locale) {
 			if (isset($names[$locale]))
-				$ret[$locale] = $names[$locale];
+				$ret[$locale] = $prefixTranslation ? $this->trans($prefixTranslation.'.'.$locale) : $names[$locale];
 		}
 		return $ret;
 	}
