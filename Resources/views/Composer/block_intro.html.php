@@ -5,7 +5,7 @@
 	<?php if ($handlerInContentsKey === 'text'): ?>
 		<?php echo $handlerInContent ?>
 	<?php else: ?>
-		<div class="text1 composable composableHtml" data-name="contents_<?php echo $nb ?>_text">
+		<div class="text composable composableHtml" data-name="contents_<?php echo $nb ?>_text">
 			<?php echo $contents['text'] ?>
 		</div>
 	<?php endif; ?>
@@ -22,6 +22,6 @@
 	<?php if ($handlerInContentsKey === 'text'): ?> 
 		<?php echo $handlerInContent ?>
 	<?php elseif (isset($contents['text']) && $contents['text'] && trim(strip_tags($contents['text']))): ?>
-		<div class="text1"><?php echo $view['nyrodev_image']->resizeImagesInHtml($contents['text'], false, true) ?></div>
+		<div class="text"><?php echo $view['nyrodev_image']->resizeImagesInHtml($contents['text'], false, true) ?></div>
 	<?php endif; ?>
 <?php endif; ?>
