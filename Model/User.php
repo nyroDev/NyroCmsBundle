@@ -5,13 +5,14 @@ namespace NyroDev\NyroCmsBundle\Model;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use NyroDev\UtilityBundle\Model\AbstractUploadable;
 
 /**
  * User
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class User implements UserInterface, \Symfony\Component\Security\Core\User\EquatableInterface, \Serializable {
+abstract class User extends AbstractUploadable implements UserInterface, \Symfony\Component\Security\Core\User\EquatableInterface, \Serializable {
 	
     protected $id;
 	
@@ -567,4 +568,8 @@ abstract class User implements UserInterface, \Symfony\Component\Security\Core\U
 		return $this->getFirstname().' '.$this->getLastname().' ('.$this->getEmail().')';
 	}
 
+	protected function getFileFields() {
+		return array();
+	}
+	
 }
