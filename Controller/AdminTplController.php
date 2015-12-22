@@ -122,7 +122,7 @@ class AdminTplController extends NyroDevAbstractController {
 			
 			$adminMenuEvent = new AdminMenuEvent($tmpUri, $adminPerRoot, $rootContents, $curRootId);
 			$adminMenuEvent->setMenu($menu);
-			$this->get('event_dispatcher')->dispatch('nyrocms.events.adminMenu', $adminMenuEvent);
+			$this->get('event_dispatcher')->dispatch(AdminMenuEvent::ADMIN_MENU, $adminMenuEvent);
 			
 			$vars['menu'] = $adminMenuEvent->getMenu();
 		}

@@ -241,7 +241,7 @@ class AdminDataController extends AbstractAdminController {
 		}
 		
 		$adminFormEvent = new AdminFormEvent($action, $row, $form);
-		$this->get('event_dispatcher')->dispatch('nyrocms.events.admin.form.update.content', $adminFormEvent);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_CONTENT, $adminFormEvent);
 	}
 	protected function contentFlush($action, $row, $form) {
 		$this->contentForm = $form;
@@ -527,7 +527,7 @@ class AdminDataController extends AbstractAdminController {
 		$form->get('valid')->setRequired(false);
 		
 		$adminFormEvent = new AdminFormEvent($action, $row, $form);
-		$this->get('event_dispatcher')->dispatch('nyrocms.events.admin.form.update.user', $adminFormEvent);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_USER, $adminFormEvent);
 	}
 	
 	protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form) {

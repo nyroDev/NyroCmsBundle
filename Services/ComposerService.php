@@ -6,6 +6,7 @@ use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
+use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 
@@ -39,7 +40,9 @@ class ComposerService extends AbstractService {
 	
 	public function getQuickConfig(Composable $row, $key) {
 		$cfg = $this->getConfig($row);
-		return isset($cfg[$key]) ? $cfg[$key] : null;
+		$event = new ComposerConfigEvent($row, $key, isset($cfg[$key]) ? $cfg[$key] : null);
+		$this->get('event_dispatcher')->dispatch(ComposerConfigEvent::COMPOSER_CONFIG, $event);
+		return $event->getConfig();
 	}
 	
 	public function canChangeLang(Composable $row) {
@@ -94,7 +97,7 @@ class ComposerService extends AbstractService {
 		}
 		
 		$tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
-		$this->get('event_dispatcher')->dispatch('nyrocms.events.tinymceConfig', $tinymceConfigEvent);
+		$this->get('event_dispatcher')->dispatch(TinymceConfigEvent::TINYMCE_CONFIG, $tinymceConfigEvent);
 		return $this->tinymceAttrsTrRec($tinymceConfigEvent->getConfig());
 	}
 	
@@ -145,7 +148,7 @@ class ComposerService extends AbstractService {
 	
 	public function getWrapperCssTheme(Composable $row) {
 		$wrapperCssThemeEvent = new WrapperCssThemeEvent($row);
-		$this->get('event_dispatcher')->dispatch('nyrocms.events.wrapperCssTheme', $wrapperCssThemeEvent);
+		$this->get('event_dispatcher')->dispatch(WrapperCssThemeEvent::WRAPPER_CSS_THEME, $wrapperCssThemeEvent);
 		return $wrapperCssThemeEvent->getWrapperCssTheme();
 	}
 	

@@ -6,6 +6,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 class AdminMenuEvent extends Event {
 	
+	const ADMIN_MENU = 'nyrocms.events.adminMenu';
+	
 	protected $menu,
 				$uriSplitted,
 				$adminPerRoot,

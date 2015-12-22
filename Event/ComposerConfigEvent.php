@@ -5,17 +5,16 @@ namespace NyroDev\NyroCmsBundle\Event;
 use Symfony\Component\EventDispatcher\Event;
 use NyroDev\NyroCmsBundle\Model\Composable;
 
-class TinymceConfigEvent extends Event {
+class ComposerConfigEvent extends Event {
 	
-	const TINYMCE_CONFIG = 'nyrocms.events.tinymceConfig';
+	const COMPOSER_CONFIG = 'nyrocms.events.composerConfig';
 	
 	protected $row,
-				$simple,
 				$config;
 	
-	public function __construct(Composable $row, $simple, array $config) {
+	public function __construct(Composable $row, $configName, $config) {
 		$this->row = $row;
-		$this->simple = $simple;
+		$this->configName = $configName;
 		$this->config = $config;
 	}
 	
@@ -27,8 +26,8 @@ class TinymceConfigEvent extends Event {
 		return $this->row;
 	}
 	
-	public function getSimple() {
-		return $this->simple;
+	public function getConfigName() {
+		return $this->configName;
 	}
 	
 	public function setConfig($config) {

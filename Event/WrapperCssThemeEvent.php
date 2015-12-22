@@ -7,6 +7,8 @@ use NyroDev\NyroCmsBundle\Model\Composable;
 
 class WrapperCssThemeEvent extends Event {
 	
+	const WRAPPER_CSS_THEME = 'nyrocms.events.wrapperCssTheme';
+	
 	protected $row,
 				$wrapperCssTheme;
 	
