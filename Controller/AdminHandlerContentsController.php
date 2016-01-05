@@ -123,7 +123,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 			throw $this->createNotFoundException();
 		
 		$handler = $this->get('nyrocms')->getHandler($ch);
-		if ($handler->isReversePositionOrder())
+		if (!$handler->isReversePositionOrder())
 			$dir = $dir == 'up' ? 'down' : 'up';
 		
 		$position = $row->getPosition();
