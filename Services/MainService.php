@@ -222,7 +222,6 @@ class MainService extends AbstractService {
 		if ($onlyLangs && !is_array($onlyLangs))
 			$onlyLangs = explode(',', $onlyLangs);
 		
-		
 		foreach($locales as $locale) {
 			if ($locale != $curLocale && ($locale == $defaultLocale || empty($onlyLangs) || in_array($locale, $onlyLangs))) {
 				$prm = array('_locale'=>$locale);
@@ -243,6 +242,12 @@ class MainService extends AbstractService {
 				}
 			}
 		}
+		
+		if ($isObjectPage) {
+			$pathInfo['object']->setTranslatableLocale($curLocale);
+			$this->get('nyrocms_db')->refresh($pathInfo['object']);
+		}
+		
 		return $ret;
 	}
 	
