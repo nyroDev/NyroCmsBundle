@@ -289,6 +289,7 @@ abstract class AbstractHandler {
 	public function flushLangClb($action, ContentSpec $row, Form $form, $lg) {
 		if (!$this->hasComposer()) {
 			$newContents = $newContentTexts = array();
+			$row->setContent(array());
 			foreach($this->getFormFields($action) as $k=>$cfg) {
 				$data = $dataLg = $form->get($k)->getData();
 				$fieldName = $k;
