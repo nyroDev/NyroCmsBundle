@@ -7,6 +7,7 @@ use NyroDev\NyroCmsBundle\Model\Composable;
 use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
+use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 
@@ -389,15 +390,7 @@ class ComposerService extends AbstractService {
 		
 		foreach($row->getContent() as $nb=>$cont) {
 			if ($showAll || !$handlerContent || $cont['type'] == 'handler') {
-				$ret.= $this->get('templating')->render($this->getQuickConfig($row, 'block_template'), array(
-					'nb'=>$nb,
-					'row'=>$row,
-					'handlerContent'=>$handlerContent,
-					'block'=>$cont,
-					'admin'=>$admin,
-					'customClass'=>$this->getBlockCustomClass($row, $cont, $admin),
-					'customAttrs'=>$this->getBlockCustomAttrs($row, $cont, $admin),
-				))."\n\n";
+				$ret.= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
 			}
 		}
 		
@@ -408,23 +401,21 @@ class ComposerService extends AbstractService {
 	
 	public function renderNew(Composable $row, $block, $admin = false, array $defaults = array()) {
 		$cont = $this->getBlock($row, $block, $defaults);
-		return $this->get('templating')->render($this->getQuickConfig($row, 'block_template'), array(
-				'nb'=>'--NEW--',
-				'row'=>$row,
-				'handlerContent'=>null,
-				'block'=>$cont,
-				'admin'=>$admin,
-				'customClass'=>$this->getBlockCustomClass($row, $cont, $admin),
-				'customAttrs'=>$this->getBlockCustomAttrs($row, $cont, $admin),
-			))."\n\n";
+		return $this->renderBlock($row, '--NEW--', null, $cont, $admin);
 	}
 	
-	public function getBlockCustomClass(Composable $row, array $block, $admin = false) {
-		return null;
-	}
-	
-	public function getBlockCustomAttrs(Composable $row, array $block, $admin = false) {
-		return null;
+	protected function renderBlock(Composable $row, $nb, $handlerContent, $block, $admin) {
+		$event = new ComposerBlockVarsEvent($row, $this->getQuickConfig($row, 'block_template'), array(
+			'nb'=>$nb,
+			'row'=>$row,
+			'handlerContent'=>$handlerContent,
+			'block'=>$block,
+			'admin'=>$admin,
+			'customClass'=>null,
+			'customAttrs'=>null,
+		));
+		$this->get('event_dispatcher')->dispatch(ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS, $event);
+		return $this->get('templating')->render($event->getTemplate(), $event->getVars())."\n\n";
 	}
 	
 	public function getImageDir() {
