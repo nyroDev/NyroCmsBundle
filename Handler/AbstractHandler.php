@@ -190,56 +190,55 @@ abstract class AbstractHandler {
 	}
 	
 	public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = array(), array $translations = array()) {
-		if (!$this->hasComposer()) {
-			$after = $this->hasValidDates() ? 'validEnd' : 'state';
-			$content = $row->getContent();
-			$translationsContent = array();
-			foreach($translations as $lg=>$trs) {
-				$translationsContent[$lg] = array();
-				foreach($trs as $field=>$tr) {
-					if ($field == 'content')
-						$translationsContent[$lg] = json_decode($tr->getContent(), true);
-				}
+		$after = $this->hasValidDates() ? 'validEnd' : 'state';
+		$content = $this->hasComposer() ? $row->getData() : $row->getContent();
+		$translationsContent = array();
+		$fieldTr = $this->hasComposer() ? 'data' : 'content';
+		foreach($translations as $lg=>$trs) {
+			$translationsContent[$lg] = array();
+			foreach($trs as $field=>$tr) {
+				if ($field == $fieldTr)
+					$translationsContent[$lg] = json_decode($tr->getContent(), true);
 			}
-			
-			foreach($this->getFormFields($action) as $k=>$cfg) {
-				$type = $cfg['type'];
-				unset($cfg['type']);
-				$translatable = false;
-				if (isset($cfg['translatable'])) {
-					$translatable = $cfg['translatable'];
-					unset($cfg['translatable']);
-				}
-				$cfg['mapped'] = false;
-				if (isset($content[$k])) {
-					$cfg['data'] = $content[$k];
-					if ($type == DateType::class || $type == DateTimeType::class)
-						$cfg['data'] = new \DateTime($cfg['data']['date']);
-				}
-				if ($type == FileType::class && isset($cfg['data']))
-					unset($cfg['data']);
-				if (!isset($cfg['position'])) {
-					$cfg['position'] = array('after'=>$after);
-					$after = $k;
-				}
-				
-				$form->add($k, $type, $cfg);
-				
-				if ($this->needTranslations() && $translatable && count($langs)) {
-					foreach($langs as $lg=>$lang) {
-						$fieldName = 'lang_'.$lg.'_'.$k;
-						$cfg['position']['after'] = $after;
-						$data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
-						if ($data && $type == 'date' && !is_object($data))
-							$data = new \DateTime($data['date']);
-						if ($type == FileType::class)
-							$data = null;
-						$form->add($fieldName, $type, array_merge($cfg, array(
-							'label'=>$cfg['label'].' '.strtoupper($lg),
-							'data'=>$data
-						)));
-						$after = $fieldName;
-					}
+		}
+
+		foreach($this->getFormFields($action) as $k=>$cfg) {
+			$type = $cfg['type'];
+			unset($cfg['type']);
+			$translatable = false;
+			if (isset($cfg['translatable'])) {
+				$translatable = $cfg['translatable'];
+				unset($cfg['translatable']);
+			}
+			$cfg['mapped'] = false;
+			if (isset($content[$k])) {
+				$cfg['data'] = $content[$k];
+				if ($type == DateType::class || $type == DateTimeType::class)
+					$cfg['data'] = new \DateTime($cfg['data']['date']);
+			}
+			if ($type == FileType::class && isset($cfg['data']))
+				unset($cfg['data']);
+			if (!isset($cfg['position'])) {
+				$cfg['position'] = array('after'=>$after);
+				$after = $k;
+			}
+
+			$form->add($k, $type, $cfg);
+
+			if ($this->needTranslations() && $translatable && count($langs)) {
+				foreach($langs as $lg=>$lang) {
+					$fieldName = 'lang_'.$lg.'_'.$k;
+					$cfg['position']['after'] = $after;
+					$data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
+					if ($data && $type == 'date' && !is_object($data))
+						$data = new \DateTime($data['date']);
+					if ($type == FileType::class)
+						$data = null;
+					$form->add($fieldName, $type, array_merge($cfg, array(
+						'label'=>$cfg['label'].' '.strtoupper($lg),
+						'data'=>$data
+					)));
+					$after = $fieldName;
 				}
 			}
 		}
@@ -264,21 +263,24 @@ abstract class AbstractHandler {
 	}
 	
 	public function flushClb($action, ContentSpec $row, Form $form) {
-		if (!$this->hasComposer()) {
-			$newContents = $newContentTexts = array();
-			foreach($this->getFormFields($action) as $k=>$cfg) {
-				$data = $form->get($k)->getData();
-				if ($cfg['type'] == FileType::class) {
-					$newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
-				} else {
-					$newContents[$k] = $data;
-					if ($cfg['type'] == TextType::class ||
-						$cfg['type'] == TextareaType::class ||
-						$cfg['type'] == ChoiceType::class) {
-							$newContentTexts[] = $data;
-					}
+		$newContents = $newContentTexts = array();
+		foreach($this->getFormFields($action) as $k=>$cfg) {
+			$data = $form->get($k)->getData();
+			if ($cfg['type'] == FileType::class) {
+				$newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
+			} else {
+				$newContents[$k] = $data;
+				if ($cfg['type'] == TextType::class ||
+					$cfg['type'] == TextareaType::class ||
+					$cfg['type'] == ChoiceType::class) {
+						$newContentTexts[] = $data;
 				}
 			}
+		}
+		
+		if ($this->hasComposer()) {
+			$row->setData($newContents);
+		} else {
 			$row->setContent($newContents);
 			$row->setContentText(implode("\n", array_filter($newContentTexts)));
 		}
@@ -287,29 +289,39 @@ abstract class AbstractHandler {
 	public function afterFlushClb($response, $action, $row) {}
 	
 	public function flushLangClb($action, ContentSpec $row, Form $form, $lg) {
-		if (!$this->hasComposer()) {
-			$newContents = $newContentTexts = array();
-			$row->setContent(array());
-			foreach($this->getFormFields($action) as $k=>$cfg) {
-				$data = $dataLg = $form->get($k)->getData();
-				$fieldName = $k;
-				if (isset($cfg['translatable']) && $cfg['translatable']) {
-					$fieldName = 'lang_'.$lg.'_'.$k;
-					$dataLg = $form->get($fieldName)->getData();
-					if ($dataLg)
-						$data = $dataLg;
-				}
-				if ($cfg['type'] == FileType::class) {
-					$newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
-				} else {
-					$newContents[$k] = $data;
-					if ($cfg['type'] == TextType::class ||
-						$cfg['type'] == TextareaType::class ||
-						$cfg['type'] == ChoiceType::class) {
-							$newContentTexts[] = $data;
-					}
+		$newContents = $newContentTexts = array();
+		if ($action == AbstractAdminController::ADD) {
+			if ($this->hasComposer()) {
+				$row->setData(array());
+			} else {
+				$row->setContent(array());
+			}
+		}
+		
+		foreach($this->getFormFields($action) as $k=>$cfg) {
+			$data = $dataLg = $form->get($k)->getData();
+			$fieldName = $k;
+			if (isset($cfg['translatable']) && $cfg['translatable']) {
+				$fieldName = 'lang_'.$lg.'_'.$k;
+				$dataLg = $form->get($fieldName)->getData();
+				if ($dataLg)
+					$data = $dataLg;
+			}
+			if ($cfg['type'] == FileType::class) {
+				$newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
+			} else {
+				$newContents[$k] = $data;
+				if ($cfg['type'] == TextType::class ||
+					$cfg['type'] == TextareaType::class ||
+					$cfg['type'] == ChoiceType::class) {
+						$newContentTexts[] = $data;
 				}
 			}
+		}
+		
+		if ($this->hasComposer()) {
+			$row->setData($newContents);
+		} else {
 			$row->setContent($newContents);
 			$row->setContentText(implode("\n", array_filter($newContentTexts)));
 		}
@@ -317,9 +329,9 @@ abstract class AbstractHandler {
 	
 	protected $fileUploaded = array();
 	protected function handleFileUpload($field, $data, $action, ContentSpec $row, $fieldForm = null) {
-		$fieldForm = is_null($fieldForm) ? $fieldForm : $field;
+		$fieldForm = is_null($fieldForm) ? $field : $fieldForm;
 		if (!isset($this->fileUploaded[$fieldForm])) {
-			$this->fileUploaded[$fieldForm] = $row->getInContent($field);
+			$this->fileUploaded[$fieldForm] = $this->hasComposer() ? $row->getInData($field) : $row->getInContent($field);
 			/* @var $data UploadedFile */
 			if ($data) {
 				// We have a file upload, handle it
@@ -351,7 +363,7 @@ abstract class AbstractHandler {
 	}
 	
 	protected function deleteFileClb(ContentSpec $row, $field) {
-		$file = $row->getInContent($field);
+		$file = $this->hasComposer() ? $row->getInData($field) : $row->getInContent($field);
 		if ($file) {
 			$fs = new Filesystem();
 			$filePath = $this->getUploadRootDir().'/'.$file;

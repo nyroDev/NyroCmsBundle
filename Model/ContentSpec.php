@@ -46,6 +46,13 @@ abstract class ContentSpec implements Composable {
     protected $contentText;
 
     /**
+     * @var array
+     * @Gedmo\Translatable
+	 * @Gedmo\Versioned
+     */
+    protected $data;
+
+    /**
      * @var string
      * @Gedmo\Translatable
 	 * @Gedmo\Versioned
@@ -236,6 +243,29 @@ abstract class ContentSpec implements Composable {
     public function getContentText()
     {
         return $this->contentText;
+    }
+
+    /**
+     * Set data
+     *
+     * @param array $data
+     * @return ContentSpec
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return array 
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
@@ -548,6 +578,11 @@ abstract class ContentSpec implements Composable {
 	
 	public function getInContent($key) {
 		$content = $this->getContent();
+		return isset($content[$key]) ? $content[$key] : null;
+	}
+	
+	public function getInData($key) {
+		$content = $this->getData();
 		return isset($content[$key]) ? $content[$key] : null;
 	}
 	

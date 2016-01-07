@@ -41,13 +41,16 @@ class FileTypeExtension extends AbstractTypeExtension {
 			if (count($tmpName) === 3) {
 				$currentFile = null;
 				foreach($data->getTranslations() as $tr) {
-					if ($tr->getLocale() == $tmpName[1] && $tr->getField() == 'content') {
+					if ($tr->getLocale() == $tmpName[1] && ($tr->getField() == 'content' || $tr->getField() == 'data')) {
 						$contents = json_decode($tr->getContent(), true);
-						$currentFile = isset($contents[$tmpName[2]]) ? $contents[$tmpName[2]] : null;
+						if (isset($contents[$tmpName[2]]))
+							$currentFile = $contents[$tmpName[2]];
 					}
 				}
 			} else {
 				$currentFile = $data->getInContent($form->getName());
+				if (!$currentFile)
+					$currentFile = $data->getInData($form->getName());
 			}
 			if ($currentFile) {
 				$currentFileWeb = $this->nyrocms->getHandler($data->getContentHandler())->getUploadDir().'/'.$currentFile;

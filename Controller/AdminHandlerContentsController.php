@@ -89,10 +89,12 @@ class AdminHandlerContentsController extends AbstractAdminController {
 			$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
 			$handler->init($request, true);
 			$handler->deleteClb($row);
-			$afters = $repo->getAfters($row);
 			$this->get('nyrocms_db')->remove($row);
+			/*
+			$afters = $repo->getAfters($row);
 			foreach($afters as $after)
-				$after->setPosition($after->getPosition() - 1);
+				$after->setPosition(max(0, $after->getPosition() - 1));
+			 */
 			$this->get('nyrocms_db')->flush();
 		}
 		return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', array('chid'=>$ch->getId())));
