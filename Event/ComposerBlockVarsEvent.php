@@ -51,4 +51,12 @@ class ComposerBlockVarsEvent extends Event {
 		return isset($this->vars[$key]) ? $this->vars[$key] : null;
 	}
 	
+	public function getInBlockVars($key) {
+		return isset($this->vars['block'][$key]) ? $this->vars['block'][$key] : null;
+	}
+	
+	public function getBlockType() {
+		return $this->getInBlockVars('type');
+	}
+	
 }
