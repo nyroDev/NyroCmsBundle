@@ -90,7 +90,15 @@ abstract class AbstractController extends NyroDevAbstractController {
 		$routePrm = array();
 		if ($handlerAction)
 			$routePrm['handler'] = $handlerAction;
-		$redirect = $this->get('nyrodev')->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm));
+		
+		$redirect = null;
+		
+		if ($content->getGoUrl())
+			$redirect = $this->redirect ($content->getGoUrl());
+		
+		if (!$redirect)
+			$redirect = $this->get('nyrodev')->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm));
+		
 		if ($redirect)
 			return $redirect;
 		
