@@ -46,7 +46,11 @@ class Files extends AbstractHandler {
 				'type'=>DateType::class,
 				'translatable'=>false,
 				'label'=>$this->trans('nyrocms.handler.files.date'),
-				'required'=>false,
+				'required'=>true,
+				'constraints'=>array(
+					new Constraints\NotBlank()
+				),
+				'data'=>new \DateTime()
 			)),
 			'file'=>array(
 				'type'=>FileType::class,
@@ -67,26 +71,29 @@ class Files extends AbstractHandler {
 			'content'=>$content,
 		);
 		
-		$routCfg = $this->get('nyrocms')->getRouteFor($content);
-		$route = $routCfg['route'];
-		$routePrm = $routCfg['prm'];
+		$results = $sorted = $tmp = array();
+		foreach($this->getContentSpecs($content) as $contentSpec) {
+			$tmp[$contentSpec->getId()] = $contentSpec;
+			$date = $contentSpec->getInContent('date');
+			if ($date) {
+				$date = new \DateTime($date['date']);
+			} else {
+				$date = $contentSpec->getInserted();
+			}
+			$key = $date->format('Y-m-d');
+			if (!isset($sorted[$key]))
+				$sorted[$key] = array();
+			$sorted[$key][] = $contentSpec->getId();
+		}
 		
-		$page = $this->request->query->get('page', 1);
-		$nbPerPage = $this->getParameter('handler_files_perpage', 10);
-		$total = $this->getTotalContentSpec($content);
-		$nbPages = ceil($total / $nbPerPage);
-
-		if ($page > $nbPages)
-			$page = $nbPages;
-		if ($page < 1)
-			$page = 1;
-
-		$pager = new \NyroDev\UtilityBundle\Utility\Pager($this->get('nyrodev'), $route, $routePrm, $total, $page, $nbPerPage);
-
-		$results = $this->getContentSpecs($content, $pager->getStart(), $nbPerPage);
-
+		arsort($sorted);
+		foreach($sorted as $ids) {
+			foreach($ids as $id) {
+				$results[] = $tmp[$id];
+			}
+		}
+		
 		$vars['results'] = $results;
-		$vars['pager'] = $pager;
 		$vars['uploadDir'] = $this->getUploadDir();
 		
 		return array(
