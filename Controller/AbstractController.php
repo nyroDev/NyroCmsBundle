@@ -161,7 +161,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 		$results = array();
 		if ($q) {
 			$this->get('nyrocms')->setPathInfoSearch($q);
-			$title = $this->trans('public.search.title', array('%q%'=>$q));
+			$title = $this->trans('nyrocms.search.title', array('%q%'=>$q));
 			$root = $this->getRootContent();
 			$tmpQ = array_filter(array_map('trim', explode(' ', trim($q))));
 			$query = $parameters = array();
