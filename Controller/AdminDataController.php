@@ -155,6 +155,9 @@ class AdminDataController extends AbstractAdminController {
 				'choices'=>$this->get('nyrocms_admin')->getContentStateChoices()
 			),
 			'relateds'=>array(
+				'choice_label'=>function($row) {
+					return $row.''.($row->getParent() ? ' ('.$row->getParent().')' : '');
+				},
 				'query_builder'=>function(ContentRepositoryInterface $er) use($row) {
 					return $er->getFormQueryBuilder($row->getParent()->getRoot(), $row->getId());
 				},
