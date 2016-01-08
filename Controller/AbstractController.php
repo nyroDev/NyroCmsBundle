@@ -135,7 +135,7 @@ abstract class AbstractController extends NyroDevAbstractController {
 		$description = $content->getSummary();
 		$image = $content->getFirstImage();
 		if ($contentSpec) {
-			$title = $contentSpec->getTitle().' - '.$title;
+			$title = $contentSpec->getTitle().' - '.$content->getTitle().', '.$title;
 			$description = $contentSpec->getSummary();
 			if ($contentSpec->getFirstImage())
 				$image = $contentSpec->getFirstImage();
