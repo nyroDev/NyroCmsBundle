@@ -24,6 +24,7 @@ class News extends AbstractHandler {
 		if ($handlerContent) {
 			$view.= 'Show';
 			$vars['news'] = $handlerContent;
+			$vars['backUrl'] = $this->generateUrl($route, $routePrm);
 			
 			$route.= '_spec';
 			$routePrm['id'] = $handlerContent->getId();
