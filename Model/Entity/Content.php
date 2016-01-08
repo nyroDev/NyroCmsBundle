@@ -15,6 +15,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\ContentRepository")
  * @Gedmo\TranslationEntity(class="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentTranslation")
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentLog")
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
 class Content extends ContentModel {
 

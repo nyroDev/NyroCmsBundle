@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\UserRepository")
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\UserLog")
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
 class User extends UserModel {
 	

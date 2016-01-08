@@ -14,6 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\ContentSpecRepository")
  * @Gedmo\TranslationEntity(class="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentSpecTranslation")
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentSpecLog")
+ * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
 class ContentSpec extends ContentSpecModel {
 	
