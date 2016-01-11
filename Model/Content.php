@@ -63,6 +63,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     /**
      * @var string
 	 * @Assert\Url()
+     * @Gedmo\Translatable
 	 * @Gedmo\Versioned
      */
     protected $goUrl;

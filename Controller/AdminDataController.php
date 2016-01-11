@@ -9,6 +9,7 @@ use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
@@ -203,6 +204,10 @@ class AdminDataController extends AbstractAdminController {
 			'type'=>TextType::class,
 			'required'=>true,
 		),
+		'goUrl'=>array(
+			'type'=>UrlType::class,
+			'required'=>false,
+		)
 	);
 	protected $translations;
 	/**
