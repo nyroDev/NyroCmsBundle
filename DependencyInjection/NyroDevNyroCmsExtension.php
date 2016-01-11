@@ -28,6 +28,7 @@ class NyroDevNyroCmsExtension extends Extension
 			$container->setParameter('nyroCms.model.classes.'.$k, $v);
 		
 		$container->setParameter('nyroCms.user_types', $config['user_types']);
+		$container->setParameter('nyroCms.disabled_locale_urls', $config['disabled_locale_urls']);
 
 		$container->setParameter('nyroCms.content.maxlevel', $config['content']['maxlevel']);
 		$container->setParameter('nyroCms.content.admin_per_root', $config['content']['admin_per_root']);

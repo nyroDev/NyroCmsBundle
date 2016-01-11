@@ -174,6 +174,7 @@ class Configuration implements ConfigurationInterface
 					->defaultValue(array('admin', 'superadmin'))
 					->prototype('scalar')->end()
 				->end()
+				->variableNode('disabled_locale_urls')->defaultValue(false)->end()
 				->arrayNode('model')->isRequired()->cannotBeEmpty()
 					->children()
 						->scalarNode('namespace')->isRequired()->cannotBeEmpty()->end()

@@ -145,16 +145,28 @@ class AdminService extends AbstractService {
 		return $content ? $content->getLevel() < $this->getParameter('nyroCms.content.maxlevel') : true;
 	}
 	
+	public function disabledLocaleUrls($locale) {
+		$ret = false;
+		$disabled = $this->getParameter('nyroCms.disabled_locale_urls');
+		if (is_array($disabled)) {
+			
+		} else if ($disabled) {
+			$ret = true;
+		}
+		return $ret;
+	}
 	
 	public function updateContentUrl(Content $row, $isEdit = false, $child = true, $forceUpdate = false) {
-		$oldUrl = $row->getUrl();
-		$url = ($row->getParent() ? $row->getParent()->getUrl() : null).'/'.$this->get('nyrodev')->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
-		$url = str_replace('//', '/', $url);
-		$row->setUrl($url);
-		
-		if ($forceUpdate || ($row->getUrl() != $oldUrl && $isEdit)) {
-			if ($child)
-				$this->updateContentUrlRec($row->getId(), $oldUrl.'/', $row->getUrl().'/', $row->getTranslatableLocale(), $forceUpdate);
+		if ($this->get('nyrocms')->getDefaultLocale($row) == $row->getTranslatableLocale() || !$this->disabledLocaleUrls($row->getTranslatableLocale())) {
+			$oldUrl = $row->getUrl();
+			$url = ($row->getParent() ? $row->getParent()->getUrl() : null).'/'.$this->get('nyrodev')->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
+			$url = str_replace('//', '/', $url);
+			$row->setUrl($url);
+
+			if ($forceUpdate || ($row->getUrl() != $oldUrl && $isEdit)) {
+				if ($child)
+					$this->updateContentUrlRec($row->getId(), $oldUrl.'/', $row->getUrl().'/', $row->getTranslatableLocale(), $forceUpdate);
+			}
 		}
 	}
 	
