@@ -248,6 +248,7 @@ nyrocms:
     news:
       more: Learn more
       empty: There is no actuality to display.
+      back: back
     files:
       file: File
       date: Date
