@@ -1,0 +1,273 @@
+admin:
+  misc:
+    title: Administration
+    headline: Administration
+    loginIntro: |
+      Log on to the <strong>administrative
+      console of your website</strong>
+    login: Connection
+    logout: Disconnection
+    admin: Administration
+    site: Site
+    filter: Filter
+    sortAsc: Sort in ascending order
+    sortDesc: Sort in descending order
+    send: Register
+    watch: See
+    handlerContents: Contents
+    account: My account
+    back: Back
+  menu:
+    contents: Content management
+    access: Access management
+    homes: Homepage management
+    modules: Modules management
+  state:
+    state_0: Deactivated
+    state_1: Activated
+    state_2: Invisible
+  themes:
+    public: Public
+  composer:
+    title: Compose
+    home_pos: Chart
+    home_move: Move
+    home_move_up: Up
+    home_move_down: Down
+    tinymce:
+      linkClass:
+        nothing: None
+        button: Button
+      styleFormats:
+        blocks: Blocks
+        block:
+          title1: Title 1
+          title2: Title 2
+          title3: Title 3
+          title4: Title 4
+          paragraph: Paragraph
+        formatting: Format
+        formats:
+          bold: Bold
+          italic: Italic
+          underline: Underlined
+          strikethrough: Strikedout
+          superscript: Exponent
+          subscript: Index
+          code: Code
+    action:
+      confirm: Confirm
+      cancel: Cancel
+      save: Register
+      drag: Drag and drop
+      delete: Remove
+      addPhoto: Add photos
+      slideshowTitle: Photo title
+      slideshowDelete: Are you sure you want to remove this picture?
+      langChange: If you change the language, you will lose the current modifications
+      posChange: If you change the chart, you will lose the current modifications
+      moveChange: If you move this chart, you will lose the current modifications
+      cancelConfirm: If you leave the page, you will lose the current modifications
+      deleteBlock: Are you sure you want to remove this block?
+      deleteImgConfirm: Are you sure you want to remove this picture?
+      video: Select the video URL
+      home_linkUrl: Modify the destination
+      home_title_bg: Modify the background color of the title
+      home_text_bg: Modify the background color of the text
+      home_theme: Change the theme of the block
+      home_image: Change the picture
+      home_image_delete: Remove the picture
+      home_imageBig: Change the large image format
+      home_imageMove: Change the animated image
+      home_imageMobile: Change the mobile image
+    blocks:
+      title: Title
+      intro: Introduction
+      text: Text
+      image: Picture
+      image_text: Picture Text
+      text_image: Text Picture
+      image2: 2 pictures
+      image3: 3 pictures
+      video: Video
+      column2: 2 columns
+      column3: 3 columns
+      slideshow: Gallery
+      separator: Separator
+    default:
+      subtitle: Subtitle
+      text: null
+      textNewsletter: null
+      mediumText: null
+      shortText: null
+  userTypes:
+    admin: Admin
+    superadmin: Superadmin
+  content:
+    viewTitle: Website
+    drag: Drag and drop
+    emptyTree: No content
+    expandAll: Unfold all
+    reduceAll: Fold up all
+    id: ID
+    parent: Parent content
+    title: Title
+    theme: Theme
+    lang: Language
+    themeEmpty: Parent theme
+    moreBlocks: More blocks
+    state: State
+    goUrl: URL redirection
+    goBlank: New tab
+    relateds: Associated content
+    relatedsPlaceholder: Enter the page title
+    handler: Handler
+    contentHandler: Associated module
+    menuOption: Menu option
+    inserted: Added on
+    updated: Updated on
+  contentHandler:
+    viewTitle: Associated modules
+    id: ID
+    name: Name
+    class: Class
+    hasAdmin: Administration?
+    inserted: Added on
+    updated: Updated on
+  contentSpec:
+    viewTitle: Specific contents
+    id: ID
+    title: Title
+    intro: Introduction
+    position: Position
+    featured: Featured
+    state: State
+    validStart: Valid from date
+    validEnd: Valid to date
+    inserted: Added on
+    updated: Updated on
+  user:
+    viewTitle: Users
+    id: ID
+    email: Email
+    firstname: First name
+    lastname: Last name
+    function: Title
+    password: Password
+    passwordConfirm: Confirmation
+    valid: Validate
+    validStart: Valid from date
+    validEnd: Valid to date
+    userType: User type
+    developper: Developer
+    userRoles: Rights
+    inserted: Added on
+    updated: Updated on
+    curPassword: Current password
+    wrongPassword: The password is not correct
+    newPassword: New password
+    samePassword: The password and the confirmation must be the same
+    accountFields: Personal information
+    accountFieldsSaved: Your account information have been registered
+    accountPassword: Password
+    accountPasswordSaved: The new password has been registered
+  userRole:
+    viewTitle: User roles
+    id: ID
+    name: Name
+    roleName: Name of the internal role
+    internal: Internal use
+    contents: Contents
+    inserted: Added on
+    updated: Updated on
+nyrocms:
+  user:
+    email_already_used: This email address is already registered
+  header:
+    menu: Menu
+    search: Search
+    searchBut: OK
+  content:
+    home: Homepage
+    relateds: To be discovered
+  search:
+    title: Search "%q%"
+    empty: No results match your request
+    results: %total% results
+    resultsContents: Contents (%nb%)
+  forgot:
+    link: Forgot your password?
+    intro: |
+      To retrieve your password,
+      enter your email.
+    notFound: |
+      This email address is not
+      registered or is not valid.
+    submit: Send
+    cancel: Cancel
+    back: Back
+    sent: |
+      An email has been sent to you
+      with your password recovery instructions
+    notFoundKey: The link is not valid
+    introPassword: Choose your new password below:
+    saved: |
+      Your new password has been registered.
+      You can use it right now.
+    email:
+      subject: Password recovery
+      content: |
+        <strong>Hello %name%,</strong
+        
+        You have requested the recovery of your password.
+        To activate a new password, click on the following link:
+        <strong><a href=\"%url%\">%url%</a></strong>
+        This link will be valid for 24 hours.
+        
+        If you didn't request anything, you can ignore this message.
+  changedPassword:
+    email:
+      subject: Password modification
+      content: |
+        <strong>Hello %name%,</strong>
+        
+        Your password has just been modified.
+        <strong>If you are not the source of this modification,
+        please contact immediately the site administrator.</strong>
+  welcome:
+    email:
+      subject: Account creation
+      content: |
+        <strong>Hello %name%,</strong>
+        
+        Your account has been activated.
+        To choose a password and be connected, click on the following link:
+        <strong><a href=\"%url%\">%url%</a></strong>
+        This link will be valid for 1 week.
+  handler:
+    news:
+      more: Learn more
+      empty: There is no actuality to display.
+    files:
+      file: File
+      date: Date
+      download: Download
+      empty: There is no file to display
+    contact:
+      emails: email addresses
+      emailsError: These email addresses are not valid : %emails%.
+      subject: Message from the site
+      defaultTo:
+        email: email@domain.com
+        name: Contact
+      to: For
+      firstname: First name
+      lastname: Last name
+      company: Company
+      phone: Phone number
+      email: E-mail
+      message: Message
+      send: OK
+      sent: |
+        Your message has been sent.
+        We will answer you as soon as possible.
