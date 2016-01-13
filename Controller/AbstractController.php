@@ -147,10 +147,10 @@ abstract class AbstractController extends NyroDevAbstractController {
 		if ($image)
 			$this->setImage($this->get('nyrocms_composer')->imageResize($image, 1000));
 		
-		return $this->handleContentView($request, $content, $parents, $contentSpec);
+		return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
 	}
 	
-	abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null);
+	abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, $handlerAction = null);
 	
 	public function searchAction(Request $request, $_config = null) {
 		$this->get('nyrocms')->setRouteConfig($_config);

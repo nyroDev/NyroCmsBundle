@@ -360,9 +360,8 @@ class ComposerService extends AbstractService {
 		}
 	}
 	
-	public function render(Composable $row, $handlerContent = null, $admin = false) {
+	public function render(Composable $row, $handlerContent = null, $handlerAction = null, $admin = false) {
 		$ret = null;
-		$showAll = false;
 		$ret = '<div class="composer composer_'.$this->getCssTheme($row).' '.$this->getWrapperCssTheme($row).'"'.($admin ? ' id="composerCont"' : '').'>';
 		$blockName = 'div';
 		
@@ -389,7 +388,7 @@ class ComposerService extends AbstractService {
 		}
 		
 		foreach($row->getContent() as $nb=>$cont) {
-			if ($showAll || !$handlerContent || $cont['type'] == 'handler') {
+			if ((!$handlerContent && !$handlerAction) || $cont['type'] == 'handler') {
 				$ret.= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
 			}
 		}
