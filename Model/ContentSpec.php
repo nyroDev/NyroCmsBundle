@@ -581,9 +581,31 @@ abstract class ContentSpec implements Composable {
 		return isset($content[$key]) ? $content[$key] : null;
 	}
 	
+	public function setInContent($key, $value) {
+		$content = $this->getContent();
+		if (is_null($value)) {
+			if (isset($content[$key]))
+				unset($content[$key]);
+		} else {
+			$content[$key] = $value;
+		}
+		return $this->setContent($content);
+	}
+	
 	public function getInData($key) {
 		$content = $this->getData();
 		return isset($content[$key]) ? $content[$key] : null;
+	}
+	
+	public function setInData($key, $value) {
+		$content = $this->getData();
+		if (is_null($value)) {
+			if (isset($content[$key]))
+				unset($content[$key]);
+		} else {
+			$content[$key] = $value;
+		}
+		return $this->setData($content);
 	}
 	
 	/**

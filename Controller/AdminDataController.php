@@ -252,11 +252,17 @@ class AdminDataController extends AbstractAdminController {
 		$this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_CONTENT, $adminFormEvent);
 	}
 	protected function contentFlush($action, $row, $form) {
+		$adminFormEvent = new AdminFormEvent($action, $row, $form);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_CONTENT, $adminFormEvent);
+		
 		$this->contentForm = $form;
 		$this->get('nyrocms_admin')->updateContentUrl($row, $action == self::EDIT);
 	}
 	
 	protected function contentAfterFlush($response, $action, $row) {
+		$adminFormEvent = new AdminFormEvent($action, $row);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_CONTENT, $adminFormEvent);
+		
 		$langs = $this->get('nyrocms')->getLocaleNames($row);
 		$defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
 		unset($langs[$defaultLocale]);
@@ -539,9 +545,14 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form) {
+		$adminFormEvent = new AdminFormEvent($action, $row, $form);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_USER, $adminFormEvent);
 	}
 	
 	protected function userFormAfterFlush($response, $action, $row) {
+		$adminFormEvent = new AdminFormEvent($action, $row);
+		$this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_USER, $adminFormEvent);
+		
 		if ($action == self::ADD)
 			$this->get('nyrocms_user')->handleAddUser($row);
 	}

@@ -227,15 +227,19 @@ abstract class AbstractHandler {
 
 			if ($this->needTranslations() && $translatable && count($langs)) {
 				foreach($langs as $lg=>$lang) {
+					$curCfg = $cfg;
 					$fieldName = 'lang_'.$lg.'_'.$k;
-					$cfg['position']['after'] = $after;
+					$curCfg['position']['after'] = $after;
 					$data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
 					if ($data && $type == 'date' && !is_object($data))
 						$data = new \DateTime($data['date']);
-					if ($type == FileType::class)
+					if ($type == FileType::class) {
 						$data = null;
-					$form->add($fieldName, $type, array_merge($cfg, array(
-						'label'=>$cfg['label'].' '.strtoupper($lg),
+						if (isset($curCfg['showDelete']) && $curCfg['showDelete'])
+							$cfg['showDelete'] = $cfg['showDelete'].'_'.$lg;
+					}
+					$form->add($fieldName, $type, array_merge($curCfg, array(
+						'label'=>$curCfg['label'].' '.strtoupper($lg),
 						'data'=>$data
 					)));
 					$after = $fieldName;
@@ -267,6 +271,8 @@ abstract class AbstractHandler {
 		foreach($this->getFormFields($action) as $k=>$cfg) {
 			$data = $form->get($k)->getData();
 			if ($cfg['type'] == FileType::class) {
+				if (isset($cfg['showDelete']) && $cfg['showDelete'] && $this->get('nyrodev')->getRequest()->get($cfg['showDelete']))
+					$this->deleteFileClb($row, $k);
 				$newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
 			} else {
 				$newContents[$k] = $data;
@@ -308,6 +314,11 @@ abstract class AbstractHandler {
 					$data = $dataLg;
 			}
 			if ($cfg['type'] == FileType::class) {
+				if (isset($cfg['translatable']) && $cfg['translatable'] && isset($cfg['showDelete']) && $cfg['showDelete']) {
+					$deleteIdent = $cfg['showDelete'].'_'.$lg;
+					if ($this->get('nyrodev')->getRequest()->get($deleteIdent))
+						$this->deleteFileClb($row, $fieldName);
+				}
 				$newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
 			} else {
 				$newContents[$k] = $data;
@@ -371,6 +382,7 @@ abstract class AbstractHandler {
 				$fs->remove($filePath);
 				$this->get('nyrodev_image')->removeCache($filePath);
 			}
+			$this->hasComposer() ? $row->setInData($field, null) : $row->getInContent($field, null);
 		}
 	}
 	
