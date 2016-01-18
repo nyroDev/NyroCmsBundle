@@ -150,7 +150,7 @@ class Contact extends AbstractHandler {
 			}
 			$message[] = '</p>';
 			
-			$this->get('nyrocms')->sendEmail($to, $subject, implode("\n", $message), $data['email']);
+			$this->sendEmail($to, $subject, implode("\n", $message), $data['email'], null, $content);
 			
 			return new RedirectResponse($this->get('nyrocms')->getUrlFor($content, false, array('sent'=>1)));
 		}
@@ -166,6 +166,10 @@ class Contact extends AbstractHandler {
 				'isAdmin'=>$this->isAdmin
 			),
 		);
+	}
+	
+	protected function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null) {
+		return $this->get('nyrocms')->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
 	}
 	
 }
