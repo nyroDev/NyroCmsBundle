@@ -106,6 +106,8 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 	}
 	
 	public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null) {
+		if (substr($class, 0, 1) !== '\\')
+			$class = '\\'.$class;
 		$qb = $this->createQueryBuilder('c')
 			->innerJoin('c.contentHandler', 'ct')
 				->andWhere('ct.class = :class')
