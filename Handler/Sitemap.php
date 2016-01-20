@@ -14,7 +14,8 @@ class Sitemap extends AbstractHandler {
 			'view'=>'NyroDevNyroCmsBundle:Handler:sitemap.html.php',
 			'vars'=>array(
 				'content'=>$content,
-				'contents'=>$this->getHierarchy($root)
+				'contents'=>$this->getHierarchy($root),
+				'isRoot'=>true
 			),
 		);
 	}

@@ -1,5 +1,5 @@
 <?php if (count($contents)): ?>
-<ul>
+<ul<?php echo isset($isRoot) && $isRoot ?' class="sitemap"' : '' ?>>
 	<?php foreach($contents as $content): ?>
 	<li>
 		<a href="<?php echo $content['content']->getGoUrl() ? $content['content']->getGoUrl() : $view['nyrocms']->getUrlFor($content['content']) ?>"<?php echo $content['content']->getGoBlank() ? ' target="_blank"' : '' ?>><?php echo $content['content']->getTitle() ?></a>
