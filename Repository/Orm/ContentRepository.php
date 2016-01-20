@@ -105,11 +105,11 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 		return $qb->getQuery()->getResult();
 	}
 	
-	public function findOneByContentHandlerCode($code, \NyroDev\NyroCmsBundle\Model\Content $root = null) {
+	public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null) {
 		$qb = $this->createQueryBuilder('c')
 			->innerJoin('c.contentHandler', 'ct')
-				->andWhere('ct.code = :code')
-					->setParameter('code', $code);
+				->andWhere('ct.class = :class')
+					->setParameter('class', $class);
 		
 		if ($root)
 			$qb->andWhere('c.root = :root')->setParameter('root', $root->getId());
