@@ -112,6 +112,8 @@ class ComposerService extends AbstractService {
 			$routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
 			if ($cfg['cancel_url']['need_id'])
 				$routePrm['id'] = $row->getId();
+			else if ($cfg['cancel_url']['need_veryParent_id'])
+				$routePrm['id'] = $row->getVeryParent()->getId();
 			$ret = $this->get('nyrodev')->generateUrl($cfg['cancel_url']['route'], $routePrm);
 		}
 		return $ret;
