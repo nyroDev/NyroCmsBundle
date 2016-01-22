@@ -387,6 +387,26 @@ class ComposerService extends AbstractService {
 				$content = array($this->getBlock($row, 'handler'));
 				$row->setContent($content);
 			}
+		} else if ($hasHandler) {
+			// Check if the handler is placed, and add it if not here
+			$content = $row->getContent();
+			$handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+			$isWrapped = $handler->isWrapped();
+			$wrappedAs = $handler->isWrappedAs();
+			$hasHandlerPlaced = false;
+			foreach($content as $cont) {
+				if ($cont['type'] == 'handler' || ($isWrapped && $isWrapped == $cont['type'] && isset($cont[$wrappedAs]) && $cont[$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR))
+					$hasHandlerPlaced = true;
+			}
+			if (!$hasHandlerPlaced) {
+				if ($admin && $isWrapped) {
+					$tmp = array($wrappedAs=>AbstractHandler::TEMPLATE_INDICATOR);
+					$content[] = $this->getBlock($row, $isWrapped, $tmp);
+				} else {
+					$content[] = $this->getBlock($row, 'handler');
+				}
+				$row->setContent($content);
+			}
 		}
 		
 		foreach($row->getContent() as $nb=>$cont) {
