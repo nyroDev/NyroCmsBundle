@@ -89,7 +89,7 @@ class Contact extends AbstractHandler {
 		$ret = array();
 		
 		if ($this->contentHandler->getHasAdmin()) {
-			foreach($this->getContentSpecs() as $spec) {
+			foreach($this->getContentSpecs($content) as $spec) {
 				$ret['spec_'.$spec->getId()] = array(
 					'emails'=>array_map('trim', explode(',', $spec->getInContent('emails'))),
 					'name'=>$spec->getTitle()

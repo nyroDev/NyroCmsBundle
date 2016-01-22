@@ -118,6 +118,12 @@ class AdminComposerController extends AbstractAdminController {
 			$contentHandler = $handler->prepareView($row);
 			if ($contentHandler instanceof \Symfony\Component\HttpFoundation\Response)
 				return $contentHandler;
+			
+			// Fix bug when there is some fetch in prepareView
+			if ($lang && $row->getTranslatableLocale() != $lang) {
+				$row->setTranslatableLocale($lang);
+				$this->get('nyrocms_db')->refresh($row);
+			}
 		}
 		
 		return $this->render($this->get('nyrocms_composer')->globalComposerTemplate($row), array(
