@@ -90,10 +90,23 @@ class MainService extends AbstractService {
 			$routeName = $root->getHandler().'_content_spec';
 			if (isset($prm['handler']) && $prm['handler'])
 				$routeName.= '_handler';
+			
+			$title = $object->getTitle();
+			if ($this->disabledLocaleUrls($object->getTranslatableLocale())) {
+				$curLoc = $object->getTranslatableLocale();
+				
+				$object->setTranslatableLocale($this->getDefaultLocale($object));
+				$this->get('nyrocms_db')->refresh($object);
+				$title = $object->getTitle();
+				
+				$object->setTranslatableLocale($curLoc);
+				$this->get('nyrocms_db')->refresh($object);
+			}
+			
 			$prm = array_merge($prm, array(
 				'url'=>trim($parent->getUrl(), '/'),
 				'id'=>$object->getId(),
-				'title'=>$this->get('nyrodev')->urlify($object->getTitle())
+				'title'=>$this->get('nyrodev')->urlify($title)
 			));
 		}
 		return array(
@@ -252,6 +265,16 @@ class MainService extends AbstractService {
 		return $ret;
 	}
 	
+	public function disabledLocaleUrls($locale) {
+		$ret = false;
+		$disabled = $this->getParameter('nyroCms.disabled_locale_urls');
+		if (is_array($disabled)) {
+			$ret = in_array($locale, $disabled);
+		} else if ($disabled) {
+			$ret = true;
+		}
+		return $ret;
+	}
 	
 	protected $foundHandlers;
 	public function getFoundHandlers() {
