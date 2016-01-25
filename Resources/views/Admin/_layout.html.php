@@ -19,7 +19,7 @@
 	<?php foreach ($view['assetic']->javascripts(
 		'@nyrocms_js_admin',
 		array('?closure'),
-		array('output'=>'js/nyroCmsAdmin.js')) as $url): ?>
+		array('output'=>'js/nyroJsAdmin.js')) as $url): ?>
 		<script type="text/javascript" src="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" defer></script>
 	<?php endforeach; ?>
 </head>
