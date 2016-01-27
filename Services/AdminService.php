@@ -148,7 +148,16 @@ class AdminService extends AbstractService {
 	public function updateContentUrl(Content $row, $isEdit = false, $child = true, $forceUpdate = false) {
 		if ($this->get('nyrocms')->getDefaultLocale($row) == $row->getTranslatableLocale() || !$this->get('nyrocms')->disabledLocaleUrls($row->getTranslatableLocale())) {
 			$oldUrl = $row->getUrl();
-			$url = ($row->getParent() ? $row->getParent()->getUrl() : null).'/'.$this->get('nyrodev')->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
+			
+			$prefix = null;
+			if ($row->getParent()) {
+				$parent = $this->get('nyrocms_db')->getContentRepository()->find($row->getParent()->getId());
+				$parent->setTranslatableLocale($row->getTranslatableLocale());
+				$this->get('nyrodev_db')->refresh($parent);
+				$prefix = $parent->getUrl();
+			}
+			
+			$url = $prefix.'/'.$this->get('nyrodev')->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
 			$url = str_replace('//', '/', $url);
 			$row->setUrl($url);
 

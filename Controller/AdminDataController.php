@@ -278,6 +278,7 @@ class AdminDataController extends AbstractAdminController {
 				$fieldName = 'lang_'.$lg.'_'.$field;
 				$propertyAccess->setValue($row, $field, $this->contentForm->get($fieldName)->getData());
 			}
+			
 			$this->get('nyrocms_admin')->updateContentUrl($row, $action == self::EDIT);
 			$om->flush();
 		}

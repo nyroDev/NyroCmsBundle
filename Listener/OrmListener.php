@@ -28,10 +28,12 @@ class OrmListener extends AbstractService implements EventSubscriber {
 			}
 			
 			// Reload content parent to be in the same locale, useful for translated URLs
+			/*
 			if ($object->getParent() && $object->getTranslatableLocale() != $object->getParent()->getTranslatableLocale()) {
 				$object->getParent()->setTranslatableLocale($object->getTranslatableLocale());
 				$this->get('nyrocms_db')->refresh($object->getParent());
 			}
+			 */
 		}
 	}
 	
