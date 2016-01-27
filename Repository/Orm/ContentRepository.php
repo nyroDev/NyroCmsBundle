@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 
 class ContentRepository extends NestedTreeRepository implements ContentRepositoryInterface {
 
@@ -51,21 +52,29 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 	
 	public function findByLog($field, $value) {
 		$search = 's:'.strlen($field).':"'.$field.'";s:'.strlen($value).':"'.$value.'";';
-		$logValues = $this->getEntityManager()->getRepository(str_replace('\Entity\Content', '\Entity\Log\Content', $this->getClassName()).'Log')
-					->createQueryBuilder('cl')
-						->andWhere('cl.data LIKE :search')
-							->setParameter('search', '%'.$search.'%')
-						->addOrderBy('cl.id', 'DESC')
-						->addGroupBy('cl.objectId')
-					->getQuery()
-					->getResult();
+		$search = '"'.$field.'":'.str_replace('\\', '\\\\', json_encode($value));
+		
+		$sql = 'SELECT * FROM content_log cl
+					WHERE cl.data LIKE \'%'.$search.'%\' ESCAPE \'|\'
+					GROUP BY cl.object_id
+					ORDER BY cl.id DESC
+			';
+		
+		$rsm = new ResultSetMappingBuilder($this->getEntityManager());
+		$rsm->addRootEntityFromClassMetadata(str_replace('\Entity\Content', '\Entity\Log\Content', $this->getClassName()).'Log', 'cl');
+		
+		$q = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+		$logValues = $q->getResult();
 		
 		$ret = array();
 		foreach($logValues as $logValue) {
-			$ret[] = $this->find($logValue->getObjectId());
-			if ($logValue->getLocale()) {
-				$ret->setTranslatableLocale($logValue->getLocale());
-				$this->getEntityManager()->refresh($ret);
+			$object = $this->find($logValue->getObjectId());
+			if ($object) {
+				if ($logValue->getLocale()) {
+					$object->setTranslatableLocale($logValue->getLocale());
+					$this->getEntityManager()->refresh($object);
+				}
+				$ret[] = $object;
 			}
 		}
 		return $ret;
