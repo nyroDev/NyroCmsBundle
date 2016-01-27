@@ -28,7 +28,7 @@ class AdminTplController extends NyroDevAbstractController {
 			$adminPerRoot = $this->getParameter('nyroCms.content.admin_per_root');
 			$rootContents = array();
 			$tmp = $this->get('nyrocms_db')->getContentRepository()->findBy(array('level'=>0), array('title'=>'ASC'));
-			$firstRoot = null;
+			$firstRoot = 1;
 			foreach($tmp as $t) {
 				$rootContents[$t->getId()] = $t;
 				if (!$firstRoot)
