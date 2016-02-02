@@ -129,6 +129,7 @@ class Contact extends AbstractHandler {
 		), $this->getFormOptions($content)));
 		$this->get('nyrodev_form')->addDummyCaptcha($form);
 		
+		/* @var $form \Symfony\Component\Form\Form */
 		$form->handleRequest($this->request);
 		if ($form->isValid()) {
 			$subject = $this->trans('nyrocms.handler.contact.subject');
@@ -137,16 +138,22 @@ class Contact extends AbstractHandler {
 			$message[] = '<p>';
 			
 			$data = $form->getData();
+			
 			if (isset($data['to']) && isset($contactEmails[$data['to']])) {
 				$to = $contactEmails[$data['to']]['emails'];
 			} else {
 				$to = $contactEmails[key($contactEmails)]['emails'];
 			}
-			foreach($data as $k=>$v) {
+			
+			$view = $form->createView();
+			
+			foreach($view as $k=>$field) {
+				/* @var $field \Symfony\Component\Form\FormView */
+				$v = $field->vars['value'];
 				if ($k == 'to' && $v)
 					$v = $contactEmails[$v]['name'];
-				if ($v)
-					$message[] = '<strong>'.$form->get($k)->getConfig()->getOption('label').'</strong> : '.nl2br($v).'<br />';
+				if ($k != '_token' && $v)
+					$message[] = '<strong>'.$field->vars['label'].'</strong> : '.nl2br($v).'<br />';
 			}
 			$message[] = '</p>';
 			
