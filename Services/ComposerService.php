@@ -395,7 +395,7 @@ class ComposerService extends AbstractService {
 			$wrappedAs = $handler->isWrappedAs();
 			$hasHandlerPlaced = false;
 			foreach($content as $cont) {
-				if ($cont['type'] == 'handler' || ($isWrapped && $isWrapped == $cont['type'] && isset($cont[$wrappedAs]) && $cont[$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR))
+				if ($cont['type'] == 'handler' || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && $cont['contents'][$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR))
 					$hasHandlerPlaced = true;
 			}
 			if (!$hasHandlerPlaced) {
