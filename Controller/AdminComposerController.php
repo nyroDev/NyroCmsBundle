@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 
 class AdminComposerController extends AbstractAdminController {
 	
@@ -87,8 +88,10 @@ class AdminComposerController extends AbstractAdminController {
 						$composerService->deleteBlock($row, $contentsType[$key], $contents[$key]);
 					} else {
 						$block = $composerService->getBlock($row, $contentsType[$key], $contents[$key], true);
-						foreach($block['texts'] as $t)
-							$newTexts[] = html_entity_decode(strip_tags($t));
+						foreach($block['texts'] as $t) {
+							if ($t != AbstractHandler::TEMPLATE_INDICATOR)
+								$newTexts[] = html_entity_decode(strip_tags($t));
+						}
 						if (is_null($firstImage) && count($block['images']) && isset($block['images'][0]))
 							$firstImage = $block['images'][0];
 						unset($block['texts']);
