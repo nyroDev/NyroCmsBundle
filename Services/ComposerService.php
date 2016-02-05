@@ -148,11 +148,14 @@ class ComposerService extends AbstractService {
 		
 		return $row->getTheme() ? $row->getTheme() : $this->getCssTheme($row->getParent());
 	}
-	
-	public function getWrapperCssTheme(Composable $row) {
-		$wrapperCssThemeEvent = new WrapperCssThemeEvent($row);
-		$this->get('event_dispatcher')->dispatch(WrapperCssThemeEvent::WRAPPER_CSS_THEME, $wrapperCssThemeEvent);
-		return $wrapperCssThemeEvent->getWrapperCssTheme();
+
+	protected $wrapperCssthemeEvents = array();
+	public function getWrapperCssTheme(Composable $row, $position = WrapperCssThemeEvent::POSITION_NORMAL) {
+		if (!isset($this->wrapperCssthemeEvents[$row->getId()])) {
+			$this->wrapperCssthemeEvents[$row->getId()] = new WrapperCssThemeEvent($row);
+			$this->get('event_dispatcher')->dispatch(WrapperCssThemeEvent::WRAPPER_CSS_THEME, $this->wrapperCssthemeEvents[$row->getId()]);
+		}
+		return $this->wrapperCssthemeEvents[$row->getId()]->getWrapperCssTheme($position);
 	}
 	
 	public function tinymceAttrs(Composable $row, $prefix, $simple = false) {

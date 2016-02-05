@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_HTML) ?>">
 <head>
     <meta charset="utf-8"/>
     <title>Composer for <?php echo $row ?></title>
@@ -24,7 +24,7 @@
 		<script type="text/javascript" src="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" defer></script>
 	<?php endforeach; ?>
 </head>
-<body>
+<body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY) ?>">
 <?php
 $prefixTinymce = 'data-tinymce_';
 $prefixTinymceSimple = 'data-tinymcesimple_';
