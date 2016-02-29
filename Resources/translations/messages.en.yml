@@ -139,6 +139,7 @@ admin:
     id: ID
     title: Title
     intro: Introduction
+    dateSpec: Date
     position: Position
     featured: Featured
     state: State

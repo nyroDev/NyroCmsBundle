@@ -40,6 +40,9 @@ class AdminHandlerContentsController extends AbstractAdminController {
 		$routePrm = array(
 			'chid'=>$ch->getId(),
 		);
+		
+		$orderField = $handler->orderField();
+		
 		return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
 				array_merge(
 					array(
@@ -52,7 +55,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 						'fields'=>array(
 							'id',
 							'title',
-							'position',
+							$orderField,
 							'updated'
 						),
 						'moreActions'=>array_filter(array(
@@ -76,7 +79,7 @@ class AdminHandlerContentsController extends AbstractAdminController {
 							) : false
 						))
 					),
-					$this->createList($request, $repo, $route, $routePrm, 'position', $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
+					$this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
 				));
 	}
 	
@@ -176,11 +179,18 @@ class AdminHandlerContentsController extends AbstractAdminController {
 			$this->translationFields['intro']['required'] = true;
 		}
 		
+		if ($handler->useDateSpec()) {
+			$moreOptions['dateSpec'] = $this->get('nyrocms')->getDateFormOptions();
+			if ($action == self::ADD)
+				$row->setDateSpec(new \DateTime());
+		}
+		
 		$fields = array_filter(array(
 			'title',
 			$handler->hasIntro() ? 'intro' : null,
 			$handler->hasFeatured() ? 'featured' : null,
 			'state',
+			$handler->useDateSpec() ? 'dateSpec' : null,
 			$handler->hasValidDates() ? 'validStart' : null,
 			$handler->hasValidDates() ? 'validEnd' : null,
 		));

@@ -11,6 +11,14 @@ use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 
 class Files extends AbstractHandler {
 	
+	public function useDateSpec() {
+		return true;
+	}
+	
+	public function orderField() {
+		return 'dateSpec';
+	}
+	
 	public function hasIntro() {
 		return true;
 	}
@@ -42,16 +50,6 @@ class Files extends AbstractHandler {
 	protected function getFormFields($action) {
 		$isAdd = $action == AbstractAdminController::ADD;
 		return array(
-			'date'=>array_merge($this->get('nyrocms')->getDateFormOptions(), array(
-				'type'=>DateType::class,
-				'translatable'=>false,
-				'label'=>$this->trans('nyrocms.handler.files.date'),
-				'required'=>true,
-				'constraints'=>array(
-					new Constraints\NotBlank()
-				),
-				'data'=>new \DateTime()
-			)),
 			'file'=>array(
 				'type'=>FileType::class,
 				'translatable'=>true,
@@ -71,29 +69,7 @@ class Files extends AbstractHandler {
 			'content'=>$content,
 		);
 		
-		$results = $sorted = $tmp = array();
-		foreach($this->getContentSpecs($content) as $contentSpec) {
-			$tmp[$contentSpec->getId()] = $contentSpec;
-			$date = $contentSpec->getInContent('date');
-			if ($date) {
-				$date = new \DateTime($date['date']);
-			} else {
-				$date = $contentSpec->getInserted();
-			}
-			$key = $date->format('Y-m-d');
-			if (!isset($sorted[$key]))
-				$sorted[$key] = array();
-			$sorted[$key][] = $contentSpec->getId();
-		}
-		
-		arsort($sorted);
-		foreach($sorted as $ids) {
-			foreach($ids as $id) {
-				$results[] = $tmp[$id];
-			}
-		}
-		
-		$vars['results'] = $results;
+		$vars['results'] = $this->getContentSpecs($content);
 		$vars['uploadDir'] = $this->getUploadDir();
 		
 		return array(

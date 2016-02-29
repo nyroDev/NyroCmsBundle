@@ -21,6 +21,7 @@
 				<option name="unsigned">true</option>
 			</options>
 		</field>
+		<field name="dateSpec" type="datetime" nullable="true" />
 		<field name="featured" type="boolean" nullable="true" />
 		<field name="state" type="smallint" nullable="false" />
 		<field name="validStart" type="date" nullable="true" />

@@ -60,6 +60,14 @@ abstract class AbstractHandler {
 		return true;
 	}
 	
+	public function useDateSpec() {
+		return false;
+	}
+	
+	public function orderField() {
+		return 'position';
+	}
+
 	public function isReversePositionOrder() {
 		return true;
 	}
@@ -429,7 +437,7 @@ abstract class AbstractHandler {
 	
 	public function getContentSpecs(Content $content = null, $start = null, $limit = null, array $where = array(), $state = ContentSpec::STATE_ACTIVE) {
 		return $this->getContentSpecRespository()
-						->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, array('position'=>$this->isReversePositionOrder() ? 'DESC' : 'ASC'), $start, $limit);
+						->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, array($this->orderField()=>$this->isReversePositionOrder() ? 'DESC' : 'ASC'), $start, $limit);
 	}
 	
 	public function getTotalContentSpec(Content $content = null, $state = ContentSpec::STATE_ACTIVE) {

@@ -148,6 +148,7 @@ admin:
     id: ID
     title: Titre
     intro: Introduction
+    dateSpec: Date
     position: Position
     featured: Mis en avant
     state: État

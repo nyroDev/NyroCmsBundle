@@ -67,6 +67,11 @@ abstract class ContentSpec implements Composable {
     protected $position;
 
     /**
+     * @var \DateTime
+     */
+    protected $dateSpec;
+
+    /**
      * @var boolean
 	 * @Gedmo\Versioned
      */
@@ -312,6 +317,29 @@ abstract class ContentSpec implements Composable {
     public function getposition()
     {
         return $this->position;
+    }
+
+    /**
+     * Set dateSpec
+     *
+     * @param \DateTime $dateSpec
+     * @return ContentSpec
+     */
+    public function setDateSpec($dateSpec)
+    {
+        $this->dateSpec = $dateSpec;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSpec
+     *
+     * @return \DateTime 
+     */
+    public function getDateSpec()
+    {
+        return $this->dateSpec;
     }
 
     /**
