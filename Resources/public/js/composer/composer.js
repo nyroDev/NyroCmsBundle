@@ -17,7 +17,7 @@ jQuery(function($) {
 			tinymceurl = composer.data('tinymceurl'),
 			htmlOptions = composer.myTinymceDataSearch(),
 			simpleOptions = composer.myTinymceDataSearch('tinymcesimple_'),
-			pluploadOptions = composer.me.nyroPluploadDataSearch({
+			pluploadOptions = composer.nyroPluploadDataSearch({
 				showCancelAll: false,
 				addFormVars: false,
 				multi_selection: false,
