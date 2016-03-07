@@ -17,22 +17,10 @@ jQuery(function($) {
 			tinymceurl = composer.data('tinymceurl'),
 			htmlOptions = composer.myTinymceDataSearch(),
 			simpleOptions = composer.myTinymceDataSearch('tinymcesimple_'),
-			pluploadOptions = {
+			pluploadOptions = composer.me.nyroPluploadDataSearch({
 				showCancelAll: false,
 				addFormVars: false,
 				multi_selection: false,
-				hideDelay: 750,
-				filters: composer.data('plupload_filters'),
-				flash_swf_url: composer.data('plupload_swf'),
-				silverlight_xap_url: composer.data('plupload_xap'),
-				texts: {
-					browse: composer.data('plupload_browse'),
-					waiting: composer.data('plupload_waiting'),
-					error: composer.data('plupload_error'),
-					cancel: composer.data('plupload_cancel'),
-					complete: composer.data('plupload_complete'),
-					cancelAll: composer.data('plupload_cancelall')
-				},
 				events: {
 					BeforeUpload: function(up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
@@ -66,7 +54,7 @@ jQuery(function($) {
 						changed();
 					}
 				}
-			},
+			}),
 			changed = function() {
 				if (!hasChanged) {
 					hasChanged = true;
