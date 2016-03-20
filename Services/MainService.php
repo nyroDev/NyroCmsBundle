@@ -6,6 +6,7 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\UtilityBundle\Services\AbstractService;
+use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 
 class MainService extends AbstractService {
 	
@@ -64,11 +65,13 @@ class MainService extends AbstractService {
 	
 	public function getUrlFor($object, $absolute = false, array $prm = array(), $parent = null) {
 		$routeCfg = $this->getRouteFor($object, $prm, $parent);
-		return $routeCfg['route'] ? $this->generateUrl($routeCfg['route'], $routeCfg['prm'], $absolute) : '#';
+		return $routeCfg['route'] ? $this->generateUrl($routeCfg['route'], $routeCfg['prm'], $absolute || $routeCfg['absolute']) : '#';
 	}
 	
 	public function getRouteFor($object, array $prm = array(), $parent = null) {
 		$routeName = null;
+		$absolute = false;
+		
 		if ($object instanceof Content) {
 			$root = $this->getContentRoot($object->getRoot());
 			if ($root->getId() == $object->getId()) {
@@ -109,9 +112,19 @@ class MainService extends AbstractService {
 				'title'=>$this->get('nyrodev')->urlify($title)
 			));
 		}
+		
+		if ($routeName) {
+			$event = new UrlGenerationEvent($routeName, $prm, $absolute, $object, $parent);
+			$this->get('event_dispatcher')->dispatch(UrlGenerationEvent::OBJECT_URL, $event);
+			$routeName = $event->getRouteName();
+			$prm = $event->getRoutePrm();
+			$absolute = $event->getAbsolute();
+		}
+		
 		return array(
 			'route'=>$routeName,
-			'prm'=>$prm
+			'prm'=>$prm,
+			'absolute'=>$absolute
 		);
 	}
 
@@ -239,20 +252,32 @@ class MainService extends AbstractService {
 		foreach($locales as $locale) {
 			if ($locale != $curLocale && ($locale == $defaultLocale || empty($onlyLangs) || in_array($locale, $onlyLangs))) {
 				$prm = array('_locale'=>$locale);
+				$routeName = null;
+				$routePrm = array();
 				if (!$pathInfo['route']) {
-					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage_noLocale', array(), $absolute);
+					$routeName = $prefixRoute.'_homepage_noLocale';
+					$routePrm = array();
 				} else if ($pathInfo['route'] == $prefixRoute.'_homepage_noLocale' && $curLocale == $defaultLocale) {
-					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage', array_merge($pathInfo['routePrm'], $prm), $absolute);
+					$routeName = $prefixRoute.'_homepage';
+					$routePrm = array_merge($pathInfo['routePrm'], $prm);
 				} else if ($pathInfo['route'] == $prefixRoute.'_homepage' && $locale == $defaultLocale) {
-					$ret[$locale] = $this->generateUrl($prefixRoute.'_homepage_noLocale', array(), $absolute);
+					$routeName = $prefixRoute.'_homepage_noLocale';
+					$routePrm = array();
 				}  else if ($this->pathInfoSearch && preg_match('/_search$/', $pathInfo['route'])) {
-					$ret[$locale] = $this->generateUrl($pathInfo['route'], array_merge($pathInfo['routePrm'], $prm, array('q'=>$this->pathInfoSearch)), $absolute);
+					$routeName = $pathInfo['route'];
+					$routePrm = array_merge($pathInfo['routePrm'], $prm, array('q'=>$this->pathInfoSearch));
 				} else if ($isObjectPage) {
 					$pathInfo['object']->setTranslatableLocale($locale);
 					$this->get('nyrocms_db')->refresh($pathInfo['object']);
 					$ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, $prm);
 				} else {
-					$ret[$locale] = $this->generateUrl($pathInfo['route'], array_merge($pathInfo['routePrm'], $prm), $absolute);
+					$routeName = $pathInfo['route'];
+					$routePrm = array_merge($pathInfo['routePrm'], $prm);
+				}
+				if (!is_null($routeName)) {
+					$event = new UrlGenerationEvent($routeName, $routePrm, $absolute);
+					$this->get('event_dispatcher')->dispatch(UrlGenerationEvent::LOCALES_URL, $event);
+					$ret[$locale] = $this->generateUrl($event->getRouteName(), $event->getRoutePrm(), $event->getAbsolute());
 				}
 			}
 		}
