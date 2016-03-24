@@ -94,10 +94,10 @@ abstract class AbstractController extends NyroDevAbstractController {
 		$redirect = null;
 		
 		if ($content->getGoUrl())
-			$redirect = $this->redirect ($content->getGoUrl());
+			$redirect = $this->redirect($content->getGoUrl());
 		
 		if (!$redirect)
-			$redirect = $this->get('nyrodev')->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm));
+			$redirect = $this->get('nyrodev')->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
 		
 		if ($redirect)
 			return $redirect;
@@ -148,6 +148,17 @@ abstract class AbstractController extends NyroDevAbstractController {
 			$this->setImage($this->get('nyrocms_composer')->imageResize($image, 1000));
 		
 		return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
+	}
+	
+	protected function getAllowedParams(Content $content) {
+		$ret = array();
+		
+		if ($content->getContentHandler()) {
+			$handler = $this->get('nyrocms')->getHandler($content->getContentHandler());
+			$ret = $handler->getAllowedParams();
+		}
+		
+		return $ret;
 	}
 	
 	abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, $handlerAction = null);

@@ -120,6 +120,10 @@ abstract class AbstractHandler {
 		return false;
 	}
 	
+	public function getAllowedParams() {
+		return array();
+	}
+	
 	/**
 	 * Get an application parameter
 	 *
