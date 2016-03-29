@@ -53,12 +53,12 @@ class AbstractAdminController extends SrcAbstractAdminController {
 					if (isset($options['required']) && $options['required'])
 						$options['constraints'] = array(new Constraints\NotBlank());
 
-					$form->add($fieldName, $type, array_merge($options, array(
+					$form->add($fieldName, $type, array_merge(array(
 						'label'=>$this->trans('admin.'.$this->translationPrefix.'.'.$field).' '.strtoupper($lg),
 						'mapped'=>false,
 						'data'=>isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
 						'position'=>array('after'=>$field)
-					)));
+					), $options));
 				}
 			}
 		}
