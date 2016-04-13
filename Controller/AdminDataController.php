@@ -232,19 +232,21 @@ class AdminDataController extends AbstractAdminController {
 		$propertyAccess = PropertyAccess::createPropertyAccessor();
 		foreach($langs as $lg=>$lang) {
 			foreach($this->contentTranslationFields as $field=>$options) {
-				$type = $options['type'];
-				unset($options['type']);
-				$fieldName = 'lang_'.$lg.'_'.$field;
-				
-				if (isset($options['required']) && $options['required'])
-					$options['constraints'] = array(new Constraints\NotBlank());
-				
-				$form->add($fieldName, $type, array_merge($options, array(
-					'label'=>$this->trans('admin.content.'.$field).' '.strtoupper($lg),
-					'mapped'=>false,
-					'data'=>isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
-					'position'=>array('after'=>$field)
-				)));
+				if ($form->has($field)) {
+					$type = $options['type'];
+					unset($options['type']);
+					$fieldName = 'lang_'.$lg.'_'.$field;
+
+					if (isset($options['required']) && $options['required'])
+						$options['constraints'] = array(new Constraints\NotBlank());
+
+					$form->add($fieldName, $type, array_merge($options, array(
+						'label'=>$this->trans('admin.content.'.$field).' '.strtoupper($lg),
+						'mapped'=>false,
+						'data'=>isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
+						'position'=>array('after'=>$field)
+					)));
+				}
 			}
 		}
 		
