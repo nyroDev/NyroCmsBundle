@@ -53,7 +53,8 @@ jQuery(function($) {
 						textarea.val(textarea.val()+"\n"+$data.file);
 						changed();
 					}
-				}
+				},
+				onAllComplete: false
 			}),
 			changed = function() {
 				if (!hasChanged) {
