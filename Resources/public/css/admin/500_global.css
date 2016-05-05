@@ -244,6 +244,12 @@ main table.data td {
 main table.data tr:nth-child(even) td {
 	background: #f5f5f5;
 }
+main table.dataHideable tbody tr td {
+	background: #f5f5f5;
+}
+main table.dataHideable tbody tr.even td {
+	background: #e5e5e5;
+}
 main table.data .actions {
 	padding: 6px 0;
 	min-width: 64px;
@@ -295,7 +301,7 @@ main table.data td.actions .down:after {
 main table.data td.actions a:last-child .icon {
 	margin-right: 0;
 }
-main table.data tr:hover td {
+main table.data tbody tr:hover td, main table.data tbody tr.even:hover td {
 	background: #cbcbcb;
 }
 .form_row_file .currentFile, .form_row_file .currentFileDelete {
