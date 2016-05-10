@@ -234,7 +234,7 @@ nyrocms:
       content: |
         <strong>Bonjour %name%,</strong>
         
-        Vous venez de demandé la récupération de votre mot passe.
+        Vous venez de demander la récupération de votre mot passe.
         Pour en choisir un nouveau, cliquez sur le lien suivant :
         <strong><a href="%url%">%url%</a></strong>
         Ce lien sera valide pendant 24 heures.
