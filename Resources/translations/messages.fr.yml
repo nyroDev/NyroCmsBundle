@@ -197,7 +197,7 @@ admin:
     viewTitle: Messages de contact
     id: ID
     contentHandler: Page
-    to: Pour
+    dest: Pour
     firstname: Prénom
     lastname: Nom
     company: Société
@@ -290,7 +290,7 @@ nyrocms:
       defaultTo:
         email: email@domain.com
         name: Contact
-      to: Pour
+      dest: Pour
       firstname: Prénom
       lastname: Nom
       company: Société

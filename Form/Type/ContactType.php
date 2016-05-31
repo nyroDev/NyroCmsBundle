@@ -36,8 +36,8 @@ class ContactType extends AbstractType {
 			foreach($options['contacts'] as $k=>$v)
 				$choices[$k] = $this->container->get('nyrodev')->trans($v['name']);
 			
-			$builder->add('to', ChoiceType::class, array(
-				'label'=>$this->container->get('nyrodev')->trans('nyrocms.handler.contact.to'),
+			$builder->add('dest', ChoiceType::class, array(
+				'label'=>$this->container->get('nyrodev')->trans('nyrocms.handler.contact.dest'),
 				'placeholder'=>'',
 				'choices'=>$choices,
 				'required'=>true

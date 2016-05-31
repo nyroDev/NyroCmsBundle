@@ -16,7 +16,7 @@ abstract class ContactMessage {
     /**
      * @var string
      */
-    protected $to;
+    protected $dest;
 	
     /**
      * @var string
@@ -83,26 +83,26 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set to
+     * Set dest
      *
-     * @param string $to
+     * @param string $dest
      * @return ContactMessage
      */
-    public function setTo($to)
+    public function setDest($dest)
     {
-        $this->to = $to;
+        $this->dest = $dest;
 
         return $this;
     }
 
     /**
-     * Get to
+     * Get dest
      *
      * @return string 
      */
-    public function getTo()
+    public function getDest()
     {
-        return $this->to;
+        return $this->dest;
     }
 
     /**

@@ -59,7 +59,7 @@ class Contact extends AbstractHandler {
 	public function getAdminMessageListFields() {
 		return array(
 			'id',
-			'to',
+			'dest',
 			'firstname',
 			'lastname',
 			'email',
@@ -74,7 +74,7 @@ class Contact extends AbstractHandler {
 	public function getAdminMessageExportFields() {
 		return array(
 			'id',
-			'to',
+			'dest',
 			'firstname',
 			'lastname',
 			'company',
@@ -190,8 +190,8 @@ class Contact extends AbstractHandler {
 			
 			$data = $form->getData();
 			
-			if (isset($data['to']) && isset($contactEmails[$data['to']])) {
-				$to = $contactEmails[$data['to']]['emails'];
+			if (isset($data['dest']) && isset($contactEmails[$data['dest']])) {
+				$to = $contactEmails[$data['dest']]['emails'];
 			} else {
 				$to = $contactEmails[key($contactEmails)]['emails'];
 			}
@@ -207,7 +207,7 @@ class Contact extends AbstractHandler {
 			foreach($view as $k=>$field) {
 				/* @var $field \Symfony\Component\Form\FormView */
 				$v = $field->vars['value'];
-				if ($k == 'to' && $v)
+				if ($k == 'dest' && $v)
 					$v = $contactEmails[$v]['name'];
 				if ($k != '_token' && $v) {
 					$message[] = '<strong>'.$field->vars['label'].'</strong> : '.nl2br($v).'<br />';

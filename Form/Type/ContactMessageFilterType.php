@@ -11,7 +11,7 @@ class ContactMessageFilterType extends Type\AbstractFilterType {
       $builder
 			->setAction($this->generateUrl('nyrocms_admin_handler_contactMessage', array('chid'=>$pathInfo['routePrm']['chid'])))
 			->add('id', Type\FilterIntType::class, array('label'=>$this->trans('admin.contactMessage.id')))
-			->add('to', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.to')))
+			->add('dest', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.dest')))
 			->add('lastname', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.lastname')))
 			->add('firstname', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.firstname')))
 			->add('email', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.email')))

@@ -10,7 +10,7 @@
 				<option name="unsigned">true</option>
 			</options>
         </id>
-		<field name="to" type="string" nullable="true" />
+		<field name="dest" type="string" nullable="true" />
 		<field name="lastname" type="string" nullable="true" />
 		<field name="firstname" type="string" nullable="true" />
 		<field name="company" type="string" nullable="true" />
