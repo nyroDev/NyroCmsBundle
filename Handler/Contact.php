@@ -201,6 +201,8 @@ class Contact extends AbstractHandler {
 			$saveInDb = $this->saveInDb();
 			if ($saveInDb) {
 				$contactMessage = $this->get('nyrocms_db')->getNew('contact_message');
+				$contactMessage->setContentHandler($this->contentHandler);
+				$contactMessage->setDest($contactEmails[$data['dest']]['name']);
 				$accessor = PropertyAccess::createPropertyAccessor();
 			}
 			

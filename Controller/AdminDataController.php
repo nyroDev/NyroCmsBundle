@@ -467,7 +467,7 @@ class AdminDataController extends AbstractAdminController {
 		$qb->addWhere('contentHandler' ,'=', $contentHandler->getId());
 		
 		$exportConfig = array(
-			'title'=>$contentHandler->getName().' '.$this->trans('admin.contactMessage.viewTitle'),
+			'title'=>$this->trans('admin.contactMessage.viewTitle'),
 			'prefix'=>'contactMessage',
 			'fields'=>$handler->getAdminMessageExportFields(),
 		);
@@ -491,7 +491,7 @@ class AdminDataController extends AbstractAdminController {
 						'noAdd'=>true,
 						'noActions'=>true
 					),
-					$this->createList($request, $repo, $route, array(), 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
+					$this->createList($request, $repo, $route, $routePrm, 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
 				));
 	}
 	

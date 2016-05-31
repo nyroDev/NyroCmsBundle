@@ -86,6 +86,7 @@ class AdminTplController extends NyroDevAbstractController {
 							foreach($otherRoutes as $k=>$route) {
 								$uri = $this->generateUrl($route['route'], $route['routePrm']);
 								$name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $route['name'])) : $route['name'];
+								$modulesIdent['module_'.$contentHandler->getId().'_'.$k] = mb_strtolower($name);
 								$modules['module_'.$contentHandler->getId().'_'.$k] = array(
 									'uri'=>$uri,
 									'name'=>$name,
