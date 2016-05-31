@@ -192,8 +192,10 @@ class Contact extends AbstractHandler {
 			
 			if (isset($data['dest']) && isset($contactEmails[$data['dest']])) {
 				$to = $contactEmails[$data['dest']]['emails'];
+				$emailName = $contactEmails[$data['dest']]['name'];
 			} else {
 				$to = $contactEmails[key($contactEmails)]['emails'];
+				$emailName = $contactEmails[key($contactEmails)]['name'];
 			}
 			
 			$view = $form->createView();
@@ -202,7 +204,7 @@ class Contact extends AbstractHandler {
 			if ($saveInDb) {
 				$contactMessage = $this->get('nyrocms_db')->getNew('contact_message');
 				$contactMessage->setContentHandler($this->contentHandler);
-				$contactMessage->setDest($contactEmails[$data['dest']]['name']);
+				$contactMessage->setDest($emailName);
 				$accessor = PropertyAccess::createPropertyAccessor();
 			}
 			
