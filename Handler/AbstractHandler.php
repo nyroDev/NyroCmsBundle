@@ -52,6 +52,10 @@ abstract class AbstractHandler {
 		);
 	}
 	
+	public function getOtherAdminRoutes() {
+		return null;
+	}
+	
 	public function hasAdminMenuLink() {
 		return true;
 	}

@@ -80,6 +80,20 @@ class AdminTplController extends NyroDevAbstractController {
 							'name'=>$name,
 							'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
 						);
+						
+						$otherRoutes = $handler->getOtherAdminRoutes();
+						if (is_array($otherRoutes) && count($otherRoutes)) {
+							foreach($otherRoutes as $k=>$route) {
+								$uri = $this->generateUrl($route['route'], $route['routePrm']);
+								$name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $route['name'])) : $route['name'];
+								$modules['module_'.$contentHandler->getId().'_'.$k] = array(
+									'uri'=>$uri,
+									'name'=>$name,
+									'active'=>$uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false
+								);
+							}
+						}
+						
 					}
 				}
 			}

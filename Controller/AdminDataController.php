@@ -449,6 +449,53 @@ class AdminDataController extends AbstractAdminController {
 	}
 	
 	
+	///////////////////////////////////////////////////////////////
+	// Contact Messages
+	
+	public function contactMessageAction(Request $request, $chid) {
+		$contentHandler = $this->get('nyrocms_db')->getContentHandlerRepository()->find($chid);
+		if (!$contentHandler)
+			throw $this->createNotFoundException();
+		
+		$this->canAdminContentHandler($contentHandler);
+		
+		$handler = $nyrocms->getHandler($contentHandler);
+		
+		$repo = $this->get('nyrocms_db')->getRepository('contact_message');
+		
+		$qb = $this->get('nyrodev_db')->getQueryBuilder($repo);
+		$qb->addWhere('contentHandler' ,'=', $contentHandler->getId());
+		
+		$exportConfig = array(
+			'title'=>$contentHandler->getName().' '.$this->trans('admin.contactMessage.viewTitle'),
+			'prefix'=>'contactMessage',
+			'fields'=>$handler->getAdminMessageExportFields(),
+		);
+		
+		$route = 'nyrocms_admin_data_contactMessage';
+		$routePrm = array('chid'=>$chid);
+		return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+				array_merge(
+					array(
+						'name'=>'contactMessage',
+						'route'=>$route,
+						'fields'=>$handler->getAdminMessageListFields(),
+						'moreGlobalActions'=>array(
+							'export'=>array(
+								'route'=>$route,
+								'routePrm'=>array_merge($routePrm, array('export'=>1)),
+								'name'=>$this->trans('admin.contactMessage.export'),
+								'attrs'=>'target="_blank"'
+							),
+						),
+						'noAdd'=>true,
+						'noActions'=>true
+					),
+					$this->createList($request, $repo, $route, array(), 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
+				));
+	}
+	
+	
 	
 	///////////////////////////////////////////////////////////////
 	// Users

@@ -193,6 +193,20 @@ admin:
     contents: Contenus
     inserted: Ajouté le
     updated: Mis à jour le
+  contactMessage:
+    viewTitle: Messages de contact
+    id: ID
+    contentHandler: Page
+    to: Pour
+    firstname: Prénom
+    lastname: Nom
+    company: Société
+    phone: Téléphone
+    email: E-mail
+    message: Message
+    inserted: Ajouté le
+    
+    export: Exporter
 nyrocms:
   user:
     email_already_used: Cette adresse email existe déjà.
