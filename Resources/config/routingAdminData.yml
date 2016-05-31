@@ -114,7 +114,7 @@ nyrocms_admin_data_contentHandler:
         page: \d+
 
 
-nyrocms_admin_handler_contactMessage:
+nyrocms_admin_data_contactMessage:
     path:  /contactMessage/{chid}
     defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contactMessage }
     requirements:

@@ -45,7 +45,7 @@ class Contact extends AbstractHandler {
 		if ($this->saveInDb()) {
 			$ret = array(
 				'contactMessage'=>array(
-					'route'=>'nyrocms_admin_handler_contactMessage',
+					'route'=>'nyrocms_admin_data_contactMessage',
 					'routePrm'=>array(
 						'chid'=>$this->contentHandler->getId()
 					),

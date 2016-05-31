@@ -459,7 +459,7 @@ class AdminDataController extends AbstractAdminController {
 		
 		$this->canAdminContentHandler($contentHandler);
 		
-		$handler = $nyrocms->getHandler($contentHandler);
+		$handler = $this->get('nyrocms')->getHandler($contentHandler);
 		
 		$repo = $this->get('nyrocms_db')->getRepository('contact_message');
 		

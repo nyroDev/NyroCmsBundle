@@ -9,7 +9,7 @@ class ContactMessageFilterType extends Type\AbstractFilterType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
 		$pathInfo = $this->get('nyrocms')->getPathInfo();
       $builder
-			->setAction($this->generateUrl('nyrocms_admin_handler_contactMessage', array('chid'=>$pathInfo['routePrm']['chid'])))
+			->setAction($this->generateUrl('nyrocms_admin_data_contactMessage', array('chid'=>$pathInfo['routePrm']['chid'])))
 			->add('id', Type\FilterIntType::class, array('label'=>$this->trans('admin.contactMessage.id')))
 			->add('dest', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.dest')))
 			->add('lastname', Type\FilterType::class, array('label'=>$this->trans('admin.contactMessage.lastname')))
