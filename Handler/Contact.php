@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class Contact extends AbstractHandler {
 	
@@ -32,6 +34,55 @@ class Contact extends AbstractHandler {
 	
 	public function isReversePositionOrder() {
 		return false;
+	}
+	
+	public function saveInDb() {
+		return false;
+	}
+	
+	public function getOtherAdminRoutes() {
+		$ret = null;
+		if ($this->saveInDb()) {
+			$ret = array(
+				'contactMessage'=>array(
+					'route'=>'nyrocms_admin_data_contactMessage',
+					'routePrm'=>array(
+						'chid'=>$this->contentHandler->getId()
+					),
+					'name'=>$this->contentHandler->getName().' '.$this->trans('admin.contactMessage.viewTitle')
+				)
+			);
+		}
+		return $ret;
+	}
+	
+	public function getAdminMessageListFields() {
+		return array(
+			'id',
+			'dest',
+			'firstname',
+			'lastname',
+			'email',
+			'inserted'
+		);
+	}
+	
+	public function getAdminMessageFilterType() {
+		return ContactMessageFilterType::class;
+	}
+	
+	public function getAdminMessageExportFields() {
+		return array(
+			'id',
+			'dest',
+			'firstname',
+			'lastname',
+			'company',
+			'phone',
+			'email',
+			'message',
+			'inserted'
+		);
 	}
 	
 	protected $validatedEmails;
@@ -139,25 +190,41 @@ class Contact extends AbstractHandler {
 			
 			$data = $form->getData();
 			
-			if (isset($data['to']) && isset($contactEmails[$data['to']])) {
-				$to = $contactEmails[$data['to']]['emails'];
+			if (isset($data['dest']) && isset($contactEmails[$data['dest']])) {
+				$to = $contactEmails[$data['dest']]['emails'];
+				$emailName = $contactEmails[$data['dest']]['name'];
 			} else {
 				$to = $contactEmails[key($contactEmails)]['emails'];
+				$emailName = $contactEmails[key($contactEmails)]['name'];
 			}
 			
 			$view = $form->createView();
 			
+			$saveInDb = $this->saveInDb();
+			if ($saveInDb) {
+				$contactMessage = $this->get('nyrocms_db')->getNew('contact_message');
+				$contactMessage->setContentHandler($this->contentHandler);
+				$contactMessage->setDest($emailName);
+				$accessor = PropertyAccess::createPropertyAccessor();
+			}
+			
 			foreach($view as $k=>$field) {
 				/* @var $field \Symfony\Component\Form\FormView */
 				$v = $field->vars['value'];
-				if ($k == 'to' && $v)
+				if ($k == 'dest' && $v)
 					$v = $contactEmails[$v]['name'];
-				if ($k != '_token' && $v)
+				if ($k != '_token' && $v) {
 					$message[] = '<strong>'.$field->vars['label'].'</strong> : '.nl2br($v).'<br />';
+					if ($saveInDb)
+						$accessor->setValue($contactMessage, $k, $v);
+				}
 			}
 			$message[] = '</p>';
 			
 			$this->sendEmail($to, $subject, implode("\n", $message), $data['email'], null, $content);
+			
+			if ($saveInDb)
+				$this->get('nyrocms_db')->flush();
 			
 			return new RedirectResponse($this->get('nyrocms')->getUrlFor($content, false, array('sent'=>1)));
 		}

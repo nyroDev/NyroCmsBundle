@@ -193,6 +193,7 @@ class Configuration implements ConfigurationInterface
 								->scalarNode('content_spec_translation')->defaultValue('Translation\\ContentSpecTranslation')->end()
 								->scalarNode('content_handler')->defaultValue('ContentHandler')->end()
 								->scalarNode('translation')->defaultValue('Translation')->end()
+								->scalarNode('contact_message')->defaultValue('ContactMessage')->end()
 							->end()
 						->end()
 					->end()

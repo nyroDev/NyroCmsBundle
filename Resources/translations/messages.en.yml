@@ -181,6 +181,20 @@ admin:
     contents: Contents
     inserted: Added on
     updated: Updated on
+  contactMessage:
+    viewTitle: Contact messages
+    id: ID
+    contentHandler: Page
+    dest: For
+    firstname: First name
+    lastname: Last name
+    company: Company
+    phone: Phone number
+    email: E-mail
+    message: Message
+    inserted: Added on
+    
+    export: Export
 nyrocms:
   user:
     email_already_used: This email address is already registered
@@ -211,7 +225,8 @@ nyrocms:
       An email has been sent to you
       with your password recovery instructions
     notFoundKey: The link is not valid
-    introPassword: Choose your new password below:
+    introPassword: |
+      Choose your new password below:
     saved: |
       Your new password has been registered.
       You can use it right now.
@@ -257,12 +272,12 @@ nyrocms:
       empty: There is no file to display
     contact:
       emails: email addresses
-      emailsError: These email addresses are not valid : %emails%.
+      emailsError: "These email addresses are not valid : %emails%."
       subject: Message from the site
       defaultTo:
         email: email@domain.com
         name: Contact
-      to: For
+      dest: For
       firstname: First name
       lastname: Last name
       company: Company

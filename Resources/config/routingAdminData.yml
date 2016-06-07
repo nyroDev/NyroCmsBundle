@@ -114,6 +114,13 @@ nyrocms_admin_data_contentHandler:
         page: \d+
 
 
+nyrocms_admin_data_contactMessage:
+    path:  /contactMessage/{chid}
+    defaults: { _controller: NyroDevNyroCmsBundle:AdminData:contactMessage }
+    requirements:
+        chid: \d+
+
+
 nyrocms_admin_data_userRole_add:
     path:  /userRole/add
     defaults: { _controller: NyroDevNyroCmsBundle:AdminData:userRoleAdd }
