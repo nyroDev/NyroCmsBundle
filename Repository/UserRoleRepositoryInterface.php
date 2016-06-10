@@ -2,8 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Repository;
 
-interface UserRoleRepositoryInterface {
-	
-	public function getFormQueryBuilder();
-	
+interface UserRoleRepositoryInterface
+{
+    public function getFormQueryBuilder();
 }

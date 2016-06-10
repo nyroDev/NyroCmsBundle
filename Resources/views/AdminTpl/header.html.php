@@ -14,8 +14,8 @@
 		<?php if ($adminPerRoot): ?>
 			<div class="selectCont">
 				<select class="selectRedirect">
-					<?php foreach($rootContents as $id=>$rootContent): ?>
-					<option value="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_switch_rootContent', array('id'=>$id)) ?>"<?php echo $id == $curRootId ? ' selected="selected"' : '' ?>>
+					<?php foreach ($rootContents as $id => $rootContent): ?>
+					<option value="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_switch_rootContent', array('id' => $id)) ?>"<?php echo $id == $curRootId ? ' selected="selected"' : '' ?>>
 						<?php echo $rootContent->getTitle() ?>
 					</option>
 					<?php endforeach; ?>
@@ -23,11 +23,11 @@
 			</div>
 		<?php endif; ?>
 		
-		<?php foreach($menu as $ident=>$mm): ?>
+		<?php foreach ($menu as $ident => $mm): ?>
 			<h2><?php echo $view['nyrodev']->trans('admin.menu.'.$ident) ?></h2>
 			<ul>
-			<?php foreach($mm as $m): ?>
-				<li><?php echo '<a href="'.$m['uri'].'" '.($m['active']?' class="active"' : '').(isset($m['_blank']) && $m['_blank'] ? ' target="_blank"' : '').'>'.$m['name'].'</a>' ?></li>
+			<?php foreach ($mm as $m): ?>
+				<li><?php echo '<a href="'.$m['uri'].'" '.($m['active'] ? ' class="active"' : '').(isset($m['_blank']) && $m['_blank'] ? ' target="_blank"' : '').'>'.$m['name'].'</a>' ?></li>
 			<?php endforeach; ?>
 			</ul>
 		<?php endforeach; ?>

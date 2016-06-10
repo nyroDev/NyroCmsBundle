@@ -6,9 +6,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<?php foreach ($view['assetic']->stylesheets(
-		'@nyrocms_css_admin',
-		array('?yui_css'),
-		array('output'=>'css/nyroCmsAdmin.css')) as $url): ?>
+        '@nyrocms_css_admin',
+        array('?yui_css'),
+        array('output' => 'css/nyroCmsAdmin.css')) as $url): ?>
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" />
 	<?php endforeach; ?>
 	<!--[if lt IE 9]>
@@ -17,9 +17,9 @@
 	<![endif]-->
 	
 	<?php foreach ($view['assetic']->javascripts(
-		'@nyrocms_js_admin',
-		array('?closure'),
-		array('output'=>'js/nyroJsAdmin.js')) as $url): ?>
+        '@nyrocms_js_admin',
+        array('?closure'),
+        array('output' => 'js/nyroJsAdmin.js')) as $url): ?>
 		<script type="text/javascript" src="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" defer></script>
 	<?php endforeach; ?>
 </head>

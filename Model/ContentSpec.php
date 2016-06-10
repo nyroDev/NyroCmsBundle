@@ -8,61 +8,61 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class ContentSpec implements Composable {
-	
-	const STATE_DISABLED = 0;
-	const STATE_ACTIVE = 1;
-	const STATE_INVISIBLE = 2;
-	
+abstract class ContentSpec implements Composable
+{
+    const STATE_DISABLED = 0;
+    const STATE_ACTIVE = 1;
+    const STATE_INVISIBLE = 2;
+
     protected $id;
-	
+
     /**
      * @var string
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $title;
-	
+
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $intro;
 
     /**
      * @var array
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $content;
 
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $contentText;
 
     /**
      * @var array
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $data;
 
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
-	protected $firstImage;
+    protected $firstImage;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\SortablePosition
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $position;
 
@@ -72,27 +72,27 @@ abstract class ContentSpec implements Composable {
     protected $dateSpec;
 
     /**
-     * @var boolean
-	 * @Gedmo\Versioned
+     * @var bool
+     * @Gedmo\Versioned
      */
     protected $featured = false;
 
     /**
      * @var smallint
-	 * @Assert\NotBlank()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
      */
     protected $state = self::STATE_ACTIVE;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $validStart;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $validEnd;
 
@@ -104,13 +104,13 @@ abstract class ContentSpec implements Composable {
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
 
@@ -118,34 +118,35 @@ abstract class ContentSpec implements Composable {
      * @var \DateTime
      */
     protected $deleted;
-	
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $translations;
 
-	/**
-	 * @var \Doctrine\Common\Collections\Collection
-	 */
-	protected $contents;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $contents;
 
     /**
      * @var string
-	 * @Gedmo\Locale
+     * @Gedmo\Locale
      */
     protected $locale;
-	
-    public function setTranslatableLocale($locale) {
+
+    public function setTranslatableLocale($locale)
+    {
         $this->locale = $locale;
     }
-	
-	public function getTranslatableLocale() {
-		return $this->locale;
-	}
-	
+
+    public function getTranslatableLocale()
+    {
+        return $this->locale;
+    }
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -159,9 +160,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return ContentSpec
      */
     public function setTitle($title)
@@ -172,9 +174,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get title
+     * Get title.
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -182,9 +184,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set intro
+     * Set intro.
      *
      * @param string $intro
+     *
      * @return ContentSpec
      */
     public function setIntro($intro)
@@ -195,9 +198,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get intro
+     * Get intro.
      *
-     * @return string 
+     * @return string
      */
     public function getIntro()
     {
@@ -205,9 +208,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param array $content
+     *
      * @return ContentSpec
      */
     public function setContent(array $content)
@@ -218,9 +222,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get content
+     * Get content.
      *
-     * @return array 
+     * @return array
      */
     public function getContent()
     {
@@ -228,9 +232,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set contentText
+     * Set contentText.
      *
      * @param string $contentText
+     *
      * @return ContentSpec
      */
     public function setContentText($contentText)
@@ -241,9 +246,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get contentText
+     * Get contentText.
      *
-     * @return string 
+     * @return string
      */
     public function getContentText()
     {
@@ -251,9 +256,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
+     *
      * @return ContentSpec
      */
     public function setData(array $data)
@@ -264,9 +270,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get data
+     * Get data.
      *
-     * @return array 
+     * @return array
      */
     public function getData()
     {
@@ -274,9 +280,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set firstImage
+     * Set firstImage.
      *
      * @param string $firstImage
+     *
      * @return ContentSpec
      */
     public function setFirstImage($firstImage)
@@ -287,9 +294,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get firstImage
+     * Get firstImage.
      *
-     * @return string 
+     * @return string
      */
     public function getFirstImage()
     {
@@ -297,9 +304,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set position
+     * Set position.
      *
-     * @param integer $position
+     * @param int $position
+     *
      * @return ContentSpec
      */
     public function setposition($position)
@@ -310,9 +318,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get position
+     * Get position.
      *
-     * @return integer 
+     * @return int
      */
     public function getposition()
     {
@@ -320,9 +328,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set dateSpec
+     * Set dateSpec.
      *
      * @param \DateTime $dateSpec
+     *
      * @return ContentSpec
      */
     public function setDateSpec($dateSpec)
@@ -333,9 +342,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get dateSpec
+     * Get dateSpec.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateSpec()
     {
@@ -343,9 +352,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set featured
+     * Set featured.
      *
-     * @param boolean $featured
+     * @param bool $featured
+     *
      * @return ContentSpec
      */
     public function setFeatured($featured)
@@ -356,9 +366,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get featured
+     * Get featured.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getFeatured()
     {
@@ -366,9 +376,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set state
+     * Set state.
      *
      * @param smallint $state
+     *
      * @return ContentSpec
      */
     public function setState($state)
@@ -379,9 +390,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get state
+     * Get state.
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getState()
     {
@@ -389,9 +400,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set contentHandler
+     * Set contentHandler.
      *
      * @param ContentHandler $contentHandler
+     *
      * @return ContentSpec
      */
     public function setContentHandler($contentHandler)
@@ -402,9 +414,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get contentHandler
+     * Get contentHandler.
      *
-     * @return ContentHandler 
+     * @return ContentHandler
      */
     public function getContentHandler()
     {
@@ -412,9 +424,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set validStart
+     * Set validStart.
      *
      * @param \DateTime $validStart
+     *
      * @return ContentSpec
      */
     public function setValidStart($validStart)
@@ -425,9 +438,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get validStart
+     * Get validStart.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidStart()
     {
@@ -435,9 +448,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set validEnd
+     * Set validEnd.
      *
      * @param \DateTime $validEnd
+     *
      * @return ContentSpec
      */
     public function setValidEnd($validEnd)
@@ -448,9 +462,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get validEnd
+     * Get validEnd.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidEnd()
     {
@@ -458,9 +472,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return ContentSpec
      */
     public function setInserted($inserted)
@@ -471,9 +486,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -481,9 +496,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return ContentSpec
      */
     public function setUpdated($updated)
@@ -494,9 +510,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
@@ -504,9 +520,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Set deleted
+     * Set deleted.
      *
      * @param \DateTime $deleted
+     *
      * @return ContentSpec
      */
     public function setDeleted($deleted)
@@ -517,9 +534,9 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get deleted
+     * Get deleted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDeleted()
     {
@@ -527,9 +544,10 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Add translations
+     * Add translations.
      *
      * @param object $translations
+     *
      * @return ContentSpec
      */
     public function addTranslation($translations)
@@ -540,7 +558,7 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Remove translations
+     * Remove translations.
      *
      * @param object $translations
      */
@@ -550,19 +568,20 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get translations
+     * Get translations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTranslations()
     {
         return $this->translations;
     }
-	
+
     /**
-     * Add contents
+     * Add contents.
      *
      * @param Content $contents
+     *
      * @return ContentSpec
      */
     public function addContent(Content $contents)
@@ -573,7 +592,7 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Remove contents
+     * Remove contents.
      *
      * @param Content $contents
      */
@@ -583,73 +602,87 @@ abstract class ContentSpec implements Composable {
     }
 
     /**
-     * Get contents
+     * Get contents.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {
         return $this->contents;
     }
-	
-	
-	public function __toString() {
-		return $this->getTitle();
-	}
-	
-	public function getSummary($limit = 200) {
-		$text = $this->getIntro() ? $this->getIntro() : str_replace("&rsquo;", "'", $this->getContentText());
-		if (mb_strlen($text) > $limit)
-			$text = mb_substr($text, 0, $limit).'...';
-		return $text;
-	}
-	
-	public function getInContent($key) {
-		$content = $this->getContent();
-		return isset($content[$key]) ? $content[$key] : null;
-	}
-	
-	public function setInContent($key, $value) {
-		$content = $this->getContent();
-		if (is_null($value)) {
-			if (isset($content[$key]))
-				unset($content[$key]);
-		} else {
-			$content[$key] = $value;
-		}
-		return $this->setContent($content);
-	}
-	
-	public function getInData($key) {
-		$content = $this->getData();
-		return isset($content[$key]) ? $content[$key] : null;
-	}
-	
-	public function setInData($key, $value) {
-		$content = $this->getData();
-		if (is_null($value)) {
-			if (isset($content[$key]))
-				unset($content[$key]);
-		} else {
-			$content[$key] = $value;
-		}
-		return $this->setData($content);
-	}
-	
-	/**
-	 * 
-	 * @return Content
-	 */
-	public function getParent() {
-		return $this->getContentHandler()->getContents()->get(0);
-	}
 
-	public function getTheme() {
-		return $this->getParent()->getTheme();
-	}
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
-	public function getVeryParent() {
-		return $this->getParent()->getVeryParent();
-	}
-	
+    public function getSummary($limit = 200)
+    {
+        $text = $this->getIntro() ? $this->getIntro() : str_replace('&rsquo;', "'", $this->getContentText());
+        if (mb_strlen($text) > $limit) {
+            $text = mb_substr($text, 0, $limit).'...';
+        }
+
+        return $text;
+    }
+
+    public function getInContent($key)
+    {
+        $content = $this->getContent();
+
+        return isset($content[$key]) ? $content[$key] : null;
+    }
+
+    public function setInContent($key, $value)
+    {
+        $content = $this->getContent();
+        if (is_null($value)) {
+            if (isset($content[$key])) {
+                unset($content[$key]);
+            }
+        } else {
+            $content[$key] = $value;
+        }
+
+        return $this->setContent($content);
+    }
+
+    public function getInData($key)
+    {
+        $content = $this->getData();
+
+        return isset($content[$key]) ? $content[$key] : null;
+    }
+
+    public function setInData($key, $value)
+    {
+        $content = $this->getData();
+        if (is_null($value)) {
+            if (isset($content[$key])) {
+                unset($content[$key]);
+            }
+        } else {
+            $content[$key] = $value;
+        }
+
+        return $this->setData($content);
+    }
+
+    /**
+     * @return Content
+     */
+    public function getParent()
+    {
+        return $this->getContentHandler()->getContents()->get(0);
+    }
+
+    public function getTheme()
+    {
+        return $this->getParent()->getTheme();
+    }
+
+    public function getVeryParent()
+    {
+        return $this->getParent()->getVeryParent();
+    }
 }

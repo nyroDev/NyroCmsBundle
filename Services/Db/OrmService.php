@@ -2,6 +2,6 @@
 
 namespace NyroDev\NyroCmsBundle\Services\Db;
 
-class OrmService extends AbstractService {
-
+class OrmService extends AbstractService
+{
 }

@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
-abstract class ContentLog {
-	
+abstract class ContentLog
+{
     protected $id;
 
     /**
@@ -27,7 +27,7 @@ abstract class ContentLog {
     protected $objectId;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $version;
 
@@ -45,15 +45,14 @@ abstract class ContentLog {
      * @var string
      */
     protected $locale;
-	
-	
-	public function getId()
+
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */
@@ -63,19 +62,21 @@ abstract class ContentLog {
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setAction($action)
     {
         $this->action = $action;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get object class
+     * Get object class.
      *
      * @return string
      */
@@ -85,19 +86,21 @@ abstract class ContentLog {
     }
 
     /**
-     * Set object class
+     * Set object class.
      *
      * @param string $objectClass
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setObjectClass($objectClass)
     {
         $this->objectClass = $objectClass;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get object id
+     * Get object id.
      *
      * @return string
      */
@@ -107,19 +110,21 @@ abstract class ContentLog {
     }
 
     /**
-     * Set object id
+     * Set object id.
      *
      * @param string $objectId
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setObjectId($objectId)
     {
         $this->objectId = $objectId;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get username
+     * Get username.
      *
      * @return string
      */
@@ -129,19 +134,21 @@ abstract class ContentLog {
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setUsername($username)
     {
         $this->username = $username;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get loggedAt
+     * Get loggedAt.
      *
      * @return \DateTime
      */
@@ -151,17 +158,19 @@ abstract class ContentLog {
     }
 
     /**
-     * Set loggedAt to "now"
-	 * @return ContentLog
+     * Set loggedAt to "now".
+     *
+     * @return ContentLog
      */
     public function setLoggedAt()
     {
         $this->loggedAt = new \DateTime();
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get data
+     * Get data.
      *
      * @return array
      */
@@ -171,21 +180,23 @@ abstract class ContentLog {
     }
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setData($data)
     {
         $this->data = $data;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get current version
+     * Get current version.
      *
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {
@@ -193,19 +204,21 @@ abstract class ContentLog {
     }
 
     /**
-     * Set current version
+     * Set current version.
      *
-     * @param integer $version
-	 * @return ContentLog
+     * @param int $version
+     *
+     * @return ContentLog
      */
     public function setVersion($version)
     {
         $this->version = $version;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get locale
+     * Get locale.
      *
      * @return string
      */
@@ -215,15 +228,16 @@ abstract class ContentLog {
     }
 
     /**
-     * Set locale
+     * Set locale.
      *
      * @param string $locale
-	 * @return ContentLog
+     *
+     * @return ContentLog
      */
     public function setLocale($locale)
     {
         $this->locale = $locale;
-		return $this;
+
+        return $this;
     }
-	
 }

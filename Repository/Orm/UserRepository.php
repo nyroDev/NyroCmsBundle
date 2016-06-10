@@ -5,20 +5,20 @@ namespace NyroDev\NyroCmsBundle\Repository\Orm;
 use Doctrine\ORM\EntityRepository;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\NoResultException;
 
-class UserRepository extends EntityRepository implements UserRepositoryInterface {
-	
-	public function loadUserByUsername($username) {
+class UserRepository extends EntityRepository implements UserRepositoryInterface
+{
+    public function loadUserByUsername($username)
+    {
         $q = $this
             ->createQueryBuilder('m')
             ->where('m.email LIKE :username')
-				->setParameter('username', $username)
-			->andWhere('m.valid = 1')
-			->andWhere('(m.validStart IS NULL OR m.validStart <= :now)')
-			->andWhere('(m.validEnd IS NULL OR m.validEnd >= :now)')
-				->setParameter('now', new \DateTime())
+                ->setParameter('username', $username)
+            ->andWhere('m.valid = 1')
+            ->andWhere('(m.validStart IS NULL OR m.validStart <= :now)')
+            ->andWhere('(m.validEnd IS NULL OR m.validEnd >= :now)')
+                ->setParameter('now', new \DateTime())
             ->getQuery();
 
         try {
@@ -34,17 +34,17 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
         }
 
         return $user;
-	}
-	
-	public function getForWelcomeEmails() {
-		return $this->createQueryBuilder('u')
-						->andWhere('u.valid = 1')
-						->andWhere('u.password = :password')
-							->setParameter('password', 'dummy')
-						->andWhere('(u.validStart LIKE :today OR u.passwordKeyEnd LIKE :today')
-							->setParameter('today', date('Y-m-d').'%')
-						->getQuery()
-						->execute();
-	}
+    }
 
+    public function getForWelcomeEmails()
+    {
+        return $this->createQueryBuilder('u')
+                        ->andWhere('u.valid = 1')
+                        ->andWhere('u.password = :password')
+                            ->setParameter('password', 'dummy')
+                        ->andWhere('(u.validStart LIKE :today OR u.passwordKeyEnd LIKE :today')
+                            ->setParameter('today', date('Y-m-d').'%')
+                        ->getQuery()
+                        ->execute();
+    }
 }

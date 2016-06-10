@@ -1,6 +1,6 @@
 <?php if (count($results)): ?>
 	<div class="listCont">
-	<?php foreach($results as $file): ?>
+	<?php foreach ($results as $file): ?>
 		<div class="list files">
 			<h3><?php echo $file->getTitle() ?></h3>
 			<p><?php echo $file->getIntro() ?></p>

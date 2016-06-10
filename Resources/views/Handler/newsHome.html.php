@@ -1,4 +1,4 @@
-<?php foreach($news as $featured): ?>
+<?php foreach ($news as $featured): ?>
 	<div class="newsHome">
 		<strong><a href="<?php echo $view['nyrocms']->getUrlFor($featured, false, array(), $handlerContent) ?>"><?php echo $featured->getTitle() ?></a></strong>
 		<p><?php echo $featured->getSummary() ?></p>

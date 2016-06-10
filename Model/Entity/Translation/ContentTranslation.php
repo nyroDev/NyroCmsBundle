@@ -13,10 +13,10 @@ use Gedmo\Translatable\Entity\MappedSuperclass\AbstractPersonalTranslation;
  *     })}
  * )
  */
-class ContentTranslation extends AbstractPersonalTranslation {
-	
+class ContentTranslation extends AbstractPersonalTranslation
+{
     /**
-     * Convenient constructor
+     * Convenient constructor.
      *
      * @param string $locale
      * @param string $field
@@ -34,5 +34,4 @@ class ContentTranslation extends AbstractPersonalTranslation {
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;
-
 }

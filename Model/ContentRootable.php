@@ -2,8 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
-interface ContentRootable {
-	
-	public function getVeryParent();
-	
+interface ContentRootable
+{
+    public function getVeryParent();
 }

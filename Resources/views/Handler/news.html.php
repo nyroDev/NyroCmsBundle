@@ -1,6 +1,6 @@
 <?php if (count($results)): ?>
 	<div class="listCont">
-	<?php foreach($results as $news): ?>
+	<?php foreach ($results as $news): ?>
 		<div class="list news">
 			<h3><a href="<?php echo $view['nyrocms']->getUrlFor($news, false, array(), $content) ?>"><?php echo $news->getTitle() ?></a></h3>
 			<p><?php echo nl2br($news->getSummary(500)) ?></p>
@@ -13,7 +13,7 @@
 			<?php if ($pager->hasPrevious()): ?>
 				<a href="<?php echo $pager->getPreviousUrl() ?>" class="prev"><?php echo $view['translator']->trans('admin.pager.prev') ?></a>
 			<?php endif; ?>
-			<?php foreach($pager->getPagesIndex() as $i=>$page): ?>
+			<?php foreach ($pager->getPagesIndex() as $i => $page): ?>
 				<?php if ($page[1]): ?>
 					<strong><?php echo $i ?></strong>
 				<?php else: ?>

@@ -6,75 +6,72 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Translation
- *
+ * Translation.
  */
-abstract class Translation {
-	
-	protected $id;
-	
+abstract class Translation
+{
+    protected $id;
+
     /**
      * @var string
-    
-	 * @Assert\NotBlank()
+     
+     * @Assert\NotBlank()
      */
     protected $domain;
 
     /**
      * @var string
      *
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     protected $locale;
 
     /**
      * @var string
      *
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     protected $ident;
 
     /**
      * @var string
-     *
      */
     protected $translation;
 
     /**
-     * @var boolean
-     *
+     * @var bool
      */
     protected $html = false;
 
     /**
      * @var \DateTime
      *
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
      *
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
-	
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
-	
+
     /**
-     * Set domain
+     * Set domain.
      *
      * @param string $domain
+     *
      * @return Translation
      */
     public function setDomain($domain)
@@ -85,9 +82,9 @@ abstract class Translation {
     }
 
     /**
-     * Get domain
+     * Get domain.
      *
-     * @return string 
+     * @return string
      */
     public function getDomain()
     {
@@ -95,9 +92,10 @@ abstract class Translation {
     }
 
     /**
-     * Set locale
+     * Set locale.
      *
      * @param string $locale
+     *
      * @return Translation
      */
     public function setLocale($locale)
@@ -108,9 +106,9 @@ abstract class Translation {
     }
 
     /**
-     * Get locale
+     * Get locale.
      *
-     * @return string 
+     * @return string
      */
     public function getLocale()
     {
@@ -118,9 +116,10 @@ abstract class Translation {
     }
 
     /**
-     * Set ident
+     * Set ident.
      *
      * @param string $ident
+     *
      * @return Translation
      */
     public function setIdent($ident)
@@ -131,9 +130,9 @@ abstract class Translation {
     }
 
     /**
-     * Get ident
+     * Get ident.
      *
-     * @return string 
+     * @return string
      */
     public function getIdent()
     {
@@ -141,9 +140,10 @@ abstract class Translation {
     }
 
     /**
-     * Set translation
+     * Set translation.
      *
      * @param string $translation
+     *
      * @return Translation
      */
     public function setTranslation($translation)
@@ -154,9 +154,9 @@ abstract class Translation {
     }
 
     /**
-     * Get translation
+     * Get translation.
      *
-     * @return string 
+     * @return string
      */
     public function getTranslation()
     {
@@ -164,9 +164,10 @@ abstract class Translation {
     }
 
     /**
-     * Set html
+     * Set html.
      *
-     * @param boolean $html
+     * @param bool $html
+     *
      * @return Translation
      */
     public function setHtml($html)
@@ -177,9 +178,9 @@ abstract class Translation {
     }
 
     /**
-     * Get html
+     * Get html.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getHtml()
     {
@@ -187,9 +188,10 @@ abstract class Translation {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return Translation
      */
     public function setInserted($inserted)
@@ -200,9 +202,9 @@ abstract class Translation {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -210,9 +212,10 @@ abstract class Translation {
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return Translation
      */
     public function setUpdated($updated)
@@ -223,13 +226,12 @@ abstract class Translation {
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
         return $this->updated;
     }
-	
 }

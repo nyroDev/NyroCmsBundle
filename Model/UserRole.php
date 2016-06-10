@@ -5,59 +5,59 @@ namespace NyroDev\NyroCmsBundle\Model;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class UserRole {
-	
-	protected $id;
+abstract class UserRole
+{
+    protected $id;
 
-	/**
+    /**
      * @var string
      *
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     protected $name;
 
-	/**
+    /**
      * @var string
      */
     protected $roleName;
 
-	/**
-     * @var boolean
+    /**
+     * @var bool
      */
     protected $internal = false;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
 
-	/**
-	 * @var \Doctrine\Common\Collections\Collection
-	 */
-	protected $contents;
-	
-	
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $contents;
+
     public function __construct()
     {
         $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
     }
-	
-	public function getId()
+
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return UserRole
      */
     public function setName($name)
@@ -68,9 +68,9 @@ abstract class UserRole {
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -78,9 +78,10 @@ abstract class UserRole {
     }
 
     /**
-     * Set roleName
+     * Set roleName.
      *
      * @param string $roleName
+     *
      * @return UserRole
      */
     public function setRoleName($roleName)
@@ -91,9 +92,9 @@ abstract class UserRole {
     }
 
     /**
-     * Get roleName
+     * Get roleName.
      *
-     * @return string 
+     * @return string
      */
     public function getRoleName()
     {
@@ -101,9 +102,10 @@ abstract class UserRole {
     }
 
     /**
-     * Set internal
+     * Set internal.
      *
-     * @param boolean $internal
+     * @param bool $internal
+     *
      * @return UserRole
      */
     public function setInternal($internal)
@@ -114,9 +116,9 @@ abstract class UserRole {
     }
 
     /**
-     * Get internal
+     * Get internal.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getInternal()
     {
@@ -124,9 +126,10 @@ abstract class UserRole {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return UserRole
      */
     public function setInserted($inserted)
@@ -137,9 +140,9 @@ abstract class UserRole {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -147,9 +150,10 @@ abstract class UserRole {
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return UserRole
      */
     public function setUpdated($updated)
@@ -160,9 +164,9 @@ abstract class UserRole {
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
@@ -170,9 +174,10 @@ abstract class UserRole {
     }
 
     /**
-     * Add contents
+     * Add contents.
      *
      * @param Content $contents
+     *
      * @return UserRole
      */
     public function addContent(Content $contents)
@@ -183,7 +188,7 @@ abstract class UserRole {
     }
 
     /**
-     * Remove contents
+     * Remove contents.
      *
      * @param Content $contents
      */
@@ -193,23 +198,24 @@ abstract class UserRole {
     }
 
     /**
-     * Get contents
+     * Get contents.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {
         return $this->contents;
     }
 
+    public function __toString()
+    {
+        return $this->getName();
+    }
 
-	public function __toString() {
-		return $this->getName();
-	}
-	
-	public function getSecurityRoleName() {
-		$name = $this->getRoleName() ? $this->getRoleName() : $this->getName();
-		return 'ROLE_'.strtoupper(str_replace(' ', '_', iconv('UTF-8', 'ASCII//TRANSLIT', $name)));
-	}
-	
+    public function getSecurityRoleName()
+    {
+        $name = $this->getRoleName() ? $this->getRoleName() : $this->getName();
+
+        return 'ROLE_'.strtoupper(str_replace(' ', '_', iconv('UTF-8', 'ASCII//TRANSLIT', $name)));
+    }
 }

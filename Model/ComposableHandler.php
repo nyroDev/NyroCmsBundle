@@ -2,8 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
-interface ComposableHandler {
-	
-	public function getContentHandler();
-	
+interface ComposableHandler
+{
+    public function getContentHandler();
 }

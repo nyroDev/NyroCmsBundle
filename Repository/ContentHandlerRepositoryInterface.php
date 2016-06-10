@@ -2,8 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Repository;
 
-interface ContentHandlerRepositoryInterface {
-
-	public function getFormQueryBuilder();
-	
+interface ContentHandlerRepositoryInterface
+{
+    public function getFormQueryBuilder();
 }

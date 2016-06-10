@@ -6,16 +6,17 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\Config\Resource\FileResource;
 
-class ValidationPass implements CompilerPassInterface {
-	
-    public function process(ContainerBuilder $container) {
+class ValidationPass implements CompilerPassInterface
+{
+    public function process(ContainerBuilder $container)
+    {
         if (!$container->hasParameter('nyroDev_utility.db_driver')) {
             return;
         }
 
         $driver = $container->getParameter('nyroDev_utility.db_driver');
 
-        $validationFile = __DIR__ . '/../../Resources/config/doctrine-validation/'.$driver.'.xml';
+        $validationFile = __DIR__.'/../../Resources/config/doctrine-validation/'.$driver.'.xml';
 
         if ($container->hasDefinition('validator.builder')) {
             // Symfony 2.5+

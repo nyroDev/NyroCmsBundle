@@ -5,24 +5,24 @@ namespace NyroDev\NyroCmsBundle\Model;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class ContentHandler {
-	
+abstract class ContentHandler
+{
     protected $id;
-	
+
     /**
      * @var string
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     protected $name;
-	
+
     /**
      * @var string
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      */
     protected $class;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $hasAdmin;
 
@@ -33,25 +33,23 @@ abstract class ContentHandler {
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
-	
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
     }
-	
 
     public function getId()
     {
@@ -59,9 +57,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return ContentHandler
      */
     public function setName($name)
@@ -72,9 +71,9 @@ abstract class ContentHandler {
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -82,9 +81,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set class
+     * Set class.
      *
      * @param string $class
+     *
      * @return ContentHandler
      */
     public function setClass($class)
@@ -95,9 +95,9 @@ abstract class ContentHandler {
     }
 
     /**
-     * Get class
+     * Get class.
      *
-     * @return string 
+     * @return string
      */
     public function getClass()
     {
@@ -105,9 +105,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set hasAdmin
+     * Set hasAdmin.
      *
-     * @param boolean $hasAdmin
+     * @param bool $hasAdmin
+     *
      * @return ContentHandler
      */
     public function setHasAdmin($hasAdmin)
@@ -118,9 +119,9 @@ abstract class ContentHandler {
     }
 
     /**
-     * Get hasAdmin
+     * Get hasAdmin.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getHasAdmin()
     {
@@ -128,9 +129,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Add contents
+     * Add contents.
      *
      * @param Content $contents
+     *
      * @return Content
      */
     public function addContent(Content $contents)
@@ -141,7 +143,7 @@ abstract class ContentHandler {
     }
 
     /**
-     * Remove contents
+     * Remove contents.
      *
      * @param Content $contents
      */
@@ -151,21 +153,23 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set contents
+     * Set contents.
      *
      * @param \Doctrine\Common\Collections\Collection $contents
+     *
      * @return ContentHandler
      */
-    public function setContents(\Doctrine\Common\Collections\Collection $contents) {
+    public function setContents(\Doctrine\Common\Collections\Collection $contents)
+    {
         $this->contents = $contents;
 
         return $this;
     }
 
     /**
-     * Get contents
+     * Get contents.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {
@@ -173,9 +177,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return ContentHandler
      */
     public function setInserted($inserted)
@@ -186,9 +191,9 @@ abstract class ContentHandler {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -196,9 +201,10 @@ abstract class ContentHandler {
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return ContentHandler
      */
     public function setUpdated($updated)
@@ -209,18 +215,17 @@ abstract class ContentHandler {
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
         return $this->updated;
     }
 
-	
-	public function __toString() {
-		return $this->getName();
-	}
-
+    public function __toString()
+    {
+        return $this->getName();
+    }
 }

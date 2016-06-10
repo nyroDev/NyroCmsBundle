@@ -3,12 +3,11 @@
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
 use NyroDev\NyroCmsBundle\Model\Content as ContentModel;
-
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Content
+ * Content.
  *
  * @ORM\Table(name="content")
  * @Gedmo\Tree(type="nested")
@@ -17,20 +16,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentLog")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-class Content extends ContentModel {
-
+class Content extends ContentModel
+{
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     protected $children;
-	
-	/**
-	 * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
-	 * @ORM\JoinTable(name="content_related")
-	 */
-	protected $relateds;
-	
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Content", cascade={"persist"})
+     * @ORM\JoinTable(name="content_related")
+     */
+    protected $relateds;
+
     /**
      * @ORM\OneToMany(
      *   targetEntity="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentTranslation",
@@ -39,5 +38,4 @@ class Content extends ContentModel {
      * )
      */
     protected $translations;
-
 }

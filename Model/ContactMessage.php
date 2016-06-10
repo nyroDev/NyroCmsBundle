@@ -4,65 +4,66 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
-abstract class ContactMessage {
-	
+abstract class ContactMessage
+{
     protected $id;
 
     /**
      * @var ContentHandler
      */
     protected $contentHandler;
-	
+
     /**
      * @var string
      */
     protected $dest;
-	
+
     /**
      * @var string
      */
     protected $lastname;
-	
+
     /**
      * @var string
      */
     protected $firstname;
-	
+
     /**
      * @var string
      */
     protected $company;
-	
+
     /**
      * @var string
      */
     protected $phone;
-	
+
     /**
      * @var string
      */
     protected $email;
-	
+
     /**
      * @var string
      */
     protected $message;
-	
+
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
-	 public function getId()
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set contentHandler
+     * Set contentHandler.
      *
      * @param Content $contentHandler
+     *
      * @return ContactMessage
      */
     public function setContentHandler(ContentHandler $contentHandler)
@@ -73,9 +74,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get contentHandler
+     * Get contentHandler.
      *
-     * @return ContentHandler 
+     * @return ContentHandler
      */
     public function getContentHandler()
     {
@@ -83,9 +84,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set dest
+     * Set dest.
      *
      * @param string $dest
+     *
      * @return ContactMessage
      */
     public function setDest($dest)
@@ -96,9 +98,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get dest
+     * Get dest.
      *
-     * @return string 
+     * @return string
      */
     public function getDest()
     {
@@ -106,9 +108,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set lastname
+     * Set lastname.
      *
      * @param string $lastname
+     *
      * @return ContactMessage
      */
     public function setLastname($lastname)
@@ -119,9 +122,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get lastname
+     * Get lastname.
      *
-     * @return string 
+     * @return string
      */
     public function getLastname()
     {
@@ -129,9 +132,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set firstname
+     * Set firstname.
      *
      * @param string $firstname
+     *
      * @return ContactMessage
      */
     public function setFirstname($firstname)
@@ -142,9 +146,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get firstname
+     * Get firstname.
      *
-     * @return string 
+     * @return string
      */
     public function getFirstname()
     {
@@ -152,9 +156,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set company
+     * Set company.
      *
      * @param string $company
+     *
      * @return ContactMessage
      */
     public function setCompany($company)
@@ -165,9 +170,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get company
+     * Get company.
      *
-     * @return string 
+     * @return string
      */
     public function getCompany()
     {
@@ -175,9 +180,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set phone
+     * Set phone.
      *
      * @param string $phone
+     *
      * @return ContactMessage
      */
     public function setPhone($phone)
@@ -188,9 +194,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get phone
+     * Get phone.
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -198,9 +204,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return ContactMessage
      */
     public function setEmail($email)
@@ -211,9 +218,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get email
+     * Get email.
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -221,9 +228,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set message
+     * Set message.
      *
      * @param string $message
+     *
      * @return ContactMessage
      */
     public function setMessage($message)
@@ -234,9 +242,9 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get message
+     * Get message.
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {
@@ -244,9 +252,10 @@ abstract class ContactMessage {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return ContactMessage
      */
     public function setInserted($inserted)
@@ -257,13 +266,12 @@ abstract class ContactMessage {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
         return $this->inserted;
     }
-	
 }

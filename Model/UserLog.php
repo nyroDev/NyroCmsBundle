@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
-abstract class UserLog {
-	
+abstract class UserLog
+{
     protected $id;
 
     /**
@@ -27,7 +27,7 @@ abstract class UserLog {
     protected $objectId;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $version;
 
@@ -40,15 +40,14 @@ abstract class UserLog {
      * @var string
      */
     protected $username;
-	
-	
-	public function getId()
+
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Get action
+     * Get action.
      *
      * @return string
      */
@@ -58,19 +57,21 @@ abstract class UserLog {
     }
 
     /**
-     * Set action
+     * Set action.
      *
      * @param string $action
-	 * @return UserLog
+     *
+     * @return UserLog
      */
     public function setAction($action)
     {
         $this->action = $action;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get object class
+     * Get object class.
      *
      * @return string
      */
@@ -80,19 +81,21 @@ abstract class UserLog {
     }
 
     /**
-     * Set object class
+     * Set object class.
      *
      * @param string $objectClass
-	 * @return UserLog
+     *
+     * @return UserLog
      */
     public function setObjectClass($objectClass)
     {
         $this->objectClass = $objectClass;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get object id
+     * Get object id.
      *
      * @return string
      */
@@ -102,19 +105,21 @@ abstract class UserLog {
     }
 
     /**
-     * Set object id
+     * Set object id.
      *
      * @param string $objectId
-	 * @return UserLog
+     *
+     * @return UserLog
      */
     public function setObjectId($objectId)
     {
         $this->objectId = $objectId;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get username
+     * Get username.
      *
      * @return string
      */
@@ -124,19 +129,21 @@ abstract class UserLog {
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
-	 * @return UserLog
+     *
+     * @return UserLog
      */
     public function setUsername($username)
     {
         $this->username = $username;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get loggedAt
+     * Get loggedAt.
      *
      * @return \DateTime
      */
@@ -146,17 +153,19 @@ abstract class UserLog {
     }
 
     /**
-     * Set loggedAt to "now"
-	 * @return UserLog
+     * Set loggedAt to "now".
+     *
+     * @return UserLog
      */
     public function setLoggedAt()
     {
         $this->loggedAt = new \DateTime();
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get data
+     * Get data.
      *
      * @return array
      */
@@ -166,21 +175,23 @@ abstract class UserLog {
     }
 
     /**
-     * Set data
+     * Set data.
      *
      * @param array $data
-	 * @return UserLog
+     *
+     * @return UserLog
      */
     public function setData($data)
     {
         $this->data = $data;
-		return $this;
+
+        return $this;
     }
 
     /**
-     * Get current version
+     * Get current version.
      *
-     * @return integer
+     * @return int
      */
     public function getVersion()
     {
@@ -188,15 +199,16 @@ abstract class UserLog {
     }
 
     /**
-     * Set current version
+     * Set current version.
      *
-     * @param integer $version
-	 * @return UserLog
+     * @param int $version
+     *
+     * @return UserLog
      */
     public function setVersion($version)
     {
         $this->version = $version;
-		return $this;
+
+        return $this;
     }
-	
 }

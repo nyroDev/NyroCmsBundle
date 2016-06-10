@@ -6,21 +6,21 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), array(
-		'row'=>$row,
-		'tabletWidth'=>$view['nyrocms_composer']->cssTabletWidth($row),
-		'desktopWidth'=>$view['nyrocms_composer']->cssDesktopWidth($row),
-	)) ?>
+        'row' => $row,
+        'tabletWidth' => $view['nyrocms_composer']->cssTabletWidth($row),
+        'desktopWidth' => $view['nyrocms_composer']->cssDesktopWidth($row),
+    )) ?>
 	
 	<?php foreach ($view['assetic']->stylesheets(
-		'@nyrocms_css_admin_composer',
-		array('?yui_css'),
-		array('output'=>'css/adminComposer.css')) as $url): ?>
+        '@nyrocms_css_admin_composer',
+        array('?yui_css'),
+        array('output' => 'css/adminComposer.css')) as $url): ?>
 		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" />
 	<?php endforeach; ?>
 	<?php foreach ($view['assetic']->javascripts(
-		'@nyrocms_js_admin_composer',
-		array('?closure'),
-		array('output'=>'js/adminComposer.js')) as $url): ?>
+        '@nyrocms_js_admin_composer',
+        array('?closure'),
+        array('output' => 'js/adminComposer.js')) as $url): ?>
 		<script type="text/javascript" src="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)) ?>" defer></script>
 	<?php endforeach; ?>
 </head>
@@ -30,21 +30,21 @@ $prefixTinymce = 'data-tinymce_';
 $prefixTinymceSimple = 'data-tinymcesimple_';
 
 $attrs = array_merge(
-	$view['nyrodev']->get('nyrodev_form')->getPluploadAttrs(),
-	array(
-		'data-tinymceurl'=>$view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
-		$prefixTinymce.'inline'=>true,
-		$prefixTinymce.'language'=>$view['request']->getLocale(),
-		$prefixTinymce.'theme'=>'modern',
-		$prefixTinymce.'relative_urls'=>'false',
-		$prefixTinymce.'browser_spellcheck'=>'true',
+    $view['nyrodev']->get('nyrodev_form')->getPluploadAttrs(),
+    array(
+        'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
+        $prefixTinymce.'inline' => true,
+        $prefixTinymce.'language' => $view['request']->getLocale(),
+        $prefixTinymce.'theme' => 'modern',
+        $prefixTinymce.'relative_urls' => 'false',
+        $prefixTinymce.'browser_spellcheck' => 'true',
 
-		$prefixTinymceSimple.'inline'=>true,
-		$prefixTinymceSimple.'menubar'=>false,
-		$prefixTinymceSimple.'valid_elements'=>'',
-	),
-	$view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymce),
-	$view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymceSimple, true)
+        $prefixTinymceSimple.'inline' => true,
+        $prefixTinymceSimple.'menubar' => false,
+        $prefixTinymceSimple.'valid_elements' => '',
+    ),
+    $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymce),
+    $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymceSimple, true)
 );
 
 $attrs['data-confirm'] = $view['nyrodev']->trans('admin.composer.action.confirm');
@@ -56,8 +56,9 @@ $attrs['data-deleteblock'] = $view['nyrodev']->trans('admin.composer.action.dele
 $attrs['data-icon'] = $view['nyrocms_admin']->getIcon('TPL');
 
 $attrsHtml = null;
-foreach ($attrs as $k=>$v)
-	$attrsHtml.= sprintf('%s="%s" ', $view->escape($k), $view->escape($v));
+foreach ($attrs as $k => $v) {
+    $attrsHtml .= sprintf('%s="%s" ', $view->escape($k), $view->escape($v));
+}
 
 $nbButtons = 0;
 $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
@@ -76,14 +77,14 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 					<label class="bg_<?php echo $view['nyrocms_composer']->getCssTheme($row->getParent()) ?>" for="theme_parent">
 						<?php echo $view['nyrodev']->trans('admin.content.themeEmpty') ?>
 					</label>
-					<?php foreach($themes as $k=>$v): ?>
+					<?php foreach ($themes as $k => $v): ?>
 						<input id="theme_<?php echo $k ?>" type="radio" name="theme" value="<?php echo $k ?>"<?php echo $k == $row->getTheme() ? ' checked="checked" ' : '' ?>/>
 						<label class="bg_<?php echo $k ?>" for="theme_<?php echo $k ?>"></label>
 					<?php endforeach; ?>
 				</div>
 			</div>
 		</div><!--
-		<?php $nbButtons++; endif; ?>
+		<?php ++$nbButtons; endif; ?>
 		<?php if ($canChangeLang && count($langs) > 0): ?>
 		--><div class="select">
 			<a href="#langSelect" class="selectLink">
@@ -92,15 +93,15 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 			</a>
 			<div id="langSelect" class="selecter selecterLink" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.langChange') ?>">
 				<div class="selectList">
-					<?php foreach($langs as $lg=>$lang): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type'=>$type, 'id'=>$id, 'lang'=>$lg)) ?>" class="langChange"><?php echo $lg ?></a>
+					<?php foreach ($langs as $lg => $lang): ?>
+						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => $type, 'id' => $id, 'lang' => $lg)) ?>" class="langChange"><?php echo $lg ?></a>
 					<?php endforeach; ?>
 				</div>
 			</div>
 		</div><!--
-		<?php $nbButtons++; endif; ?>
+		<?php ++$nbButtons; endif; ?>
 		--><nav id="availableBlocks"><!--
-			<?php foreach($availableBlocks as $b): ?>
+			<?php foreach ($availableBlocks as $b): ?>
 			<?php if ($nbButtons == $maxButtons): ?>
 				--><div class="select">
 					<a href="#moreBlocksSelect" class="selectLink" id="moreBlocks">
@@ -112,16 +113,16 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 			--><a href="<?php echo $composerUrl.'?block='.$b ?>" class="availableBlock <?php echo $b ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b) ?>">
 				<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b) ?></span>
 			</a><!--
-			<?php $nbButtons++; endforeach; ?>
-			<?php if ($nbButtons-1 >= $maxButtons): ?>
+			<?php ++$nbButtons; endforeach; ?>
+			<?php if ($nbButtons - 1 >= $maxButtons): ?>
 					--></div><!--
 				--></div><!--
 			<?php endif; ?>
 		--></nav>
 	</div>
 	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), array(
-		'row'=>$row,
-	)) ?>
+        'row' => $row,
+    )) ?>
 	<button type="submit" class="composerSubmit"><?php echo $view['nyrodev']->trans('admin.composer.action.save') ?></button>
 	<a href="<?php echo $view['nyrocms_composer']->cancelUrl($row) ?>" class="cancel button" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.cancelConfirm') ?>"><?php echo $view['nyrodev']->trans('admin.misc.cancel') ?></a>
 </form>

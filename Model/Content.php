@@ -10,133 +10,133 @@ use NyroDev\UtilityBundle\Model\AbstractUploadable;
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class Content extends AbstractUploadable implements Composable, ComposableHandler {
-	
-	const STATE_DISABLED = 0;
-	const STATE_ACTIVE = 1;
-	const STATE_INVISIBLE = 2;
-	
+abstract class Content extends AbstractUploadable implements Composable, ComposableHandler
+{
+    const STATE_DISABLED = 0;
+    const STATE_ACTIVE = 1;
+    const STATE_INVISIBLE = 2;
+
     protected $id;
-	
+
     /**
      * @var string
-	 * @Assert\NotBlank()
+     * @Assert\NotBlank()
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $title;
-	
+
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $url;
 
     /**
      * @var string
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $theme;
 
     /**
      * @var array
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $content;
 
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $contentText;
 
     /**
      * @var string
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
-	protected $firstImage;
+    protected $firstImage;
 
     /**
      * @var string
-	 * @Assert\Url()
+     * @Assert\Url()
      * @Gedmo\Translatable
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $goUrl;
 
     /**
-     * @var boolean
-	 * @Gedmo\Versioned
+     * @var bool
+     * @Gedmo\Versioned
      */
     protected $goBlank;
 
     /**
      * @var smallint
-	 * @Assert\NotBlank()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
      */
     protected $state = self::STATE_ACTIVE;
 
     /**
      * @var string
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $handler;
 
     /**
      * @var string
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $host;
 
     /**
      * @var string
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $locales;
 
     /**
-     * @var boolean
-	 * @Gedmo\Versioned
+     * @var bool
+     * @Gedmo\Versioned
      */
     protected $xmlSitemap;
 
     /**
      * @var ContentHandler
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $contentHandler;
 
     /**
      * @var string
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $menuOption;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLeft
      */
     protected $lft;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRight
      */
     protected $rgt;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeLevel
      */
     protected $level;
 
     /**
-     * @var integer
+     * @var int
      * @Gedmo\TreeRoot
      */
     protected $root;
@@ -144,7 +144,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     /**
      * @var Content
      * @Gedmo\TreeParent
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $parent;
 
@@ -155,13 +155,13 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
 
@@ -170,11 +170,11 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
      */
     protected $deleted;
 
-	/**
+    /**
      * @var \Doctrine\Common\Collections\Collection
-	 */
-	protected $relateds;
-	
+     */
+    protected $relateds;
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
@@ -182,21 +182,22 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
 
     /**
      * @var string
-	 * @Gedmo\Locale
+     * @Gedmo\Locale
      */
     protected $locale;
-	
-    public function setTranslatableLocale($locale) {
+
+    public function setTranslatableLocale($locale)
+    {
         $this->locale = $locale;
     }
-	
-	public function getTranslatableLocale() {
-		return $this->locale;
-	}
-	
+
+    public function getTranslatableLocale()
+    {
+        return $this->locale;
+    }
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -211,9 +212,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Content
      */
     public function setTitle($title)
@@ -224,9 +226,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get title
+     * Get title.
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -234,9 +236,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Content
      */
     public function setUrl($url)
@@ -247,9 +250,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get url
+     * Get url.
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -257,9 +260,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set theme
+     * Set theme.
      *
      * @param string $theme
+     *
      * @return Content
      */
     public function setTheme($theme)
@@ -270,9 +274,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get theme
+     * Get theme.
      *
-     * @return string 
+     * @return string
      */
     public function getTheme()
     {
@@ -280,9 +284,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param array $content
+     *
      * @return Content
      */
     public function setContent(array $content)
@@ -293,9 +298,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get content
+     * Get content.
      *
-     * @return array 
+     * @return array
      */
     public function getContent()
     {
@@ -303,9 +308,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set contentText
+     * Set contentText.
      *
      * @param string $contentText
+     *
      * @return Content
      */
     public function setContentText($contentText)
@@ -316,9 +322,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get contentText
+     * Get contentText.
      *
-     * @return string 
+     * @return string
      */
     public function getContentText()
     {
@@ -326,9 +332,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set firstImage
+     * Set firstImage.
      *
      * @param string $firstImage
+     *
      * @return Content
      */
     public function setFirstImage($firstImage)
@@ -339,9 +346,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get firstImage
+     * Get firstImage.
      *
-     * @return string 
+     * @return string
      */
     public function getFirstImage()
     {
@@ -349,9 +356,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set goUrl
+     * Set goUrl.
      *
      * @param string $goUrl
+     *
      * @return Content
      */
     public function setGoUrl($goUrl)
@@ -362,9 +370,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get goUrl
+     * Get goUrl.
      *
-     * @return string 
+     * @return string
      */
     public function getGoUrl()
     {
@@ -372,9 +380,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set goBlank
+     * Set goBlank.
      *
-     * @param boolean $goBlank
+     * @param bool $goBlank
+     *
      * @return Content
      */
     public function setGoBlank($goBlank)
@@ -385,9 +394,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get goBlank
+     * Get goBlank.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getGoBlank()
     {
@@ -395,9 +404,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set state
+     * Set state.
      *
      * @param smallint $state
+     *
      * @return Content
      */
     public function setState($state)
@@ -408,9 +418,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get state
+     * Get state.
      *
-     * @return smallint 
+     * @return smallint
      */
     public function getState()
     {
@@ -418,9 +428,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set handler
+     * Set handler.
      *
      * @param string $handler
+     *
      * @return Content
      */
     public function setHandler($handler)
@@ -431,9 +442,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get handler
+     * Get handler.
      *
-     * @return string 
+     * @return string
      */
     public function getHandler()
     {
@@ -441,9 +452,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set host
+     * Set host.
      *
      * @param string $host
+     *
      * @return Content
      */
     public function setHost($host)
@@ -454,9 +466,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get host
+     * Get host.
      *
-     * @return string 
+     * @return string
      */
     public function getHost()
     {
@@ -464,9 +476,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set locales
+     * Set locales.
      *
      * @param string $locales
+     *
      * @return Content
      */
     public function setLocales($locales)
@@ -477,9 +490,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get locales
+     * Get locales.
      *
-     * @return string 
+     * @return string
      */
     public function getLocales()
     {
@@ -487,9 +500,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set xmlSitemap
+     * Set xmlSitemap.
      *
-     * @param boolean $xmlSitemap
+     * @param bool $xmlSitemap
+     *
      * @return Content
      */
     public function setXmlSitemap($xmlSitemap)
@@ -500,9 +514,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get xmlSitemap
+     * Get xmlSitemap.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getXmlSitemap()
     {
@@ -510,9 +524,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set contentHandler
+     * Set contentHandler.
      *
      * @param ContentHandler $contentHandler
+     *
      * @return Content
      */
     public function setContentHandler($contentHandler)
@@ -523,9 +538,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get contentHandler
+     * Get contentHandler.
      *
-     * @return ContentHandler 
+     * @return ContentHandler
      */
     public function getContentHandler()
     {
@@ -533,9 +548,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set menuOption
+     * Set menuOption.
      *
      * @param string $menuOption
+     *
      * @return Content
      */
     public function setMenuOption($menuOption)
@@ -546,9 +562,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get menuOption
+     * Get menuOption.
      *
-     * @return string 
+     * @return string
      */
     public function getMenuOption()
     {
@@ -556,9 +572,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set lft
+     * Set lft.
      *
-     * @param integer $lft
+     * @param int $lft
+     *
      * @return Content
      */
     public function setLft($lft)
@@ -569,9 +586,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get lft
+     * Get lft.
      *
-     * @return integer 
+     * @return int
      */
     public function getLft()
     {
@@ -579,9 +596,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set rgt
+     * Set rgt.
      *
-     * @param integer $rgt
+     * @param int $rgt
+     *
      * @return Content
      */
     public function setRgt($rgt)
@@ -592,9 +610,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get rgt
+     * Get rgt.
      *
-     * @return integer 
+     * @return int
      */
     public function getRgt()
     {
@@ -602,9 +620,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set level
+     * Set level.
      *
-     * @param integer $level
+     * @param int $level
+     *
      * @return Content
      */
     public function setLevel($level)
@@ -615,9 +634,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get level
+     * Get level.
      *
-     * @return integer 
+     * @return int
      */
     public function getLevel()
     {
@@ -625,9 +644,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set root
+     * Set root.
      *
-     * @param integer $root
+     * @param int $root
+     *
      * @return Content
      */
     public function setRoot($root)
@@ -638,9 +658,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get root
+     * Get root.
      *
-     * @return integer 
+     * @return int
      */
     public function getRoot()
     {
@@ -648,9 +668,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return Content
      */
     public function setInserted($inserted)
@@ -661,9 +682,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -671,9 +692,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return Content
      */
     public function setUpdated($updated)
@@ -684,9 +706,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
@@ -694,9 +716,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set deleted
+     * Set deleted.
      *
      * @param \DateTime $deleted
+     *
      * @return Content
      */
     public function setDeleted($deleted)
@@ -707,9 +730,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get deleted
+     * Get deleted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDeleted()
     {
@@ -717,9 +740,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Set parent
+     * Set parent.
      *
      * @param Content $parent
+     *
      * @return Content
      */
     public function setParent(Content $parent = null)
@@ -730,9 +754,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get parent
+     * Get parent.
      *
-     * @return Content 
+     * @return Content
      */
     public function getParent()
     {
@@ -740,9 +764,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Add children
+     * Add children.
      *
      * @param Content $children
+     *
      * @return Content
      */
     public function addChild(Content $children)
@@ -753,7 +778,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Remove children
+     * Remove children.
      *
      * @param Content $children
      */
@@ -763,9 +788,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get children
+     * Get children.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
@@ -773,9 +798,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Add relateds
+     * Add relateds.
      *
      * @param Content $relateds
+     *
      * @return Content
      */
     public function addRelated(Content $relateds)
@@ -786,7 +812,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Remove relateds
+     * Remove relateds.
      *
      * @param Content $relateds
      */
@@ -796,9 +822,9 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get relateds
+     * Get relateds.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRelateds()
     {
@@ -806,9 +832,10 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Add translations
+     * Add translations.
      *
      * @param object $translations
+     *
      * @return Content
      */
     public function addTranslation($translations)
@@ -819,7 +846,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Remove translations
+     * Remove translations.
      *
      * @param object $translations
      */
@@ -829,52 +856,57 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     }
 
     /**
-     * Get translations
+     * Get translations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTranslations()
     {
         return $this->translations;
     }
-	
-	
-	public function __toString() {
-		return $this->getTitle();
-	}
-	
-	/**
-	 * 
-	 * @return Content
-	 */
-	public function getVeryParent() {
-		return $this->getParent() ? $this->getParent()->getVeryParent() : $this;
-	}
-	
-	/**
-	 * 
-	 * @return Content
-	 */
-	public function getParentLvl($level) {
-		return $this->getLevel() > $level && $this->getParent() ? $this->getParent()->getParentLvl($level) : $this;
-	}
-	
-	public function getParentTheme() {
-		if (!$this->getParent())
-			return $this->getTheme();
-		
-		return $this->getTheme() ? $this->getTheme() : $this->getParent()->getParentTheme();
-	}
 
-	public function getSummary($limit = 250) {
-		$text = str_replace("&rsquo;", "'", $this->getContentText());
-		if (mb_strlen($text) > $limit)
-			$text = mb_substr ($text, 0, $limit).'...';
-		return $text;
-	}
+    public function __toString()
+    {
+        return $this->getTitle();
+    }
 
-	protected function getFileFields() {
-		return array();
-	}
-	
+    /**
+     * @return Content
+     */
+    public function getVeryParent()
+    {
+        return $this->getParent() ? $this->getParent()->getVeryParent() : $this;
+    }
+
+    /**
+     * @return Content
+     */
+    public function getParentLvl($level)
+    {
+        return $this->getLevel() > $level && $this->getParent() ? $this->getParent()->getParentLvl($level) : $this;
+    }
+
+    public function getParentTheme()
+    {
+        if (!$this->getParent()) {
+            return $this->getTheme();
+        }
+
+        return $this->getTheme() ? $this->getTheme() : $this->getParent()->getParentTheme();
+    }
+
+    public function getSummary($limit = 250)
+    {
+        $text = str_replace('&rsquo;', "'", $this->getContentText());
+        if (mb_strlen($text) > $limit) {
+            $text = mb_substr($text, 0, $limit).'...';
+        }
+
+        return $text;
+    }
+
+    protected function getFileFields()
+    {
+        return array();
+    }
 }

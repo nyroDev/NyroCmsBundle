@@ -8,36 +8,36 @@ use Symfony\Component\Validator\Constraints as Assert;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 
 /**
- * User
+ * User.
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class User extends AbstractUploadable implements UserInterface, \Symfony\Component\Security\Core\User\EquatableInterface, \Serializable {
-	
+abstract class User extends AbstractUploadable implements UserInterface, \Symfony\Component\Security\Core\User\EquatableInterface, \Serializable
+{
     protected $id;
-	
-	/**
+
+    /**
      * @var string
      *
-	 * @Assert\NotBlank()
-	 * @Assert\Email()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Assert\Email()
+     * @Gedmo\Versioned
      */
     protected $email;
 
-	/**
+    /**
      * @var string
      *
-	 * @Assert\NotBlank()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
      */
     protected $firstname;
 
-	/**
+    /**
      * @var string
      *
-	 * @Assert\NotBlank()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
      */
     protected $lastname;
 
@@ -54,56 +54,56 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     /**
      * @var string
      *
-	 * @Assert\NotBlank()
-	 * @Gedmo\Versioned
+     * @Assert\NotBlank()
+     * @Gedmo\Versioned
      */
     protected $userType;
 
     /**
-     * @var boolean
+     * @var bool
      *
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
-	protected $developper = false;
+    protected $developper = false;
 
     /**
-     * @var boolean
+     * @var bool
      *
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
-	protected $valid = true;
+    protected $valid = true;
 
     /**
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $validStart;
 
     /**
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $validEnd;
 
     /**
      * @var string
      *
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $passwordKey;
 
     /**
-	 * @Gedmo\Versioned
+     * @Gedmo\Versioned
      */
     protected $passwordKeyEnd;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
     /**
      * @var \DateTime
-	 * @Gedmo\Timestampable(on="update")
+     * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
 
@@ -112,13 +112,13 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
      */
     protected $deleted;
 
-	/**
-	 * @var \Doctrine\Common\Collections\Collection
-	 */
-	protected $userRoles;
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $userRoles;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -131,9 +131,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return User
      */
     public function setEmail($email)
@@ -144,9 +145,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get email
+     * Get email.
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -154,9 +155,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set firstname
+     * Set firstname.
      *
      * @param string $firstname
+     *
      * @return User
      */
     public function setFirstname($firstname)
@@ -167,9 +169,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get firstname
+     * Get firstname.
      *
-     * @return string 
+     * @return string
      */
     public function getFirstname()
     {
@@ -177,9 +179,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set lastname
+     * Set lastname.
      *
      * @param string $lastname
+     *
      * @return User
      */
     public function setLastname($lastname)
@@ -190,9 +193,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get lastname
+     * Get lastname.
      *
-     * @return string 
+     * @return string
      */
     public function getLastname()
     {
@@ -200,9 +203,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
+     *
      * @return User
      */
     public function setPassword($password)
@@ -213,9 +217,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get password
+     * Get password.
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -223,9 +227,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set salt
+     * Set salt.
      *
      * @param string $salt
+     *
      * @return User
      */
     public function setSalt($salt)
@@ -236,9 +241,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get salt
+     * Get salt.
      *
-     * @return string 
+     * @return string
      */
     public function getSalt()
     {
@@ -246,9 +251,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set userType
+     * Set userType.
      *
      * @param string $userType
+     *
      * @return User
      */
     public function setUserType($userType)
@@ -259,9 +265,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get userType
+     * Get userType.
      *
-     * @return string 
+     * @return string
      */
     public function getUserType()
     {
@@ -269,9 +275,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set developper
+     * Set developper.
      *
-     * @param boolean $developper
+     * @param bool $developper
+     *
      * @return User
      */
     public function setDevelopper($developper)
@@ -282,9 +289,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get developper
+     * Get developper.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getDevelopper()
     {
@@ -292,9 +299,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set valid
+     * Set valid.
      *
-     * @param boolean $valid
+     * @param bool $valid
+     *
      * @return User
      */
     public function setValid($valid)
@@ -305,9 +313,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get valid
+     * Get valid.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getValid()
     {
@@ -315,9 +323,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set validStart
+     * Set validStart.
      *
      * @param \DateTime $validStart
+     *
      * @return User
      */
     public function setValidStart($validStart)
@@ -328,9 +337,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get validStart
+     * Get validStart.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidStart()
     {
@@ -338,9 +347,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set validEnd
+     * Set validEnd.
      *
      * @param \DateTime $validEnd
+     *
      * @return User
      */
     public function setValidEnd($validEnd)
@@ -351,9 +361,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get validEnd
+     * Get validEnd.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidEnd()
     {
@@ -361,9 +371,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set passwordKey
+     * Set passwordKey.
      *
      * @param string $passwordKey
+     *
      * @return User
      */
     public function setPasswordKey($passwordKey)
@@ -374,9 +385,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get passwordKey
+     * Get passwordKey.
      *
-     * @return string 
+     * @return string
      */
     public function getPasswordKey()
     {
@@ -384,9 +395,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set passwordKeyEnd
+     * Set passwordKeyEnd.
      *
      * @param \DateTime $passwordKeyEnd
+     *
      * @return User
      */
     public function setPasswordKeyEnd($passwordKeyEnd)
@@ -397,9 +409,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get passwordKeyEnd
+     * Get passwordKeyEnd.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPasswordKeyEnd()
     {
@@ -407,9 +419,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return User
      */
     public function setInserted($inserted)
@@ -420,9 +433,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
@@ -430,9 +443,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return User
      */
     public function setUpdated($updated)
@@ -443,9 +457,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdated()
     {
@@ -453,9 +467,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Set deleted
+     * Set deleted.
      *
      * @param \DateTime $deleted
+     *
      * @return User
      */
     public function setDeleted($deleted)
@@ -466,9 +481,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get deleted
+     * Get deleted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDeleted()
     {
@@ -476,9 +491,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Add userRoles
+     * Add userRoles.
      *
      * @param UserRole $userRoles
+     *
      * @return User
      */
     public function addUserRole(UserRole $userRoles)
@@ -489,7 +505,7 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Remove userRoles
+     * Remove userRoles.
      *
      * @param UserRole $userRoles
      */
@@ -499,77 +515,90 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     }
 
     /**
-     * Get userRoles
+     * Get userRoles.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUserRoles()
     {
         return $this->userRoles;
     }
-	
-	
-	
-	protected $serializeVars = array(
-		'id',
-		'email',
-		'password',
-		'salt',
-		'userType'
-	);
-	
-	public function eraseCredentials() {}
 
-	public function isEqualTo(UserInterface $user) {
-        if (!$user instanceof User ||
-				$this->getPassword() !== $user->getPassword() ||
-				$this->getSalt() !== $user->getSalt() ||
-				$this->getUsername() !== $user->getUsername() ||
-				$this->getId() !== $user->getId())
+    protected $serializeVars = array(
+        'id',
+        'email',
+        'password',
+        'salt',
+        'userType',
+    );
+
+    public function eraseCredentials()
+    {
+    }
+
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof self ||
+                $this->getPassword() !== $user->getPassword() ||
+                $this->getSalt() !== $user->getSalt() ||
+                $this->getUsername() !== $user->getUsername() ||
+                $this->getId() !== $user->getId()) {
             return false;
+        }
+
         return true;
-	}
+    }
 
-	public function serialize() {
-		$vars = array();
-		foreach($this->serializeVars as $field)
-			$vars[$field] = $this->$field;
+    public function serialize()
+    {
+        $vars = array();
+        foreach ($this->serializeVars as $field) {
+            $vars[$field] = $this->$field;
+        }
+
         return serialize($vars);
-	}
+    }
 
-	public function unserialize($serialized) {
-		$vars = unserialize($serialized);
-		foreach($vars as $k=>$v)
-			$this->$k = $v;
-	}
+    public function unserialize($serialized)
+    {
+        $vars = unserialize($serialized);
+        foreach ($vars as $k => $v) {
+            $this->$k = $v;
+        }
+    }
 
-	public function getRoles() {
-		$ret = array(
-			'ROLE_USER',
-			'ROLE_'.strtoupper($this->getUserType())
-		);
-		if ($this->getValid()) {
-			foreach($this->getUserRoles() as $role) {
-				$ret[] = $role->getSecurityRoleName();
-			}
-		}
-		return $ret;
-	}
-	
-	public function hasRole($role) {
-		return in_array($role, $this->getRoles());
-	}
+    public function getRoles()
+    {
+        $ret = array(
+            'ROLE_USER',
+            'ROLE_'.strtoupper($this->getUserType()),
+        );
+        if ($this->getValid()) {
+            foreach ($this->getUserRoles() as $role) {
+                $ret[] = $role->getSecurityRoleName();
+            }
+        }
 
-	public function getUsername() {
-		return $this->getEmail();
-	}
-	
-	public function __toString() {
-		return $this->getFirstname().' '.$this->getLastname().' ('.$this->getEmail().')';
-	}
+        return $ret;
+    }
 
-	protected function getFileFields() {
-		return array();
-	}
-	
+    public function hasRole($role)
+    {
+        return in_array($role, $this->getRoles());
+    }
+
+    public function getUsername()
+    {
+        return $this->getEmail();
+    }
+
+    public function __toString()
+    {
+        return $this->getFirstname().' '.$this->getLastname().' ('.$this->getEmail().')';
+    }
+
+    protected function getFileFields()
+    {
+        return array();
+    }
 }

@@ -4,21 +4,21 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 
-abstract class UserLogin {
-	
-	protected $id;
+abstract class UserLogin
+{
+    protected $id;
 
     /**
-	 * @var User
+     * @var User
      */
     protected $user;
 
-	/**
+    /**
      * @var string
      */
     protected $ipAddress;
 
-	/**
+    /**
      * @var string
      */
     protected $place;
@@ -26,19 +26,20 @@ abstract class UserLogin {
     /**
      * @var \DateTime
      *
-	 * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="create")
      */
     protected $inserted;
 
-	public function getId()
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
+     *
      * @return UserLogin
      */
     public function setUser(User $user)
@@ -49,9 +50,9 @@ abstract class UserLogin {
     }
 
     /**
-     * Get user
+     * Get user.
      *
-     * @return User 
+     * @return User
      */
     public function getUser()
     {
@@ -59,9 +60,10 @@ abstract class UserLogin {
     }
 
     /**
-     * Set ipAddress
+     * Set ipAddress.
      *
      * @param string $ipAddress
+     *
      * @return UserLogin
      */
     public function setIpAddress($ipAddress)
@@ -72,9 +74,9 @@ abstract class UserLogin {
     }
 
     /**
-     * Get ipAddress
+     * Get ipAddress.
      *
-     * @return string 
+     * @return string
      */
     public function getIpAddress()
     {
@@ -82,9 +84,10 @@ abstract class UserLogin {
     }
 
     /**
-     * Set place
+     * Set place.
      *
      * @param string $place
+     *
      * @return UserLogin
      */
     public function setPlace($place)
@@ -95,9 +98,9 @@ abstract class UserLogin {
     }
 
     /**
-     * Get place
+     * Get place.
      *
-     * @return string 
+     * @return string
      */
     public function getPlace()
     {
@@ -105,9 +108,10 @@ abstract class UserLogin {
     }
 
     /**
-     * Set inserted
+     * Set inserted.
      *
      * @param \DateTime $inserted
+     *
      * @return UserLogin
      */
     public function setInserted($inserted)
@@ -118,9 +122,9 @@ abstract class UserLogin {
     }
 
     /**
-     * Get inserted
+     * Get inserted.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInserted()
     {
