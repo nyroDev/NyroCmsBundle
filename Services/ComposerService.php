@@ -327,7 +327,7 @@ class ComposerService extends AbstractService
                     }
                 } elseif (strpos($v, 'OBJECT::') === 0) {
                     $fct = substr($v, 8);
-                    $ret['contents'][$k] = $row->$fct();
+                    $ret['contents'][$k] = $row->{$fct}();
                 } else {
                     $ret['contents'][$k] = !is_null($v) ? $this->trans($v) : $v;
                 }

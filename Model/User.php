@@ -553,7 +553,7 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     {
         $vars = array();
         foreach ($this->serializeVars as $field) {
-            $vars[$field] = $this->$field;
+            $vars[$field] = $this->{$field};
         }
 
         return serialize($vars);
@@ -563,7 +563,7 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     {
         $vars = unserialize($serialized);
         foreach ($vars as $k => $v) {
-            $this->$k = $v;
+            $this->{$k} = $v;
         }
     }
 

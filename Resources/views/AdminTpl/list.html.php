@@ -73,7 +73,7 @@
 						<?php foreach ($fields as $f): ?>
 							<td><?php
                                 $fct = 'get'.ucfirst($f);
-                                $val = $r->$fct();
+                                $val = $r->{$fct}();
                                 if (is_object($val)) {
                                     if ($val instanceof \DateTime) {
                                         $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
