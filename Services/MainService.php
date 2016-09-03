@@ -307,7 +307,7 @@ class MainService extends AbstractService
                 } elseif ($isObjectPage) {
                     $pathInfo['object']->setTranslatableLocale($locale);
                     $this->get('nyrocms_db')->refresh($pathInfo['object']);
-                    $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, $prm);
+                    $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $prm));
                 } else {
                     $routeName = $pathInfo['route'];
                     $routePrm = array_merge($pathInfo['routePrm'], $prm);
