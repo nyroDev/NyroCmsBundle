@@ -237,7 +237,7 @@ nyrocms:
         
         You have requested the recovery of your password.
         To activate a new password, click on the following link:
-        <strong><a href=\"%url%\">%url%</a></strong>
+        <strong><a href="%url%">%url%</a></strong>
         This link will be valid for 24 hours.
         
         If you didn't request anything, you can ignore this message.
@@ -258,7 +258,7 @@ nyrocms:
         
         Your account has been activated.
         To choose a password and be connected, click on the following link:
-        <strong><a href=\"%url%\">%url%</a></strong>
+        <strong><a href="%url%">%url%</a></strong>
         This link will be valid for 1 week.
   handler:
     news:
