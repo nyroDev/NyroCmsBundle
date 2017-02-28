@@ -228,7 +228,10 @@ class AdminDataController extends AbstractAdminController
             'required' => false,
         ),
     );
+    
     protected $translations;
+    protected $langs;
+    
     /**
      * @var \Symfony\Component\Form\Form
      */
@@ -272,11 +275,13 @@ class AdminDataController extends AbstractAdminController
         }
 
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
+        $adminFormEvent->setTranslations($this->translations);
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_CONTENT, $adminFormEvent);
     }
     protected function contentFlush($action, $row, $form)
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
+        $adminFormEvent->setTranslations($this->translations);
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_CONTENT, $adminFormEvent);
 
         $this->contentForm = $form;
@@ -285,7 +290,8 @@ class AdminDataController extends AbstractAdminController
 
     protected function contentAfterFlush($response, $action, $row)
     {
-        $adminFormEvent = new AdminFormEvent($action, $row);
+        $adminFormEvent = new AdminFormEvent($action, $row, $this->contentForm);
+        $adminFormEvent->setTranslations($this->translations);
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_CONTENT, $adminFormEvent);
 
         $langs = $this->get('nyrocms')->getLocaleNames($row);
