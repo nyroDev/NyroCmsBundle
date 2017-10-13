@@ -138,11 +138,6 @@ class Contact extends AbstractHandler
         return $ret;
     }
 
-    public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = array(), array $translations = array())
-    {
-        parent::formClb($action, $row, $form, $langs, $translations);
-    }
-
     public function flushClb($action, ContentSpec $row, Form $form)
     {
         parent::flushClb($action, $row, $form);

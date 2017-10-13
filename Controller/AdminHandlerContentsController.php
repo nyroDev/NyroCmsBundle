@@ -216,7 +216,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         if (!$handler->hasIntro()) {
             unset($this->translationFields['intro']);
         }
-
+        
         $adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
         if (!is_array($adminForm)) {
             return $adminForm;
