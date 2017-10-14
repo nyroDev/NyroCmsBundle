@@ -94,6 +94,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         $repo = $this->get('nyrocms_db')->getContentSpecRepository();
         $row = $repo->find($id);
         if ($row) {
+            $row->setService($this->get('nyrodev'));
             $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
             $handler->init($request, true);
             $handler->deleteClb($row);
@@ -164,6 +165,7 @@ class AdminHandlerContentsController extends AbstractAdminController
 
     public function form(Request $request, $action, $row)
     {
+        $row->setService($this->get('nyrodev'));
         $routePrm = array('chid' => $row->getContentHandler()->getId());
         $moreOptions = array(
             'state' => array(
@@ -216,7 +218,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         if (!$handler->hasIntro()) {
             unset($this->translationFields['intro']);
         }
-        
+
         $adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
         if (!is_array($adminForm)) {
             return $adminForm;
