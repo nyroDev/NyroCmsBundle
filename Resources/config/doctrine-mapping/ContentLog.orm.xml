@@ -17,8 +17,8 @@
 		<field name="version" type="integer" nullable="false" />
 		<field name="data" type="json_array" nullable="true" />
 		<field name="username" type="string" nullable="true" />
-		<field name="locale" type="string" length="8" nullable="true" />
-		
+		<field name="locale" type="string" length="12" nullable="true" />
+
 		<indexes>
 			<index name="content_log_class_lookup_idx" columns="object_class" />
 			<index name="content_log_date_lookup_idx" columns="logged_at" />
