@@ -58,12 +58,12 @@ class News extends AbstractHandler
         );
     }
 
-    public function getFeatured(Content $content, $nb = 2)
+    public function getFeatured(Content $content, $nb = 2, $forceNb = true)
     {
         $results = $this->getContentSpecs($content, 0, $nb, array('featured' => 1));
 
         $count = count($results);
-        if ($count < $nb) {
+        if ($forceNb && $count < $nb) {
             $results = array_merge($results, $this->getContentSpecs($content, 0, $nb - $count, array('!featured' => 1)));
         }
 
