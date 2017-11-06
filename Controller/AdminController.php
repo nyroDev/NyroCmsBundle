@@ -3,7 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminController extends Controller
 {
@@ -37,5 +39,23 @@ class AdminController extends Controller
     public function accountAction(Request $request)
     {
         return $this->render('NyroDevNyroCmsBundle:Admin:account.html.php', $this->get('nyrocms_user')->handleAccount('admin', $request));
+    }
+
+	public function ccAction()
+    {
+        $fs = new Filesystem();
+		$cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        $ret = 'Nothing to remove';
+        try {
+            if ($fs->exists($cacheDir)) {
+                $fs->remove($cacheDir);
+                $ret = 'removed';
+            }
+        } catch (\Exception $e) {
+            $ret = $e->getMessage();
+        }
+
+        return new Response($ret);
     }
 }
