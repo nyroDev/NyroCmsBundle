@@ -10,6 +10,7 @@ jQuery(function($) {
 				input: false,
 				inputValue: false,
 				inputPlaceholder: false,
+				contentClb: false,
 				clbOk: false,
 				clbKo: false
 			}, options),
@@ -18,8 +19,9 @@ jQuery(function($) {
 				content;
 		
 			contentHtml = '<div class="'+opts.class+'">';
-			if (opts.text)
+			if (opts.text) {
 				contentHtml+= '<p>'+opts.text+'</p>';
+			}
 			if (opts.input) {
 				contentHtml+= '<form action="#" method="get">';
 				if (opts.input == 'select') {
@@ -40,25 +42,33 @@ jQuery(function($) {
 					contentHtml+= '<button type="submit" class="nyroModalConfirm button">'+opts.ok+'</button>';
 				contentHtml+= '</div>';
 			}
-			if (opts.input)
+			if (opts.input) {
 				contentHtml+= '</form>';
+			}
 			contentHtml+= '</div>';
 			
 			var content = $(contentHtml);
+
+			if (opts.contentClb && $.isFunction(opts.contentClb)) {
+				opts.contentClb(content);
+			}
+
 			if (opts.input) {
 				content.find('form').on('submit', function(e) {
 					e.preventDefault();
 					isConfirmed = true;
-					if ($.isFunction(opts.clbOk))
+					if ($.isFunction(opts.clbOk)) {
 						opts.clbOk($(this).find(':input').val());
+					}
 					$.nmTop().close();
 				});
 			} else {
 				content.find('.nyroModalConfirm').on('click', function(e) {
 					e.preventDefault();
 					isConfirmed = true;
-					if ($.isFunction(opts.clbOk))
+					if ($.isFunction(opts.clbOk)) {
 						opts.clbOk();
+					}
 					$.nmTop().close();
 				});
 			}

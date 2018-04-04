@@ -71,6 +71,7 @@ admin:
       deleteBlock: Are you sure you want to remove this block?
       deleteImgConfirm: Are you sure you want to remove this picture?
       video: Select the video URL
+      videoAutoplay: Autoplay the video?
       home_linkUrl: Modify the destination
       home_title_bg: Modify the background color of the title
       home_text_bg: Modify the background color of the text

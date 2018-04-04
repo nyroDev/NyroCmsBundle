@@ -67,6 +67,7 @@ class Configuration implements ConfigurationInterface
             'video' => array(
                 'url' => null,
                 'embed' => null,
+                'autoplay' => null
             ),
             'separator' => array(
             ),

@@ -60,9 +60,13 @@ class AdminComposerController extends AbstractAdminController
 
                 if (count($errors) == 0) {
                     $dataUrl = $this->get('nyrodev_embed')->data($url);
+                    $embedUrl = $dataUrl['urlEmbed'];
+                    if ($request->request->get('autoplay')) {
+                        $embedUrl.= (strpos($embedUrl, '?') === false ? '?' : '&').'autoplay=1';
+                    }
                     $ret = array(
                         'url' => $url,
-                        'embed' => $dataUrl['urlEmbed'],
+                        'embed' => $embedUrl,
                     );
                 } else {
                     $tmp = array();

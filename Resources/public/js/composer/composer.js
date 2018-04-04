@@ -161,6 +161,8 @@ jQuery(function($) {
 							iframe = video.children('iframe'),
 							inputUrl = video.children('textarea[name*="url"]'),
 							inputEmbed = video.children('textarea[name*="embed"]'),
+							inputAutoplay = video.children('textarea[name*="autoplay"]'),
+							autoplayChk,
 							askUrl = function() {
 								$.nmConfirm({
 									text: link.text(),
@@ -169,6 +171,16 @@ jQuery(function($) {
 									input: 'url',
 									inputValue: inputUrl.val(),
 									inputPlaceholder: 'https://www.youtube.com/watch?v=vN1FJPQG9co',
+									contentClb: function(content) {
+										var url = content.find('input[type="url"]');
+										url.after('<label for="autoplayChk">'+inputAutoplay.data('label')+'</label>');
+										autoplayChk = $(
+											'<input type="checkbox" value="1" name="autoplayChk" id="autoplayChk" ' +
+											(inputAutoplay.val() ? 'checked="checked" ' : '') +
+											' />'
+										).insertAfter(url);
+										url.after('<br />');
+									},
 									clbOk: function(newUrl) {
 										if (newUrl && newUrl != inputUrl.val()) {
 											$.ajax({
@@ -177,13 +189,15 @@ jQuery(function($) {
 												dataType: 'json',
 												data: {
 													video: 1,
-													url: newUrl
+													url: newUrl,
+													autoplay: autoplayChk.is(':checked') ? 1 : 0
 												}
 											}).done(function(data) {
 												if (!data.err) {
 													iframe.attr('src', data.embed);
 													inputUrl.val(data.url);
 													inputEmbed.val(data.embed);
+													inputAutoplay.val(autoplayChk.is(':checked') ? 1 : '');
 													changed();
 												} else {
 													$.nmConfirm({
