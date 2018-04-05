@@ -8,7 +8,9 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
@@ -198,6 +200,12 @@ class AdminDataController extends AbstractAdminController
             'goUrl',
             'goBlank',
             'relateds',
+            'metaTitle',
+            'metaDescription',
+            'metaKeywords',
+            'ogTitle',
+            'ogDescription',
+            'ogImage',
         ));
 
         if ($this->get('nyrocms_admin')->isDeveloper()) {
@@ -225,6 +233,30 @@ class AdminDataController extends AbstractAdminController
         ),
         'goUrl' => array(
             'type' => UrlType::class,
+            'required' => false,
+        ),
+        'metaTitle' => array(
+            'type' => TextType::class,
+            'required' => false,
+        ),
+        'metaDescription' => array(
+            'type' => TextareaType::class,
+            'required' => false,
+        ),
+        'metaKeywords' => array(
+            'type' => TextareaType::class,
+            'required' => false,
+        ),
+        'ogTitle' => array(
+            'type' => TextType::class,
+            'required' => false,
+        ),
+        'ogDescription' => array(
+            'type' => TextareaType::class,
+            'required' => false,
+        ),
+        'ogImage' => array(
+            'type' => FileType::class,
             'required' => false,
         ),
     );

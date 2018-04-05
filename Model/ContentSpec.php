@@ -9,7 +9,7 @@ use NyroDev\UtilityBundle\Model\AbstractUploadable;
 /**
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class ContentSpec extends AbstractUploadable implements Composable
+abstract class ContentSpec extends AbstractUploadable implements Composable, Sharable
 {
     const STATE_DISABLED = 0;
     const STATE_ACTIVE = 1;

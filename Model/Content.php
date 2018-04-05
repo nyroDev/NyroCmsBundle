@@ -10,8 +10,9 @@ use NyroDev\UtilityBundle\Model\AbstractUploadable;
  * @Gedmo\Tree(type="nested")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class Content extends AbstractUploadable implements Composable, ComposableHandler
+abstract class Content extends AbstractUploadable implements Composable, ComposableHandler, Sharable
 {
+
     const STATE_DISABLED = 0;
     const STATE_ACTIVE = 1;
     const STATE_INVISIBLE = 2;

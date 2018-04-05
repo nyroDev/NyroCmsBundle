@@ -133,9 +133,14 @@ admin:
     handler: Handler
     contentHandler: Module associé
     menuOption: Option menu
+    metaTitle: Meta titre
+    metaDescription: Meta description
+    metaKeywords: Meta keywords
+    ogTitle: Titre de partage
+    ogDescription: Description de partage
+    ogImage: Image de partage
     inserted: Ajouté le
     updated: Mis à jour le
-    
   contentHandler:
     viewTitle: Modules associés
     id: ID
@@ -155,6 +160,12 @@ admin:
     state: État
     validStart: Début validité
     validEnd: Fin validité
+    metaTitle: Meta titre
+    metaDescription: Meta description
+    metaKeywords: Meta keywords
+    ogTitle: Titre de partage
+    ogDescription: Description de partage
+    ogImage: Image de partage
     inserted: Ajouté le
     updated: Mis à jour le
   user:

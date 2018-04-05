@@ -6,6 +6,7 @@ use Symfony\Component\Validator\Constraints;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -217,6 +218,42 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         if (!$handler->hasIntro()) {
             unset($this->translationFields['intro']);
+        }
+
+        if ($handler->hasMetas()) {
+            $fields[] = 'metaTitle';
+            $fields[] = 'metaDescription';
+            $fields[] = 'metaKeywords';
+            $this->translationFields['metaTitle'] = array(
+                'type' => TextType::class,
+                'required' => false,
+            );
+            $this->translationFields['metaDescription'] = array(
+                'type' => TextareaType::class,
+                'required' => false,
+            );
+            $this->translationFields['metaKeywords'] = array(
+                'type' => TextareaType::class,
+                'required' => false,
+            );
+        }
+
+        if ($handler->hasOgs()) {
+            $fields[] = 'ogTitle';
+            $fields[] = 'ogDescription';
+            $fields[] = 'ogImage';
+            $this->translationFields['ogTitle'] = array(
+                'type' => TextType::class,
+                'required' => false,
+            );
+            $this->translationFields['ogDescription'] = array(
+                'type' => TextareaType::class,
+                'required' => false,
+            );
+            $this->translationFields['ogImage'] = array(
+                'type' => FileType::class,
+                'required' => false,
+            );
         }
 
         $adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');

@@ -18,6 +18,9 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Content extends ContentModel
 {
+
+    use Traits\SharableTrait;
+
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="parent")
      * @ORM\OrderBy({"lft" = "ASC"})

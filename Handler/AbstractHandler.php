@@ -108,6 +108,16 @@ abstract class AbstractHandler
         return true;
     }
 
+    public function hasMetas()
+    {
+        return false;
+    }
+
+    public function hasOgs()
+    {
+        return false;
+    }
+
     public function needTranslations()
     {
         return true;

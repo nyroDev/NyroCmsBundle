@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -160,10 +161,16 @@ abstract class AbstractController extends NyroDevAbstractController
         } else {
             $title = $content->getTitle().($title ? ', '.$title : null);
         }
+
         $this->setTitle($title);
         $this->setDescription($description);
         if ($image) {
             $this->setImage($this->get('nyrocms_composer')->imageResize($image, 1000));
+        }
+
+        $this->setSharableContent($content);
+        if ($contentSpec) {
+            $this->setSharableContent($contentSpec);
         }
 
         return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
@@ -281,19 +288,14 @@ abstract class AbstractController extends NyroDevAbstractController
         ), $response);
     }
 
-    protected function inlineText($text)
-    {
-        return preg_replace('/\s\s+/', ' ', preg_replace('/\s/', ' ', trim($text, " \t\n\r\0\x0B:·-")));
-    }
-
     protected function setTitle($title, $addDefault = true)
     {
-        $this->get('nyrodev_share')->setTitle($this->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
+        $this->get('nyrodev_share')->setTitle($this->get('nyrocms')->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
     }
 
     protected function setDescription($description)
     {
-        $this->get('nyrodev_share')->setDescription($this->inlineText($description));
+        $this->get('nyrodev_share')->setDescription($this->get('nyrocms')->inlineText($description));
     }
 
     protected function setImage($image)
@@ -301,5 +303,10 @@ abstract class AbstractController extends NyroDevAbstractController
         if ($image) {
             $this->get('nyrodev_share')->setImage($image);
         }
+    }
+
+    protected function setSharableContent(Sharable $sharable)
+    {
+        $this->get('nyrocms')->setSharableContent($sharable);
     }
 }

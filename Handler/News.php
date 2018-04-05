@@ -12,6 +12,16 @@ class News extends AbstractHandler
         return true;
     }
 
+    public function hasMetas()
+    {
+        return true;
+    }
+
+    public function hasOgs()
+    {
+        return true;
+    }
+
     public function getAllowedParams()
     {
         return array(

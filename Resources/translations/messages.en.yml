@@ -125,6 +125,12 @@ admin:
     handler: Handler
     contentHandler: Associated module
     menuOption: Menu option
+    metaTitle: Meta title
+    metaDescription: Meta description
+    metaKeywords: Meta keywords
+    ogTitle: Share title
+    ogDescription: Share description
+    ogImage: Share image
     inserted: Added on
     updated: Updated on
   contentHandler:
@@ -146,6 +152,11 @@ admin:
     state: State
     validStart: Valid from date
     validEnd: Valid to date
+    metaDescription: Meta description
+    metaKeywords: Meta keywords
+    ogTitle: Share title
+    ogDescription: Share description
+    ogImage: Share image
     inserted: Added on
     updated: Updated on
   user:

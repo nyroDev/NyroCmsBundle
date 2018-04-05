@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 
@@ -358,5 +359,34 @@ class MainService extends AbstractService
         }
 
         return $this->foundHandlers;
+    }
+
+    public function inlineText($text)
+    {
+        return preg_replace('/\s\s+/', ' ', preg_replace('/\s/', ' ', trim($text, " \t\n\r\0\x0B:·-")));
+    }
+
+    public function setSharableContent(Sharable $sharable)
+    {
+        if ($sharable->getMetaTitle()) {
+            $this->get('nyrodev_share')->setTitle($this->inlineText($sharable->getMetaTitle()));
+        }
+        if ($sharable->getMetaDescription()) {
+            $this->get('nyrodev_share')->setDescription($this->inlineText($sharable->getMetaDescription()));
+        }
+        if ($sharable->getMetaKeywords()) {
+            $this->get('nyrodev_share')->setKeywords($this->inlineText($sharable->getMetaKeywords()));
+        }
+        if ($sharable->getOgTitle()) {
+            $this->get('nyrodev_share')->set('og:title', $this->inlineText($sharable->getOgTitle()), true);
+            $this->get('nyrodev_share')->set('twitter:title', $this->inlineText($sharable->getOgTitle()));
+        }
+        if ($sharable->getOgDescription()) {
+            $this->get('nyrodev_share')->set('og:description', $this->inlineText($sharable->getOgDescription()), true);
+            $this->get('nyrodev_share')->set('twitter:description', $this->inlineText($sharable->getOgDescription()));
+        }
+        if ($sharable->getOgImageFile()) {
+            $this->get('nyrodev_share')->setImage($sharable->getWebPath('ogImage'));
+        }
     }
 }
