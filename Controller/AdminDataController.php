@@ -8,13 +8,13 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
+use NyroDev\UtilityBundle\Model\AbstractUploadable;
 
 class AdminDataController extends AbstractAdminController
 {
@@ -219,6 +219,10 @@ class AdminDataController extends AbstractAdminController
             );
         }
 
+        if ($row instanceOf AbstractUploadable) {
+            $row->setService($this->get('nyrodev'));
+        }
+
         $adminForm = $this->createAdminForm($request, 'content', $action, $row, $fields, 'nyrocms_admin_data_content_tree', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush', $this->get('nyrocms_db')->getObjectManager());
         if (!is_array($adminForm)) {
             return $adminForm;
@@ -254,11 +258,7 @@ class AdminDataController extends AbstractAdminController
         'ogDescription' => array(
             'type' => TextareaType::class,
             'required' => false,
-        ),
-        'ogImage' => array(
-            'type' => FileType::class,
-            'required' => false,
-        ),
+        )
     );
     
     protected $translations;

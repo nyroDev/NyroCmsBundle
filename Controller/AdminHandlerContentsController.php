@@ -6,7 +6,6 @@ use Symfony\Component\Validator\Constraints;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -248,10 +247,6 @@ class AdminHandlerContentsController extends AbstractAdminController
             );
             $this->translationFields['ogDescription'] = array(
                 'type' => TextareaType::class,
-                'required' => false,
-            );
-            $this->translationFields['ogImage'] = array(
-                'type' => FileType::class,
                 'required' => false,
             );
         }

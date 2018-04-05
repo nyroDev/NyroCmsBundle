@@ -55,7 +55,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="og_image_file", type="string", length=250, nullable=true)
-     * @Gedmo\Translatable
      */
     protected $ogImageFile;
 
@@ -156,17 +155,11 @@ trait SharableTrait
 	}
 
     protected function getFileFields() {
-        $ret = parent::getFileFields();
-
-        if (!is_array($ret)) {
-            $ret = array();
-        }
-
-        $ret['ogImage'] = array(
-            AbstractUploadable::CONFIG_FIELD=>'ogImageFile',
-            AbstractUploadable::CONFIG_DIR=>'uploads/sharable'
+        return array(
+            'ogImage' => array(
+                AbstractUploadable::CONFIG_FIELD=>'ogImageFile',
+                AbstractUploadable::CONFIG_DIR=>'uploads/sharable'
+            ),
         );
-
-        return $ret;
     }
 }
