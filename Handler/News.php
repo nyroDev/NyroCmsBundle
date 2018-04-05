@@ -12,6 +12,13 @@ class News extends AbstractHandler
         return true;
     }
 
+    public function getAllowedParams()
+    {
+        return array(
+            'page',
+        );
+    }
+
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
         $view = 'NyroDevNyroCmsBundle:Handler:news';
