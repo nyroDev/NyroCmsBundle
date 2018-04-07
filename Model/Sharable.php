@@ -33,5 +33,7 @@ interface Sharable
 
 	public function setOgImage(UploadedFile $ogImage = null);
 
-	public function getOgImage();
+    public function getOgImage();
+    
+    public function __toString();
 }

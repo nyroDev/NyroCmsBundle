@@ -368,6 +368,8 @@ class MainService extends AbstractService
 
     public function setSharableContent(Sharable $sharable)
     {
+        $this->get('nyrodev_share')->setTitle($this->inlineText($sharable.''));
+
         if ($sharable->getMetaTitle()) {
             $this->get('nyrodev_share')->setTitle($this->inlineText($sharable->getMetaTitle()));
         }
