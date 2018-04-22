@@ -56,12 +56,12 @@ class AdminHandlerContentsController extends AbstractAdminController
                         'routePrmDelete' => $routePrm,
                         'name' => 'contentSpec',
                         'route' => $route,
-                        'fields' => array(
+                        'fields' => array_unique(array_filter(array(
                             'id',
                             'title',
                             $orderField,
                             'updated',
-                        ),
+                        ))),
                         'moreActions' => array_filter(array(
                             'up' => $handler->hasMoveActions() ? array(
                                 'name' => '↑',

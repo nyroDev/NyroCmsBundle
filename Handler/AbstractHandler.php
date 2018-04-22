@@ -8,6 +8,7 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
+use NyroDev\UtilityBundle\Form\Type\TinymceType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -348,6 +349,8 @@ abstract class AbstractHandler
                     $cfg['type'] == TextareaType::class ||
                     $cfg['type'] == ChoiceType::class) {
                     $newContentTexts[] = $data;
+                } else if ($cfg['type'] === TinymceType::class) {
+                    $newContentTexts[] = html_entity_decode(strip_tags($data));
                 }
             }
         }
@@ -399,6 +402,8 @@ abstract class AbstractHandler
                     $cfg['type'] == TextareaType::class ||
                     $cfg['type'] == ChoiceType::class) {
                     $newContentTexts[] = $data;
+                } else if ($cfg['type'] === TinymceType::class) {
+                    $newContentTexts[] = html_entity_decode(strip_tags($data));
                 }
             }
         }
