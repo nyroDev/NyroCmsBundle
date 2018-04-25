@@ -33,14 +33,14 @@ $attrs = array_merge(
     $view['nyrodev']->get('nyrodev_form')->getPluploadAttrs(),
     array(
         'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
-        $prefixTinymce.'inline' => true,
+        $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),
         $prefixTinymce.'theme' => 'modern',
         $prefixTinymce.'relative_urls' => 'false',
         $prefixTinymce.'browser_spellcheck' => 'true',
 
-        $prefixTinymceSimple.'inline' => true,
-        $prefixTinymceSimple.'menubar' => false,
+        $prefixTinymceSimple.'inline' => 'true',
+        $prefixTinymceSimple.'menubar' => 'false',
         $prefixTinymceSimple.'valid_elements' => '',
     ),
     $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymce),
