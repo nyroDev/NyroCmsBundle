@@ -230,7 +230,7 @@ nyrocms:
     home: Accueil
     relateds: À découvrir
   search:
-    title: Rechecher "%q%"
+    title: Rechercher "%q%"
     empty: Aucun élément ne correspond à votre recherche.
     results: %total% résultats.
     resultsContents: Contenus (%nb%)
