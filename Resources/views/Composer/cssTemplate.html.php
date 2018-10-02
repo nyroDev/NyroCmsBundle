@@ -13,7 +13,7 @@ foreach ($view['assetic']->stylesheets(
     array('output' => 'css/tablet.css')) as $url) {
     $url = $view->escape($view['nyrodev']->getAsseticVersionUrl($url));
     $ieCss[] = $url; ?>
-	<link rel="stylesheet" type="text/css" media="all and (min-width: <?php echo $tabletWidth; ?>)" href="<?php echo $url; ?>" />
+	<link rel="stylesheet" type="text/css" media="all and (min-width: <?php echo $tabletWidth; ?>), print" href="<?php echo $url; ?>" />
 	<?php
 }
 foreach ($view['assetic']->stylesheets(
@@ -22,7 +22,7 @@ foreach ($view['assetic']->stylesheets(
     array('output' => 'css/desktop.css')) as $url) {
     $url = $view->escape($view['nyrodev']->getAsseticVersionUrl($url));
     $ieCss[] = $url; ?>
-	<link rel="stylesheet" type="text/css" media="all and (min-width: <?php echo $desktopWidth; ?>)" href="<?php echo $url; ?>" />
+	<link rel="stylesheet" type="text/css" media="all and (min-width: <?php echo $desktopWidth; ?>), print" href="<?php echo $url; ?>" />
 	<?php
 }
 ?>
