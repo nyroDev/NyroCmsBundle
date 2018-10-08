@@ -123,7 +123,7 @@ class AdminDataController extends AbstractAdminController
     public function contentDeleteAction($id)
     {
         $row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-        if ($row && !$row->getHandler() && $this->get('nyrocms_admin')->canAdminContent($row) === true) {
+        if ($row && !$row->getHandler() && true === $this->get('nyrocms_admin')->canAdminContent($row)) {
             $this->get('nyrocms_db')->remove($row);
             $this->get('nyrocms_db')->flush();
         }
@@ -150,7 +150,7 @@ class AdminDataController extends AbstractAdminController
     public function contentEditAction(Request $request, $id)
     {
         $row = $this->get('nyrocms_db')->getContentRepository()->find($id);
-        if (!$row || !$this->get('nyrocms_admin')->canAdminContent($row) === true) {
+        if (!$row || true === !$this->get('nyrocms_admin')->canAdminContent($row)) {
             throw $this->createNotFoundException();
         }
         $this->get('nyrocms_admin')->setContentParentId($row->getVeryParent()->getId());
@@ -199,6 +199,7 @@ class AdminDataController extends AbstractAdminController
             'state',
             'goUrl',
             'goBlank',
+            'redirectToChildren',
             'relateds',
             'metaTitle',
             'metaDescription',
@@ -219,7 +220,7 @@ class AdminDataController extends AbstractAdminController
             );
         }
 
-        if ($row instanceOf AbstractUploadable) {
+        if ($row instanceof AbstractUploadable) {
             $row->setService($this->get('nyrodev'));
         }
 
@@ -230,6 +231,7 @@ class AdminDataController extends AbstractAdminController
 
         return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
     }
+
     protected $contentTranslationFields = array(
         'title' => array(
             'type' => TextType::class,
@@ -258,16 +260,17 @@ class AdminDataController extends AbstractAdminController
         'ogDescription' => array(
             'type' => TextareaType::class,
             'required' => false,
-        )
+        ),
     );
-    
+
     protected $translations;
     protected $langs;
-    
+
     /**
      * @var \Symfony\Component\Form\Form
      */
     protected $contentForm;
+
     protected function contentFormClb($action, \NyroDev\NyroCmsBundle\Model\Content $row, \Symfony\Component\Form\FormBuilder $form)
     {
         $langs = $this->get('nyrocms')->getLocaleNames($row);
@@ -310,6 +313,7 @@ class AdminDataController extends AbstractAdminController
         $adminFormEvent->setTranslations($this->translations);
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_CONTENT, $adminFormEvent);
     }
+
     protected function contentFlush($action, $row, $form)
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
@@ -317,7 +321,7 @@ class AdminDataController extends AbstractAdminController
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_CONTENT, $adminFormEvent);
 
         $this->contentForm = $form;
-        $this->get('nyrocms_admin')->updateContentUrl($row, $action == self::EDIT);
+        $this->get('nyrocms_admin')->updateContentUrl($row, self::EDIT == $action);
     }
 
     protected function contentAfterFlush($response, $action, $row)
@@ -344,7 +348,7 @@ class AdminDataController extends AbstractAdminController
                 }
             }
 
-            $this->get('nyrocms_admin')->updateContentUrl($row, $action == self::EDIT);
+            $this->get('nyrocms_admin')->updateContentUrl($row, self::EDIT == $action);
             $om->flush();
         }
     }
@@ -702,7 +706,7 @@ class AdminDataController extends AbstractAdminController
         $adminFormEvent = new AdminFormEvent($action, $row);
         $this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_USER, $adminFormEvent);
 
-        if ($action == self::ADD) {
+        if (self::ADD == $action) {
             $this->get('nyrocms_user')->handleAddUser($row);
         }
     }

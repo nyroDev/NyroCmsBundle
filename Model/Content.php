@@ -12,7 +12,6 @@ use NyroDev\UtilityBundle\Model\AbstractUploadable;
  */
 abstract class Content extends AbstractUploadable implements Composable, ComposableHandler, Sharable
 {
-
     const STATE_DISABLED = 0;
     const STATE_ACTIVE = 1;
     const STATE_INVISIBLE = 2;
@@ -74,6 +73,12 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
      * @Gedmo\Versioned
      */
     protected $goBlank;
+
+    /**
+     * @var bool
+     * @Gedmo\Versioned
+     */
+    protected $redirectToChildren;
 
     /**
      * @var smallint
@@ -402,6 +407,30 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     public function getGoBlank()
     {
         return $this->goBlank;
+    }
+
+    /**
+     * Set redirectToChildren.
+     *
+     * @param bool $redirectToChildren
+     *
+     * @return Content
+     */
+    public function setRedirectToChildren($redirectToChildren)
+    {
+        $this->redirectToChildren = $redirectToChildren;
+
+        return $this;
+    }
+
+    /**
+     * Get redirectToChildren.
+     *
+     * @return bool
+     */
+    public function getRedirectToChildren()
+    {
+        return $this->redirectToChildren;
     }
 
     /**

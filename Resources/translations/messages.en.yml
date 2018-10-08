@@ -120,6 +120,7 @@ admin:
     state: State
     goUrl: URL redirection
     goBlank: New tab
+    redirectToChildren: Redirect to children
     relateds: Associated content
     relatedsPlaceholder: Enter the page title
     handler: Handler

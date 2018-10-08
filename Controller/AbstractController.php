@@ -118,7 +118,7 @@ abstract class AbstractController extends NyroDevAbstractController
             return $redirect;
         }
 
-        if (count($content->getContent()) === 0) {
+        if (0 === count($content->getContent()) || $content->getRedirectToChildren()) {
             // No text content, search for the first sub content
             $subContents = $this->getContentRepo()->childrenForMenu($content, true);
             if (count($subContents)) {
@@ -264,11 +264,11 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->get('nyrocms')->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $urls = array(
-            $this->get('nyrodev')->generateUrl($this->getRootHandler().'_homepage'.($request->getLocale() == 'fr' ? '_noLocale' : ''), array(), true),
+            $this->get('nyrodev')->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
         );
 
         foreach ($this->getContentRepo()->childrenForMenu($this->getRootContent(), false) as $content) {
-            if (!$content->getGoUrl()) {
+            if (!$content->getGoUrl() && !$content->getRedirectToChildren()) {
                 $urls[] = $this->get('nyrocms')->getUrlFor($content, true);
             }
             if ($content->getContentHandler() && $this->get('nyrocms')->getHandler($content->getContentHandler())->hasContentSpecUrl()) {

@@ -18,6 +18,7 @@
 		<field name="firstImage" type="string" nullable="true" />
 		<field name="goUrl" type="string" nullable="true" />
 		<field name="goBlank" type="boolean" nullable="true" />
+		<field name="redirectToChildren" type="boolean" nullable="true" />
 		<field name="state" type="smallint" nullable="false" />
 		<field name="handler" type="string" nullable="true" />
 		<field name="host" type="string" nullable="true" />
