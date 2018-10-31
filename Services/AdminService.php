@@ -10,6 +10,7 @@ use NyroDev\NyroCmsBundle\Model\Composable;
 class AdminService extends AbstractService
 {
     protected $userTypes;
+
     public function getUserTypeChoices()
     {
         if (is_null($this->userTypes)) {
@@ -28,6 +29,7 @@ class AdminService extends AbstractService
     }
 
     protected $userRoles;
+
     public function getUserRoles()
     {
         if (is_null($this->userRoles)) {
@@ -41,10 +43,12 @@ class AdminService extends AbstractService
     }
 
     protected $contentParentId;
+
     public function setContentParentId($id)
     {
         $this->contentParentId = $id;
     }
+
     public function getContentParentId()
     {
         return $this->contentParentId;
@@ -92,13 +96,13 @@ class AdminService extends AbstractService
                 $rolePrefixLn = strlen($rolePrefix);
                 foreach ($this->get('nyrodev_member')->getUser()->getUserRoles() as $role) {
                     if (
-                            (($rolePrefix == 'complete' || $rolePrefix == 'root') && !$role->getInternal()) ||
+                            (('complete' == $rolePrefix || 'root' == $rolePrefix) && !$role->getInternal()) ||
                             ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
                         ) {
                         // This is an corresponding role, check it against
                         if ($role->getContents()->count() > 0) {
                             foreach ($role->getContents() as $content) {
-                                if ($rolePrefix != 'root' || $content->getRoot() == $content->getId()) {
+                                if ('root' != $rolePrefix || $content->getRoot() == $content->getId()) {
                                     $this->administrableRootContentIds[$rolePrefix][$content->getRoot()] = true;
                                 }
                             }
@@ -150,6 +154,8 @@ class AdminService extends AbstractService
             foreach ($row->getContentHandler()->getContents() as $content) {
                 $canAdmin = $canAdmin || $this->get('nyrocms_admin')->canAdmin($content);
             }
+        } else {
+            $canAdmin = $this->canAdminContent($row->getParent());
         }
 
         return $canAdmin;
