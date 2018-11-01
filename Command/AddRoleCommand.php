@@ -60,7 +60,7 @@ class AddRoleCommand extends ContainerAwareCommand
 
         $newRole->setName($name);
         $newRole->setRoleName($roleName);
-        $newRole->setInternal($internal === 'true');
+        $newRole->setInternal('true' === $internal);
 
         $dbService->flush();
 

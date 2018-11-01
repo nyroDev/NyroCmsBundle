@@ -148,11 +148,11 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         $handler = $this->get('nyrocms')->getHandler($ch);
         if (!$handler->isReversePositionOrder()) {
-            $dir = $dir == 'up' ? 'down' : 'up';
+            $dir = 'up' == $dir ? 'down' : 'up';
         }
 
         $position = $row->getPosition();
-        if ($dir == 'up') {
+        if ('up' == $dir) {
             ++$position;
         } elseif ($position > 0) {
             --$position;
@@ -200,7 +200,7 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         if ($handler->useDateSpec()) {
             $moreOptions['dateSpec'] = $this->get('nyrocms')->getDateFormOptions();
-            if ($action == self::ADD) {
+            if (self::ADD == $action) {
                 $row->setDateSpec(new \DateTime());
             }
         }
@@ -276,6 +276,7 @@ class AdminHandlerContentsController extends AbstractAdminController
      * @var \Symfony\Component\Form\Form
      */
     protected $contentForm;
+
     protected function contentFormClb($action, \NyroDev\NyroCmsBundle\Model\ContentSpec $row, \Symfony\Component\Form\FormBuilder $form)
     {
         $langs = $this->get('nyrocms')->getLocaleNames($row);
@@ -318,6 +319,7 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         $handler->formClb($action, $row, $form, $langs, $this->translations);
     }
+
     protected function contentFlush($action, $row, $form)
     {
         $this->contentForm = $form;

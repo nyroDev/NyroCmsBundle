@@ -8,11 +8,11 @@ class AdminMenuEvent extends Event
 {
     const ADMIN_MENU = 'nyrocms.events.adminMenu';
 
-    protected $menu,
-                $uriSplitted,
-                $adminPerRoot,
-                $rootContents,
-                $curRootId;
+    protected $menu;
+    protected $uriSplitted;
+    protected $adminPerRoot;
+    protected $rootContents;
+    protected $curRootId;
 
     public function __construct($uriSplitted, $adminPerRoot, array $rootContents, $curRootId)
     {

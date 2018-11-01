@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -159,7 +158,7 @@ class Contact extends AbstractHandler
             }
         }
 
-        if (count($ret) == 0) {
+        if (0 == count($ret)) {
             $ret = array(
                 'contact' => array(
                     'emails' => array($this->trans('nyrocms.handler.contact.defaultTo.email')),
@@ -225,10 +224,10 @@ class Contact extends AbstractHandler
             foreach ($view as $k => $field) {
                 /* @var $field \Symfony\Component\Form\FormView */
                 $v = $field->vars['value'];
-                if ($k == 'dest' && $v) {
+                if ('dest' == $k && $v) {
                     $v = $contactEmails[$v]['name'];
                 }
-                if ($k != '_token' && $v) {
+                if ('_token' != $k && $v) {
                     $message[] = '<strong>'.$field->vars['label'].'</strong> : '.nl2br($v).'<br />';
                     if ($saveInDb) {
                         $accessor->setValue($contactMessage, $k, $v);

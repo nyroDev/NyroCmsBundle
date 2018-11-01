@@ -6,7 +6,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface Sharable
 {
-
     public function getMetaTitle();
 
     public function setMetaTitle($metaTitle);
@@ -31,9 +30,9 @@ interface Sharable
 
     public function setOgImageFile($ogImageFile);
 
-	public function setOgImage(UploadedFile $ogImage = null);
+    public function setOgImage(UploadedFile $ogImage = null);
 
     public function getOgImage();
-    
+
     public function __toString();
 }

@@ -2,18 +2,18 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title><?php echo $subject ?></title>
+        <title><?php echo $subject; ?></title>
 		<?php echo $view->render($stylesTemplate, array(
             'locale' => $locale,
             'content' => $content,
             'dbContent' => $dbContent,
-        )) ?>
+        )); ?>
 	</head>
     <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0">
     	<?php echo $view->render($bodyTemplate, array(
             'locale' => $locale,
             'content' => $content,
             'dbContent' => $dbContent,
-        )) ?>
+        )); ?>
     </body>
 </html>

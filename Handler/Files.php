@@ -57,7 +57,7 @@ class Files extends AbstractHandler
 
     protected function getFormFields($action)
     {
-        $isAdd = $action == AbstractAdminController::ADD;
+        $isAdd = AbstractAdminController::ADD == $action;
 
         return array(
             'file' => array(

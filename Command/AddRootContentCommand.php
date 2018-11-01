@@ -82,7 +82,7 @@ class AddRootContentCommand extends ContainerAwareCommand
         $newContent->setTheme($theme);
         $newContent->setHost($host);
         $newContent->setLocales($locales);
-        $newContent->setXmlSitemap($xmlSitemap === 'true');
+        $newContent->setXmlSitemap('true' === $xmlSitemap);
 
         $dbService->flush();
 

@@ -1,8 +1,8 @@
-jQuery(function($) {
+jQuery(function ($) {
 	var dates = $('.datepicker');
-	
+
 	if (dates.length) {
-		dates.each(function() {
+		dates.each(function () {
 			var me = $(this);
 			var options = {
 				showOtherMonths: true,
@@ -10,12 +10,14 @@ jQuery(function($) {
 				changeMonth: true,
 				changeYear: true
 			};
-			
-			if (me.data('future'))
+
+			if (me.data('future')) {
 				options.minDate = '+1D';
-			if (me.data('past'))
+			}
+			if (me.data('past')) {
 				options.maxDate = '-1D';
-			
+			}
+
 			me.prop('type', 'text');
 			if (me.is('.datetimepicker')) {
 				options.timeText = 'Heure';

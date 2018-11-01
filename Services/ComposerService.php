@@ -19,6 +19,7 @@ class ComposerService extends AbstractService
     }
 
     protected $configs = array();
+
     public function getConfig(Composable $row)
     {
         $class = get_class($row);
@@ -30,7 +31,7 @@ class ComposerService extends AbstractService
             $cfgArraysMerge = array('default_blocks', 'config_blocks');
 
             foreach ($cfgArrays as $cfg) {
-                if (isset($ret[$cfg]) && count($ret[$cfg]) === 0) {
+                if (isset($ret[$cfg]) && 0 === count($ret[$cfg])) {
                     unset($ret[$cfg]);
                 }
             }
@@ -177,6 +178,7 @@ class ComposerService extends AbstractService
     }
 
     protected $wrapperCssthemeEvents = array();
+
     public function getWrapperCssTheme(Composable $row, $position = WrapperCssThemeEvent::POSITION_NORMAL)
     {
         if (!isset($this->wrapperCssthemeEvents[$row->getId()])) {
@@ -203,7 +205,7 @@ class ComposerService extends AbstractService
         foreach ($values as $k => $v) {
             if (is_array($v)) {
                 $ret[$k] = $this->tinymceAttrsTrRec($v);
-            } elseif ($k == 'title') {
+            } elseif ('title' == $k) {
                 $ret[$k] = $this->trans($v);
             } else {
                 $ret[$k] = $v;
@@ -243,7 +245,7 @@ class ComposerService extends AbstractService
         foreach ($blocks as $content) {
             $contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : array();
             foreach ($contents as $name => $c) {
-                if ($name == 'images') {
+                if ('images' == $name) {
                     foreach ($c as $img) {
                         if (isset($img['file'])) {
                             $images[] = $img['file'];
@@ -325,7 +327,7 @@ class ComposerService extends AbstractService
                             $ret['texts'][] = $ret['contents'][$k];
                         }
                     }
-                } elseif (strpos($v, 'OBJECT::') === 0) {
+                } elseif (0 === strpos($v, 'OBJECT::')) {
                     $fct = substr($v, 8);
                     $ret['contents'][$k] = $row->{$fct}();
                 } else {
@@ -394,7 +396,7 @@ class ComposerService extends AbstractService
         $nb = count($tmp);
         if ($nb > 0) {
             $ret = $tmp[$nb - 1];
-            if ($ret == 'DELETE') {
+            if ('DELETE' == $ret) {
                 $ret = null;
             }
             unset($tmp[$nb - 1]);
@@ -411,7 +413,7 @@ class ComposerService extends AbstractService
         $images = array_diff(array_map('trim', $images), $this->existingImages);
         $fs = new \Symfony\Component\Filesystem\Filesystem();
         foreach ($images as $image) {
-            if (trim($image) && $image != 'DELETE') {
+            if (trim($image) && 'DELETE' != $image) {
                 $file = $this->getRootImageDir().'/'.trim($image);
                 if ($fs->exists($file)) {
                     $fs->remove($file);
@@ -428,7 +430,7 @@ class ComposerService extends AbstractService
         $blockName = 'div';
 
         $hasHandler = $row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler();
-        if (count($row->getContent()) == 0) {
+        if (0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
                 $content = array($this->getBlock($row, 'intro'));
@@ -455,7 +457,7 @@ class ComposerService extends AbstractService
             $wrappedAs = $handler->isWrappedAs();
             $hasHandlerPlaced = false;
             foreach ($content as $cont) {
-                if ($cont['type'] == 'handler' || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && $cont['contents'][$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR)) {
+                if ('handler' == $cont['type'] || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && $cont['contents'][$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR)) {
                     $hasHandlerPlaced = true;
                 }
             }
@@ -471,7 +473,7 @@ class ComposerService extends AbstractService
         }
 
         foreach ($row->getContent() as $nb => $cont) {
-            if ((!$handlerContent && !$handlerAction) || $cont['type'] == 'handler') {
+            if ((!$handlerContent && !$handlerAction) || 'handler' == $cont['type']) {
                 $ret .= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
             }
         }
@@ -512,6 +514,7 @@ class ComposerService extends AbstractService
     }
 
     protected $rootImageDir;
+
     protected function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {

@@ -22,13 +22,13 @@ class User extends UserModel
      * @ORM\JoinTable(name="user_user_role")
      */
     protected $userRoles;
-	
-	/**
-	* @ORM\PreRemove()
-	*/
-	public function preRemove()
+
+    /**
+     * @ORM\PreRemove()
+     */
+    public function preRemove()
     {
         $this->setEmail('_deleted_'.time().$this->getEmail());
         $this->setPasswordKey(null);
-	}
+    }
 }

@@ -42,7 +42,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         if (count($where)) {
             foreach ($where as $k => $v) {
                 $operator = '=';
-                if ($k[0] == '!') {
+                if ('!' == $k[0]) {
                     $operator = '<>';
                     $k = substr($k, 1);
                 }
@@ -70,6 +70,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
                 ->setParameters($qb->getParameters())
                 ->getQuery()->getSingleScalarResult();
     }
+
     public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array(), $start = null, $limit = null)
     {
         $qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order);

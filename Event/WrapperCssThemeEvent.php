@@ -13,8 +13,8 @@ class WrapperCssThemeEvent extends Event
     const POSITION_ADMIN_HTML = 'admin.html';
     const POSITION_ADMIN_BODY = 'admin.body';
 
-    protected $row,
-                $wrapperCssTheme = array();
+    protected $row;
+    protected $wrapperCssTheme = array();
 
     public function __construct(Composable $row)
     {

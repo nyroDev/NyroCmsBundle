@@ -1,6 +1,6 @@
 <?php if (isset($sent) && $sent): ?>
 	<div class="block_text">
-		<p><strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.handler.contact.sent')) ?></strong></p>
+		<p><strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.handler.contact.sent')); ?></strong></p>
 	</div>
 <?php else: ?>
 	<?php

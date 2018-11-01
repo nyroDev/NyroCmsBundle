@@ -67,6 +67,7 @@ class AbstractAdminController extends SrcAbstractAdminController
             }
         }
     }
+
     protected function translationFlushClb($action, $row, $form)
     {
         $this->translationForm = $form;

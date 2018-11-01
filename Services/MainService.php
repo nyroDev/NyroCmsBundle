@@ -12,6 +12,7 @@ use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 class MainService extends AbstractService
 {
     protected $handlers = array();
+
     public function getHandler(ContentHandler $contentHandler)
     {
         if (!isset($this->handlers[$contentHandler->getId()])) {
@@ -20,7 +21,7 @@ class MainService extends AbstractService
                 throw new \RuntimeException($class.' not found when trying to create handler.');
             }
 
-            if (strpos(get_class($contentHandler), 'Proxies') === 0) {
+            if (0 === strpos(get_class($contentHandler), 'Proxies')) {
                 $contentHandler = $this->get('nyrocms_db')->getContentHandlerRepository()->find($contentHandler->getId());
             }
 
@@ -31,20 +32,24 @@ class MainService extends AbstractService
     }
 
     protected $routeConfig;
+
     public function setRouteConfig($routeConfig)
     {
         $this->routeConfig = $routeConfig;
     }
+
     public function getRouteConfig()
     {
         return $this->routeConfig;
     }
 
     protected $activeIds = array();
+
     public function setActiveIds($activeIds)
     {
         $this->activeIds = $activeIds;
     }
+
     public function getActiveIds()
     {
         return $this->activeIds;
@@ -56,6 +61,7 @@ class MainService extends AbstractService
     {
         $this->rootContent = $content;
     }
+
     public function getRootContent()
     {
         return $this->rootContent;
@@ -249,12 +255,14 @@ class MainService extends AbstractService
     }
 
     protected $pathInfoObject;
+
     public function setPathInfoObject($object)
     {
         $this->pathInfoObject = $object;
     }
 
     protected $pathInfoSearch;
+
     public function setPathInfoSearch($search)
     {
         $this->pathInfoSearch = $search;
@@ -343,6 +351,7 @@ class MainService extends AbstractService
     }
 
     protected $foundHandlers;
+
     public function getFoundHandlers()
     {
         if (is_null($this->foundHandlers)) {

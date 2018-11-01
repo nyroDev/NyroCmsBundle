@@ -1,13 +1,13 @@
-jQuery(function($) {
-	
+jQuery(function ($) {
+
 	var composer = $('#composer');
-	
+
 	if (composer.length) {
 		var main = composer.find('#composerContents'),
 			txtConfirm = composer.data('confirm'),
 			txtCancel = composer.data('cancel'),
 			hasChanged = false,
-			getIcon = function(name) {
+			getIcon = function (name) {
 				return composer.data('icon').replace(/TPL/g, name);
 			},
 			tools = composer.children('#composerTools'),
@@ -22,58 +22,59 @@ jQuery(function($) {
 				addFormVars: false,
 				multi_selection: false,
 				events: {
-					BeforeUpload: function(up, file) {
+					BeforeUpload: function (up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
 						console.log(compImg.data('cfg'));
 						up.settings.file_data_name = 'image',
-						up.settings.multipart_params = {
-							imageUpload: 1,
-							cfg: compImg.data('cfg')
-						};
-						if (compImg.data('more'))
+							up.settings.multipart_params = {
+								imageUpload: 1,
+								cfg: compImg.data('cfg')
+							};
+						if (compImg.data('more')) {
 							up.settings.multipart_params.more = compImg.data('more');
+						}
 					},
-					FileUploaded: function(up, file, data) {
+					FileUploaded: function (up, file, data) {
 						var $data = $.parseJSON(data.response),
 							compImg = $(up.settings.drop_element).closest('.composableImgCont'),
 							textarea = compImg.find('textarea'),
 							block = compImg.closest('.composerBlock');
 						if (compImg.is('.composableImgBig')) {
-							block.css('background-image', 'url('+$data.resized+')');
+							block.css('background-image', 'url(' + $data.resized + ')');
 						} else if (!compImg.is('.composableImgMobile')) {
 							compImg.find('img').attr('src', $data.resized);
 						}
 						if ($data.datas) {
-							$.each($data.datas, function(k, v) {
+							$.each($data.datas, function (k, v) {
 								block.data(k, v);
 							});
 							block.trigger('composerImgChange');
 						}
 						compImg.addClass('composableImgExists');
-						textarea.val(textarea.val()+"\n"+$data.file);
+						textarea.val(textarea.val() + "\n" + $data.file);
 						changed();
 					}
 				},
 				onAllComplete: false
 			}),
-			changed = function() {
+			changed = function () {
 				if (!hasChanged) {
 					hasChanged = true;
 					saveButton.removeAttr('disabled').removeProp('disabled');
 				}
 			},
-			initComposable = function(parent) {
+			initComposable = function (parent) {
 				parent
 					.find('.block_handler [required]').removeAttr('required').removeProp('required').end()
 					.find('.composableSimple').myTinymce(simpleOptions, tinymceurl).end()
 					.find('.composableHtml').myTinymce(htmlOptions, tinymceurl).end()
 					.find('.composableImg').nyroPlupload(pluploadOptions).end()
-					.find('.composableUrl').each(function() {
+					.find('.composableUrl').each(function () {
 						var me = $(this),
 							name = me.data('name'),
-							inputUrl = me.closest('.composerBlock').find('#'+name),
-							handler = $('<a href="#" class="composableUrlHandler" title="'+composer.data('linkurl')+'"></a>').insertAfter(me);
-						handler.on('click', function(e) {
+							inputUrl = me.closest('.composerBlock').find('#' + name),
+							handler = $('<a href="#" class="composableUrlHandler" title="' + composer.data('linkurl') + '"></a>').insertAfter(me);
+						handler.on('click', function (e) {
 							e.preventDefault();
 							$.nmConfirm({
 								text: composer.data('linkurl'),
@@ -82,7 +83,7 @@ jQuery(function($) {
 								input: 'text',
 								inputPlaceholder: '',
 								inputValue: inputUrl.val(),
-								clbOk: function(newUrl) {
+								clbOk: function (newUrl) {
 									if (newUrl != inputUrl.val()) {
 										inputUrl.val(newUrl);
 										changed();
@@ -91,49 +92,51 @@ jQuery(function($) {
 							});
 						});
 					}).end()
-					.find('.composableImgDelete').each(function() {
+					.find('.composableImgDelete').each(function () {
 						var me = $(this),
 							compImg = me.prev('.composableImgCont'),
 							textarea = compImg.find('textarea');
-						me.on('click', function(e) {
+						me.on('click', function (e) {
 							e.preventDefault();
 							$.nmConfirm({
 								text: me.data('confirm'),
 								ok: txtConfirm,
 								cancel: txtCancel,
-								clbOk: function() {
+								clbOk: function () {
 									compImg.removeClass('composableImgExists');
-									textarea.val(textarea.val()+"\nDELETE");
-									if (compImg.is('.composableImgBig'))
+									textarea.val(textarea.val() + "\nDELETE");
+									if (compImg.is('.composableImgBig')) {
 										compImg.closest('.composerBlock').css('background-image', 'none');
+									}
 									changed();
 								}
 							});
 						});
 					}).end()
-					.find('.composableSel').each(function() {
+					.find('.composableSel').each(function () {
 						var me = $(this),
 							isObject = me.is('.composableObjectId'),
 							classPrefix = me.data('classprefix'),
 							name = me.data('name'),
 							composerBlock = me.closest('.composerBlock'),
 							applyTo = composerBlock,
-							inputVal = composerBlock.find('#'+name);
+							inputVal = composerBlock.find('#' + name);
 						if (me.data('applyto')) {
 							applyTo = composerBlock.find(me.data('applyto'));
 						}
-						me.on('click', function(e) {
+						me.on('click', function (e) {
 							e.preventDefault();
 							var sels = [],
 								classes = [];
-							me.children('span').each(function() {
+							me.children('span').each(function () {
 								var sp = $(this);
 								sels.push({
 									val: sp.data('val'),
 									label: sp.text()
 								});
-								if (!isObject)
-									classes.push(classPrefix+sp.data('val'));
+								if (!isObject) {
+									classes.push(classPrefix + sp.data('val'));
+								}
 							});
 							$.nmConfirm({
 								text: me.attr('title'),
@@ -142,15 +145,15 @@ jQuery(function($) {
 								input: 'select',
 								values: sels,
 								inputValue: inputVal.val(),
-								clbOk: function(newVal) {
+								clbOk: function (newVal) {
 									if (newVal != inputVal.val()) {
 										if (isObject) {
 											composerBlock
-												.children('#'+classPrefix+inputVal.val()).hide().end()
-												.children('#'+classPrefix+newVal).show().end()
+												.children('#' + classPrefix + inputVal.val()).hide().end()
+												.children('#' + classPrefix + newVal).show().end()
 												.trigger('composerSelChange', [name, newVal]);
 										} else {
-											applyTo.removeClass(classes.join(' ')).addClass(classPrefix+newVal);
+											applyTo.removeClass(classes.join(' ')).addClass(classPrefix + newVal);
 											composerBlock.trigger('composerSelChange', [name, newVal]);
 										}
 										inputVal.val(newVal);
@@ -160,7 +163,7 @@ jQuery(function($) {
 							});
 						});
 					}).end()
-					.find('.composableVideo').each(function() {
+					.find('.composableVideo').each(function () {
 						var video = $(this),
 							link = video.children('a'),
 							iframe = video.children('iframe'),
@@ -168,7 +171,7 @@ jQuery(function($) {
 							inputEmbed = video.children('textarea[name*="embed"]'),
 							inputAutoplay = video.children('textarea[name*="autoplay"]'),
 							autoplayChk,
-							askUrl = function() {
+							askUrl = function () {
 								$.nmConfirm({
 									text: link.text(),
 									ok: txtConfirm,
@@ -176,9 +179,9 @@ jQuery(function($) {
 									input: 'url',
 									inputValue: inputUrl.val(),
 									inputPlaceholder: 'https://www.youtube.com/watch?v=vN1FJPQG9co',
-									contentClb: function(content) {
+									contentClb: function (content) {
 										var url = content.find('input[type="url"]');
-										url.after('<label for="autoplayChk">'+inputAutoplay.data('label')+'</label>');
+										url.after('<label for="autoplayChk">' + inputAutoplay.data('label') + '</label>');
 										autoplayChk = $(
 											'<input type="checkbox" value="1" name="autoplayChk" id="autoplayChk" ' +
 											(inputAutoplay.val() ? 'checked="checked" ' : '') +
@@ -186,7 +189,7 @@ jQuery(function($) {
 										).insertAfter(url);
 										url.after('<br />');
 									},
-									clbOk: function(newUrl) {
+									clbOk: function (newUrl) {
 										if (newUrl && newUrl != inputUrl.val()) {
 											$.ajax({
 												url: video.closest('form').attr('action'),
@@ -197,7 +200,7 @@ jQuery(function($) {
 													url: newUrl,
 													autoplay: autoplayChk.is(':checked') ? 1 : 0
 												}
-											}).done(function(data) {
+											}).done(function (data) {
 												if (!data.err) {
 													iframe.attr('src', data.embed);
 													inputUrl.val(data.url);
@@ -214,12 +217,12 @@ jQuery(function($) {
 									}
 								});
 							};
-						link.on('click', function(e) {
+						link.on('click', function (e) {
 							e.preventDefault();
 							askUrl();
 						});
 					}).end()
-					.find('.composableSlideshow').each(function() {
+					.find('.composableSlideshow').each(function () {
 						var me = $(this),
 							big = me.find('.block_slideshow_big'),
 							myPluploadOptions = $.extend(true, {}, pluploadOptions),
@@ -230,45 +233,45 @@ jQuery(function($) {
 							sizebigCfg = me.data('sizebigcfg'),
 							sizethumbCfg = me.data('sizethumbcfg'),
 							placehold = me.data('placehold');
-						
-						myPluploadOptions.events.BeforeUpload = function(up, file) {
+
+						myPluploadOptions.events.BeforeUpload = function (up, file) {
 							up.settings.file_data_name = 'image',
-							up.settings.multipart_params = {
-								imageUpload: 1,
-								cfg: sizebigCfg,
-								cfg2: sizethumbCfg
-							};
+								up.settings.multipart_params = {
+									imageUpload: 1,
+									cfg: sizebigCfg,
+									cfg2: sizethumbCfg
+								};
 						};
-						myPluploadOptions.events.FileUploaded = function(up, file, data) {
+						myPluploadOptions.events.FileUploaded = function (up, file, data) {
 							var $data = $.parseJSON(data.response),
 								$li = $(up.settings.drop_element).closest('li'),
 								textarea = $li.find('textarea[name*="images"]');
 							$li
 								.children('.block_slideshow_thumb').attr('href', $data.resized)
-									.children('img').attr('src', $data.resized2);
-							textarea.val(textarea.val()+"\n"+$data.file);
+								.children('img').attr('src', $data.resized2);
+							textarea.val(textarea.val() + "\n" + $data.file);
 							changed();
 						};
-						
+
 						me
-							.on('click', '.block_slideshow_thumb', function(e) {
+							.on('click', '.block_slideshow_thumb', function (e) {
 								e.preventDefault();
 							})
-							.on('click', '.composableSlideshowDelete', function(e) {
+							.on('click', '.composableSlideshowDelete', function (e) {
 								e.preventDefault();
 								var me = $(this);
 								$.nmConfirm({
 									text: composer.data('slideshowdelete'),
 									ok: txtConfirm,
 									cancel: txtCancel,
-									clbOk: function() {
+									clbOk: function () {
 										me.closest('li').addClass('deleted').fadeOut()
-												.find('textarea[name*="deletes"]').val(1);
+											.find('textarea[name*="deletes"]').val(1);
 										changed();
 									}
 								});
 							})
-							.on('click', '.composableSlideshowEdit', function(e) {
+							.on('click', '.composableSlideshowEdit', function (e) {
 								e.preventDefault();
 								var $li = $(this).closest('li'),
 									input = $li.find('textarea[name*="titles"]');
@@ -278,7 +281,7 @@ jQuery(function($) {
 									cancel: txtCancel,
 									input: 'text',
 									inputValue: input.val(),
-									clbOk: function(val) {
+									clbOk: function (val) {
 										input.val(val);
 										$li.find('.block_slideshow_thumb').children('img').attr('alt', val);
 										changed();
@@ -286,22 +289,22 @@ jQuery(function($) {
 								});
 							})
 							.find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions);
-					
-						var addButton = $('<a href="#" class="composableSlideshowUpload">'+composer.data('addphoto')+'</a>').appendTo(big),
+
+						var addButton = $('<a href="#" class="composableSlideshowUpload">' + composer.data('addphoto') + '</a>').appendTo(big),
 							myPluploadOptionsAdd = $.extend(true, {}, myPluploadOptions);
-						
+
 						myPluploadOptionsAdd.texts.browse = composer.data('addphoto');
 						myPluploadOptionsAdd.multi_selection = true;
-						
-						myPluploadOptionsAdd.events.FileUploaded = function(up, file, data) {
+
+						myPluploadOptionsAdd.events.FileUploaded = function (up, file, data) {
 							var $data = $.parseJSON(data.response),
 								htmlNew = '<li>';
-								htmlNew+= '<a href="'+$data.resized+'" class="block_slideshow_thumb"><img src="'+$data.resized2+'" alt="" /></a>';
-								htmlNew+= '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">'+getIcon('drag')+'</a><a href="#" class="composableSlideshowEdit">'+getIcon('pencil')+'</a><a href="#" class="composableSlideshowDelete">'+getIcon('delete')+'</a>';
-								htmlNew+= '<textarea name="contents['+nb+'][images][]">'+$data.file+'</textarea>';
-								htmlNew+= '<textarea name="contents['+nb+'][titles][]"></textarea>';
-								htmlNew+= '<textarea name="contents['+nb+'][deletes][]"></textarea>';
-								htmlNew+= '</li>';
+							htmlNew += '<a href="' + $data.resized + '" class="block_slideshow_thumb"><img src="' + $data.resized2 + '" alt="" /></a>';
+							htmlNew += '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">' + getIcon('drag') + '</a><a href="#" class="composableSlideshowEdit">' + getIcon('pencil') + '</a><a href="#" class="composableSlideshowDelete">' + getIcon('delete') + '</a>';
+							htmlNew += '<textarea name="contents[' + nb + '][images][]">' + $data.file + '</textarea>';
+							htmlNew += '<textarea name="contents[' + nb + '][titles][]"></textarea>';
+							htmlNew += '<textarea name="contents[' + nb + '][deletes][]"></textarea>';
+							htmlNew += '</li>';
 							var $li = $(htmlNew).appendTo(nav).find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions).end();
 							if (nbLi == 0) {
 								me.closest('.block_slideshow').trigger('slideshowShow', [$li]);
@@ -312,21 +315,21 @@ jQuery(function($) {
 							changed();
 						};
 						addButton.nyroPlupload(myPluploadOptionsAdd);
-						
+
 						nav
 							.sortable({
 								items: 'li:not(.composableSlideshowAdd)',
 								handle: '.composableSlideshowDrag',
 								placeholder: 'ui-state-highlight',
-								stop: function() {
+								stop: function () {
 									changed();
 								}
 							});
-						
+
 						if (nbLi == 0) {
-							big.find('img').attr('src', placehold+sizebig);
+							big.find('img').attr('src', placehold + sizebig);
 						}
-						
+
 						if (!parent.is('#composer') && $.fn.extend.slideshow)
 							me.closest('.block_slideshow').slideshow();
 					});
@@ -335,43 +338,43 @@ jQuery(function($) {
 			},
 			curAdd = 0,
 			cacheBlock = {},
-			addBlock = function(url, inserter) {
+			addBlock = function (url, inserter) {
 				if (!cacheBlock[url]) {
 					$.ajax({
 						url: url
-					}).done(function(data) {
+					}).done(function (data) {
 						cacheBlock[url] = data;
 						addBlock(url, inserter);
 					});
 				} else {
-					var ident = 'new-'+curAdd,
+					var ident = 'new-' + curAdd,
 						html = $(cacheBlock[url].replace(/--NEW--/g, ident));
-					
+
 					if (inserter)
 						inserter(html);
 					else
 						cont.append(html);
-					
+
 					initComposable(html);
 					changed();
-					
+
 					curAdd++;
 				}
 			};
-		
-		simpleOptions.setup = function(ed) {
+
+		simpleOptions.setup = function (ed) {
 			ed.on('change', changed);
 		};
-		htmlOptions.setup = function(ed) {
+		htmlOptions.setup = function (ed) {
 			ed.on('change', changed);
 		};
-		
+
 		tools
-			.on('click', '.selectLink', function(e) {
+			.on('click', '.selectLink', function (e) {
 				e.preventDefault();
 				$(this).closest('.select').toggleClass('opened');
 			})
-			.on('click', '.selecterLink a', function(e) {
+			.on('click', '.selecterLink a', function (e) {
 				if (hasChanged) {
 					e.preventDefault();
 					var me = $(this);
@@ -379,56 +382,57 @@ jQuery(function($) {
 						text: me.closest('.selecterLink').data('confirm'),
 						ok: txtConfirm,
 						cancel: txtCancel,
-						clbOk: function() {
+						clbOk: function () {
 							document.location.href = me.attr('href');
 						}
 					});
-				} 
+				}
 			})
-			.find('input[name="theme"]').on('change', function() {
+			.find('input[name="theme"]').on('change', function () {
 				var me = $(this);
 				if (me.is(':checked')) {
 					var val = me.val();
-					if (val.length == 0)
+					if (val.length == 0) {
 						val = me.data('parent');
-					cont.attr('class', 'composer composer_'+val);
-					themeDemo.attr('class', 'bg_'+val);
+					}
+					cont.attr('class', 'composer composer_' + val);
+					themeDemo.attr('class', 'bg_' + val);
 					changed();
 					me.closest('.select').toggleClass('opened');
 				}
 			});
-		
+
 		composer
-			.on('composerChanged', function() {
-				changed();		
+			.on('composerChanged', function () {
+				changed();
 			})
-			.on('composerInit', function(e, parent) {
-				initComposable(parent);		
+			.on('composerInit', function (e, parent) {
+				initComposable(parent);
 			})
-			.on('submit', function() {
-				main.find('.composableSimple, .composableHtml').each(function() {
+			.on('submit', function () {
+				main.find('.composableSimple, .composableHtml').each(function () {
 					var me = $(this);
-					main.find('textarea#'+me.data('name')).val(me.html());
+					main.find('textarea#' + me.data('name')).val(me.html());
 				});
 			})
-			.on('click', '.composerDelete', function(e) {
+			.on('click', '.composerDelete', function (e) {
 				e.preventDefault();
 				var me = $(this);
 				$.nmConfirm({
 					text: composer.data('deleteblock'),
 					ok: txtConfirm,
 					cancel: txtCancel,
-					clbOk: function() {
+					clbOk: function () {
 						var block = me.closest('.composerBlock');
-						block.fadeOut(function() {
-							block.append('<input type="hidden" name="contentsDel['+block.data('nb')+']" value="1" />');
+						block.fadeOut(function () {
+							block.append('<input type="hidden" name="contentsDel[' + block.data('nb') + ']" value="1" />');
 							composer.trigger('blockRemoved', [block]);
 						});
 						changed();
 					}
 				});
 			})
-			.on('click', '.cancel', function(e) {
+			.on('click', '.cancel', function (e) {
 				if (hasChanged) {
 					e.preventDefault();
 					var me = $(this);
@@ -436,21 +440,21 @@ jQuery(function($) {
 						text: me.data('confirm'),
 						ok: txtConfirm,
 						cancel: txtCancel,
-						clbOk: function() {
+						clbOk: function () {
 							document.location.href = me.attr('href');
 						}
 					});
-				} 
+				}
 			});
-			
+
 		if (!composer.is('.composerNoDrag')) {
 			cont.sortable({
 				items: '.composerBlock',
 				handle: '.composerDrag',
 				placeholder: 'ui-state-highlight',
-				stop: function(e, ui) {
+				stop: function (e, ui) {
 					if (ui.item.is('a')) {
-						addBlock(ui.item.attr('href'), function(html) {
+						addBlock(ui.item.attr('href'), function (html) {
 							html.insertAfter(ui.item);
 							ui.item.remove();
 						});
@@ -460,23 +464,23 @@ jQuery(function($) {
 				}
 			});
 		}
-		
+
 		tools
 			.children('#availableBlocks')
-				.find('a.availableBlock')
-					.on('click', function(e) {
-						e.preventDefault();
-						addBlock($(this).attr('href'));
-					})
-					.draggable({
-						revert: true,
-						connectToSortable: cont,
-						helper: function() {
-							return $(this).clone();
-						}
-					});
-		
+			.find('a.availableBlock')
+			.on('click', function (e) {
+				e.preventDefault();
+				addBlock($(this).attr('href'));
+			})
+			.draggable({
+				revert: true,
+				connectToSortable: cont,
+				helper: function () {
+					return $(this).clone();
+				}
+			});
+
 		initComposable(main);
 	}
-	
+
 });

@@ -1,19 +1,18 @@
-jQuery(function($, undefined) {;
-	
+jQuery(function ($, undefined) {;
+
 	var detectsCss = $('.detectCss');
-	
+
 	$.extend({
-		preloadImage: function(src, clb) {
+		preloadImage: function (src, clb) {
 			$('<img />')
-				.on('load', function() {
+				.on('load', function () {
 					if ($.isFunction(clb))
 						clb();
 				})
 				.attr('src', src);
 		},
-		detectCss: function() {
+		detectCss: function () {
 			return detectsCss.filter(':visible').data('type');
 		}
 	});
-
 });

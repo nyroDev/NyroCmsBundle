@@ -41,10 +41,10 @@ class AdminController extends Controller
         return $this->render('NyroDevNyroCmsBundle:Admin:account.html.php', $this->get('nyrocms_user')->handleAccount('admin', $request));
     }
 
-	public function ccAction()
+    public function ccAction()
     {
         $fs = new Filesystem();
-		$cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
 
         $ret = 'Nothing to remove';
         try {

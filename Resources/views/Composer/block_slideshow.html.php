@@ -1,10 +1,10 @@
 <?php if ($admin): ?>
 <div class="composableSlideshow"
-	data-nb="<?php echo $nb ?>"
-	data-sizebig="<?php echo(isset($config['images']['big']['placeholdW']) ? $config['images']['big']['placeholdW'] : $config['images']['big']['w']).'x'.(isset($config['images']['big']['placeholdH']) ? $config['images']['big']['placeholdH'] : $config['images']['big']['h']) ?>"
-	data-sizebigcfg="<?php echo $view->escape(json_encode($config['images']['big'])) ?>"
-	data-sizethumb="<?php echo(isset($config['images']['thumb']['placeholdW']) ? $config['images']['thumb']['placeholdW'] : $config['images']['thumb']['w']).'x'.(isset($config['images']['thumb']['placeholdH']) ? $config['images']['thumb']['placeholdH'] : $config['images']['thumb']['h']) ?>"
-	data-sizethumbcfg="<?php echo $view->escape(json_encode($config['images']['thumb'])) ?>"
+	data-nb="<?php echo $nb; ?>"
+	data-sizebig="<?php echo(isset($config['images']['big']['placeholdW']) ? $config['images']['big']['placeholdW'] : $config['images']['big']['w']).'x'.(isset($config['images']['big']['placeholdH']) ? $config['images']['big']['placeholdH'] : $config['images']['big']['h']); ?>"
+	data-sizebigcfg="<?php echo $view->escape(json_encode($config['images']['big'])); ?>"
+	data-sizethumb="<?php echo(isset($config['images']['thumb']['placeholdW']) ? $config['images']['thumb']['placeholdW'] : $config['images']['thumb']['w']).'x'.(isset($config['images']['thumb']['placeholdH']) ? $config['images']['thumb']['placeholdH'] : $config['images']['thumb']['h']); ?>"
+	data-sizethumbcfg="<?php echo $view->escape(json_encode($config['images']['thumb'])); ?>"
 	data-placehold="https://placehold.it/">
 <?php endif; ?>
 <?php if (count($contents['images']) || $admin): ?>

@@ -104,7 +104,7 @@ class AddUserCommand extends ContainerAwareCommand
             }
         }
 
-        if (count($userroles) === 0 && count($userRolesDb) > 0) {
+        if (0 === count($userroles) && count($userRolesDb) > 0) {
             $userRolesDbList = array(
                 '0' => 'nothing',
             );
@@ -136,7 +136,7 @@ class AddUserCommand extends ContainerAwareCommand
         $newUser->setSalt($salt);
 
         $newUser->setUserType($usertype);
-        $newUser->setDevelopper($developper === 'true');
+        $newUser->setDevelopper('true' === $developper);
 
         if (count($userroles)) {
             foreach ($userroles as $ur) {

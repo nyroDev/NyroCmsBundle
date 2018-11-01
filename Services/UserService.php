@@ -20,7 +20,7 @@ class UserService extends AbstractService
             (!$user->getValidEnd() || $user->getValidEnd() >= $now)
             ) {
             // user is valid, we can send it an email
-                $this->sendWelcomeEmail($user);
+            $this->sendWelcomeEmail($user);
         }
     }
 
@@ -64,7 +64,7 @@ class UserService extends AbstractService
             $ret['step'] = 2;
             $user = $repo->find($id);
 
-            if ($user && $welcome && $user->getSalt() != 'dummy') {
+            if ($user && $welcome && 'dummy' != $user->getSalt()) {
                 $user = null;
             }
 

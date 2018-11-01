@@ -9,7 +9,11 @@ class UrlGenerationEvent extends Event
     const LOCALES_URL = 'nyrocms.events.urlGeneration.locales';
     const OBJECT_URL = 'nyrocms.events.urlGeneration.object';
 
-    protected $routeName, $routePrm, $absolute, $object, $parent;
+    protected $routeName;
+    protected $routePrm;
+    protected $absolute;
+    protected $object;
+    protected $parent;
 
     public function __construct($routeName, array $routePrm = array(), $absolute = false, $object = null, $parent = null)
     {

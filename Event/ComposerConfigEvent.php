@@ -9,8 +9,8 @@ class ComposerConfigEvent extends Event
 {
     const COMPOSER_CONFIG = 'nyrocms.events.composerConfig';
 
-    protected $row,
-                $config;
+    protected $row;
+    protected $config;
 
     public function __construct(Composable $row, $configName, $config)
     {

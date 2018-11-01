@@ -39,10 +39,10 @@ class FileTypeExtension extends AbstractTypeExtension
         $data = $form->getParent()->getData();
         if ($data instanceof ContentSpec) {
             $tmpName = explode('_', $form->getName());
-            if (count($tmpName) === 3) {
+            if (3 === count($tmpName)) {
                 $currentFile = null;
                 foreach ($data->getTranslations() as $tr) {
-                    if ($tr->getLocale() == $tmpName[1] && ($tr->getField() == 'content' || $tr->getField() == 'data')) {
+                    if ($tr->getLocale() == $tmpName[1] && ('content' == $tr->getField() || 'data' == $tr->getField())) {
                         $contents = json_decode($tr->getContent(), true);
                         if (isset($contents[$tmpName[2]])) {
                             $currentFile = $contents[$tmpName[2]];

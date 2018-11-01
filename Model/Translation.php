@@ -14,7 +14,6 @@ abstract class Translation
 
     /**
      * @var string
-     
      * @Assert\NotBlank()
      */
     protected $domain;

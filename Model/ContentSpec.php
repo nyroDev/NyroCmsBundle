@@ -686,7 +686,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
     {
         return $this->getParent()->getVeryParent();
     }
-    
+
     protected function getFileFields()
     {
         return array();

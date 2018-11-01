@@ -49,7 +49,7 @@ class AdminTplController extends NyroDevAbstractController
                 $menu['contents']['root_'.$curRootId] = array(
                     'uri' => $this->generateUrl('nyrocms_admin_data_content_tree', array('id' => $curRootId)),
                     'name' => $rootContents[$curRootId]->getTitle(),
-                    'active' => $tmpUri[0] == 'content' && $this->get('nyrocms_admin')->getContentParentId() == $curRootId,
+                    'active' => 'content' == $tmpUri[0] && $this->get('nyrocms_admin')->getContentParentId() == $curRootId,
                 );
                 $vars['rootContents'] = $rootContents;
                 $vars['curRootId'] = $curRootId;
@@ -58,7 +58,7 @@ class AdminTplController extends NyroDevAbstractController
                     $menu['contents']['root_'.$rootContent->getId()] = array(
                         'uri' => $this->generateUrl('nyrocms_admin_data_content_tree', array('id' => $rootContent->getId())),
                         'name' => $rootContent->getTitle(),
-                        'active' => $tmpUri[0] == 'content' && $this->get('nyrocms_admin')->getContentParentId() == $rootContent->getId(),
+                        'active' => 'content' == $tmpUri[0] && $this->get('nyrocms_admin')->getContentParentId() == $rootContent->getId(),
                     );
                 }
             }
@@ -82,7 +82,7 @@ class AdminTplController extends NyroDevAbstractController
                         $modules['module_'.$contentHandler->getId()] = array(
                             'uri' => $uri,
                             'name' => $name,
-                            'active' => $uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false,
+                            'active' => $uri == $tmpUriInit || false !== strpos($tmpUriInit, $uri.'/'),
                         );
 
                         $otherRoutes = $handler->getOtherAdminRoutes();
@@ -94,7 +94,7 @@ class AdminTplController extends NyroDevAbstractController
                                 $modules['module_'.$contentHandler->getId().'_'.$k] = array(
                                     'uri' => $uri,
                                     'name' => $name,
-                                    'active' => $uri == $tmpUriInit || strpos($tmpUriInit, $uri.'/') !== false,
+                                    'active' => $uri == $tmpUriInit || false !== strpos($tmpUriInit, $uri.'/'),
                                 );
                             }
                         }
@@ -119,7 +119,7 @@ class AdminTplController extends NyroDevAbstractController
                     $menu['contents']['contenthandler'] = array(
                         'uri' => $this->generateUrl('nyrocms_admin_data_contentHandler'),
                         'name' => $this->trans('admin.contentHandler.viewTitle'),
-                        'active' => $tmpUri[0] == 'contentHandler',
+                        'active' => 'contentHandler' == $tmpUri[0],
                     );
                 }
 
@@ -131,12 +131,12 @@ class AdminTplController extends NyroDevAbstractController
                     'user' => array(
                         'uri' => $this->generateUrl('nyrocms_admin_data_user'),
                         'name' => $this->trans('admin.user.viewTitle'),
-                        'active' => $tmpUri[0] == 'user',
+                        'active' => 'user' == $tmpUri[0],
                     ),
                     'userRole' => array(
                         'uri' => $this->generateUrl('nyrocms_admin_data_userRole'),
                         'name' => $this->trans('admin.userRole.viewTitle'),
-                        'active' => $tmpUri[0] == 'userRole',
+                        'active' => 'userRole' == $tmpUri[0],
                     ),
                 );
             }

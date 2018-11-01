@@ -9,9 +9,9 @@ class ComposerBlockVarsEvent extends Event
 {
     const COMPOSER_BLOCK_VARS = 'nyrocms.events.composerBlockVars';
 
-    protected $row,
-                $template,
-                $vars;
+    protected $row;
+    protected $template;
+    protected $vars;
 
     public function __construct(Composable $row, $template, array $vars)
     {

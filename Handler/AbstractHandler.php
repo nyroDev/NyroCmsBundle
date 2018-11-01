@@ -274,11 +274,11 @@ abstract class AbstractHandler
             $cfg['mapped'] = false;
             if (isset($content[$k])) {
                 $cfg['data'] = $content[$k];
-                if ($type == DateType::class || $type == DateTimeType::class) {
+                if (DateType::class == $type || DateTimeType::class == $type) {
                     $cfg['data'] = new \DateTime($cfg['data']['date']);
                 }
             }
-            if ($type == FileType::class && isset($cfg['data'])) {
+            if (FileType::class == $type && isset($cfg['data'])) {
                 unset($cfg['data']);
             }
             if (!isset($cfg['position'])) {
@@ -294,10 +294,10 @@ abstract class AbstractHandler
                     $fieldName = 'lang_'.$lg.'_'.$k;
                     $curCfg['position']['after'] = $after;
                     $data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
-                    if ($data && $type == 'date' && !is_object($data)) {
+                    if ($data && 'date' == $type && !is_object($data)) {
                         $data = new \DateTime($data['date']);
                     }
-                    if ($type == FileType::class) {
+                    if (FileType::class == $type) {
                         $data = null;
                         if (isset($curCfg['showDelete']) && $curCfg['showDelete']) {
                             $cfg['showDelete'] = $cfg['showDelete'].'_'.$lg;
@@ -338,18 +338,18 @@ abstract class AbstractHandler
         $newContents = $newContentTexts = array();
         foreach ($this->getFormFields($action) as $k => $cfg) {
             $data = $form->get($k)->getData();
-            if ($cfg['type'] == FileType::class) {
+            if (FileType::class == $cfg['type']) {
                 if (isset($cfg['showDelete']) && $cfg['showDelete'] && $this->get('nyrodev')->getRequest()->get($cfg['showDelete'])) {
                     $this->deleteFileClb($row, $k);
                 }
                 $newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
             } else {
                 $newContents[$k] = $data;
-                if ($cfg['type'] == TextType::class ||
-                    $cfg['type'] == TextareaType::class ||
-                    $cfg['type'] == ChoiceType::class) {
+                if (TextType::class == $cfg['type'] ||
+                    TextareaType::class == $cfg['type'] ||
+                    ChoiceType::class == $cfg['type']) {
                     $newContentTexts[] = $data;
-                } else if ($cfg['type'] === TinymceType::class) {
+                } elseif (TinymceType::class === $cfg['type']) {
                     $newContentTexts[] = html_entity_decode(strip_tags($data));
                 }
             }
@@ -370,7 +370,7 @@ abstract class AbstractHandler
     public function flushLangClb($action, ContentSpec $row, Form $form, $lg)
     {
         $newContents = $newContentTexts = array();
-        if ($action == AbstractAdminController::ADD) {
+        if (AbstractAdminController::ADD == $action) {
             if ($this->hasComposer()) {
                 $row->setData(array());
             } else {
@@ -388,7 +388,7 @@ abstract class AbstractHandler
                     $data = $dataLg;
                 }
             }
-            if ($cfg['type'] == FileType::class) {
+            if (FileType::class == $cfg['type']) {
                 if (isset($cfg['translatable']) && $cfg['translatable'] && isset($cfg['showDelete']) && $cfg['showDelete']) {
                     $deleteIdent = $cfg['showDelete'].'_'.$lg;
                     if ($this->get('nyrodev')->getRequest()->get($deleteIdent)) {
@@ -398,11 +398,11 @@ abstract class AbstractHandler
                 $newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
             } else {
                 $newContents[$k] = $data;
-                if ($cfg['type'] == TextType::class ||
-                    $cfg['type'] == TextareaType::class ||
-                    $cfg['type'] == ChoiceType::class) {
+                if (TextType::class == $cfg['type'] ||
+                    TextareaType::class == $cfg['type'] ||
+                    ChoiceType::class == $cfg['type']) {
                     $newContentTexts[] = $data;
-                } else if ($cfg['type'] === TinymceType::class) {
+                } elseif (TinymceType::class === $cfg['type']) {
                     $newContentTexts[] = html_entity_decode(strip_tags($data));
                 }
             }
@@ -417,6 +417,7 @@ abstract class AbstractHandler
     }
 
     protected $fileUploaded = array();
+
     protected function handleFileUpload($field, $data, $action, ContentSpec $row, $fieldForm = null)
     {
         $fieldForm = is_null($fieldForm) ? $field : $fieldForm;
@@ -449,7 +450,7 @@ abstract class AbstractHandler
     public function deleteClb(ContentSpec $row)
     {
         foreach ($this->getFormFields(AbstractAdminController::ADD) as $k => $cfg) {
-            if ($cfg['type'] == FileType::class) {
+            if (FileType::class == $cfg['type']) {
                 $this->deleteFileClb($row, $k);
             }
         }
@@ -534,6 +535,7 @@ abstract class AbstractHandler
     }
 
     protected $preparedView;
+
     public function prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
         if (is_null($this->preparedView)) {
@@ -546,6 +548,7 @@ abstract class AbstractHandler
     abstract protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null);
 
     protected $preparedHomeView;
+
     public function prepareHomeView(Content $content)
     {
         if (is_null($this->preparedHomeView)) {

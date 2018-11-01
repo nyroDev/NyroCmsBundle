@@ -18,7 +18,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Content extends ContentModel
 {
-
     use Traits\SharableTrait { getFileFields as protected sharableGetFileFields; }
 
     /**

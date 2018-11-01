@@ -9,9 +9,9 @@ class TinymceConfigEvent extends Event
 {
     const TINYMCE_CONFIG = 'nyrocms.events.tinymceConfig';
 
-    protected $row,
-                $simple,
-                $config;
+    protected $row;
+    protected $simple;
+    protected $config;
 
     public function __construct(Composable $row, $simple, array $config)
     {

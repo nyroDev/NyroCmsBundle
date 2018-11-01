@@ -10,7 +10,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 trait SharableTrait
 {
-
     /**
      * @var string
      *
@@ -130,35 +129,37 @@ trait SharableTrait
         return $this;
     }
 
+    /**
+     * @Assert\Image()
+     */
+    protected $ogImage;
 
-	/**
-	 * @Assert\Image()
-	 */
-	protected $ogImage;
+    /**
+     * Sets Image.
+     *
+     * @param UploadedFile $image
+     */
+    public function setOgImage(UploadedFile $ogImage = null)
+    {
+        $this->setUploadFile('ogImage', $ogImage);
+    }
 
-	/**
-	 * Sets Image.
-	 *
-	 * @param UploadedFile $image
-	 */
-	public function setOgImage(UploadedFile $ogImage = null) {
-		$this->setUploadFile('ogImage', $ogImage);
-	}
+    /**
+     * Get Image.
+     *
+     * @return UploadedFile
+     */
+    public function getOgImage()
+    {
+        return $this->ogImage;
+    }
 
-	/**
-	 * Get Image.
-	 *
-	 * @return UploadedFile
-	 */
-	public function getOgImage() {
-		return $this->ogImage;
-	}
-
-    protected function getFileFields() {
+    protected function getFileFields()
+    {
         return array(
             'ogImage' => array(
-                AbstractUploadable::CONFIG_FIELD=>'ogImageFile',
-                AbstractUploadable::CONFIG_DIR=>'uploads/sharable'
+                AbstractUploadable::CONFIG_FIELD => 'ogImageFile',
+                AbstractUploadable::CONFIG_DIR => 'uploads/sharable',
             ),
         );
     }
