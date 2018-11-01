@@ -70,7 +70,8 @@ jQuery(function($) {
 					.find('.composableImg').nyroPlupload(pluploadOptions).end()
 					.find('.composableUrl').each(function() {
 						var me = $(this),
-							inputUrl = me.closest('.composerBlock').find('textarea[name*="linkUrl"]'),
+							name = me.data('name'),
+							inputUrl = me.closest('.composerBlock').find('#'+name),
 							handler = $('<a href="#" class="composableUrlHandler" title="'+composer.data('linkurl')+'"></a>').insertAfter(me);
 						handler.on('click', function(e) {
 							e.preventDefault();
@@ -115,7 +116,12 @@ jQuery(function($) {
 							isObject = me.is('.composableObjectId'),
 							classPrefix = me.data('classprefix'),
 							name = me.data('name'),
-							inputVal = me.closest('.composerBlock').find('#'+name);
+							composerBlock = me.closest('.composerBlock'),
+							applyTo = composerBlock,
+							inputVal = composerBlock.find('#'+name);
+						if (me.data('applyto')) {
+							applyTo = composerBlock.find(me.data('applyto'));
+						}
 						me.on('click', function(e) {
 							e.preventDefault();
 							var sels = [],
@@ -139,14 +145,13 @@ jQuery(function($) {
 								clbOk: function(newVal) {
 									if (newVal != inputVal.val()) {
 										if (isObject) {
-											me.closest('.composerBlock')
+											composerBlock
 												.children('#'+classPrefix+inputVal.val()).hide().end()
 												.children('#'+classPrefix+newVal).show().end()
 												.trigger('composerSelChange', [name, newVal]);
 										} else {
-											me.closest('.composerBlock')
-												.removeClass(classes.join(' ')).addClass(classPrefix+newVal)
-												.trigger('composerSelChange', [name, newVal]);
+											applyTo.removeClass(classes.join(' ')).addClass(classPrefix+newVal);
+											composerBlock.trigger('composerSelChange', [name, newVal]);
 										}
 										inputVal.val(newVal);
 										changed();

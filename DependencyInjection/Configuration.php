@@ -67,7 +67,7 @@ class Configuration implements ConfigurationInterface
             'video' => array(
                 'url' => null,
                 'embed' => null,
-                'autoplay' => null
+                'autoplay' => null,
             ),
             'separator' => array(
             ),
@@ -263,10 +263,10 @@ class Configuration implements ConfigurationInterface
                                             foreach ($config as $k => $v) {
                                                 if (is_array($v)) {
                                                     $hasReplace = array_search('REPLACE', $v);
-                                                    if ($hasReplace !== false) {
+                                                    if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -285,10 +285,10 @@ class Configuration implements ConfigurationInterface
                                             foreach ($config as $k => $v) {
                                                 if (is_array($v)) {
                                                     $hasReplace = array_search('REPLACE', $v);
-                                                    if ($hasReplace !== false) {
+                                                    if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -308,10 +308,10 @@ class Configuration implements ConfigurationInterface
                                             foreach ($config as $k => $v) {
                                                 if (is_array($v)) {
                                                     $hasReplace = array_search('REPLACE', $v);
-                                                    if ($hasReplace !== false) {
+                                                    if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -331,10 +331,10 @@ class Configuration implements ConfigurationInterface
                                             foreach ($config as $k => $v) {
                                                 if (is_array($v)) {
                                                     $hasReplace = array_search('REPLACE', $v);
-                                                    if ($hasReplace !== false) {
+                                                    if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || $hasReplace !== false ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -357,6 +357,8 @@ class Configuration implements ConfigurationInterface
                                     ->scalarNode('composer_template')->end()
                                     ->scalarNode('block_template')->end()
                                     ->scalarNode('css_template')->end()
+                                    ->scalarNode('css_tablet_width')->defaultValue('800px')->end()
+                                    ->scalarNode('css_desktop_width')->defaultValue('1000px')->end()
                                     ->arrayNode('cancel_url')
                                         ->children()
                                             ->scalarNode('route')->end()

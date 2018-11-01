@@ -58,11 +58,11 @@ class AdminComposerController extends AbstractAdminController
                 );
                 $errors = $this->get('validator')->validateValue($url, $constraints);
 
-                if (count($errors) == 0) {
+                if (0 == count($errors)) {
                     $dataUrl = $this->get('nyrodev_embed')->data($url);
                     $embedUrl = $dataUrl['urlEmbed'];
                     if ($request->request->get('autoplay')) {
-                        $embedUrl.= (strpos($embedUrl, '?') === false ? '?' : '&').'autoplay=1';
+                        $embedUrl .= (false === strpos($embedUrl, '?') ? '?' : '&').'autoplay=1';
                     }
                     $ret = array(
                         'url' => $url,
@@ -99,7 +99,7 @@ class AdminComposerController extends AbstractAdminController
                     } else {
                         $block = $composerService->getBlock($row, $contentsType[$key], $contents[$key], true);
                         foreach ($block['texts'] as $t) {
-                            if ($t != AbstractHandler::TEMPLATE_INDICATOR) {
+                            if (AbstractHandler::TEMPLATE_INDICATOR != $t) {
                                 $newTexts[] = html_entity_decode(strip_tags($t));
                             }
                         }
