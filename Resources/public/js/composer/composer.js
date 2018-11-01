@@ -229,6 +229,7 @@ jQuery(function ($) {
 							nb = me.data('nb'),
 							nav = me.children('ul'),
 							nbLi = nav.children().length,
+							multipleFields = me.data('multiplefields').split(','),
 							sizebig = me.data('sizebig'),
 							sizebigCfg = me.data('sizebigcfg'),
 							sizethumbCfg = me.data('sizethumbcfg'),
@@ -273,20 +274,46 @@ jQuery(function ($) {
 							})
 							.on('click', '.composableSlideshowEdit', function (e) {
 								e.preventDefault();
-								var $li = $(this).closest('li'),
-									input = $li.find('textarea[name*="titles"]');
-								$.nmConfirm({
-									text: composer.data('slideshowtitle'),
-									ok: txtConfirm,
-									cancel: txtCancel,
-									input: 'text',
-									inputValue: input.val(),
-									clbOk: function (val) {
-										input.val(val);
-										$li.find('.block_slideshow_thumb').children('img').attr('alt', val);
-										changed();
-									}
-								});
+								var $li = $(this).closest('li');
+								if (multipleFields && multipleFields.length) {
+									var textareas = $li.find('textarea'),
+										inputsHtml = '';
+
+									// Start by adding title
+									inputsHtml += '<input name="title" type="text" value="' + textareas.filter('[name*="titles"]').val() + '" /><br />';
+
+									$.each(multipleFields, function () {
+										inputsHtml += '<p>' + this + '</p>';
+										inputsHtml += '<input name="' + this + '" type="text" value="' + textareas.filter('[name*="' + this + 's"]').val() + '" / ><br />';
+									});
+
+									$.nmConfirm({
+										text: composer.data('slideshowtitle'),
+										ok: txtConfirm,
+										cancel: txtCancel,
+										inputs: inputsHtml,
+										clbOk: function (vals) {
+											$.each(vals, function () {
+												textareas.filter('[name*="' + this.name + 's"]').val(this.value);
+											});
+											changed();
+										}
+									});
+								} else {
+									var input = $li.find('textarea[name*="titles"]');
+									$.nmConfirm({
+										text: composer.data('slideshowtitle'),
+										ok: txtConfirm,
+										cancel: txtCancel,
+										input: 'text',
+										inputValue: input.val(),
+										clbOk: function (val) {
+											input.val(val);
+											$li.find('.block_slideshow_thumb').children('img').attr('alt', val);
+											changed();
+										}
+									});
+								}
 							})
 							.find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions);
 
@@ -303,6 +330,11 @@ jQuery(function ($) {
 							htmlNew += '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">' + getIcon('drag') + '</a><a href="#" class="composableSlideshowEdit">' + getIcon('pencil') + '</a><a href="#" class="composableSlideshowDelete">' + getIcon('delete') + '</a>';
 							htmlNew += '<textarea name="contents[' + nb + '][images][]">' + $data.file + '</textarea>';
 							htmlNew += '<textarea name="contents[' + nb + '][titles][]"></textarea>';
+							if (multipleFields && multipleFields.length) {
+								$.each(multipleFields, function () {
+									htmlNew += '<textarea name="contents[' + nb + '][' + this + 's][]"></textarea>';
+								});
+							}
 							htmlNew += '<textarea name="contents[' + nb + '][deletes][]"></textarea>';
 							htmlNew += '</li>';
 							var $li = $(htmlNew).appendTo(nav).find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions).end();
@@ -312,6 +344,7 @@ jQuery(function ($) {
 							} else {
 								me.closest('.block_slideshow').trigger('slideshowStartTimer');
 							}
+							me.trigger('composableSlideshowAdded', [$li]);
 							changed();
 						};
 						addButton.nyroPlupload(myPluploadOptionsAdd);
@@ -330,11 +363,16 @@ jQuery(function ($) {
 							big.find('img').attr('src', placehold + sizebig);
 						}
 
-						if (!parent.is('#composer') && $.fn.extend.slideshow)
+						if (!parent.is('#composer') && $.fn.extend.slideshow) {
 							me.closest('.block_slideshow').slideshow();
+						}
+						me
+							.trigger('composableSlideshowInited')
+							.addClass('composableSlideshowInited');
 					});
-				if (window.svg4everybody)
+				if (window.svg4everybody) {
 					window.svg4everybody();
+				}
 			},
 			curAdd = 0,
 			cacheBlock = {},

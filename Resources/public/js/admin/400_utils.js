@@ -4,9 +4,11 @@ jQuery(function ($) {
 		nmConfirm: function (options) {
 			var opts = $.extend({
 					class: 'nmConfirm',
-					text: '',
+					text: false,
+					html: false,
 					ok: 'OK',
 					cancel: false,
+					inputs: false,
 					input: false,
 					inputValue: false,
 					inputPlaceholder: false,
@@ -19,10 +21,17 @@ jQuery(function ($) {
 				content;
 
 			contentHtml = '<div class="' + opts.class + '">';
+			if (opts.html) {
+				contentHtml += '<p>' + opts.html + '</p>';
+			}
 			if (opts.text) {
 				contentHtml += '<p>' + opts.text + '</p>';
 			}
-			if (opts.input) {
+
+			if (opts.inputs) {
+				contentHtml += '<form action="#" method="get">';
+				contentHtml += opts.inputs;
+			} else if (opts.input) {
 				contentHtml += '<form action="#" method="get">';
 				if (opts.input == 'select') {
 					contentHtml += '<select>';
@@ -44,7 +53,7 @@ jQuery(function ($) {
 				}
 				contentHtml += '</div>';
 			}
-			if (opts.input) {
+			if (opts.inputs || opts.input) {
 				contentHtml += '</form>';
 			}
 			contentHtml += '</div>';
@@ -55,12 +64,12 @@ jQuery(function ($) {
 				opts.contentClb(content);
 			}
 
-			if (opts.input) {
+			if (opts.input || opts.inputs) {
 				content.find('form').on('submit', function (e) {
 					e.preventDefault();
 					isConfirmed = true;
 					if ($.isFunction(opts.clbOk)) {
-						opts.clbOk($(this).find(':input').val());
+						opts.clbOk(opts.inputs ? $(this).serializeArray() : $(this).find(':input').val());
 					}
 					$.nmTop().close();
 				});

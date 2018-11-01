@@ -301,10 +301,20 @@ class ComposerService extends AbstractService
                                 foreach ($defaults[$k] as $kk => $img) {
                                     if (!isset($deletes[$kk]) || !$deletes[$kk]) {
                                         $image = $this->handleDefaultImage($img);
-                                        $ret['contents'][$k][] = array(
-                                            'title' => isset($defaults['titles']) && isset($defaults['titles'][$k]) ? $defaults['titles'][$k] : null,
+                                        $val = array(
+                                            'title' => isset($defaults['titles']) && isset($defaults['titles'][$kk]) ? $defaults['titles'][$kk] : null,
                                             'file' => $image,
                                         );
+
+                                        if (isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields'])) {
+                                            foreach ($blockConfig[$k]['multipleFields'] as $field) {
+                                                $fields = $field.'s';
+                                                $val[$field] = isset($defaults[$fields]) && isset($defaults[$fields][$kk]) ? $defaults[$fields][$kk] : null;
+                                            }
+                                        }
+
+                                        $ret['contents'][$k][] = $val;
+
                                         if ($addExtract) {
                                             $ret['images'][] = $image;
                                         }
