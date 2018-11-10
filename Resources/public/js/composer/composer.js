@@ -284,7 +284,11 @@ jQuery(function ($) {
 
 									$.each(multipleFields, function () {
 										inputsHtml += '<p>' + this + '</p>';
-										inputsHtml += '<input name="' + this + '" type="text" value="' + textareas.filter('[name*="' + this + 's"]').val() + '" / ><br />';
+										if (this.indexOf('text') === 0) {
+											inputsHtml += '<textarea name="' + this + '">' + textareas.filter('[name*="' + this + 's"]').val() + '</textarea><br />';
+										} else {
+											inputsHtml += '<input name="' + this + '" type="text" value="' + textareas.filter('[name*="' + this + 's"]').val() + '" / ><br />';
+										}
 									});
 
 									$.nmConfirm({
