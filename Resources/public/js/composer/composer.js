@@ -24,7 +24,6 @@ jQuery(function ($) {
 				events: {
 					BeforeUpload: function (up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
-						console.log(compImg.data('cfg'));
 						up.settings.file_data_name = 'image',
 							up.settings.multipart_params = {
 								imageUpload: 1,
@@ -69,6 +68,27 @@ jQuery(function ($) {
 					.find('.composableSimple').myTinymce(simpleOptions, tinymceurl).end()
 					.find('.composableHtml').myTinymce(htmlOptions, tinymceurl).end()
 					.find('.composableImg').nyroPlupload(pluploadOptions).end()
+					.find('.composableImgDelete').each(function () {
+						var me = $(this),
+							compImg = me.prev('.composableImgCont'),
+							textarea = compImg.find('textarea');
+						me.on('click', function (e) {
+							e.preventDefault();
+							$.nmConfirm({
+								text: me.data('confirm'),
+								ok: txtConfirm,
+								cancel: txtCancel,
+								clbOk: function () {
+									compImg.removeClass('composableImgExists');
+									textarea.val(textarea.val() + "\nDELETE");
+									if (compImg.is('.composableImgBig')) {
+										compImg.closest('.composerBlock').css('background-image', 'none');		
+									}
+									changed();
+								}
+							});
+						});
+					}).end()
 					.find('.composableUrl').each(function () {
 						var me = $(this),
 							name = me.data('name'),
@@ -88,27 +108,6 @@ jQuery(function ($) {
 										inputUrl.val(newUrl);
 										changed();
 									}
-								}
-							});
-						});
-					}).end()
-					.find('.composableImgDelete').each(function () {
-						var me = $(this),
-							compImg = me.prev('.composableImgCont'),
-							textarea = compImg.find('textarea');
-						me.on('click', function (e) {
-							e.preventDefault();
-							$.nmConfirm({
-								text: me.data('confirm'),
-								ok: txtConfirm,
-								cancel: txtCancel,
-								clbOk: function () {
-									compImg.removeClass('composableImgExists');
-									textarea.val(textarea.val() + "\nDELETE");
-									if (compImg.is('.composableImgBig')) {
-										compImg.closest('.composerBlock').css('background-image', 'none');
-									}
-									changed();
 								}
 							});
 						});
@@ -392,12 +391,14 @@ jQuery(function ($) {
 					var ident = 'new-' + curAdd,
 						html = $(cacheBlock[url].replace(/--NEW--/g, ident));
 
-					if (inserter)
+					if (inserter) {
 						inserter(html);
-					else
+					} else {
 						cont.append(html);
+					}
 
 					initComposable(html);
+					html.trigger('composableAddedBlock');
 					changed();
 
 					curAdd++;
