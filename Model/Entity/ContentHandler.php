@@ -17,4 +17,9 @@ class ContentHandler extends ContentHandlerModel
      * @ORM\OneToMany(targetEntity="Content", mappedBy="contentHandler")
      */
     protected $contents;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ContentHandlerConfig", mappedBy="contentHandler")
+     */
+    protected $contentHandlerConfigs;
 }

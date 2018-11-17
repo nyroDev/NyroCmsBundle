@@ -32,6 +32,11 @@ abstract class ContentHandler
     protected $contents;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    protected $contentHandlerConfigs;
+
+    /**
      * @var \DateTime
      * @Gedmo\Timestampable(on="create")
      */
@@ -49,6 +54,7 @@ abstract class ContentHandler
     public function __construct()
     {
         $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contentHandlerConfigs = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId()
@@ -174,6 +180,71 @@ abstract class ContentHandler
     public function getContents()
     {
         return $this->contents;
+    }
+
+    /**
+     * Add contentHandlerConfigs.
+     *
+     * @param ContentHandlerConfig $contentHandlerConfigs
+     *
+     * @return ContentHandlerConfig
+     */
+    public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
+    {
+        $this->contentHandlerConfigs[] = $contentHandlerConfigs;
+
+        return $this;
+    }
+
+    /**
+     * Remove contentHandlerConfigs.
+     *
+     * @param ContentHandlerConfig $contentHandlerConfigs
+     */
+    public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
+    {
+        $this->contentHandlerConfigs->removeElement($contentHandlerConfigs);
+
+        return $this;
+    }
+
+    /**
+     * Set contentHandlerConfigs.
+     *
+     * @param \Doctrine\Common\Collections\Collection $contentHandlerConfigs
+     *
+     * @return ContentHandlerConfigHandler
+     */
+    public function setContentHandlerConfigs(\Doctrine\Common\Collections\Collection $contentHandlerConfigs)
+    {
+        $this->contentHandlerConfigs = $contentHandlerConfigs;
+
+        return $this;
+    }
+
+    /**
+     * Get contentHandlerConfigs.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContentHandlerConfigs()
+    {
+        return $this->contentHandlerConfigs;
+    }
+
+    /**
+     * Get contentHandlerConfigs.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getContentHandlerConfigsByIdent()
+    {
+        $ret = [];
+        foreach ($this->getContentHandlerConfigs() as $cfg) {
+            $ret[$cfg->getconfigIdent()] = $cfg;
+        }
+
+        return $ret;
     }
 
     /**

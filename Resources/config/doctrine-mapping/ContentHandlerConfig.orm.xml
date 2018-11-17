@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<mapped-superclass name="NyroDev\NyroCmsBundle\Model\ContentHandlerConfig">
+		<id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+			<options>
+				<option name="unsigned">true</option>
+			</options>
+        </id>
+		<field name="name" type="string" nullable="false" />
+		<field name="configIdent" type="string" nullable="false" />
+		<field name="configType" type="string" nullable="false" />
+		<field name="valueText" type="text" nullable="true" />
+		<field name="valueDate" type="datetime" nullable="true" />
+		<field name="valueNumber" type="integer" nullable="true" />
+		<field name="inserted" type="datetime" nullable="false" />
+		<field name="updated" type="datetime" nullable="false" />
+
+		<many-to-one field="contentHandler" target-entity="NyroDev\NyroCmsBundle\Model\ContentHandler" inversed-by="contentHandlerConfigs" nullable="false">
+			<join-column name="content_handler_config_id" referenced-column-name="id" on-delete="CASCADE" on-update="CASCADE" />
+		</many-to-one>
+	</mapped-superclass>
+</doctrine-mapping>
