@@ -1,32 +1,30 @@
-parameters:
-    nyrocms.form.userFilter.class: NyroDev\NyroCmsBundle\Form\Type\UserFilterType
-    nyrocms.form.contentHandlerFilter.class: NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType
-    nyrocms.handler.form.contact.class: NyroDev\NyroCmsBundle\Form\Type\ContactType
-    nyrocms.handler.form.contactMessageFilter.class: NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType
-
 services:
-    nyrocms.userFilter.form.type:
-        class: %nyrocms.form.userFilter.class%
+    NyroDev\NyroCmsBundle\Form\Type\UserFilterType:
+        alias: nyrocms.userFilter.form.type:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrocms.contentHandlerFilter.form.type:
-        class: %nyrocms.form.contentHandlerFilter.class%
+
+    NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType:
+        alias: nyrocms.contentHandlerFilter.form.type:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrocms.handler.contact.form.type:
-        class: %nyrocms.handler.form.contact.class%
+
+    NyroDev\NyroCmsBundle\Form\Type\ContactType:
+        alias: nyrocms.handler.contact.form.type:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrocms.handler.contactMessageFilter.form.type:
-        class: %nyrocms.handler.form.contactMessageFilter.class%
+    
+    NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType:
+        alias: nyrocms.handler.contactMessageFilter.form.type:
         arguments: ['@service_container']
         tags:
           - { name: form.type }
-    nyrocms.file_extension.form.type:
-        class: NyroDev\NyroCmsBundle\Form\Extension\FileTypeExtension
+    
+    NyroDev\NyroCmsBundle\Form\Extension\FileTypeExtension:
+        alias: nyrocms.file_extension.form.type:
         arguments: ['@nyrocms']
         tags:
           - { name: form.type_extension, extended_type: Symfony\Component\Form\Extension\Core\Type\FileType }

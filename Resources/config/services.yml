@@ -1,33 +1,33 @@
-parameters:
-    nyrocms.mainService.class: NyroDev\NyroCmsBundle\Services\MainService
-    nyrocms.userService.class: NyroDev\NyroCmsBundle\Services\UserService
-    nyrocms.adminService.class: NyroDev\NyroCmsBundle\Services\AdminService
-    nyrocms.composerService.class: NyroDev\NyroCmsBundle\Services\ComposerService
-    nyrocms.routingLoader.class: NyroDev\NyroCmsBundle\Routing\NyrocmsLoader
-
 services:
-    nyrocms:
-        class: %nyrocms.mainService.class%
+    NyroDev\NyroCmsBundle\Services\MainService:
+        alias: nyrocms:
+        public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms }
-    nyrocms_user:
-        class: %nyrocms.userService.class%
+
+    NyroDev\NyroCmsBundle\Services\UserService:
+        alias: nyrocms_user:
+        public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_user }
-    nyrocms_admin:
-        class: %nyrocms.adminService.class%
+
+    NyroDev\NyroCmsBundle\Services\AdminService:
+        alias: nyrocms_admin:
+        public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_admin }
-    nyrocms_composer:
-        class: %nyrocms.composerService.class%
+
+    NyroDev\NyroCmsBundle\Services\ComposerService:
+        alias: nyrocms_composer:
+        public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
-    nyrocms.routing_loader:
-        class: %nyrocms.routingLoader.class%
+    
+    NyroDev\NyroCmsBundle\Routing\NyrocmsLoader:
         arguments: ['@service_container']
         tags:
             - { name: routing.loader }
