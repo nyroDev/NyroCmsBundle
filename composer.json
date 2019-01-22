@@ -8,16 +8,15 @@
         {
             "name": "Cédric Nirousset",
             "email": "cedric@nyrodev.com",
-            "homepage": "http://nyrodev.com",
+            "homepage": "https://nyrodev.com/",
             "role": "Developer"
         }
     ],
     "require": {
-        "php": ">=5.5.9",
-        "symfony/symfony": ">=2.8",
-		"stof/doctrine-extensions-bundle": "^1.2",
-		"egeloen/ordered-form-bundle": "~1.0",
-        "nyrodev/utility-bundle": "~2.8"
+        "symfony/symfony": "^4",
+		"stof/doctrine-extensions-bundle": "^1.3",
+		"becklyn/ordered-form-bundle": "~1.0",
+        "nyrodev/utility-bundle": "dev-master"
     },
     "suggest": {
         "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly"
