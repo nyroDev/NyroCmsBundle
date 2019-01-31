@@ -2,12 +2,16 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
-use NyroDev\UtilityBundle\Services\AbstractService;
+use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\NyroCmsBundle\Model\Composable;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\Db\AbstractService as nyroDevDbService;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\MemberService;
 
-class AdminService extends AbstractService
+class AdminService extends nyroDevAbstractService
 {
     protected $userTypes;
 
@@ -34,7 +38,7 @@ class AdminService extends AbstractService
     {
         if (is_null($this->userRoles)) {
             $this->userRoles = array();
-            foreach ($this->get('nyrocms_db')->getRepository('user_role')->findAll() as $tmp) {
+            foreach ($this->get(AbstractService::class)->getRepository('user_role')->findAll() as $tmp) {
                 $this->userRoles[$tmp->getId()] = $tmp;
             }
         }
@@ -60,11 +64,11 @@ class AdminService extends AbstractService
     {
         if (is_null($this->administrableContentIds)) {
             $this->administrableContentIds = array();
-            if ($this->get('nyrodev_member')->isLogged()) {
-                $user = $this->get('nyrodev_member')->getUser();
+            if ($this->get(MemberService::class)->isLogged()) {
+                $user = $this->get(MemberService::class)->getUser();
                 /* @var $user \NyroDev\NyroCmsBundle\Model\User */
 
-                $repoContent = $this->get('nyrocms_db')->getContentRepository();
+                $repoContent = $this->get(AbstractService::class)->getContentRepository();
                 foreach ($user->getUserRoles() as $userRole) {
                     /* @var $userRole \NyroDev\NyroCmsBundle\Model\UserRole */
                     if (!$userRole->getInternal()) {
@@ -94,7 +98,7 @@ class AdminService extends AbstractService
 
             if (!$fullRootIds) {
                 $rolePrefixLn = strlen($rolePrefix);
-                foreach ($this->get('nyrodev_member')->getUser()->getUserRoles() as $role) {
+                foreach ($this->get(MemberService::class)->getUser()->getUserRoles() as $role) {
                     if (
                             (('complete' == $rolePrefix || 'root' == $rolePrefix) && !$role->getInternal()) ||
                             ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
@@ -115,7 +119,7 @@ class AdminService extends AbstractService
 
             if ($fullRootIds) {
                 $this->administrableRootContentIds[$rolePrefix] = array();
-                foreach ($this->get('nyrocms_db')->getContentRepository()->children(null, true) as $content) {
+                foreach ($this->get(AbstractService::class)->getContentRepository()->children(null, true) as $content) {
                     $this->administrableRootContentIds[$rolePrefix][$content->getId()] = true;
                 }
             }
@@ -136,20 +140,20 @@ class AdminService extends AbstractService
 
     public function hasRole($role)
     {
-        return $this->get('nyrodev_member')->isGranted($role);
+        return $this->get(MemberService::class)->isGranted($role);
     }
 
     public function isDeveloper()
     {
-        return $this->get('nyrodev_member')->getUser()->getDevelopper();
+        return $this->get(MemberService::class)->getUser()->getDevelopper();
     }
 
     public function canAdmin(Composable $row)
     {
         $canAdmin = false;
-        if ($this->get('nyrocms_db')->isA($row, 'content')) {
+        if ($this->get(AbstractService::class)->isA($row, 'content')) {
             $canAdmin = $this->canAdminContent($row);
-        } elseif ($this->get('nyrocms_db')->isA($row, 'content_spec')) {
+        } elseif ($this->get(AbstractService::class)->isA($row, 'content_spec')) {
             /* @var $row \Luxepack\DbBundle\Entity\ContentSpec */
             foreach ($row->getContentHandler()->getContents() as $content) {
                 $canAdmin = $canAdmin || $this->get('nyrocms_admin')->canAdmin($content);
@@ -183,13 +187,13 @@ class AdminService extends AbstractService
 
             $prefix = null;
             if ($row->getParent()) {
-                $parent = $this->get('nyrocms_db')->getContentRepository()->find($row->getParent()->getId());
+                $parent = $this->get(AbstractService::class)->getContentRepository()->find($row->getParent()->getId());
                 $parent->setTranslatableLocale($row->getTranslatableLocale());
-                $this->get('nyrodev_db')->refresh($parent);
+                $this->get(nyroDevDbService::class)->refresh($parent);
                 $prefix = $parent->getUrl();
             }
 
-            $url = $prefix.'/'.$this->get('nyrodev')->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
+            $url = $prefix.'/'.$this->get(nyroDevService::class)->urlify(str_replace(array('+', '&'), array('plus', 'et'), $row->getTitle()));
             $url = str_replace('//', '/', $url);
             $row->setUrl($url);
 
@@ -203,10 +207,10 @@ class AdminService extends AbstractService
 
     protected function updateContentUrlRec($parentId, $oldUrl, $newUrl, $locale, $forceUpdate = false)
     {
-        $rows = $this->get('nyrocms_db')->getContentRepository()->findBy(array('parent' => $parentId));
+        $rows = $this->get(AbstractService::class)->getContentRepository()->findBy(array('parent' => $parentId));
         foreach ($rows as $row) {
             $row->setTranslatableLocale($locale);
-            $this->get('nyrocms_db')->refresh($row);
+            $this->get(AbstractService::class)->refresh($row);
             $old = $row->getUrl();
             $new = str_replace(array($oldUrl, '//'), array($newUrl, '/'), $row->getUrl());
             if ($forceUpdate || $old != $new) {
@@ -259,7 +263,7 @@ class AdminService extends AbstractService
 
     protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0, array $limitRootIds = array())
     {
-        foreach ($this->get('nyrocms_db')->getContentRepository()->children($parent, true) as $child) {
+        foreach ($this->get(AbstractService::class)->getContentRepository()->children($parent, true) as $child) {
             $canUse = count($limitRootIds) > 0 ? isset($limitRootIds[$child->getId()]) && $limitRootIds[$child->getId()] : true;
             if ($canUse) {
                 $contents[$child->getId()] = $child;

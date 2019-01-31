@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Command;
 
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -46,7 +47,7 @@ class CreateDbClassesCommand extends ContainerAwareCommand
         if ($dirname) {
             $sourceDir = realpath(__DIR__.'/../Model/'.$dirname);
             $converter = new CamelCaseToSnakeCaseNameConverter();
-            $dbService = $this->getContainer()->get('nyrocms_db');
+            $dbService = $this->getContainer()->get(AbstractService::class);
             $namespace = $dbService->getNamespace();
             $originalNamespace = 'NyroDev\NyroCmsBundle\Model\\'.$dirname;
 

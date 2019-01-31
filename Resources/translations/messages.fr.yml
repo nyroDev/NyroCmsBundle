@@ -231,10 +231,10 @@ nyrocms:
     home: Accueil
     relateds: À découvrir
   search:
-    title: Rechercher "%q%"
+    title: 'Rechercher "%q%"'
     empty: Aucun élément ne correspond à votre recherche.
-    results: %total% résultats.
-    resultsContents: Contenus (%nb%)
+    results: '%total% résultats.'
+    resultsContents: 'Contenus (%nb%)'
   forgot:
     link: Mot de passe oublié ?
     intro: |
@@ -298,7 +298,7 @@ nyrocms:
       empty: Il n'y a aucun fichier à afficher.
     contact:
       emails: Adresses emails
-      emailsError: "Ces adresses emails sont erronées : %emails%."
+      emailsError: 'Ces adresses emails sont erronées : %emails%.'
       subject: Message depuis le site
       defaultTo:
         email: email@domain.com

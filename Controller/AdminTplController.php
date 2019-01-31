@@ -2,9 +2,11 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
-use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Event\AdminMenuEvent;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
+use NyroDev\UtilityBundle\Services\MemberService;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminTplController extends NyroDevAbstractController
 {
@@ -20,7 +22,7 @@ class AdminTplController extends NyroDevAbstractController
     public function headerAction(Request $request)
     {
         $vars = array(
-            'logged' => $this->get('nyrodev_member')->isLogged(),
+            'logged' => $this->get(MemberService::class)->isLogged(),
         );
         if ($vars['logged']) {
             $tmpUriInit = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -30,7 +32,7 @@ class AdminTplController extends NyroDevAbstractController
 
             $adminPerRoot = $this->getParameter('nyroCms.content.admin_per_root');
             $rootContents = array();
-            $tmp = $this->get('nyrocms_db')->getContentRepository()->findBy(array('level' => 0), array('title' => 'ASC'));
+            $tmp = $this->get(AbstractService::class)->getContentRepository()->findBy(array('level' => 0), array('title' => 'ASC'));
             $firstRoot = 1;
             foreach ($tmp as $t) {
                 $rootContents[$t->getId()] = $t;
@@ -67,7 +69,7 @@ class AdminTplController extends NyroDevAbstractController
             $nyrocmsAdmin = $this->get('nyrocms_admin');
 
             $modules = $modulesIdent = array();
-            $contentHandlers = $this->get('nyrocms_db')->getContentHandlerRepository()->findBy(array('hasAdmin' => 1));
+            $contentHandlers = $this->get(AbstractService::class)->getContentHandlerRepository()->findBy(array('hasAdmin' => 1));
             foreach ($contentHandlers as $contentHandler) {
                 $canAdmin = false;
                 foreach ($contentHandler->getContents() as $content) {

@@ -176,7 +176,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->variableNode('disabled_locale_urls')->defaultValue(false)->end()
-                ->arrayNode('model')->isRequired()->cannotBeEmpty()
+                ->arrayNode('model')->isRequired()
                     ->children()
                         ->scalarNode('namespace')->isRequired()->cannotBeEmpty()->end()
                         ->arrayNode('classes')

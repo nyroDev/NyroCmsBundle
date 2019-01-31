@@ -2,13 +2,16 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
-use Symfony\Component\Validator\Constraints;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\Db\AbstractService as nyroDevDbService;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use Symfony\Component\Validator\Constraints;
 
 class AdminHandlerContentsController extends AbstractAdminController
 {
@@ -21,7 +24,7 @@ class AdminHandlerContentsController extends AbstractAdminController
      */
     protected function getContentHandler($chid)
     {
-        $contentHandler = $this->get('nyrocms_db')->getContentHandlerRepository()->find($chid);
+        $contentHandler = $this->get(AbstractService::class)->getContentHandlerRepository()->find($chid);
         if (!$contentHandler) {
             throw $this->createNotFoundException();
         }
@@ -36,8 +39,8 @@ class AdminHandlerContentsController extends AbstractAdminController
         $ch = $this->getContentHandler($chid);
         $handler = $this->get('nyrocms')->getHandler($ch);
 
-        $repo = $this->get('nyrocms_db')->getContentSpecRepository();
-        $qb = $this->get('nyrodev_db')->getQueryBuilder($repo)
+        $repo = $this->get(AbstractService::class)->getContentSpecRepository();
+        $qb = $this->get(nyroDevDbService::class)->getQueryBuilder($repo)
                 ->addWhere('contentHandler', '=', $ch->getId());
 
         $route = 'nyrocms_admin_handler_contents';
@@ -91,17 +94,17 @@ class AdminHandlerContentsController extends AbstractAdminController
     {
         $ch = $this->getContentHandler($chid);
 
-        $repo = $this->get('nyrocms_db')->getContentSpecRepository();
+        $repo = $this->get(AbstractService::class)->getContentSpecRepository();
         $row = $repo->find($id);
         if ($row) {
-            $row->setService($this->get('nyrodev'));
+            $row->setService($this->get(nyroDevService::class));
             $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
             $handler->init($request, true);
             $handler->deleteClb($row);
 
             $afters = $repo->getAfters($row);
 
-            //$this->get('nyrocms_db')->remove($row);
+            //$this->get(AbstractService::class)->remove($row);
 
             $row->setDeleted(new \DateTime());
 
@@ -109,7 +112,7 @@ class AdminHandlerContentsController extends AbstractAdminController
                 $after->setPosition(max(0, $after->getPosition() - 1));
             }
 
-            $this->get('nyrocms_db')->flush();
+            $this->get(AbstractService::class)->flush();
         }
 
         return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', array('chid' => $ch->getId())));
@@ -118,7 +121,7 @@ class AdminHandlerContentsController extends AbstractAdminController
     public function addAction(Request $request, $chid)
     {
         $ch = $this->getContentHandler($chid);
-        $row = $this->get('nyrocms_db')->getNew('content_spec', false);
+        $row = $this->get(AbstractService::class)->getNew('content_spec', false);
         $row->setContentHandler($ch);
 
         return $this->form($request, self::ADD, $row);
@@ -128,7 +131,7 @@ class AdminHandlerContentsController extends AbstractAdminController
     {
         $this->getContentHandler($chid);
 
-        $row = $this->get('nyrocms_db')->getContentSpecRepository()->find($id);
+        $row = $this->get(AbstractService::class)->getContentSpecRepository()->find($id);
         if (!$row) {
             throw $this->createNotFoundException();
         }
@@ -140,7 +143,7 @@ class AdminHandlerContentsController extends AbstractAdminController
     {
         $ch = $this->getContentHandler($chid);
 
-        $repo = $this->get('nyrocms_db')->getContentSpecRepository();
+        $repo = $this->get(AbstractService::class)->getContentSpecRepository();
         $row = $repo->find($id);
         if (!$row) {
             throw $this->createNotFoundException();
@@ -158,14 +161,14 @@ class AdminHandlerContentsController extends AbstractAdminController
             --$position;
         }
         $row->setPosition($position);
-        $this->get('nyrocms_db')->flush();
+        $this->get(AbstractService::class)->flush();
 
         return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', array('chid' => $ch->getId())));
     }
 
     public function form(Request $request, $action, $row)
     {
-        $row->setService($this->get('nyrodev'));
+        $row->setService($this->get(nyroDevService::class));
         $routePrm = array('chid' => $row->getContentHandler()->getId());
         $moreOptions = array(
             'state' => array(
@@ -176,7 +179,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             'validEnd' => $this->get('nyrocms')->getDateFormOptions(),
             'submit' => array(
                 'attr' => array(
-                    'data-cancelurl' => $this->container->get('nyrodev')->generateUrl('nyrocms_admin_handler_contents', $routePrm),
+                    'data-cancelurl' => $this->container->get(nyroDevService::class)->generateUrl('nyrocms_admin_handler_contents', $routePrm),
                 ),
             ),
         );
@@ -336,7 +339,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             $defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
             unset($langs[$defaultLocale]);
 
-            $om = $this->get('nyrocms_db')->getObjectManager();
+            $om = $this->get(AbstractService::class)->getObjectManager();
             $propertyAccess = PropertyAccess::createPropertyAccessor();
 
             foreach ($langs as $lg => $lang) {

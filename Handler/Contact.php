@@ -2,16 +2,18 @@
 
 namespace NyroDev\NyroCmsBundle\Handler;
 
+use NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\ContactType;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use Symfony\Component\HttpFoundation\RedirectResponse;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\FormService;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Form\Form;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Validator\Constraints;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class Contact extends AbstractHandler
 {
@@ -191,7 +193,7 @@ class Contact extends AbstractHandler
             ),
             'contacts' => $contactEmails,
         ), $this->getFormOptions($content)));
-        $this->get('nyrodev_form')->addDummyCaptcha($form);
+        $this->get(FormService::class)->addDummyCaptcha($form);
 
         /* @var $form \Symfony\Component\Form\Form */
         $form->handleRequest($this->request);
@@ -215,7 +217,7 @@ class Contact extends AbstractHandler
 
             $saveInDb = $this->saveInDb();
             if ($saveInDb) {
-                $contactMessage = $this->get('nyrocms_db')->getNew('contact_message');
+                $contactMessage = $this->get(AbstractService::class)->getNew('contact_message');
                 $contactMessage->setContentHandler($this->contentHandler);
                 $contactMessage->setDest($emailName);
                 $accessor = PropertyAccess::createPropertyAccessor();
@@ -239,7 +241,7 @@ class Contact extends AbstractHandler
             $this->sendEmail($to, $subject, implode("\n", $message), $data['email'], null, $content);
 
             if ($saveInDb) {
-                $this->get('nyrocms_db')->flush();
+                $this->get(AbstractService::class)->flush();
             }
 
             return new RedirectResponse($this->get('nyrocms')->getUrlFor($content, false, array('sent' => 1)));

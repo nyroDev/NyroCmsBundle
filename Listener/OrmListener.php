@@ -3,10 +3,11 @@
 namespace NyroDev\NyroCmsBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
-use NyroDev\UtilityBundle\Services\AbstractService;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 
-class OrmListener extends AbstractService implements EventSubscriber
+class OrmListener extends nyroDevAbstractService implements EventSubscriber
 {
     public function getSubscribedEvents()
     {
@@ -18,12 +19,12 @@ class OrmListener extends AbstractService implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args = null)
     {
         $object = $args->getObject();
-        if ($this->get('nyrocms_db')->isA($object, 'content_spec')) {
+        if ($this->get(AbstractService::class)->isA($object, 'content_spec')) {
             /* @var $object \NyroDev\NyroCmsBundle\Model\ContentSpec */
 
             // Reload contentHandler to correctly fill contents
             if ($object->getContentHandler() && is_null($object->getContentHandler()->getContents())) {
-                $ch = $this->get('nyrocms_db')->getContentHandlerRepository()->find($object->getContentHandler()->getId());
+                $ch = $this->get(AbstractService::class)->getContentHandlerRepository()->find($object->getContentHandler()->getId());
                 $object->getContentHandler()->setContents($ch->getContents());
                 unset($ch);
                 $ch = null;
@@ -33,7 +34,7 @@ class OrmListener extends AbstractService implements EventSubscriber
             /*
             if ($object->getParent() && $object->getTranslatableLocale() != $object->getParent()->getTranslatableLocale()) {
                 $object->getParent()->setTranslatableLocale($object->getTranslatableLocale());
-                $this->get('nyrocms_db')->refresh($object->getParent());
+                $this->get(AbstractService::class)->refresh($object->getParent());
             }
              */
         }

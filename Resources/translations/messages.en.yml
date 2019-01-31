@@ -219,10 +219,10 @@ nyrocms:
     home: Homepage
     relateds: To be discovered
   search:
-    title: Search "%q%"
+    title: 'Search "%q%"'
     empty: No results match your request
-    results: %total% results
-    resultsContents: Contents (%nb%)
+    results: '%total% results'
+    resultsContents: 'Contents (%nb%)'
   forgot:
     link: Forgot your password?
     intro: |
@@ -285,7 +285,7 @@ nyrocms:
       empty: There is no file to display
     contact:
       emails: email addresses
-      emailsError: "These email addresses are not valid : %emails%."
+      emailsError: 'These email addresses are not valid : %emails%.'
       subject: Message from the site
       defaultTo:
         email: email@domain.com

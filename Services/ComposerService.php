@@ -2,14 +2,16 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
-use NyroDev\UtilityBundle\Services\AbstractService;
-use NyroDev\NyroCmsBundle\Model\Composable;
-use Symfony\Component\HttpFoundation\Request;
-use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
-use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
+use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
+use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
+use NyroDev\NyroCmsBundle\Model\Composable;
+use NyroDev\UtilityBundle\Services\AbstractService;
+use NyroDev\UtilityBundle\Services\ImageService;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use Symfony\Component\HttpFoundation\Request;
 
 class ComposerService extends AbstractService
 {
@@ -125,7 +127,7 @@ class ComposerService extends AbstractService
         $ret = '#';
         if ($row instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
             $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
-            $ret = $this->get('nyrodev')->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+            $ret = $this->get(nyroDevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
             $cfg = $this->getConfig($row);
             $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
@@ -134,7 +136,7 @@ class ComposerService extends AbstractService
             } elseif ($cfg['cancel_url']['need_veryParent_id']) {
                 $routePrm['id'] = $row->getVeryParent()->getId();
             }
-            $ret = $this->get('nyrodev')->generateUrl($cfg['cancel_url']['route'], $routePrm);
+            $ret = $this->get(nyroDevService::class)->generateUrl($cfg['cancel_url']['route'], $routePrm);
         }
 
         return $ret;
@@ -427,7 +429,7 @@ class ComposerService extends AbstractService
                 $file = $this->getRootImageDir().'/'.trim($image);
                 if ($fs->exists($file)) {
                     $fs->remove($file);
-                    $this->get('nyrodev_image')->removeCache($file);
+                    $this->get(ImageService::class)->removeCache($file);
                 }
             }
         }
@@ -467,7 +469,7 @@ class ComposerService extends AbstractService
             $wrappedAs = $handler->isWrappedAs();
             $hasHandlerPlaced = false;
             foreach ($content as $cont) {
-                if ('handler' == $cont['type'] || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && $cont['contents'][$wrappedAs] == AbstractHandler::TEMPLATE_INDICATOR)) {
+                if ('handler' == $cont['type'] || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && AbstractHandler::TEMPLATE_INDICATOR == $cont['contents'][$wrappedAs])) {
                     $hasHandlerPlaced = true;
                 }
             }
@@ -541,7 +543,7 @@ class ComposerService extends AbstractService
     public function imageUpload(\Symfony\Component\HttpFoundation\File\UploadedFile $image)
     {
         $dir = $this->getRootImageDir();
-        $filename = $this->get('nyrodev')->getUniqFileName($dir, $image->getClientOriginalName());
+        $filename = $this->get(nyroDevService::class)->getUniqFileName($dir, $image->getClientOriginalName());
         $image->move($dir, $filename);
 
         return $filename;
@@ -569,7 +571,7 @@ class ComposerService extends AbstractService
                     $config['name'] = md5(json_encode($config));
                 }
 
-                $resizedPath = $this->get('nyrodev_image')->_resize($absoluteFile, $config);
+                $resizedPath = $this->get(ImageService::class)->_resize($absoluteFile, $config);
 
                 $tmp = explode('/web/', $resizedPath);
                 $ret = $this->get('templating.helper.assets')->getUrl($tmp[1]);

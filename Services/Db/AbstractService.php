@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Services\Db;
 
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
+use NyroDev\UtilityBundle\Services\Db\AbstractService as nyroDevDbService;
 
 abstract class AbstractService extends AbstractServiceSrc
 {
@@ -35,7 +36,7 @@ abstract class AbstractService extends AbstractServiceSrc
      */
     public function getObjectManager()
     {
-        return $this->get('nyrodev_db')->getObjectManager();
+        return $this->get(nyroDevDbService::class)->getObjectManager();
     }
 
     /**
@@ -85,31 +86,31 @@ abstract class AbstractService extends AbstractServiceSrc
      */
     public function getRepository($name)
     {
-        return $this->get('nyrodev_db')->getRepository($this->getClass($name));
+        return $this->get(nyroDevDbService::class)->getRepository($this->getClass($name));
     }
 
     public function getNew($name, $persist = true)
     {
-        return $this->get('nyrodev_db')->getNew($this->getRepository($name), $persist);
+        return $this->get(nyroDevDbService::class)->getNew($this->getRepository($name), $persist);
     }
 
     public function persist($object)
     {
-        $this->get('nyrodev_db')->persist($object);
+        $this->get(nyroDevDbService::class)->persist($object);
     }
 
     public function remove($object)
     {
-        $this->get('nyrodev_db')->remove($object);
+        $this->get(nyroDevDbService::class)->remove($object);
     }
 
     public function refresh($object)
     {
-        $this->get('nyrodev_db')->refresh($object);
+        $this->get(nyroDevDbService::class)->refresh($object);
     }
 
     public function flush()
     {
-        $this->get('nyrodev_db')->flush();
+        $this->get(nyroDevDbService::class)->flush();
     }
 }

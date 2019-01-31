@@ -1462,16 +1462,16 @@ jQuery(function($, undefined) {
 			},
 			initElts: function(nm) {
 				var inputSel;
-				if (nm.store.form.sel)
+				if (nm.store.form.sel) {
 					inputSel = $('<input type="hidden" />', {
 						name: nm.selIndicator,
 						value: nm.store.form.sel.substring(1)
 					}).appendTo(nm.opener);
+				}
 				function rmFormFileElts() {
 					if (inputSel) {
 						inputSel.remove();
 						inputSel = undefined;
-						delete(inputSel);
 					}
 					nm.store.formFileIframe.attr('src', 'about:blank').remove();
 					nm.store.formFileIframe = undefined;

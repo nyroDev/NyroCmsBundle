@@ -2,14 +2,17 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Model\Sharable;
-use NyroDev\UtilityBundle\Services\AbstractService;
-use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\ShareService;
 
-class MainService extends AbstractService
+class MainService extends nyroDevAbstractService
 {
     protected $handlers = array();
 
@@ -22,7 +25,7 @@ class MainService extends AbstractService
             }
 
             if (0 === strpos(get_class($contentHandler), 'Proxies')) {
-                $contentHandler = $this->get('nyrocms_db')->getContentHandlerRepository()->find($contentHandler->getId());
+                $contentHandler = $this->get(AbstractService::class)->getContentHandlerRepository()->find($contentHandler->getId());
             }
 
             $this->handlers[$contentHandler->getId()] = new $class($contentHandler, $this->container);
@@ -77,7 +80,7 @@ class MainService extends AbstractService
     public function getContentRoot($id)
     {
         if (!isset($this->contentRoots[$id])) {
-            $this->contentRoots[$id] = $this->get('nyrocms_db')->getContentRepository()->find($id);
+            $this->contentRoots[$id] = $this->get(AbstractService::class)->getContentRepository()->find($id);
         }
 
         return $this->contentRoots[$id];
@@ -125,17 +128,17 @@ class MainService extends AbstractService
                 $curLoc = $object->getTranslatableLocale();
 
                 $object->setTranslatableLocale($this->getDefaultLocale($object));
-                $this->get('nyrocms_db')->refresh($object);
+                $this->get(AbstractService::class)->refresh($object);
                 $title = $object->getTitle();
 
                 $object->setTranslatableLocale($curLoc);
-                $this->get('nyrocms_db')->refresh($object);
+                $this->get(AbstractService::class)->refresh($object);
             }
 
             $prm = array_merge($prm, array(
                 'url' => trim($parent->getUrl(), '/'),
                 'id' => $object->getId(),
-                'title' => $this->get('nyrodev')->urlify($title),
+                'title' => $this->get(nyroDevService::class)->urlify($title),
             ));
         }
 
@@ -188,7 +191,7 @@ class MainService extends AbstractService
             'dbContent' => $dbContent,
         ));
         $html = $response->getContent();
-        $text = $this->get('nyrodev')->html2text($html);
+        $text = $this->get(nyroDevService::class)->html2text($html);
 
         if (!$from) {
             $from = $this->getParameter('noreply_email');
@@ -315,7 +318,7 @@ class MainService extends AbstractService
                     $routePrm = array_merge($pathInfo['routePrm'], $prm, array('q' => $this->pathInfoSearch));
                 } elseif ($isObjectPage) {
                     $pathInfo['object']->setTranslatableLocale($locale);
-                    $this->get('nyrocms_db')->refresh($pathInfo['object']);
+                    $this->get(AbstractService::class)->refresh($pathInfo['object']);
                     $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $prm));
                 } else {
                     $routeName = $pathInfo['route'];
@@ -331,7 +334,7 @@ class MainService extends AbstractService
 
         if ($isObjectPage) {
             $pathInfo['object']->setTranslatableLocale($curLocale);
-            $this->get('nyrocms_db')->refresh($pathInfo['object']);
+            $this->get(AbstractService::class)->refresh($pathInfo['object']);
         }
 
         return $ret;
@@ -377,27 +380,28 @@ class MainService extends AbstractService
 
     public function setSharableContent(Sharable $sharable)
     {
-        $this->get('nyrodev_share')->setTitle($this->inlineText($sharable.''));
+        $shareService = $this->get(ShareService::class);
+        $shareService->setTitle($this->inlineText($sharable.''));
 
         if ($sharable->getMetaTitle()) {
-            $this->get('nyrodev_share')->setTitle($this->inlineText($sharable->getMetaTitle()));
+            $shareService->setTitle($this->inlineText($sharable->getMetaTitle()));
         }
         if ($sharable->getMetaDescription()) {
-            $this->get('nyrodev_share')->setDescription($this->inlineText($sharable->getMetaDescription()));
+            $shareService->setDescription($this->inlineText($sharable->getMetaDescription()));
         }
         if ($sharable->getMetaKeywords()) {
-            $this->get('nyrodev_share')->setKeywords($this->inlineText($sharable->getMetaKeywords()));
+            $shareService->setKeywords($this->inlineText($sharable->getMetaKeywords()));
         }
         if ($sharable->getOgTitle()) {
-            $this->get('nyrodev_share')->set('og:title', $this->inlineText($sharable->getOgTitle()), true);
-            $this->get('nyrodev_share')->set('twitter:title', $this->inlineText($sharable->getOgTitle()));
+            $shareService->set('og:title', $this->inlineText($sharable->getOgTitle()), true);
+            $shareService->set('twitter:title', $this->inlineText($sharable->getOgTitle()));
         }
         if ($sharable->getOgDescription()) {
-            $this->get('nyrodev_share')->set('og:description', $this->inlineText($sharable->getOgDescription()), true);
-            $this->get('nyrodev_share')->set('twitter:description', $this->inlineText($sharable->getOgDescription()));
+            $shareService->set('og:description', $this->inlineText($sharable->getOgDescription()), true);
+            $shareService->set('twitter:description', $this->inlineText($sharable->getOgDescription()));
         }
         if ($sharable->getOgImageFile()) {
-            $this->get('nyrodev_share')->setImage($sharable->getWebPath('ogImage'));
+            $shareService->setImage($sharable->getWebPath('ogImage'));
         }
     }
 }

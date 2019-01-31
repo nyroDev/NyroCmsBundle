@@ -1,8 +1,14 @@
 services:
+    NyroDev\NyroCmsBundle\Services\Db\AbstractService:
+        alias: NyroDev\NyroCmsBundle\Services\Db\OrmService
+        public: true
+
     NyroDev\NyroCmsBundle\Services\Db\OrmService:
-        alias: nyrocms_db:
         public: true
         arguments: ['@service_container']
+    nyrocms_db:
+        alias: NyroDev\NyroCmsBundle\Services\Db\OrmService
+        public: true
 
     NyroDev\NyroCmsBundle\Listener\OrmListener:
         arguments: ['@service_container']

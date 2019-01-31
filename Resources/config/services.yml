@@ -1,31 +1,39 @@
 services:
     NyroDev\NyroCmsBundle\Services\MainService:
-        alias: nyrocms:
         public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms }
+    nyrocms:
+        alias: NyroDev\NyroCmsBundle\Services\MainService
+        public: true
 
     NyroDev\NyroCmsBundle\Services\UserService:
-        alias: nyrocms_user:
         public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_user }
+    nyrocms_user:
+        alias: NyroDev\NyroCmsBundle\Services\UserService
+        public: true
 
     NyroDev\NyroCmsBundle\Services\AdminService:
-        alias: nyrocms_admin:
         public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_admin }
+    nyrocms_admin:
+        alias: NyroDev\NyroCmsBundle\Services\AdminService
+        public: true
 
     NyroDev\NyroCmsBundle\Services\ComposerService:
-        alias: nyrocms_composer:
         public: true
         arguments: ['@service_container']
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
+    nyrocms_composer:
+        alias: NyroDev\NyroCmsBundle\Services\ComposerService
+        public: true
     
     NyroDev\NyroCmsBundle\Routing\NyrocmsLoader:
         arguments: ['@service_container']

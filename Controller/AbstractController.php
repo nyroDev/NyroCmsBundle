@@ -6,7 +6,10 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\ShareService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -19,7 +22,7 @@ abstract class AbstractController extends NyroDevAbstractController
      */
     public function getContentRepo()
     {
-        return $this->get('nyrocms_db')->getContentRepository();
+        return $this->get(AbstractService::class)->getContentRepository();
     }
 
     protected $rootContent;
@@ -88,7 +91,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->setGlobalRootContent();
         $content = $this->getContentByUrl($url);
 
-        $contentSpec = $this->get('nyrocms_db')->getContentSpecRepository()->findForAction($id, $content->getContentHandler()->getId(), $this->enabledStates);
+        $contentSpec = $this->get(AbstractService::class)->getContentSpecRepository()->findForAction($id, $content->getContentHandler()->getId(), $this->enabledStates);
 
         if (!$contentSpec) {
             throw $this->createNotFoundException();
@@ -111,7 +114,7 @@ abstract class AbstractController extends NyroDevAbstractController
         }
 
         if (!$redirect) {
-            $redirect = $this->get('nyrodev')->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
+            $redirect = $this->get(nyroDevService::class)->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
         }
 
         if ($redirect) {
@@ -220,7 +223,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
             $results['contentSpecs'] = array();
             if (count($cts)) {
-                $tmpSpecs = $this->get('nyrocms_db')->getContentSpecRepository()->search($tmpQ, array_keys($cts), ContentSpec::STATE_ACTIVE);
+                $tmpSpecs = $this->get(AbstractService::class)->getContentSpecRepository()->search($tmpQ, array_keys($cts), ContentSpec::STATE_ACTIVE);
 
                 foreach ($tmpSpecs as $tmp) {
                     $chId = $tmp->getContentHandler()->getId();
@@ -264,7 +267,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->get('nyrocms')->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $urls = array(
-            $this->get('nyrodev')->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
+            $this->get(nyroDevService::class)->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
         );
 
         foreach ($this->getContentRepo()->childrenForMenu($this->getRootContent(), false) as $content) {
@@ -272,7 +275,7 @@ abstract class AbstractController extends NyroDevAbstractController
                 $urls[] = $this->get('nyrocms')->getUrlFor($content, true);
             }
             if ($content->getContentHandler() && $this->get('nyrocms')->getHandler($content->getContentHandler())->hasContentSpecUrl()) {
-                $contentSpecs = $this->get('nyrocms_db')->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
+                $contentSpecs = $this->get(AbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
                 foreach ($contentSpecs as $contentSpec) {
                     $urls[] = $this->get('nyrocms')->getUrlFor($contentSpec, true, array(), $content);
                 }
@@ -290,18 +293,18 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setTitle($title, $addDefault = true)
     {
-        $this->get('nyrodev_share')->setTitle($this->get('nyrocms')->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
+        $this->get(ShareService::class)->setTitle($this->get('nyrocms')->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
     }
 
     protected function setDescription($description)
     {
-        $this->get('nyrodev_share')->setDescription($this->get('nyrocms')->inlineText($description));
+        $this->get(ShareService::class)->setDescription($this->get('nyrocms')->inlineText($description));
     }
 
     protected function setImage($image)
     {
         if ($image) {
-            $this->get('nyrodev_share')->setImage($image);
+            $this->get(ShareService::class)->setImage($image);
         }
     }
 

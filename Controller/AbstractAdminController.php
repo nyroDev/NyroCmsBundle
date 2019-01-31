@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController as SrcAbstractAdminController;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
@@ -80,7 +81,7 @@ class AbstractAdminController extends SrcAbstractAdminController
             $defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
             unset($langs[$defaultLocale]);
 
-            $om = $this->get('nyrocms_db')->getObjectManager();
+            $om = $this->get(AbstractService::class)->getObjectManager();
             $propertyAccess = PropertyAccess::createPropertyAccessor();
 
             foreach ($langs as $lg => $lang) {

@@ -2,12 +2,14 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
-use NyroDev\UtilityBundle\Services\AbstractService;
-use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\User;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\MemberService;
 use Symfony\Component\HttpFoundation\Request;
 
-class UserService extends AbstractService
+class UserService extends nyroDevAbstractService
 {
     public function handleAddUser(User $user)
     {
@@ -26,12 +28,12 @@ class UserService extends AbstractService
 
     public function sendWelcomeEmail(User $user)
     {
-        $passwordKey = $this->get('nyrodev')->randomStr(32);
+        $passwordKey = $this->get(nyroDevService::class)->randomStr(32);
         $end = new \DateTime('+1month');
 
         $user->setPasswordKey($passwordKey);
         $user->setPasswordKeyEnd($end);
-        $this->get('nyrocms_db')->flush();
+        $this->get(AbstractService::class)->flush();
 
         $this->get('nyrocms')->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', array(
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
@@ -139,7 +141,7 @@ class UserService extends AbstractService
                     $user = null;
                 }
                 if ($user) {
-                    $passwordKey = $this->get('nyrodev')->randomStr(32);
+                    $passwordKey = $this->get(nyroDevService::class)->randomStr(32);
                     $end = new \DateTime('+2day');
 
                     $user->setPasswordKey($passwordKey);
@@ -173,7 +175,7 @@ class UserService extends AbstractService
             'password' => false,
         );
 
-        $user = $this->get('nyrodev_member')->getUser();
+        $user = $this->get(MemberService::class)->getUser();
         $fields = array(
             'email',
             'firstname',

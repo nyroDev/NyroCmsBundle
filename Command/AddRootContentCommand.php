@@ -2,12 +2,13 @@
 
 namespace NyroDev\NyroCmsBundle\Command;
 
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 
 class AddRootContentCommand extends ContainerAwareCommand
 {
@@ -71,7 +72,7 @@ class AddRootContentCommand extends ContainerAwareCommand
             $xmlSitemap = $helper->ask($input, $output, $question);
         }
 
-        $dbService = $this->getContainer()->get('nyrocms_db');
+        $dbService = $this->getContainer()->get(AbstractService::class);
         $newContent = $dbService->getNew('content');
 
         /* @var $newContent \NyroDev\NyroCmsBundle\Model\Content */

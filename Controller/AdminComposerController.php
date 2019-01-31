@@ -2,14 +2,16 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\UtilityBundle\Services\EmbedService;
+use Symfony\Component\HttpFoundation\Request;
 
 class AdminComposerController extends AbstractAdminController
 {
     public function composerAction(Request $request, $type, $id, $lang = null)
     {
-        $row = $this->get('nyrocms_db')->getRepository($type)->find($id);
+        $row = $this->get(AbstractService::class)->getRepository($type)->find($id);
         if (!$row || !($row instanceof \NyroDev\NyroCmsBundle\Model\Composable)) {
             throw $this->createNotFoundException();
         }
@@ -33,7 +35,7 @@ class AdminComposerController extends AbstractAdminController
         if ($canChangeLang) {
             if ($lang != $locale) {
                 $row->setTranslatableLocale($lang);
-                $this->get('nyrocms_db')->refresh($row);
+                $this->get(AbstractService::class)->refresh($row);
                 unset($langs[$lang]);
             } else {
                 unset($langs[$locale]);
@@ -59,7 +61,7 @@ class AdminComposerController extends AbstractAdminController
                 $errors = $this->get('validator')->validateValue($url, $constraints);
 
                 if (0 == count($errors)) {
-                    $dataUrl = $this->get('nyrodev_embed')->data($url);
+                    $dataUrl = $this->get(EmbedService::class)->data($url);
                     $embedUrl = $dataUrl['urlEmbed'];
                     if ($request->request->get('autoplay')) {
                         $embedUrl .= (false === strpos($embedUrl, '?') ? '?' : '&').'autoplay=1';
@@ -117,7 +119,7 @@ class AdminComposerController extends AbstractAdminController
             $row->setContentText(implode("\n", $newTexts));
             $row->setFirstImage($firstImage);
 
-            $this->get('nyrocms_db')->flush();
+            $this->get(AbstractService::class)->flush();
 
             return $this->redirect($url);
         } elseif ($request->query->has('block')) {
@@ -141,7 +143,7 @@ class AdminComposerController extends AbstractAdminController
             // Fix bug when there is some fetch in prepareView
             if ($lang && $row->getTranslatableLocale() != $lang) {
                 $row->setTranslatableLocale($lang);
-                $this->get('nyrocms_db')->refresh($row);
+                $this->get(AbstractService::class)->refresh($row);
             }
         }
 

@@ -30,7 +30,7 @@ $prefixTinymce = 'data-tinymce_';
 $prefixTinymceSimple = 'data-tinymcesimple_';
 
 $attrs = array_merge(
-    $view['nyrodev']->get('nyrodev_form')->getPluploadAttrs(),
+    $view['nyrodev_form']->getPluploadAttrs(),
     array(
         'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',

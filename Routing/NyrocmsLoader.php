@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Routing;
 
+use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -28,7 +29,7 @@ class NyrocmsLoader extends Loader
             throw new \RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
         }
 
-        $rootContent = $this->container->get('nyrocms_db')->getContentRepository()->findOneBy(array(
+        $rootContent = $this->container->get(AbstractService::class)->getContentRepository()->findOneBy(array(
             'level' => 0,
             'handler' => $res[0],
         ));
