@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\DependencyInjection;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
 
 /**
@@ -23,34 +24,45 @@ class NyroDevNyroCmsExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         // Transform config into parameters usable everywhere
-        $container->setParameter('nyroCms.model.namespace', $config['model']['namespace']);
+        $container->setParameter('nyrocms.model.namespace', $config['model']['namespace']);
         foreach ($config['model']['classes'] as $k => $v) {
-            $container->setParameter('nyroCms.model.classes.'.$k, $v);
+            $container->setParameter('nyrocms.model.classes.'.$k, $v);
         }
 
-        $container->setParameter('nyroCms.user_types', $config['user_types']);
-        $container->setParameter('nyroCms.disabled_locale_urls', $config['disabled_locale_urls']);
+        $container->setParameter('nyrocms.user_types', $config['user_types']);
+        $container->setParameter('nyrocms.disabled_locale_urls', $config['disabled_locale_urls']);
 
-        $container->setParameter('nyroCms.content.maxlevel', $config['content']['maxlevel']);
-        $container->setParameter('nyroCms.content.admin_per_root', $config['content']['admin_per_root']);
+        $container->setParameter('nyrocms.content.maxlevel', $config['content']['maxlevel']);
+        $container->setParameter('nyrocms.content.admin_per_root', $config['content']['admin_per_root']);
+        $container->setParameter('nyrocms.content.root_composer', $config['content']['root_composer']);
 
-        $container->setParameter('nyroCms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
+        $container->setParameter('nyrocms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
 
-        $container->setParameter('nyroCms.email.global_template', $config['email']['global_template']);
-        $container->setParameter('nyroCms.email.styles_template', $config['email']['styles_template']);
-        $container->setParameter('nyroCms.email.body_template', $config['email']['body_template']);
-        $container->setParameter('nyroCms.email.router_scheme', $config['email']['router_scheme']);
-        $container->setParameter('nyroCms.email.router_host', $config['email']['router_host']);
-        $container->setParameter('nyroCms.email.router_base_url', $config['email']['router_base_url']);
+        $container->setParameter('nyrocms.email.global_template', $config['email']['global_template']);
+        $container->setParameter('nyrocms.email.styles_template', $config['email']['styles_template']);
+        $container->setParameter('nyrocms.email.body_template', $config['email']['body_template']);
+        $container->setParameter('nyrocms.email.router_scheme', $config['email']['router_scheme']);
+        $container->setParameter('nyrocms.email.router_host', $config['email']['router_host']);
+        $container->setParameter('nyrocms.email.router_base_url', $config['email']['router_base_url']);
 
         $composable = $config['composable']['classes'];
         $composable['default'] = $config['composable']['default'];
-        $container->setParameter('nyroCms.composable', $composable);
+        $container->setParameter('nyrocms.composable', $composable);
 
         $dbDriver = $container->getParameter('nyroDev_utility.db_driver');
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('forms.yml');
         $loader->load('services_'.$dbDriver.'.yml');
+
+        // Load commands
+        $definition = new Definition();
+        $definition
+            ->setAutowired(true)
+            ->setAutoconfigured(true)
+            ->setPublic(false)
+        ;
+        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
+        $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Command\\', './*');
     }
 }

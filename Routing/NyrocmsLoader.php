@@ -2,7 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Routing;
 
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -23,13 +24,14 @@ class NyrocmsLoader extends Loader
 
     public function load($resource, $type = null)
     {
-        $typCfg = explode('_', $type);
+        $typeCfg = array_flip(explode('_', $type));
+
         $res = explode('@', $resource);
         if (isset($this->loaded[$res[0]])) {
             throw new \RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
         }
 
-        $rootContent = $this->container->get(AbstractService::class)->getContentRepository()->findOneBy(array(
+        $rootContent = $this->container->get(DbAbstractService::class)->getContentRepository()->findOneBy(array(
             'level' => 0,
             'handler' => $res[0],
         ));
@@ -40,11 +42,22 @@ class NyrocmsLoader extends Loader
 
         $routes = new RouteCollection();
 
-        $locale = $this->container->get('nyrocms')->getDefaultLocale($rootContent);
-        $locales = $this->container->get('nyrocms')->getLocales($rootContent, true);
+        $locale = $this->container->get(NyroCmsService::class)->getDefaultLocale($rootContent);
+        $locales = $this->container->get(NyroCmsService::class)->getLocales($rootContent, true);
+
+        if (isset($typeCfg['homepage'])) {
+            $routes->add('_homepage', new Route(
+                    '/',
+                    array('_controller' => $res[1].':index', '_locale' => $locale, '_config' => $res[0]),
+                    array(),
+                    array(),
+                    $rootContent->getHost()
+                )
+            );
+        }
 
         $routes->add($res[0].'_homepage_noLocale', new Route(
-                '/'.(in_array('forceLang', $typCfg, true) ? $locale.'/' : ''),
+                '/'.(isset($typeCfg['forceLang']) ? $locale.'/' : ''),
                 array('_controller' => $res[1].':index', '_locale' => $locale, '_config' => $res[0]),
                 array(),
                 array(),

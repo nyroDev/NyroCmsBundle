@@ -2,7 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Command;
 
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,9 @@ class AddRootContentCommand extends ContainerAwareCommand
             ->addArgument('theme', InputArgument::OPTIONAL, 'Content theme', null)
             ->addArgument('host', InputArgument::OPTIONAL, 'Host constraint', null)
             ->addArgument('locales', InputArgument::OPTIONAL, 'Locales enabled (| separated)', null)
-            ->addArgument('xmlSitemap', InputArgument::OPTIONAL, 'Xml sitemap enabling', null);
+            ->addArgument('xmlSitemap', InputArgument::OPTIONAL, 'Xml sitemap enabling', null)
+            ->addArgument('userRole', InputArgument::OPTIONAL, 'Add user role', null)
+        ;
     }
 
     /**
@@ -42,6 +44,7 @@ class AddRootContentCommand extends ContainerAwareCommand
         $host = $input->getArgument('host');
         $locales = $input->getArgument('locales');
         $xmlSitemap = $input->getArgument('xmlSitemap');
+        $userRole = $input->getArgument('userRole');
 
         $helper = $this->getHelper('question');
         if (!$title) {
@@ -71,8 +74,15 @@ class AddRootContentCommand extends ContainerAwareCommand
                 1);
             $xmlSitemap = $helper->ask($input, $output, $question);
         }
+        if (is_null($userRole)) {
+            $question = new ChoiceQuestion(
+                'Add user role too?',
+                array('false', 'true'),
+                1);
+            $userRole = $helper->ask($input, $output, $question);
+        }
 
-        $dbService = $this->getContainer()->get(AbstractService::class);
+        $dbService = $this->getContainer()->get(DbAbstractService::class);
         $newContent = $dbService->getNew('content');
 
         /* @var $newContent \NyroDev\NyroCmsBundle\Model\Content */
@@ -85,8 +95,17 @@ class AddRootContentCommand extends ContainerAwareCommand
         $newContent->setLocales($locales);
         $newContent->setXmlSitemap('true' === $xmlSitemap);
 
+        if ($userRole) {
+            $userRole = $dbService->getNew('userRole');
+            $userRole->setName($title);
+            $userRole->addContent($newContent);
+        }
+
         $dbService->flush();
 
         $output->writeln('New content "'.$title.'" added with ID: '.$newContent->getId());
+        if ($userRole) {
+            $output->writeln('New user role "'.$title.'" added with ID: '.$userRole->getId());
+        }
     }
 }

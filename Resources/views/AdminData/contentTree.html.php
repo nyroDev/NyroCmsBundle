@@ -18,6 +18,13 @@
         }
         ?>
 
+		<?php if ($canRootComposer && $view['nyrocms_admin']->canAdminContent($parent)): ?>
+			<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => 'Content', 'id' => $parent->getId())); ?>" id="composerHomeEdit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
+				<?php echo $view['nyrocms_admin']->getIcon('pencil'); ?>
+				<?php echo $view['nyrodev']->trans('admin.composer.rootEdit'); ?>
+			</a>
+		<?php endif; ?>
+
 		<form action="" method="post" id="contentTree">
 			<a href="#" class="expandAll"><?php echo $view['nyrodev']->trans('admin.content.expandAll'); ?></a>
 			<a href="#" class="reduceAll"><?php echo $view['nyrodev']->trans('admin.content.reduceAll'); ?></a><br />

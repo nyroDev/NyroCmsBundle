@@ -4,7 +4,7 @@ namespace NyroDev\NyroCmsBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 
 class OrmListener extends nyroDevAbstractService implements EventSubscriber
@@ -19,12 +19,12 @@ class OrmListener extends nyroDevAbstractService implements EventSubscriber
     public function postLoad(LifecycleEventArgs $args = null)
     {
         $object = $args->getObject();
-        if ($this->get(AbstractService::class)->isA($object, 'content_spec')) {
+        if ($this->get(DbAbstractService::class)->isA($object, 'content_spec')) {
             /* @var $object \NyroDev\NyroCmsBundle\Model\ContentSpec */
 
             // Reload contentHandler to correctly fill contents
             if ($object->getContentHandler() && is_null($object->getContentHandler()->getContents())) {
-                $ch = $this->get(AbstractService::class)->getContentHandlerRepository()->find($object->getContentHandler()->getId());
+                $ch = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($object->getContentHandler()->getId());
                 $object->getContentHandler()->setContents($ch->getContents());
                 unset($ch);
                 $ch = null;
@@ -34,7 +34,7 @@ class OrmListener extends nyroDevAbstractService implements EventSubscriber
             /*
             if ($object->getParent() && $object->getTranslatableLocale() != $object->getParent()->getTranslatableLocale()) {
                 $object->getParent()->setTranslatableLocale($object->getTranslatableLocale());
-                $this->get(AbstractService::class)->refresh($object->getParent());
+                $this->get(DbAbstractService::class)->refresh($object->getParent());
             }
              */
         }

@@ -3,7 +3,10 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\AdminService;
+use NyroDev\NyroCmsBundle\Services\ComposerService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\EmbedService;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -11,31 +14,31 @@ class AdminComposerController extends AbstractAdminController
 {
     public function composerAction(Request $request, $type, $id, $lang = null)
     {
-        $row = $this->get(AbstractService::class)->getRepository($type)->find($id);
+        $row = $this->get(DbAbstractService::class)->getRepository($type)->find($id);
         if (!$row || !($row instanceof \NyroDev\NyroCmsBundle\Model\Composable)) {
             throw $this->createNotFoundException();
         }
 
-        if (!$this->get('nyrocms_admin')->canAdmin($row)) {
+        if (!$this->get(AdminService::class)->canAdmin($row)) {
             throw $this->createAccessDeniedException();
         }
 
         /* @var $row \NyroDev\NyroCmsBundle\Model\Composable */
-        $locale = $this->get('nyrocms')->getDefaultLocale($row);
+        $locale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
         if (!$lang) {
             $lang = $locale;
         }
 
-        $composerService = $this->get('nyrocms_composer');
+        $composerService = $this->get(ComposerService::class);
         $composerService->initComposerFor($row, $lang);
         $canChangeLang = $composerService->canChangeLang($row);
         $canChangeTheme = $composerService->canChangeTheme($row);
 
-        $langs = $this->get('nyrocms')->getLocaleNames($row);
+        $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         if ($canChangeLang) {
             if ($lang != $locale) {
                 $row->setTranslatableLocale($lang);
-                $this->get(AbstractService::class)->refresh($row);
+                $this->get(DbAbstractService::class)->refresh($row);
                 unset($langs[$lang]);
             } else {
                 unset($langs[$locale]);
@@ -45,7 +48,7 @@ class AdminComposerController extends AbstractAdminController
         $url = $this->generateUrl('nyrocms_admin_composer', array_filter(array('type' => $type, 'id' => $id, 'lang' => $lang)));
         /* @var $composerService \NyroDev\NyroCmsBundle\Services\ComposerService */
         $availableBlocks = $composerService->getAvailableBlocks($row);
-        $themes = $canChangeTheme ? $composerService->getThemes($row->getParent()) : array();
+        $themes = $canChangeTheme ? $composerService->getThemes($row->getParent() ? $row->getParent() : $row) : array();
 
         if ($request->isMethod('post')) {
             if ($request->request->has('imageUpload') && $request->files->has('image')) {
@@ -119,7 +122,7 @@ class AdminComposerController extends AbstractAdminController
             $row->setContentText(implode("\n", $newTexts));
             $row->setFirstImage($firstImage);
 
-            $this->get(AbstractService::class)->flush();
+            $this->get(DbAbstractService::class)->flush();
 
             return $this->redirect($url);
         } elseif ($request->query->has('block')) {
@@ -133,7 +136,7 @@ class AdminComposerController extends AbstractAdminController
         }
 
         if ($row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler()) {
-            $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+            $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $handler->init($request, true);
             $contentHandler = $handler->prepareView($row);
             if ($contentHandler instanceof \Symfony\Component\HttpFoundation\Response) {
@@ -143,11 +146,11 @@ class AdminComposerController extends AbstractAdminController
             // Fix bug when there is some fetch in prepareView
             if ($lang && $row->getTranslatableLocale() != $lang) {
                 $row->setTranslatableLocale($lang);
-                $this->get(AbstractService::class)->refresh($row);
+                $this->get(DbAbstractService::class)->refresh($row);
             }
         }
 
-        return $this->render($this->get('nyrocms_composer')->globalComposerTemplate($row), array(
+        return $this->render($this->get(ComposerService::class)->globalComposerTemplate($row), array(
             'type' => $type,
             'id' => $id,
             'composerUrl' => $url,

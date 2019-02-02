@@ -1,5 +1,5 @@
 services:
-    NyroDev\NyroCmsBundle\Services\Db\AbstractService:
+    NyroDev\NyroCmsBundle\Services\Db\DbAbstractService:
         alias: NyroDev\NyroCmsBundle\Services\Db\OrmService
         public: true
 

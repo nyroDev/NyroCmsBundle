@@ -2,7 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Form\Type;
 
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -37,53 +37,53 @@ class ContactType extends AbstractType
         if (count($options['contacts']) > 1) {
             $choices = array();
             foreach ($options['contacts'] as $k => $v) {
-                $choices[$k] = $this->container->get(nyroDevService::class)->trans($v['name']);
+                $choices[$k] = $this->container->get(NyrodevService::class)->trans($v['name']);
             }
 
             $builder->add('dest', ChoiceType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.dest'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.dest'),
                 'placeholder' => '',
-                'choices' => $choices,
+                'choices' => array_flip($choices),
                 'required' => true,
             ));
         }
 
         $builder
             ->add('lastname', TextType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.lastname'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.lastname'),
                 'constraints' => array(
                     new Constraints\NotBlank(),
                 ),
             ))
             ->add('firstname', TextType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.firstname'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.firstname'),
                 'constraints' => array(
                     new Constraints\NotBlank(),
                 ),
             ))
             ->add('company', TextType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.company'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.company'),
                 'required' => false,
             ))
             ->add('phone', TextType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.phone'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.phone'),
                 'required' => false,
             ))
             ->add('email', EmailType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.email'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.email'),
                 'constraints' => array(
                     new Constraints\NotBlank(),
                     new Constraints\Email(),
                 ),
             ))
             ->add('message', TextareaType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.message'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.message'),
                 'constraints' => array(
                     new Constraints\NotBlank(),
                 ),
             ))
             ->add('submit', SubmitType::class, array(
-                'label' => $this->container->get(nyroDevService::class)->trans('nyrocms.handler.contact.send'),
+                'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.send'),
             ));
     }
 

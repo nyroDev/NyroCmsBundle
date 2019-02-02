@@ -6,9 +6,11 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\ComposerService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +24,7 @@ abstract class AbstractController extends NyroDevAbstractController
      */
     public function getContentRepo()
     {
-        return $this->get(AbstractService::class)->getContentRepository();
+        return $this->get(DbAbstractService::class)->getContentRepository();
     }
 
     protected $rootContent;
@@ -44,8 +46,18 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setGlobalRootContent()
     {
-        $this->get('nyrocms')->setRootContent($this->getRootContent());
+        $this->get(NyroCmsService::class)->setRootContent($this->getRootContent());
     }
+
+    public function index(Request $request, $_config = null): Response
+    {
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
+        $this->setGlobalRootContent();
+
+        return $this->handleIndex($request);
+    }
+
+    abstract protected function handleIndex(Request $request): Response;
 
     protected $enabledStates = array(
         Content::STATE_ACTIVE,
@@ -76,22 +88,22 @@ abstract class AbstractController extends NyroDevAbstractController
         throw $this->createNotFoundException();
     }
 
-    public function contentAction(Request $request, $url, $handler = null, $_config = null)
+    public function content(Request $request, $url, $handler = null, $_config = null): Response
     {
-        $this->get('nyrocms')->setRouteConfig($_config);
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $content = $this->getContentByUrl($url);
 
         return $this->handleContent($request, $content, null, $handler);
     }
 
-    public function contentSpecAction(Request $request, $url, $id, $handler = null, $_config = null)
+    public function contentSpec(Request $request, $url, $id, $handler = null, $_config = null): Response
     {
-        $this->get('nyrocms')->setRouteConfig($_config);
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $content = $this->getContentByUrl($url);
 
-        $contentSpec = $this->get(AbstractService::class)->getContentSpecRepository()->findForAction($id, $content->getContentHandler()->getId(), $this->enabledStates);
+        $contentSpec = $this->get(DbAbstractService::class)->getContentSpecRepository()->findForAction($id, $content->getContentHandler()->getId(), $this->enabledStates);
 
         if (!$contentSpec) {
             throw $this->createNotFoundException();
@@ -100,7 +112,7 @@ abstract class AbstractController extends NyroDevAbstractController
         return $this->handleContent($request, $content, $contentSpec, $handler);
     }
 
-    protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null)
+    protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null): Response
     {
         $routePrm = array();
         if ($handlerAction) {
@@ -114,7 +126,7 @@ abstract class AbstractController extends NyroDevAbstractController
         }
 
         if (!$redirect) {
-            $redirect = $this->get(nyroDevService::class)->redirectIfNotUrl($this->get('nyrocms')->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
+            $redirect = $this->get(NyrodevService::class)->redirectIfNotUrl($this->get(NyroCmsService::class)->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
         }
 
         if ($redirect) {
@@ -125,7 +137,7 @@ abstract class AbstractController extends NyroDevAbstractController
             // No text content, search for the first sub content
             $subContents = $this->getContentRepo()->childrenForMenu($content, true);
             if (count($subContents)) {
-                return $this->redirect($this->get('nyrocms')->getUrlFor($subContents[0]));
+                return $this->redirect($this->get(NyroCmsService::class)->getUrlFor($subContents[0]));
             }
         }
 
@@ -140,11 +152,11 @@ abstract class AbstractController extends NyroDevAbstractController
 
         $activeIds[$content->getId()] = $content->getId();
 
-        $this->get('nyrocms')->setActiveIds($activeIds);
-        $this->get('nyrocms')->setPathInfoObject($contentSpec ? $contentSpec : $content);
+        $this->get(NyroCmsService::class)->setActiveIds($activeIds);
+        $this->get(NyroCmsService::class)->setPathInfoObject($contentSpec ? $contentSpec : $content);
 
         if ($content->getContentHandler()) {
-            $handler = $this->get('nyrocms')->getHandler($content->getContentHandler());
+            $handler = $this->get(NyroCmsService::class)->getHandler($content->getContentHandler());
             $handler->init($request);
             $contentHandler = $handler->prepareView($content, $contentSpec, $handlerAction);
             if ($contentHandler instanceof Response) {
@@ -168,7 +180,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->setTitle($title);
         $this->setDescription($description);
         if ($image) {
-            $this->setImage($this->get('nyrocms_composer')->imageResize($image, 1000));
+            $this->setImage($this->get(ComposerService::class)->imageResize($image, 1000));
         }
 
         $this->setSharableContent($content);
@@ -184,25 +196,25 @@ abstract class AbstractController extends NyroDevAbstractController
         $ret = array();
 
         if ($content->getContentHandler()) {
-            $handler = $this->get('nyrocms')->getHandler($content->getContentHandler());
+            $handler = $this->get(NyroCmsService::class)->getHandler($content->getContentHandler());
             $ret = $handler->getAllowedParams();
         }
 
         return $ret;
     }
 
-    abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, $handlerAction = null);
+    abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, $handlerAction = null): Response;
 
-    public function searchAction(Request $request, $_config = null)
+    public function search(Request $request, $_config = null): Response
     {
-        $this->get('nyrocms')->setRouteConfig($_config);
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $q = strip_tags($request->query->get('q'));
 
         $title = $this->trans('public.header.search');
         $results = array();
         if ($q) {
-            $this->get('nyrocms')->setPathInfoSearch($q);
+            $this->get(NyroCmsService::class)->setPathInfoSearch($q);
             $title = $this->trans('nyrocms.search.title', array('%q%' => $q));
             $root = $this->getRootContent();
             $tmpQ = array_filter(array_map('trim', explode(' ', trim($q))));
@@ -223,7 +235,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
             $results['contentSpecs'] = array();
             if (count($cts)) {
-                $tmpSpecs = $this->get(AbstractService::class)->getContentSpecRepository()->search($tmpQ, array_keys($cts), ContentSpec::STATE_ACTIVE);
+                $tmpSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->search($tmpQ, array_keys($cts), ContentSpec::STATE_ACTIVE);
 
                 foreach ($tmpSpecs as $tmp) {
                     $chId = $tmp->getContentHandler()->getId();
@@ -246,14 +258,14 @@ abstract class AbstractController extends NyroDevAbstractController
         return $this->handleSearchView($request, $q, $results, $title);
     }
 
-    abstract protected function handleSearchView(Request $request, $q, array $results, $title);
+    abstract protected function handleSearchView(Request $request, $q, array $results, $title): Response;
 
-    public function sitemapIndexXmlAction($_config = null)
+    public function sitemapIndexXml($_config = null): Response
     {
-        $this->get('nyrocms')->setRouteConfig($_config);
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $urls = array();
-        foreach ($this->get('nyrocms')->getLocales($this->getRootContent()) as $locale) {
+        foreach ($this->get(NyroCmsService::class)->getLocales($this->getRootContent()) as $locale) {
             $urls[] = $this->generateUrl($this->getRootHandler().'_sitemapXml', array('_locale' => $locale, '_format' => 'xml'), true);
         }
 
@@ -262,22 +274,22 @@ abstract class AbstractController extends NyroDevAbstractController
         ));
     }
 
-    public function sitemapXmlAction(Request $request, $_config = null)
+    public function sitemapXml(Request $request, $_config = null): Response
     {
-        $this->get('nyrocms')->setRouteConfig($_config);
+        $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
         $urls = array(
-            $this->get(nyroDevService::class)->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
+            $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
         );
 
         foreach ($this->getContentRepo()->childrenForMenu($this->getRootContent(), false) as $content) {
             if (!$content->getGoUrl() && !$content->getRedirectToChildren()) {
-                $urls[] = $this->get('nyrocms')->getUrlFor($content, true);
+                $urls[] = $this->get(NyroCmsService::class)->getUrlFor($content, true);
             }
-            if ($content->getContentHandler() && $this->get('nyrocms')->getHandler($content->getContentHandler())->hasContentSpecUrl()) {
-                $contentSpecs = $this->get(AbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
+            if ($content->getContentHandler() && $this->get(NyroCmsService::class)->getHandler($content->getContentHandler())->hasContentSpecUrl()) {
+                $contentSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
                 foreach ($contentSpecs as $contentSpec) {
-                    $urls[] = $this->get('nyrocms')->getUrlFor($contentSpec, true, array(), $content);
+                    $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, array(), $content);
                 }
             }
         }
@@ -293,12 +305,12 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setTitle($title, $addDefault = true)
     {
-        $this->get(ShareService::class)->setTitle($this->get('nyrocms')->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
+        $this->get(ShareService::class)->setTitle($this->get(NyroCmsService::class)->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
     }
 
     protected function setDescription($description)
     {
-        $this->get(ShareService::class)->setDescription($this->get('nyrocms')->inlineText($description));
+        $this->get(ShareService::class)->setDescription($this->get(NyroCmsService::class)->inlineText($description));
     }
 
     protected function setImage($image)
@@ -310,6 +322,6 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setSharableContent(Sharable $sharable)
     {
-        $this->get('nyrocms')->setSharableContent($sharable);
+        $this->get(NyroCmsService::class)->setSharableContent($sharable);
     }
 }

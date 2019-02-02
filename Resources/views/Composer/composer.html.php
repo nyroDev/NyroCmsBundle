@@ -7,22 +7,11 @@
 	
 	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), array(
         'row' => $row,
-        'tabletWidth' => $view['nyrocms_composer']->cssTabletWidth($row),
-        'desktopWidth' => $view['nyrocms_composer']->cssDesktopWidth($row),
     )); ?>
-	
-	<?php foreach ($view['assetic']->stylesheets(
-        '@nyrocms_css_admin_composer',
-        array('?yui_css'),
-        array('output' => 'css/adminComposer.css')) as $url): ?>
-		<link rel="stylesheet" type="text/css" media="screen" href="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)); ?>" />
-	<?php endforeach; ?>
-	<?php foreach ($view['assetic']->javascripts(
-        '@nyrocms_js_admin_composer',
-        array('?closure'),
-        array('output' => 'js/adminComposer.js')) as $url): ?>
-		<script type="text/javascript" src="<?php echo $view->escape($view['nyrodev']->getAsseticVersionUrl($url)); ?>" defer></script>
-	<?php endforeach; ?>
+
+	<?php echo $view['nyrodev_tagRender']->renderWebpackLinkTags('css/admin/nyroCmsComposer', 'type="text/css" media="screen"'); ?>
+
+	<?php echo $view['nyrodev_tagRender']->renderWebpackScriptTags('js/admin/nyroCmsComposer', 'defer'); ?>
 </head>
 <body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?>">
 <?php

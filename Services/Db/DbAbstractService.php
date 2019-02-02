@@ -3,18 +3,13 @@
 namespace NyroDev\NyroCmsBundle\Services\Db;
 
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
-use NyroDev\UtilityBundle\Services\Db\AbstractService as nyroDevDbService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
 
-abstract class AbstractService extends AbstractServiceSrc
+abstract class DbAbstractService extends AbstractServiceSrc
 {
-    public function __construct($container)
-    {
-        parent::__construct($container);
-    }
-
     public function getNamespace()
     {
-        return $this->getParameter('nyroCms.model.namespace');
+        return $this->getParameter('nyrocms.model.namespace');
     }
 
     public function getClass($name, $namespaced = true)
@@ -23,7 +18,7 @@ abstract class AbstractService extends AbstractServiceSrc
         $converter = new \Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter();
         $paramKey = $converter->normalize($tmp[count($tmp) - 1]);
 
-        return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyroCms.model.classes.'.$paramKey, $name);
+        return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyrocms.model.classes.'.$paramKey, $name);
     }
 
     public function isA($object, $name)

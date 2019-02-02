@@ -1,3 +1,11 @@
+#composerHomeEdit {
+	display: inline-block;
+	height: 30px;
+	margin-bottom: 10px;
+}
+#composerHomeEdit svg {
+	vertical-align: middle;
+}
 .tree {
 	margin: 0;
 	padding: 0;

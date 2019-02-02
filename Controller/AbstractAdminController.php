@@ -2,7 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\AdminService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController as SrcAbstractAdminController;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
@@ -12,7 +14,7 @@ class AbstractAdminController extends SrcAbstractAdminController
     protected function canAdminContentHandler(\NyroDev\NyroCmsBundle\Model\ContentHandler $contentHandler)
     {
         $canAdmin = false;
-        $nyrocmsAdmin = $this->get('nyrocms_admin');
+        $nyrocmsAdmin = $this->get(AdminService::class);
         foreach ($contentHandler->getContents() as $content) {
             $canAdmin = $canAdmin || $nyrocmsAdmin->canAdminContent($content);
         }
@@ -33,8 +35,8 @@ class AbstractAdminController extends SrcAbstractAdminController
     protected function translationFormClb($action, $row, \Symfony\Component\Form\FormBuilder $form)
     {
         if (count($this->translationFields)) {
-            $langs = $this->get('nyrocms')->getLocaleNames($row);
-            $defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
+            $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
+            $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
             unset($langs[$defaultLocale]);
 
             $this->translations = array();
@@ -77,11 +79,11 @@ class AbstractAdminController extends SrcAbstractAdminController
     protected function translationAfterFlushClb($response, $action, $row)
     {
         if (count($this->translationFields)) {
-            $langs = $this->get('nyrocms')->getLocaleNames($row);
-            $defaultLocale = $this->get('nyrocms')->getDefaultLocale($row);
+            $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
+            $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
             unset($langs[$defaultLocale]);
 
-            $om = $this->get(AbstractService::class)->getObjectManager();
+            $om = $this->get(DbAbstractService::class)->getObjectManager();
             $propertyAccess = PropertyAccess::createPropertyAccessor();
 
             foreach ($langs as $lg => $lang) {

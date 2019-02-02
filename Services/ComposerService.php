@@ -10,11 +10,23 @@ use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\UtilityBundle\Services\ImageService;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
+use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 class ComposerService extends AbstractService
 {
+    /**
+     * @var AssetsHelper
+     */
+    protected $assetsHelper;
+
+    public function __construct($container, AssetsHelper $assetsHelper)
+    {
+        parent::__construct($container);
+        $this->assetsHelper = $assetsHelper;
+    }
+
     public function getContainer()
     {
         return $this->container;
@@ -26,7 +38,7 @@ class ComposerService extends AbstractService
     {
         $class = get_class($row);
         if (!isset($this->configs[$class])) {
-            $composableConfig = $this->getParameter('nyroCms.composable');
+            $composableConfig = $this->getParameter('nyrocms.composable');
 
             $ret = isset($composableConfig[$class]) ? $composableConfig[$class] : array();
             $cfgArrays = array('themes', 'available_blocks');
@@ -69,16 +81,6 @@ class ComposerService extends AbstractService
     public function cssTemplate(Composable $row)
     {
         return $this->getQuickConfig($row, 'css_template');
-    }
-
-    public function cssTabletWidth(Composable $row)
-    {
-        return $this->getQuickConfig($row, 'css_tablet_width');
-    }
-
-    public function cssDesktopWidth(Composable $row)
-    {
-        return $this->getQuickConfig($row, 'css_desktop_width');
     }
 
     public function getMaxComposerButtons(Composable $row)
@@ -126,8 +128,8 @@ class ComposerService extends AbstractService
     {
         $ret = '#';
         if ($row instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
-            $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
-            $ret = $this->get(nyroDevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+            $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
+            $ret = $this->get(NyrodevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
             $cfg = $this->getConfig($row);
             $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
@@ -136,7 +138,7 @@ class ComposerService extends AbstractService
             } elseif ($cfg['cancel_url']['need_veryParent_id']) {
                 $routePrm['id'] = $row->getVeryParent()->getId();
             }
-            $ret = $this->get(nyroDevService::class)->generateUrl($cfg['cancel_url']['route'], $routePrm);
+            $ret = $this->get(NyrodevService::class)->generateUrl($cfg['cancel_url']['route'], $routePrm);
         }
 
         return $ret;
@@ -223,7 +225,7 @@ class ComposerService extends AbstractService
     {
         $this->existingImages = array();
 
-        if ($lang != $this->get('nyrocms')->getDefaultLocale($row)) {
+        if ($lang != $this->get(NyroCmsService::class)->getDefaultLocale($row)) {
             $this->existingImages = $this->getImages($row->getContent());
         }
 
@@ -447,7 +449,7 @@ class ComposerService extends AbstractService
             if ($admin) {
                 $content = array($this->getBlock($row, 'intro'));
                 if ($hasHandler) {
-                    $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+                    $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
                     if ($handler->isWrapped() && $handler->isWrappedAs()) {
                         $tmp = array($handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR);
                         $content[] = $this->getBlock($row, $handler->isWrapped(), $tmp);
@@ -464,7 +466,7 @@ class ComposerService extends AbstractService
         } elseif ($hasHandler) {
             // Check if the handler is placed, and add it if not here
             $content = $row->getContent();
-            $handler = $this->get('nyrocms')->getHandler($row->getContentHandler());
+            $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $isWrapped = $handler->isWrapped();
             $wrappedAs = $handler->isWrappedAs();
             $hasHandlerPlaced = false;
@@ -530,7 +532,7 @@ class ComposerService extends AbstractService
     protected function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {
-            $this->rootImageDir = $this->getParameter('kernel.root_dir').'/../web/'.$this->getImageDir();
+            $this->rootImageDir = $this->get('kernel')->getProjectDir().'/public/'.$this->getImageDir();
             $fs = new \Symfony\Component\Filesystem\Filesystem();
             if (!$fs->exists($this->rootImageDir)) {
                 $fs->mkdir($this->rootImageDir);
@@ -543,7 +545,7 @@ class ComposerService extends AbstractService
     public function imageUpload(\Symfony\Component\HttpFoundation\File\UploadedFile $image)
     {
         $dir = $this->getRootImageDir();
-        $filename = $this->get(nyroDevService::class)->getUniqFileName($dir, $image->getClientOriginalName());
+        $filename = $this->get(NyrodevService::class)->getUniqFileName($dir, $image->getClientOriginalName());
         $image->move($dir, $filename);
 
         return $filename;
@@ -573,8 +575,8 @@ class ComposerService extends AbstractService
 
                 $resizedPath = $this->get(ImageService::class)->_resize($absoluteFile, $config);
 
-                $tmp = explode('/web/', $resizedPath);
-                $ret = $this->get('templating.helper.assets')->getUrl($tmp[1]);
+                $tmp = explode('/public/', $resizedPath);
+                $ret = $this->assetsHelper->getUrl($tmp[1]);
             } catch (\Exception $e) {
             }
         }

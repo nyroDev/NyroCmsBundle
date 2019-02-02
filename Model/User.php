@@ -573,6 +573,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
             'ROLE_USER',
             'ROLE_'.strtoupper($this->getUserType()),
         );
+        if ($this->getDevelopper()) {
+            $ret[] = 'ROLE_DEVELOPPER';
+        }
         if ($this->getValid()) {
             foreach ($this->getUserRoles() as $role) {
                 $ret[] = $role->getSecurityRoleName();

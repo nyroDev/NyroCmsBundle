@@ -5,6 +5,9 @@
 	background: linear-gradient(to bottom, #7495c2 0%,#000000 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7495c2', endColorstr='#000000',GradientType=0 );
 }
+#loginpage h1 {
+	color: #fff;
+}
 #loginpage main {
 	width: 100%;
 	margin: 125px 0;
@@ -56,6 +59,7 @@
 #loginpage .form_errors {
 	color: #9BC3FF;
 	margin-bottom: 15px;
+	margin-left: 0;
 }
 .forgotLink {
 	color: #fff;

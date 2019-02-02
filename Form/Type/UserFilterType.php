@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Form\Type;
 
+use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -18,7 +19,7 @@ class UserFilterType extends Type\AbstractFilterType
             ->add('userType', Type\FilterChoiceType::class, array(
                 'label' => $this->trans('admin.user.userType'),
                 'choiceOptions' => array(
-                    'choices' => $this->get('nyrocms_admin')->getUserTypeChoices(),
+                    'choices' => array_flip($this->get(AdminService::class)->getUserTypeChoices()),
                 ),
             ))
             ->add('valid', Type\FilterBoolType::class, array('label' => $this->trans('admin.user.valid')))

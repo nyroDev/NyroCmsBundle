@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
 use NyroDev\NyroCmsBundle\Model\Content as ContentModel;
+use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -15,10 +16,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @Gedmo\TranslationEntity(class="NyroDev\NyroCmsBundle\Model\Entity\Translation\ContentTranslation")
  * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\ContentLog")
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
+ * @ORM\HasLifecycleCallbacks
  */
 class Content extends ContentModel
 {
-    use Traits\SharableTrait { getFileFields as protected sharableGetFileFields; }
+    use SharableTrait { getFileFields as protected sharableGetFileFields; }
 
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="parent")
@@ -40,4 +42,30 @@ class Content extends ContentModel
      * )
      */
     protected $translations;
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUpload()
+    {
+        parent::preUpload();
+    }
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     */
+    public function upload()
+    {
+        parent::upload();
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeUpload()
+    {
+        parent::removeUpload();
+    }
 }

@@ -2,16 +2,26 @@
 
 namespace NyroDev\NyroCmsBundle\Command;
 
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\AdminService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AddUserCommand extends ContainerAwareCommand
 {
+    private $passwordEncoder;
+
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -45,9 +55,9 @@ class AddUserCommand extends ContainerAwareCommand
         $developper = $input->getArgument('developper');
         $userroles = $input->getArgument('userroles');
 
-        $dbService = $this->getContainer()->get(AbstractService::class);
-        $userTypes = $this->getContainer()->get('nyrocms_admin')->getUserTypeChoices();
-        $userRolesDb = $this->getContainer()->get('nyrocms_admin')->getUserRoles();
+        $dbService = $this->getContainer()->get(DbAbstractService::class);
+        $userTypes = $this->getContainer()->get(AdminService::class)->getUserTypeChoices();
+        $userRolesDb = $this->getContainer()->get(AdminService::class)->getUserRoles();
 
         $helper = $this->getHelper('question');
         if (!$email) {
@@ -103,6 +113,8 @@ class AddUserCommand extends ContainerAwareCommand
             } else {
                 $userroles = array();
             }
+        } else {
+            $userroles = [];
         }
 
         if (0 === count($userroles) && count($userRolesDb) > 0) {
@@ -131,10 +143,8 @@ class AddUserCommand extends ContainerAwareCommand
         $newUser->setFirstname($firstname);
         $newUser->setLastname($lastname);
 
-        $salt = sha1(uniqid());
-        $passwordSalted = $this->getContainer()->get('security.encoder_factory')->getEncoder($newUser)->encodePassword($password, $salt);
+        $passwordSalted = $this->passwordEncoder->encodePassword($newUser, $password);
         $newUser->setPassword($passwordSalted);
-        $newUser->setSalt($salt);
 
         $newUser->setUserType($usertype);
         $newUser->setDevelopper('true' === $developper);

@@ -7,12 +7,12 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Model\Sharable;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
 
-class MainService extends nyroDevAbstractService
+class NyroCmsService extends nyroDevAbstractService
 {
     protected $handlers = array();
 
@@ -25,7 +25,7 @@ class MainService extends nyroDevAbstractService
             }
 
             if (0 === strpos(get_class($contentHandler), 'Proxies')) {
-                $contentHandler = $this->get(AbstractService::class)->getContentHandlerRepository()->find($contentHandler->getId());
+                $contentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($contentHandler->getId());
             }
 
             $this->handlers[$contentHandler->getId()] = new $class($contentHandler, $this->container);
@@ -80,7 +80,7 @@ class MainService extends nyroDevAbstractService
     public function getContentRoot($id)
     {
         if (!isset($this->contentRoots[$id])) {
-            $this->contentRoots[$id] = $this->get(AbstractService::class)->getContentRepository()->find($id);
+            $this->contentRoots[$id] = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
         }
 
         return $this->contentRoots[$id];
@@ -128,17 +128,17 @@ class MainService extends nyroDevAbstractService
                 $curLoc = $object->getTranslatableLocale();
 
                 $object->setTranslatableLocale($this->getDefaultLocale($object));
-                $this->get(AbstractService::class)->refresh($object);
+                $this->get(DbAbstractService::class)->refresh($object);
                 $title = $object->getTitle();
 
                 $object->setTranslatableLocale($curLoc);
-                $this->get(AbstractService::class)->refresh($object);
+                $this->get(DbAbstractService::class)->refresh($object);
             }
 
             $prm = array_merge($prm, array(
                 'url' => trim($parent->getUrl(), '/'),
                 'id' => $object->getId(),
-                'title' => $this->get(nyroDevService::class)->urlify($title),
+                'title' => $this->get(NyrodevService::class)->urlify($title),
             ));
         }
 
@@ -182,16 +182,16 @@ class MainService extends nyroDevAbstractService
 
     public function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
     {
-        $response = $this->get('templating')->renderResponse($this->getParameter('nyroCms.email.global_template'), array(
-            'stylesTemplate' => $this->getParameter('nyroCms.email.styles_template'),
-            'bodyTemplate' => $this->getParameter('nyroCms.email.body_template'),
+        $response = $this->get('templating')->renderResponse($this->getParameter('nyrocms.email.global_template'), array(
+            'stylesTemplate' => $this->getParameter('nyrocms.email.styles_template'),
+            'bodyTemplate' => $this->getParameter('nyrocms.email.body_template'),
             'subject' => $subject,
             'locale' => $locale ? $locale : $this->getLocale(),
             'content' => $content,
             'dbContent' => $dbContent,
         ));
         $html = $response->getContent();
-        $text = $this->get(nyroDevService::class)->html2text($html);
+        $text = $this->get(NyrodevService::class)->html2text($html);
 
         if (!$from) {
             $from = $this->getParameter('noreply_email');
@@ -318,7 +318,7 @@ class MainService extends nyroDevAbstractService
                     $routePrm = array_merge($pathInfo['routePrm'], $prm, array('q' => $this->pathInfoSearch));
                 } elseif ($isObjectPage) {
                     $pathInfo['object']->setTranslatableLocale($locale);
-                    $this->get(AbstractService::class)->refresh($pathInfo['object']);
+                    $this->get(DbAbstractService::class)->refresh($pathInfo['object']);
                     $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $prm));
                 } else {
                     $routeName = $pathInfo['route'];
@@ -334,7 +334,7 @@ class MainService extends nyroDevAbstractService
 
         if ($isObjectPage) {
             $pathInfo['object']->setTranslatableLocale($curLocale);
-            $this->get(AbstractService::class)->refresh($pathInfo['object']);
+            $this->get(DbAbstractService::class)->refresh($pathInfo['object']);
         }
 
         return $ret;
@@ -343,7 +343,7 @@ class MainService extends nyroDevAbstractService
     public function disabledLocaleUrls($locale)
     {
         $ret = false;
-        $disabled = $this->getParameter('nyroCms.disabled_locale_urls');
+        $disabled = $this->getParameter('nyrocms.disabled_locale_urls');
         if (is_array($disabled)) {
             $ret = in_array($locale, $disabled);
         } elseif ($disabled) {
@@ -359,6 +359,7 @@ class MainService extends nyroDevAbstractService
     {
         if (is_null($this->foundHandlers)) {
             $this->foundHandlers = array();
+            dump($GLOBALS['loader']);
             if (isset($GLOBALS['loader']) && $GLOBALS['loader'] instanceof \Composer\Autoload\ClassLoader) {
                 $classes = array_keys($GLOBALS['loader']->getClassMap());
                 foreach ($classes as $class) {

@@ -181,6 +181,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
     {
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.root = :root')
+            ->andWhere('c.id <> :root')
                 ->setParameter('root', $root)
             ->addOrderBy('c.lft', 'ASC');
         if ($ignoreId) {

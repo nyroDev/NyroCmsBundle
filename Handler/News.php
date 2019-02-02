@@ -4,7 +4,8 @@ namespace NyroDev\NyroCmsBundle\Handler;
 
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 
 class News extends AbstractHandler
 {
@@ -37,7 +38,7 @@ class News extends AbstractHandler
             'content' => $content,
         );
 
-        $routCfg = $this->get('nyrocms')->getRouteFor($content);
+        $routCfg = $this->get(NyroCmsService::class)->getRouteFor($content);
         $route = $routCfg['route'];
         $routePrm = $routCfg['prm'];
 
@@ -48,7 +49,7 @@ class News extends AbstractHandler
 
             $route .= '_spec';
             $routePrm['id'] = $handlerContent->getId();
-            $routePrm['title'] = $this->get(nyroDevService::class)->urlify($handlerContent->getTitle());
+            $routePrm['title'] = $this->get(NyrodevService::class)->urlify($handlerContent->getTitle());
         } else {
             $page = $this->request->query->get('page', 1);
             $nbPerPage = $this->getParameter('handler_news_perpage', 6);
@@ -62,7 +63,7 @@ class News extends AbstractHandler
                 $page = 1;
             }
 
-            $pager = new \NyroDev\UtilityBundle\Utility\Pager($this->get(nyroDevService::class), $route, $routePrm, $total, $page, $nbPerPage);
+            $pager = new \NyroDev\UtilityBundle\Utility\Pager($this->get(NyrodevService::class), $route, $routePrm, $total, $page, $nbPerPage);
 
             $results = $this->getContentSpecs($content, $pager->getStart(), $nbPerPage);
 

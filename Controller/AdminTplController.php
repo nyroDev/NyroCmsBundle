@@ -3,7 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\NyroCmsBundle\Event\AdminMenuEvent;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\AdminService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use NyroDev\UtilityBundle\Services\MemberService;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,9 +32,9 @@ class AdminTplController extends NyroDevAbstractController
             $tmpUriT = substr($tmpUriInit, strpos($tmpUriInit, $adminPrefix) + strlen($adminPrefix));
             $tmpUri = array_merge(explode('/', trim($tmpUriT, '/')), array_fill(0, 2, false));
 
-            $adminPerRoot = $this->getParameter('nyroCms.content.admin_per_root');
+            $adminPerRoot = $this->getParameter('nyrocms.content.admin_per_root');
             $rootContents = array();
-            $tmp = $this->get(AbstractService::class)->getContentRepository()->findBy(array('level' => 0), array('title' => 'ASC'));
+            $tmp = $this->get(DbAbstractService::class)->getContentRepository()->findBy(array('level' => 0), array('title' => 'ASC'));
             $firstRoot = 1;
             foreach ($tmp as $t) {
                 $rootContents[$t->getId()] = $t;
@@ -51,7 +53,7 @@ class AdminTplController extends NyroDevAbstractController
                 $menu['contents']['root_'.$curRootId] = array(
                     'uri' => $this->generateUrl('nyrocms_admin_data_content_tree', array('id' => $curRootId)),
                     'name' => $rootContents[$curRootId]->getTitle(),
-                    'active' => 'content' == $tmpUri[0] && $this->get('nyrocms_admin')->getContentParentId() == $curRootId,
+                    'active' => 'content' == $tmpUri[0] && $this->get(AdminService::class)->getContentParentId() == $curRootId,
                 );
                 $vars['rootContents'] = $rootContents;
                 $vars['curRootId'] = $curRootId;
@@ -60,16 +62,16 @@ class AdminTplController extends NyroDevAbstractController
                     $menu['contents']['root_'.$rootContent->getId()] = array(
                         'uri' => $this->generateUrl('nyrocms_admin_data_content_tree', array('id' => $rootContent->getId())),
                         'name' => $rootContent->getTitle(),
-                        'active' => 'content' == $tmpUri[0] && $this->get('nyrocms_admin')->getContentParentId() == $rootContent->getId(),
+                        'active' => 'content' == $tmpUri[0] && $this->get(AdminService::class)->getContentParentId() == $rootContent->getId(),
                     );
                 }
             }
 
-            $nyrocms = $this->get('nyrocms');
-            $nyrocmsAdmin = $this->get('nyrocms_admin');
+            $nyrocms = $this->get(NyroCmsService::class);
+            $nyrocmsAdmin = $this->get(AdminService::class);
 
             $modules = $modulesIdent = array();
-            $contentHandlers = $this->get(AbstractService::class)->getContentHandlerRepository()->findBy(array('hasAdmin' => 1));
+            $contentHandlers = $this->get(DbAbstractService::class)->getContentHandlerRepository()->findBy(array('hasAdmin' => 1));
             foreach ($contentHandlers as $contentHandler) {
                 $canAdmin = false;
                 foreach ($contentHandler->getContents() as $content) {

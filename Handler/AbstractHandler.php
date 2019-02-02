@@ -7,11 +7,11 @@ use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 use NyroDev\UtilityBundle\Form\Type\TinymceType;
 use NyroDev\UtilityBundle\Services\ImageService;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -214,7 +214,7 @@ abstract class AbstractHandler
      */
     public function generateUrl($route, $parameters = array(), $absolute = false)
     {
-        return $this->container->get(nyroDevService::class)->generateUrl($route, $parameters, $absolute);
+        return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }
 
     /**
@@ -222,7 +222,7 @@ abstract class AbstractHandler
      */
     public function getContentRepo()
     {
-        return $this->get(AbstractService::class)->getContentRepository();
+        return $this->get(DbAbstractService::class)->getContentRepository();
     }
 
     /**
@@ -230,7 +230,7 @@ abstract class AbstractHandler
      */
     public function getContentSpecRespository()
     {
-        return $this->get(AbstractService::class)->getContentSpecRepository();
+        return $this->get(DbAbstractService::class)->getContentSpecRepository();
     }
 
     protected $contents = array();
@@ -323,7 +323,7 @@ abstract class AbstractHandler
      */
     public function getUploadRootDir()
     {
-        return $this->getParameter('kernel.root_dir').'/../web/'.$this->getUploadDir();
+        return $this->get('kernel')->getProjectDir().'/public/'.$this->getUploadDir();
     }
 
     /**
@@ -342,7 +342,7 @@ abstract class AbstractHandler
         foreach ($this->getFormFields($action) as $k => $cfg) {
             $data = $form->get($k)->getData();
             if (FileType::class == $cfg['type']) {
-                if (isset($cfg['showDelete']) && $cfg['showDelete'] && $this->get(nyroDevService::class)->getRequest()->get($cfg['showDelete'])) {
+                if (isset($cfg['showDelete']) && $cfg['showDelete'] && $this->get(NyrodevService::class)->getRequest()->get($cfg['showDelete'])) {
                     $this->deleteFileClb($row, $k);
                 }
                 $newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
@@ -394,7 +394,7 @@ abstract class AbstractHandler
             if (FileType::class == $cfg['type']) {
                 if (isset($cfg['translatable']) && $cfg['translatable'] && isset($cfg['showDelete']) && $cfg['showDelete']) {
                     $deleteIdent = $cfg['showDelete'].'_'.$lg;
-                    if ($this->get(nyroDevService::class)->getRequest()->get($deleteIdent)) {
+                    if ($this->get(NyrodevService::class)->getRequest()->get($deleteIdent)) {
                         $this->deleteFileClb($row, $fieldName);
                     }
                 }
@@ -440,7 +440,7 @@ abstract class AbstractHandler
                 $this->deleteFileClb($row, $field);
 
                 // Transfer new File
-                $destPath = $this->get(nyroDevService::class)->getUniqFileName($rootDir, $data->getClientOriginalName());
+                $destPath = $this->get(NyrodevService::class)->getUniqFileName($rootDir, $data->getClientOriginalName());
                 $data->move($rootDir, $destPath);
 
                 $this->fileUploaded[$fieldForm] = $destPath;
@@ -508,7 +508,7 @@ abstract class AbstractHandler
 
             if ($this->contentSpec[$id] && $locale) {
                 $this->contentSpec[$id]->setTranslatableLocale($locale);
-                $this->get(AbstractService::class)->refresh($this->contentSpec[$id]);
+                $this->get(DbAbstractService::class)->refresh($this->contentSpec[$id]);
             }
         }
 

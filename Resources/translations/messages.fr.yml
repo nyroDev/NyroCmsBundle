@@ -30,6 +30,7 @@ admin:
     public: Public
   composer:
     title: Composer
+    rootEdit: Modifier la racine
     home_pos: Tableau
     home_move: Déplacer
     home_move_up: Monter

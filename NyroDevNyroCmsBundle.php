@@ -17,15 +17,18 @@ class NyroDevNyroCmsBundle extends Bundle
         $container->addCompilerPass(new ValidationPass());
         $container->addCompilerPass(new DbPass());
 
-        $mappings = array(
-            realpath(__DIR__.'/Resources/config/doctrine-mapping') => 'NyroDev\NyroCmsBundle\Model',
-        );
-
-        if (class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
-            $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, array('nyrocms.model_manager_name')));
-        }
-        if (class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
-            $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, array('nyrocms.model_manager_name')));
+        $pathMapping = $container->getParameter('kernel.project_dir').'/config/nyrocms-doctrine-mapping';
+        if (file_exists($pathMapping)) {
+            $mappings = [
+                $pathMapping => 'NyroDev\NyroCmsBundle\Model',
+            ];
+    
+            if (class_exists('Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass')) {
+                $container->addCompilerPass(DoctrineOrmMappingsPass::createXmlMappingDriver($mappings, ['nyrocms.model_manager_name']));
+            }
+            if (class_exists('Doctrine\Bundle\MongoDBBundle\DependencyInjection\Compiler\DoctrineMongoDBMappingsPass')) {
+                $container->addCompilerPass(DoctrineMongoDBMappingsPass::createXmlMappingDriver($mappings, ['nyrocms.model_manager_name']));
+            }
         }
     }
 }

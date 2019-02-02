@@ -6,7 +6,8 @@ use NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\ContactType;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\FormService;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
@@ -197,7 +198,7 @@ class Contact extends AbstractHandler
 
         /* @var $form \Symfony\Component\Form\Form */
         $form->handleRequest($this->request);
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $subject = $this->trans('nyrocms.handler.contact.subject');
             $message = array();
             $message[] = '<h1>'.$subject.'</h1>';
@@ -217,7 +218,7 @@ class Contact extends AbstractHandler
 
             $saveInDb = $this->saveInDb();
             if ($saveInDb) {
-                $contactMessage = $this->get(AbstractService::class)->getNew('contact_message');
+                $contactMessage = $this->get(DbAbstractService::class)->getNew('contact_message');
                 $contactMessage->setContentHandler($this->contentHandler);
                 $contactMessage->setDest($emailName);
                 $accessor = PropertyAccess::createPropertyAccessor();
@@ -241,10 +242,10 @@ class Contact extends AbstractHandler
             $this->sendEmail($to, $subject, implode("\n", $message), $data['email'], null, $content);
 
             if ($saveInDb) {
-                $this->get(AbstractService::class)->flush();
+                $this->get(DbAbstractService::class)->flush();
             }
 
-            return new RedirectResponse($this->get('nyrocms')->getUrlFor($content, false, array('sent' => 1)));
+            return new RedirectResponse($this->get(NyroCmsService::class)->getUrlFor($content, false, array('sent' => 1)));
         }
 
         $view = 'NyroDevNyroCmsBundle:Handler:contact';
@@ -262,6 +263,6 @@ class Contact extends AbstractHandler
 
     protected function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
     {
-        return $this->get('nyrocms')->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
+        return $this->get(NyroCmsService::class)->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
     }
 }

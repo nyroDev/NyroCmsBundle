@@ -2,7 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Command;
 
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,7 +54,7 @@ class AddRoleCommand extends ContainerAwareCommand
             $internal = $helper->ask($input, $output, $question);
         }
 
-        $dbService = $this->getContainer()->get(AbstractService::class);
+        $dbService = $this->getContainer()->get(DbAbstractService::class);
         $newRole = $dbService->getNew('user_role');
 
         /* @var $newRole \NyroDev\NyroCmsBundle\Model\UserRole */

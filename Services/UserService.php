@@ -3,14 +3,32 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use NyroDev\NyroCmsBundle\Model\User;
-use NyroDev\NyroCmsBundle\Services\Db\AbstractService;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
-use NyroDev\UtilityBundle\Services\MainService as nyroDevService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\MemberService;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserService extends nyroDevAbstractService
 {
+    protected $passwordEncoder;
+
+    public function __construct(ContainerInterface $container, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        parent::__construct($container);
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     public function handleAddUser(User $user)
     {
         $now = new \DateTime();
@@ -28,14 +46,14 @@ class UserService extends nyroDevAbstractService
 
     public function sendWelcomeEmail(User $user)
     {
-        $passwordKey = $this->get(nyroDevService::class)->randomStr(32);
+        $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
         $end = new \DateTime('+1month');
 
         $user->setPasswordKey($passwordKey);
         $user->setPasswordKeyEnd($end);
-        $this->get(AbstractService::class)->flush();
+        $this->get(DbAbstractService::class)->flush();
 
-        $this->get('nyrocms')->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', array(
+        $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', array(
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
             '%url%' => $this->generateUrl('nyrocms_admin_welcome', array(
                 'id' => $user->getId(),
@@ -46,7 +64,7 @@ class UserService extends nyroDevAbstractService
 
     public function sendChangedPasswordEmail(User $user)
     {
-        return $this->get('nyrocms')->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', array(
+        return $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', array(
                 '%name%' => $user->getFirstname().' '.$user->getLastName(),
             ))));
     }
@@ -60,7 +78,7 @@ class UserService extends nyroDevAbstractService
             'form' => null,
             'welcome' => $welcome,
         );
-        $repo = $this->get('nyrocms_db')->getUserRepository();
+        $repo = $this->get(DbAbstractService::class)->getUserRepository();
 
         if ($id || $welcome) {
             $ret['step'] = 2;
@@ -73,40 +91,39 @@ class UserService extends nyroDevAbstractService
             $now = new \DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
                 $form = $this->get('form.factory')->createBuilder('form')
-                    ->add('password', 'repeated', array(
-                        'type' => 'password',
+                    ->add('password', RepeatedType::class, array(
+                        'type' => PasswordType::class,
                         'first_options' => array(
                             'label' => $this->trans('admin.user.password'),
                             'attr' => array('placeholder' => $this->trans('admin.user.newPassword')),
                             'constraints' => array(
-                                new \Symfony\Component\Validator\Constraints\NotBlank(),
+                                new NotBlank(),
                             ),
                         ),
                         'second_options' => array(
                             'label' => $this->trans('admin.user.passwordConfirm'),
                             'attr' => array('placeholder' => $this->trans('admin.user.passwordConfirm')),
                             'constraints' => array(
-                                new \Symfony\Component\Validator\Constraints\NotBlank(),
+                                new NotBlank(),
                             ),
                         ),
                         'required' => true,
                         'invalid_message' => $this->trans('admin.user.samePassword'),
                     ))
-                    ->add('submit', 'submit', array(
+                    ->add('submit', SubmitType::class, array(
                         'label' => $this->trans('admin.misc.send'),
                     ))
                     ->getForm();
+
                 $form->handleRequest($request);
-                if ($form->isValid()) {
+                if ($form->isSubmitted() && $form->isValid()) {
                     $data = $form->getData();
 
-                    $salt = sha1(uniqid());
-                    $password = $this->get('security.encoder_factory')->getEncoder($user)->encodePassword($data['password'], $salt);
+                    $password = $this->passwordEncoder->encodePassword($user, $data['password']);
                     $user->setPassword($password);
-                    $user->setSalt($salt);
                     $user->setPasswordKey(null);
                     $user->setPasswordKeyEnd(null);
-                    $this->get('nyrocms_db')->flush();
+                    $this->get(DbAbstractService::class)->flush();
 
                     $this->sendChangedPasswordEmail($user);
 
@@ -118,22 +135,22 @@ class UserService extends nyroDevAbstractService
                 $ret['notFound'] = true;
             }
         } else {
-            $form = $this->get('form.factory')->createBuilder('form')
-                ->add('email', 'email', array(
+            $form = $this->get('form.factory')->createBuilder()
+                ->add('email', EmailType::class, array(
                     'label' => $this->trans('admin.user.email'),
                     'constraints' => array(
-                        new \Symfony\Component\Validator\Constraints\NotBlank(),
-                        new \Symfony\Component\Validator\Constraints\Email(),
+                        new NotBlank(),
+                        new Email(),
                     ),
                     'attr' => array('placeholder' => $this->trans('admin.user.email')),
-                    ))
-                ->add('submit', 'submit', array(
+                ))
+                ->add('submit', SubmitType::class, array(
                     'label' => $this->trans('admin.misc.send'),
                 ))
                 ->getForm();
 
             $form->handleRequest($request);
-            if ($form->isValid()) {
+            if ($form->isSubmitted() && $form->isValid()) {
                 $data = $form->getData();
                 try {
                     $user = $repo->loadUserByUsername($data['email']);
@@ -141,14 +158,14 @@ class UserService extends nyroDevAbstractService
                     $user = null;
                 }
                 if ($user) {
-                    $passwordKey = $this->get(nyroDevService::class)->randomStr(32);
+                    $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
                     $end = new \DateTime('+2day');
 
                     $user->setPasswordKey($passwordKey);
                     $user->setPasswordKeyEnd($end);
-                    $this->get('nyrocms_db')->flush();
+                    $this->get(DbAbstractService::class)->flush();
 
-                    $this->get('nyrocms')->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', array(
+                    $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', array(
                         '%name%' => $user->getFirstname().' '.$user->getLastName(),
                         '%url%' => $this->generateUrl('nyrocms_'.$place.'_forgot', array(
                             'id' => $user->getId(),
@@ -169,7 +186,7 @@ class UserService extends nyroDevAbstractService
 
     public function handleAccount($place, Request $request)
     {
-        $this->get('nyrocms')->setActiveIds(array('account' => 'account'));
+        $this->get(NyroCmsService::class)->setActiveIds(array('account' => 'account'));
         $ret = array(
             'fields' => false,
             'password' => false,
@@ -182,36 +199,38 @@ class UserService extends nyroDevAbstractService
             'lastname',
         );
 
-        $form = $this->get('form.factory')->createNamedBuilder('fields', 'form', $user);
+        $this->sendChangedPasswordEmail($user);
+
+        $form = $this->get('form.factory')->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
             $form->add($f, null, array(
                 'label' => $this->trans('admin.user.'.$f),
             ));
         }
-        $form->add('submit', 'submit', array(
+        $form->add('submit', SubmitType::class, array(
             'label' => $this->trans('admin.misc.send'),
         ));
 
         $formFields = $form->getForm();
 
-        $formPassword = $this->get('form.factory')->createNamedBuilder('password', 'form', $user)
-            ->add('curPassword', 'password', array(
+        $formPassword = $this->get('form.factory')->createNamedBuilder('password', FormType::class, $user)
+            ->add('curPassword', PasswordType::class, array(
                     'label' => $this->trans('admin.user.curPassword'),
                     'required' => true,
                     'mapped' => false,
                     'constraints' => array(
-                        new \Symfony\Component\Validator\Constraints\NotBlank(),
-                        new \Symfony\Component\Security\Core\Validator\Constraints\UserPassword(array(
+                        new NotBlank(),
+                        new UserPassword(array(
                             'message' => $this->trans('admin.user.wrongPassword'),
                         )),
                     ), ))
-            ->add('password', 'repeated', array(
+            ->add('password', RepeatedType::class, array(
                     'mapped' => false,
                     'first_name' => 'pwd1',
                     'second_name' => 'pwd2',
-                    'constraints' => array(new \Symfony\Component\Validator\Constraints\NotBlank()),
+                    'constraints' => array(new NotBlank()),
                     'required' => true,
-                    'type' => 'password',
+                    'type' => PasswordType::class,
                     'first_options' => array(
                         'label' => $this->trans('admin.user.newPassword'),
                     ),
@@ -220,25 +239,23 @@ class UserService extends nyroDevAbstractService
                     ),
                     'invalid_message' => $this->trans('admin.user.samePassword'),
                 ))
-            ->add('submit', 'submit', array(
+            ->add('submit', SubmitType::class, array(
                 'label' => $this->trans('admin.misc.send'),
             ))
             ->getForm();
 
         $formFields->handleRequest($request);
         $formPassword->handleRequest($request);
-        if ($formFields->isValid()) {
-            $this->get('nyrocms_db')->flush();
+        if ($formFields->isSubmitted() && $formFields->isValid()) {
+            $this->get(DbAbstractService::class)->flush();
             $ret['fields'] = true;
-        } elseif ($formPassword->isValid()) {
+        } elseif ($formPassword->isSubmitted() && $formPassword->isValid()) {
             $newPassword = $formPassword->get('password')->getData();
-            $salt = sha1(uniqid());
-            $password = $this->get('security.encoder_factory')->getEncoder($user)->encodePassword($newPassword, $salt);
+            $password = $this->passwordEncoder->encodePassword($user, $newPassword);
             $user->setPassword($password);
-            $user->setSalt($salt);
             $user->setPasswordKey(null);
             $user->setPasswordKeyEnd(null);
-            $this->get('nyrocms_db')->flush();
+            $this->get(DbAbstractService::class)->flush();
 
             $this->sendChangedPasswordEmail($user);
             $ret['password'] = true;

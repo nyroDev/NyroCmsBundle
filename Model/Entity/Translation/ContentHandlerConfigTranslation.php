@@ -30,7 +30,7 @@ class ContentHandlerConfigTranslation extends AbstractPersonalTranslation
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="NyroDev\NyroCmsBundle\Model\ContentHandlerConfig", inversedBy="translations")
+     * @ORM\ManyToOne(targetEntity="NyroDev\NyroCmsBundle\Model\Entity\ContentHandlerConfig", inversedBy="translations")
      * @ORM\JoinColumn(name="object_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $object;

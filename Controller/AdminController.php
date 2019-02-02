@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Services\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,12 +34,12 @@ class AdminController extends Controller
 
     public function forgotAction(Request $request, $id = null, $key = null, $welcome = false)
     {
-        return $this->render('NyroDevNyroCmsBundle:Admin:forgot.html.php', $this->get('nyrocms_user')->handleForgot('admin', $request, $id, $key, $welcome));
+        return $this->render('NyroDevNyroCmsBundle:Admin:forgot.html.php', $this->get(UserService::class)->handleForgot('admin', $request, $id, $key, $welcome));
     }
 
     public function accountAction(Request $request)
     {
-        return $this->render('NyroDevNyroCmsBundle:Admin:account.html.php', $this->get('nyrocms_user')->handleAccount('admin', $request));
+        return $this->render('NyroDevNyroCmsBundle:Admin:account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
     }
 
     public function ccAction()
