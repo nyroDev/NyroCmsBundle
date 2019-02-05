@@ -3,16 +3,31 @@
 namespace NyroDev\NyroCmsBundle\Command;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\HttpKernel\KernelInterface;
 
-class CreateDbClassesCommand extends ContainerAwareCommand
+class CreateDbClassesCommand extends Command
 {
+    protected $db;
+    protected $params;
+    protected $kernel;
+
+    public function __construct(DbAbstractService $db, ParameterBagInterface $params, KernelInterface $kernel)
+    {
+        $this->db = $db;
+        $this->params = $params;
+        $this->kernel = $kernel;
+
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -34,7 +49,7 @@ class CreateDbClassesCommand extends ContainerAwareCommand
     {
         $force = $input->getOption('force');
 
-        $db_driver = $this->getContainer()->getParameter('nyroDev_utility.db_driver');
+        $db_driver = $this->params->get('nyroDev_utility.db_driver');
 
         $dirname = null;
         switch ($db_driver) {
@@ -45,18 +60,19 @@ class CreateDbClassesCommand extends ContainerAwareCommand
 
         if ($dirname) {
             $sourceDir = realpath(__DIR__.'/../Model/'.$dirname);
-            $dbService = $this->getContainer()->get(DbAbstractService::class);
-            $namespace = $dbService->getNamespace();
+            $namespace = $this->db->getNamespace();
 
             $namespaceDir = str_replace('App\\', '', $namespace);
 
             $originalNamespace = 'NyroDev\NyroCmsBundle\Model\\'.$dirname;
 
-            $srcDir = dirname($this->getContainer()->getParameter('kernel.root_dir')).'/src';
+            $projectDir = $this->kernel->getProjectDir();
+
+            $srcDir = $projectDir.'/src';
 
             $search = [
                 $originalNamespace,
-                'use '.$dbService->getNamespace().'\\Traits\\',
+                'use '.$this->db->getNamespace().'\\Traits\\',
             ];
             $replace = [
                 $namespace,
@@ -74,7 +90,7 @@ class CreateDbClassesCommand extends ContainerAwareCommand
                 /* @var $source SplFileInfo */
                 $classname = lcfirst(substr($source->getBasename(), 0, -4));
                 $src = $source->getRealPath();
-                $dstClass = $dbService->getClass($classname, false);
+                $dstClass = $this->db->getClass($classname, false);
 
                 $dst = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $srcDir.'/'.$namespaceDir.'/'.$dstClass.'.php');
 
@@ -91,7 +107,7 @@ class CreateDbClassesCommand extends ContainerAwareCommand
             $output->writeln('-------------------------------');
             $output->writeln('Start copying doctrine mapping');
 
-            $dirDestMapping = $this->getContainer()->getParameter('kernel.project_dir').'/config/nyrocms-doctrine-mapping';
+            $dirDestMapping = $projectDir.'/config/nyrocms-doctrine-mapping';
             if (!$fs->exists($dirDestMapping)) {
                 $fs->mkdir($dirDestMapping);
             }

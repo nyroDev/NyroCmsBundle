@@ -3,12 +3,12 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\NyroCmsBundle\Services\UserService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminController extends Controller
+class AdminController extends NyroDevAbstractController
 {
     public function loginAction(Request $request)
     {

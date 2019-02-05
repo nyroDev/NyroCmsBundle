@@ -3,15 +3,24 @@
 namespace NyroDev\NyroCmsBundle\Command;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class AddRoleCommand extends ContainerAwareCommand
+class AddRoleCommand extends Command
 {
+    protected $db;
+
+    public function __construct(DbAbstractService $db)
+    {
+        $this->db = $db;
+
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -54,8 +63,7 @@ class AddRoleCommand extends ContainerAwareCommand
             $internal = $helper->ask($input, $output, $question);
         }
 
-        $dbService = $this->getContainer()->get(DbAbstractService::class);
-        $newRole = $dbService->getNew('user_role');
+        $newRole = $this->db->getNew('user_role');
 
         /* @var $newRole \NyroDev\NyroCmsBundle\Model\UserRole */
 
@@ -63,7 +71,7 @@ class AddRoleCommand extends ContainerAwareCommand
         $newRole->setRoleName($roleName);
         $newRole->setInternal('true' === $internal);
 
-        $dbService->flush();
+        $this->db->flush();
 
         $output->writeln('New role "'.$name.'" added with ID: '.$newRole->getId());
     }

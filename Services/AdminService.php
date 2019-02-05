@@ -192,9 +192,14 @@ class AdminService extends nyroDevAbstractService
         return $this->getParameter('nyrocms.content.root_composer');
     }
 
+    public function getContentMaxLevel(Content $content)
+    {
+        return $this->getParameter('nyrocms.content.maxlevel');
+    }
+
     public function canHaveSub(Content $content)
     {
-        return $content ? $content->getLevel() < $this->getParameter('nyrocms.content.maxlevel') : true;
+        return $content ? $content->getLevel() < $this->getContentMaxLevel($content) : true;
     }
 
     public function updateContentUrl(Content $row, $isEdit = false, $child = true, $forceUpdate = false)

@@ -42,7 +42,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                         ->andWhere('u.valid = 1')
                         ->andWhere('u.password = :password')
                             ->setParameter('password', 'dummy')
-                        ->andWhere('(u.validStart LIKE :today OR u.passwordKeyEnd LIKE :today')
+                        ->andWhere('(u.validStart LIKE :today OR u.passwordKeyEnd LIKE :today)')
                             ->setParameter('today', date('Y-m-d').'%')
                         ->getQuery()
                         ->execute();

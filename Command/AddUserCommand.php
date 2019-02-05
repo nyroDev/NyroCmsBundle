@@ -4,7 +4,7 @@ namespace NyroDev\NyroCmsBundle\Command;
 
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -12,12 +12,16 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AddUserCommand extends ContainerAwareCommand
+class AddUserCommand extends Command
 {
-    private $passwordEncoder;
+    protected $db;
+    protected $admin;
+    protected $passwordEncoder;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(DbAbstractService $db, AdminService $admin, UserPasswordEncoderInterface $passwordEncoder)
     {
+        $this->db = $db;
+        $this->admin = $admin;
         $this->passwordEncoder = $passwordEncoder;
         parent::__construct();
     }
@@ -55,9 +59,8 @@ class AddUserCommand extends ContainerAwareCommand
         $developper = $input->getArgument('developper');
         $userroles = $input->getArgument('userroles');
 
-        $dbService = $this->getContainer()->get(DbAbstractService::class);
-        $userTypes = $this->getContainer()->get(AdminService::class)->getUserTypeChoices();
-        $userRolesDb = $this->getContainer()->get(AdminService::class)->getUserRoles();
+        $userTypes = $this->admin->getUserTypeChoices();
+        $userRolesDb = $this->admin->getUserRoles();
 
         $helper = $this->getHelper('question');
         if (!$email) {
@@ -136,7 +139,7 @@ class AddUserCommand extends ContainerAwareCommand
             }
         }
 
-        $newUser = $dbService->getNew('user');
+        $newUser = $this->db->getNew('user');
         /* @var $newUser \NyroDev\NyroCmsBundle\Model\User */
 
         $newUser->setEmail($email);
@@ -157,7 +160,7 @@ class AddUserCommand extends ContainerAwareCommand
             }
         }
 
-        $dbService->flush();
+        $this->db->flush();
 
         $output->writeln('New user "'.$email.'" added with ID: '.$newUser->getId());
     }

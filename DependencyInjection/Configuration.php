@@ -17,9 +17,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('nyro_dev_nyro_cms');
-        /* @var $rootNode \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition */
+        $builder = new TreeBuilder('nyro_dev_nyro_cms');
+        $rootNode = $builder->getRootNode($builder, 'nyro_dev_nyro_cms');
 
         $defaultBlocks = array(
             'intro' => array(
@@ -390,6 +389,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
-        return $treeBuilder;
+        return $builder;
     }
 }

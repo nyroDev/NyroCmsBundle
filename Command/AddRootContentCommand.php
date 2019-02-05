@@ -3,15 +3,24 @@
 namespace NyroDev\NyroCmsBundle\Command;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class AddRootContentCommand extends ContainerAwareCommand
+class AddRootContentCommand extends Command
 {
+    protected $db;
+
+    public function __construct(DbAbstractService $db)
+    {
+        $this->db = $db;
+
+        parent::__construct();
+    }
+
     /**
      * Configure the command.
      */
@@ -82,8 +91,7 @@ class AddRootContentCommand extends ContainerAwareCommand
             $userRole = $helper->ask($input, $output, $question);
         }
 
-        $dbService = $this->getContainer()->get(DbAbstractService::class);
-        $newContent = $dbService->getNew('content');
+        $newContent = $this->db->getNew('content');
 
         /* @var $newContent \NyroDev\NyroCmsBundle\Model\Content */
 
@@ -96,12 +104,12 @@ class AddRootContentCommand extends ContainerAwareCommand
         $newContent->setXmlSitemap('true' === $xmlSitemap);
 
         if ($userRole) {
-            $userRole = $dbService->getNew('userRole');
+            $userRole = $this->db->getNew('userRole');
             $userRole->setName($title);
             $userRole->addContent($newContent);
         }
 
-        $dbService->flush();
+        $this->db->flush();
 
         $output->writeln('New content "'.$title.'" added with ID: '.$newContent->getId());
         if ($userRole) {

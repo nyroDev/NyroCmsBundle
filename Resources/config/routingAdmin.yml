@@ -1,30 +1,30 @@
 nyrocms_admin_homepage:
     path: /
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:index }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::indexAction }
 
 nyrocms_admin_login:
     path: /login
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:login }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::loginAction }
 
 nyrocms_admin_forgot:
     path: /forgot/{id}/{key}
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, id: null, key: null }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::forgotAction, id: null, key: null }
 
 nyrocms_admin_welcome:
     path: /welcome/{id}/{key}
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:forgot, welcome: true }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::forgotAction, welcome: true }
 
 nyrocms_admin_account:
     path: /account
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:account }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::accountAction }
 
 nyrocms_admin_switch_rootContent:
     path: /switchRootContent/{id}
-    defaults: { _controller: NyroDevNyroCmsBundle:AdminTpl:switchRootContent }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminTplController::switchRootContentAction }
 
 nyrocms_admin_cc:
     path: /cc
-    defaults: { _controller: NyroDevNyroCmsBundle:Admin:cc }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::ccAction }
 
 nyrocms_admin_security_check:
     path: /login_check
@@ -34,13 +34,13 @@ nyrocms_admin_security_logout:
 
 nyrocms_admin_tinymce_browser_dirname:
     path:  /tinymceBrowser_{dirName}/{file}
-    defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
+    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction, file: null }
     requirements:
         file: .+
 
 nyrocms_admin_tinymce_browser:
     path:  /tinymceBrowser/{file}
-    defaults: { _controller: NyroDevUtilityBundle:Tinymce:browser, file: null }
+    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction, file: null }
     requirements:
         file: .+
 

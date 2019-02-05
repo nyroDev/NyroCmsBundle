@@ -2,11 +2,13 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * This is the class that loads and manages your bundle configuration.
@@ -64,5 +66,18 @@ class NyroDevNyroCmsExtension extends Extension
         ;
         $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
         $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Command\\', './*');
+
+        // Load controllers
+        $definition = new Definition();
+        $definition
+            ->setAutowired(true)
+            ->setAutoconfigured(true)
+            ->setPublic(false)
+            ->addMethodCall('setContainer', [new Reference(ContainerInterface::class)])
+            ->addTag('controller.service_arguments')
+        ;
+
+        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Controller'));
+        $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Controller\\', './*');
     }
 }

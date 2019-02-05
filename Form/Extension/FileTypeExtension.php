@@ -17,14 +17,11 @@ class FileTypeExtension extends AbstractTypeExtension
         $this->nyrocms = $nyrocms;
     }
 
-    /**
-     * Returns the name of the type being extended.
-     *
-     * @return string The name of the type being extended
-     */
-    public function getExtendedType()
+    public static function getExtendedTypes(): iterable
     {
-        return FileType::class;
+        return [
+            FileType::class,
+        ];
     }
 
     /**
