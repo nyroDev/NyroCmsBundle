@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractController extends NyroDevAbstractController
 {
+    use Traits\SubscribedServiceTrait;
+
     abstract protected function getRootHandler();
 
     /**

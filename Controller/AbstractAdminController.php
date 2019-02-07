@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints;
 
 class AbstractAdminController extends SrcAbstractAdminController
 {
+    use Traits\SubscribedServiceTrait;
+
     protected function canAdminContentHandler(\NyroDev\NyroCmsBundle\Model\ContentHandler $contentHandler)
     {
         $canAdmin = false;

@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AdminTplController extends NyroDevAbstractController
 {
+    use Traits\SubscribedServiceTrait;
+
     protected $sessionRootName = 'rootContent';
 
     public function switchRootContentAction(Request $request, $id)
