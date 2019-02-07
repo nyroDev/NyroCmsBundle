@@ -102,3 +102,6 @@ security:
 
 # Edit config/bootstrap.php
 `$loader = require dirname(__DIR__).'/vendor/autoload.php';`
+
+# Overwrite a template
+Copy the file from Resources/views into your own folder: src/Resources/NyroDevNyroCmsBundle/views/
