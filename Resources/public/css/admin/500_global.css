@@ -179,6 +179,7 @@ main a:hover {
 }
 .listButtons a {
 	font-size: 14px;
+	overflow: hidden;
 }
 
 
