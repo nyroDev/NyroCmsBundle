@@ -13,7 +13,7 @@
 
 	<?php echo $view['nyrodev_tagRender']->renderWebpackScriptTags('js/admin/nyroCmsComposer', 'defer'); ?>
 </head>
-<body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?>">
+<body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?><?php echo $canChangeStructure ? '' : ' noChangeStructure'; ?><?php echo $canChangeMedia ? '' : ' noChangeMedia'; ?>">
 <?php
 $prefixTinymce = 'data-tinymce_';
 $prefixTinymceSimple = 'data-tinymcesimple_';
@@ -54,7 +54,7 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 ?>
 <form id="composer" <?php echo $attrsHtml; ?> method="post" enctype="multipart/form-data">
 	<div id="composerTools"><!--
-		<?php if ($canChangeTheme && count($themes) > 1): ?>
+		<?php if ($canChangeStructure && $canChangeTheme && count($themes) > 1): ?>
 		--><div class="select">
 			<a href="#themeSelect" class="selectLink">
 				<span><?php echo $view['nyrodev']->trans('admin.content.theme'); ?></span>
@@ -89,23 +89,24 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 			</div>
 		</div><!--
 		<?php ++$nbButtons; endif; ?>
-		--><nav id="availableBlocks"><!--
-			<?php foreach ($availableBlocks as $b): ?>
-			<?php if ($nbButtons == $maxButtons): ?>
-				--><div class="select">
-					<a href="#moreBlocksSelect" class="selectLink" id="moreBlocks">
-						<span><?php echo $view['nyrodev']->trans('admin.content.moreBlocks'); ?></span>
-						<strong>+</strong>
-					</a>
-					<div id="moreBlocksSelect" class="selecter"><!--
-			<?php endif; ?>
-			--><a href="<?php echo $composerUrl.'?block='.$b; ?>" class="availableBlock <?php echo $b; ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?>">
-				<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?></span>
-			</a><!--
-			<?php ++$nbButtons; endforeach; ?>
-			<?php if ($nbButtons - 1 >= $maxButtons): ?>
+		--><?php if ($canChangeStructure): ?><nav id="availableBlocks"><!--
+				<?php foreach ($availableBlocks as $b): ?>
+				<?php if ($nbButtons == $maxButtons): ?>
+					--><div class="select">
+						<a href="#moreBlocksSelect" class="selectLink" id="moreBlocks">
+							<span><?php echo $view['nyrodev']->trans('admin.content.moreBlocks'); ?></span>
+							<strong>+</strong>
+						</a>
+						<div id="moreBlocksSelect" class="selecter"><!--
+				<?php endif; ?>
+				--><a href="<?php echo $composerUrl.'?block='.$b; ?>" class="availableBlock <?php echo $b; ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?>">
+					<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?></span>
+				</a><!--
+				<?php ++$nbButtons; endforeach; ?>
+				<?php if ($nbButtons - 1 >= $maxButtons): ?>
+						--></div><!--
 					--></div><!--
-				--></div><!--
+				<?php endif; ?>
 			<?php endif; ?>
 		--></nav>
 	</div>

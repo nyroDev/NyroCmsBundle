@@ -138,11 +138,13 @@
 	max-width: 120px;
 	text-align: center;
 	color: #fff;
+	font-size: 14px;
+	line-height: 11px;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 900;
 	text-transform: uppercase;
 	font-weight: bold;
-	padding: 0;
+	padding: 10px 14px;
 	background: #7495c2;
 	transition: background 300ms;
 	margin-right: 10px;

@@ -4,10 +4,12 @@ namespace NyroDev\NyroCmsBundle\Services;
 
 use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
+use NyroDev\NyroCmsBundle\Event\ComposerEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Composable;
+use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
@@ -71,6 +73,30 @@ class ComposerService extends AbstractService
     public function canChangeLang(Composable $row)
     {
         return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'change_lang');
+    }
+
+    public function isSameLangStructure(Composable $row)
+    {
+        return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'same_lang_structure');
+    }
+
+    public function canChangeStructure(Composable $row)
+    {
+        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+
+        return $isDefaultLocale || !$this->isSameLangStructure($row);
+    }
+
+    public function isSameLangMedia(Composable $row)
+    {
+        return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'same_lang_media');
+    }
+
+    public function canChangeMedia(Composable $row)
+    {
+        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+
+        return $isDefaultLocale || !$this->isSameLangMedia($row);
     }
 
     public function canChangeTheme(Composable $row)
@@ -281,9 +307,10 @@ class ComposerService extends AbstractService
         return $config['template'];
     }
 
-    public function getBlock(Composable $row, $block, array $defaults = array(), $addExtract = false)
+    public function getBlock(Composable $row, $id, $block, array $defaults = array(), $addExtract = false)
     {
         $ret = array(
+            'id' => $id,
             'type' => $block,
             'contents' => array(),
         );
@@ -301,17 +328,44 @@ class ComposerService extends AbstractService
                         if (isset($blockConfig[$k]['multiple']) && $blockConfig[$k]['multiple']) {
                             $ret['contents'][$k] = array();
                             if (is_array($defaults[$k])) {
+                                $multipleFields = isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields']);
+                                if (is_array($defaults[$k][0])) {
+                                    // We're coming from a non request call, so transform structure as it shoudl have been
+                                    $tmp = [];
+                                    $defaults['titles'] = [];
+                                    $defaults['ids'] = [];
+                                    if ($multipleFields) {
+                                        foreach ($multipleFields as $field) {
+                                            $defaults[$field.'s'] = [];
+                                        }
+                                    }
+
+                                    foreach ($defaults[$k] as $kk => $vv) {
+                                        $tmp[$kk] = $vv['file'];
+                                        $defaults['titles'][$kk] = $vv['title'] ?? null;
+                                        $defaults['ids'][$kk] = $vv['id'] ?? 'img-'.time() * 1000;
+                                        if ($multipleFields) {
+                                            foreach ($multipleFields as $field) {
+                                                $defaults[$field.'s'][$kk] = $vv[$field] ?? null;
+                                            }
+                                        }
+                                    }
+
+                                    $defaults[$k] = $tmp;
+                                }
+
                                 $deletes = isset($defaults['deletes']) ? $defaults['deletes'] : array();
                                 foreach ($defaults[$k] as $kk => $img) {
                                     if (!isset($deletes[$kk]) || !$deletes[$kk]) {
                                         $image = $this->handleDefaultImage($img);
                                         $val = array(
+                                            'id' => isset($defaults['ids']) && isset($defaults['ids'][$kk]) ? $defaults['ids'][$kk] : 'img-'.time() * 1000,
                                             'title' => isset($defaults['titles']) && isset($defaults['titles'][$kk]) ? $defaults['titles'][$kk] : null,
                                             'file' => $image,
                                         );
 
-                                        if (isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields'])) {
-                                            foreach ($blockConfig[$k]['multipleFields'] as $field) {
+                                        if ($multipleFields) {
+                                            foreach ($multipleFields as $field) {
                                                 $fields = $field.'s';
                                                 $val[$field] = isset($defaults[$fields]) && isset($defaults[$fields][$kk]) ? $defaults[$fields][$kk] : null;
                                             }
@@ -353,7 +407,7 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    public function deleteBlock(Composable $row, $block, array $contents = array())
+    public function deleteBlock(Composable $row, $id, $block, array $contents = array())
     {
         $blockConfig = $this->getBlockConfig($row, $block);
         foreach ($blockConfig as $k => $v) {
@@ -447,20 +501,20 @@ class ComposerService extends AbstractService
         if (0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
-                $content = array($this->getBlock($row, 'intro'));
+                $content = array($this->getBlock($row, 'intro-intro', 'intro'));
                 if ($hasHandler) {
                     $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
                     if ($handler->isWrapped() && $handler->isWrappedAs()) {
                         $tmp = array($handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR);
-                        $content[] = $this->getBlock($row, $handler->isWrapped(), $tmp);
+                        $content[] = $this->getBlock($row, 'wrapper-'.$handler->isWrapped(), $handler->isWrapped(), $tmp);
                     } else {
-                        $content[] = $this->getBlock($row, 'handler');
+                        $content[] = $this->getBlock($row, 'handler-handler', 'handler');
                     }
                 }
 
                 $row->setContent($content);
             } elseif ($hasHandler) {
-                $content = array($this->getBlock($row, 'handler'));
+                $content = array($this->getBlock($row, 'handler-handler', 'handler'));
                 $row->setContent($content);
             }
         } elseif ($hasHandler) {
@@ -478,9 +532,9 @@ class ComposerService extends AbstractService
             if (!$hasHandlerPlaced) {
                 if ($admin && $isWrapped) {
                     $tmp = array($wrappedAs => AbstractHandler::TEMPLATE_INDICATOR);
-                    $content[] = $this->getBlock($row, $isWrapped, $tmp);
+                    $content[] = $this->getBlock($row, 'wrapper-'.$isWrapped, $isWrapped, $tmp);
                 } else {
-                    $content[] = $this->getBlock($row, 'handler');
+                    $content[] = $this->getBlock($row, 'handler-handler', 'handler');
                 }
                 $row->setContent($content);
             }
@@ -501,7 +555,7 @@ class ComposerService extends AbstractService
 
     public function renderNew(Composable $row, $block, $admin = false, array $defaults = array())
     {
-        $cont = $this->getBlock($row, $block, $defaults);
+        $cont = $this->getBlock($row, $block.'---ID--', $block, $defaults);
 
         return $this->renderBlock($row, '--NEW--', null, $cont, $admin);
     }
@@ -583,6 +637,205 @@ class ComposerService extends AbstractService
 
         if (!$ret) {
             $ret = 'data:'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::CONTENT_TYPE.';base64,'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::IMAGE_CONTENT;
+        }
+
+        return $ret;
+    }
+
+    public function afterComposerEdition(Composable $row)
+    {
+        $isDefaultLocale = true;
+        $canChangeLang = $this->canChangeLang($row);
+        $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
+
+        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+
+        $event = new ComposerEvent($row);
+        $eventName = null;
+        if ($isDefaultLocale || !$canChangeLang) {
+            // We changed the default local row
+            $sameLangStructure = $this->isSameLangStructure($row);
+            $sameLangMedia = $this->isSameLangMedia($row);
+
+            if ($sameLangStructure || $sameLangMedia) {
+                // We have to check if the structure or the media of already translated content need to be updated
+
+                $contents = $this->idifyContents($row->getContent());
+
+                $newContents = [];
+                $cacheConfigMedia = [];
+
+                foreach ($row->getTranslations() as $translation) {
+                    if ('content' === $translation->getField() && $translation->getContent()) {
+                        try {
+                            $trContents = $this->idifyContents(json_decode($translation->getContent(), true));
+
+                            $hasChange = false;
+
+                            $importedIds = [];
+
+                            if ($sameLangStructure) {
+                                $newTrContents = [];
+                                foreach ($contents as $id => $origContent) {
+                                    if (!isset($trContents[$id])) {
+                                        $hasChange = true;
+                                        $importedIds[] = $id;
+                                        $newTrContents[$id] = $origContent;
+                                    } else {
+                                        $newTrContents[$id] = $trContents[$id];
+                                    }
+                                }
+                                $nbBefore = count($trContents);
+                                $trContents = array_intersect_key($newTrContents, $contents);
+                                if (count($trContents) != $nbBefore) {
+                                    // Something was removed
+                                    $hasChange = true;
+                                }
+                            }
+
+                            if ($sameLangMedia) {
+                                $checkIds = array_diff(array_keys($trContents), $importedIds);
+                                foreach ($checkIds as $checkId) {
+                                    if (isset($contents[$checkId])) {
+                                        $origContent = $contents[$checkId];
+                                        $trContent = $trContents[$checkId];
+
+                                        if (!isset($cacheConfigMedia[$origContent['type']])) {
+                                            $cfgMedia = [];
+                                            $blockConfig = $this->getBlockConfig($row, $origContent['type']);
+                                            foreach ($blockConfig as $k => $v) {
+                                                if (is_array($v)) {
+                                                    if (isset($v['image']) && $v['image']) {
+                                                        if (isset($v['multiple']) && $v['multiple']) {
+                                                            $cfgMedia[$k] = 'multiple';
+                                                        } else {
+                                                            $cfgMedia[$k] = true;
+                                                        }
+                                                    } elseif (isset($v['treatAsMedia']) && $v['treatAsMedia']) {
+                                                        $cfgMedia[$k] = true;
+                                                        if (isset($v['linkedFields']) && $v['linkedFields'] && is_array($v['linkedFields'])) {
+                                                            foreach ($v['linkedFields'] as $linkedField) {
+                                                                $cfgMedia[$linkedField] = true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            $cacheConfigMedia[$origContent['type']] = $cfgMedia;
+                                        }
+
+                                        $blockConfigMedia = $cacheConfigMedia[$origContent['type']];
+
+                                        if ($blockConfigMedia && is_array($blockConfigMedia) && count($blockConfigMedia)) {
+                                            foreach ($blockConfigMedia as $k => $v) {
+                                                if (isset($origContent['contents'][$k]) && $origContent['contents'][$k]) {
+                                                    if ('multiple' === $v) {
+                                                        $origImages = $this->idifyContents($origContent['contents'][$k]);
+                                                        $trImages = $this->idifyContents($trContent['contents'][$k]);
+
+                                                        $newImages = [];
+                                                        foreach ($origImages as $id => $img) {
+                                                            if (!isset($trImages[$id])) {
+                                                                $hasChange = true;
+                                                                $newImages[$id] = $img;
+                                                            } else {
+                                                                $newImages[$id] = $trImages[$id];
+                                                                // check image change here
+                                                                if ($newImages[$id]['file'] != $img['file']) {
+                                                                    $newImages[$id]['file'] = $img['file'];
+                                                                    $hasChange = true;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        $nbBefore = count($trImages);
+                                                        $trContent['contents'][$k] = array_values($newImages);
+                                                        if (count($trContent['contents'][$k]) != $nbBefore) {
+                                                            // Something was removed
+                                                            $hasChange = true;
+                                                        }
+                                                    } elseif (!isset($trContent['contents'][$k]) || $trContent['contents'][$k] != $origContent['contents'][$k]) {
+                                                        $trContent['contents'][$k] = $origContent['contents'][$k];
+                                                        $hasChange = true;
+                                                    }
+                                                } elseif (isset($trContent['contents'][$k]) && $trContent['contents'][$k]) {
+                                                    unset($trContent['contents'][$k]);
+                                                    $hasChange = true;
+                                                }
+                                            }
+                                        }
+
+                                        $trContents[$checkId] = $trContent;
+                                    }
+                                }
+                            }
+
+                            if ($hasChange) {
+                                $newContents[$translation->getLocale()] = $trContents;
+                            }
+                        } catch (\Exception $e) {
+                            // What to do here?
+                        }
+                    }
+                }
+
+                if (count($newContents)) {
+                    // We have some lang changes to apply, let's do it
+                    $om = $this->get(DbAbstractService::class)->getObjectManager();
+                    $curLocale = $row->getTranslatableLocale();
+
+                    foreach ($newContents as $lg => $content) {
+                        $row->setTranslatableLocale($lg);
+                        $om->refresh($row);
+
+                        $newConts = [];
+                        $newTexts = [];
+                        $firstImage = false;
+                        foreach ($content as $id => $cont) {
+                            $block = $this->getBlock($row, $id, $cont['type'], $cont['contents'], true);
+                            foreach ($block['texts'] as $t) {
+                                if (AbstractHandler::TEMPLATE_INDICATOR != $t) {
+                                    $newTexts[] = html_entity_decode(strip_tags($t));
+                                }
+                            }
+                            if (is_null($firstImage) && count($block['images']) && isset($block['images'][0])) {
+                                $firstImage = $block['images'][0];
+                            }
+                            unset($block['texts']);
+                            unset($block['images']);
+                            $newConts[] = $block;
+                        }
+
+                        $row->setContent($newConts);
+                        $row->setContentText(implode("\n", $newTexts));
+                        $row->setFirstImage($firstImage);
+
+                        $om->flush();
+
+                        $this->get('event_dispatcher')->dispatch(ComposerEvent::COMPOSER_LANG_SAME, $event);
+                    }
+
+                    $row->setTranslatableLocale($curLocale);
+                    $om->refresh($row);
+                }
+            }
+
+            $eventName = ComposerEvent::COMPOSER_DEFAULT;
+        } else {
+            // We changed a locale row, simply dipatch an event
+            $eventName = ComposerEvent::COMPOSER_LANG;
+        }
+
+        if ($eventName) {
+            $this->get('event_dispatcher')->dispatch($eventName, $event);
+        }
+    }
+
+    protected function idifyContents(array $contents)
+    {
+        $ret = array();
+        foreach ($contents as $content) {
+            $ret[$content['id']] = $content;
         }
 
         return $ret;

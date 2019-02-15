@@ -114,7 +114,7 @@ body {
 	width: 4.8rem;
 	height: 6.3rem;
 	margin-top: -5rem;
-	background: url(images/arrows.png);
+	/* background: url(images/arrows.png); */
 }
 .block_slideshow_arrow:after {
 	width: 4.9rem;

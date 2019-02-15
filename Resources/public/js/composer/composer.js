@@ -3,7 +3,8 @@ jQuery(function ($) {
 	var composer = $('#composer');
 
 	if (composer.length) {
-		var main = composer.find('#composerContents'),
+		var $b = $('body'),
+			main = composer.find('#composerContents'),
 			txtConfirm = composer.data('confirm'),
 			txtCancel = composer.data('cancel'),
 			hasChanged = false,
@@ -228,7 +229,7 @@ jQuery(function ($) {
 							nb = me.data('nb'),
 							nav = me.children('ul'),
 							nbLi = nav.children().length,
-							multipleFields = me.data('multiplefields').split(','),
+							multipleFields = me.data('multiplefields') ? me.data('multiplefields').split(',') : false,
 							sizebig = me.data('sizebig'),
 							sizebigCfg = me.data('sizebigcfg'),
 							sizethumbCfg = me.data('sizethumbcfg'),
@@ -320,47 +321,50 @@ jQuery(function ($) {
 							})
 							.find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions);
 
-						var addButton = $('<a href="#" class="composableSlideshowUpload">' + composer.data('addphoto') + '</a>').appendTo(big),
-							myPluploadOptionsAdd = $.extend(true, {}, myPluploadOptions);
-
-						myPluploadOptionsAdd.texts.browse = composer.data('addphoto');
-						myPluploadOptionsAdd.multi_selection = true;
-
-						myPluploadOptionsAdd.events.FileUploaded = function (up, file, data) {
-							var $data = $.parseJSON(data.response),
-								htmlNew = '<li>';
-							htmlNew += '<a href="' + $data.resized + '" class="block_slideshow_thumb"><img src="' + $data.resized2 + '" alt="" /></a>';
-							htmlNew += '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">' + getIcon('drag') + '</a><a href="#" class="composableSlideshowEdit">' + getIcon('pencil') + '</a><a href="#" class="composableSlideshowDelete">' + getIcon('delete') + '</a>';
-							htmlNew += '<textarea name="contents[' + nb + '][images][]">' + $data.file + '</textarea>';
-							htmlNew += '<textarea name="contents[' + nb + '][titles][]"></textarea>';
-							if (multipleFields && multipleFields.length) {
-								$.each(multipleFields, function () {
-									htmlNew += '<textarea name="contents[' + nb + '][' + this + 's][]"></textarea>';
-								});
-							}
-							htmlNew += '<textarea name="contents[' + nb + '][deletes][]"></textarea>';
-							htmlNew += '</li>';
-							var $li = $(htmlNew).appendTo(nav).find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions).end();
-							if (nbLi == 0) {
-								me.closest('.block_slideshow').trigger('slideshowShow', [$li]);
-								nbLi = 1;
-							} else {
-								me.closest('.block_slideshow').trigger('slideshowStartTimer');
-							}
-							me.trigger('composableSlideshowAdded', [$li]);
-							changed();
-						};
-						addButton.nyroPlupload(myPluploadOptionsAdd);
-
-						nav
-							.sortable({
-								items: 'li:not(.composableSlideshowAdd)',
-								handle: '.composableSlideshowDrag',
-								placeholder: 'ui-state-highlight',
-								stop: function () {
-									changed();
+						if (!$b.is('.noChangeMedia')) {
+							var addButton = $('<a href="#" class="composableSlideshowUpload">' + composer.data('addphoto') + '</a>').appendTo(big),
+								myPluploadOptionsAdd = $.extend(true, {}, myPluploadOptions);
+	
+							myPluploadOptionsAdd.texts.browse = composer.data('addphoto');
+							myPluploadOptionsAdd.multi_selection = true;
+	
+							myPluploadOptionsAdd.events.FileUploaded = function (up, file, data) {
+								var $data = $.parseJSON(data.response),
+									htmlNew = '<li>';
+								htmlNew += '<a href="' + $data.resized + '" class="block_slideshow_thumb"><img src="' + $data.resized2 + '" alt="" /></a>';
+								htmlNew += '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">' + getIcon('drag') + '</a><a href="#" class="composableSlideshowEdit">' + getIcon('pencil') + '</a><a href="#" class="composableSlideshowDelete">' + getIcon('delete') + '</a>';
+								htmlNew += '<textarea name="contents[' + nb + '][ids][]">img-' + Date.now() + '</textarea>';
+								htmlNew += '<textarea name="contents[' + nb + '][images][]">' + $data.file + '</textarea>';
+								htmlNew += '<textarea name="contents[' + nb + '][titles][]"></textarea>';
+								if (multipleFields && multipleFields.length) {
+									$.each(multipleFields, function () {
+										htmlNew += '<textarea name="contents[' + nb + '][' + this + 's][]"></textarea>';
+									});
 								}
-							});
+								htmlNew += '<textarea name="contents[' + nb + '][deletes][]"></textarea>';
+								htmlNew += '</li>';
+								var $li = $(htmlNew).appendTo(nav).find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions).end();
+								if (nbLi == 0) {
+									me.closest('.block_slideshow').trigger('slideshowShow', [$li]);
+									nbLi = 1;
+								} else {
+									me.closest('.block_slideshow').trigger('slideshowStartTimer');
+								}
+								me.trigger('composableSlideshowAdded', [$li]);
+								changed();
+							};
+							addButton.nyroPlupload(myPluploadOptionsAdd);
+
+							nav
+								.sortable({
+									items: 'li:not(.composableSlideshowAdd)',
+									handle: '.composableSlideshowDrag',
+									placeholder: 'ui-state-highlight',
+									stop: function () {
+										changed();
+									}
+								});
+						}
 
 						if (nbLi == 0) {
 							big.find('img').attr('src', placehold + sizebig);
@@ -389,7 +393,11 @@ jQuery(function ($) {
 					});
 				} else {
 					var ident = 'new-' + curAdd,
-						html = $(cacheBlock[url].replace(/--NEW--/g, ident));
+						html = $(
+							cacheBlock[url]
+								.replace(/--NEW--/g, ident)
+								.replace(/--ID--/g, Date.now())
+						);
 
 					if (inserter) {
 						inserter(html);
@@ -490,7 +498,7 @@ jQuery(function ($) {
 				}
 			});
 
-		if (!composer.is('.composerNoDrag')) {
+		if (!composer.is('.composerNoDrag') && !$b.is('.noChangeStructure')) {
 			cont.sortable({
 				items: '.composerBlock',
 				handle: '.composerDrag',

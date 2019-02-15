@@ -32,11 +32,15 @@ class AdminComposerController extends AbstractAdminController
         $composerService = $this->get(ComposerService::class);
         $composerService->initComposerFor($row, $lang);
         $canChangeLang = $composerService->canChangeLang($row);
+        $sameLangStructure = $composerService->isSameLangStructure($row);
+        $sameLangMedia = $composerService->isSameLangMedia($row);
         $canChangeTheme = $composerService->canChangeTheme($row);
 
+        $isDefaultLocale = true;
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         if ($canChangeLang) {
             if ($lang != $locale) {
+                $isDefaultLocale = false;
                 $row->setTranslatableLocale($lang);
                 $this->get(DbAbstractService::class)->refresh($row);
                 unset($langs[$lang]);
@@ -44,6 +48,9 @@ class AdminComposerController extends AbstractAdminController
                 unset($langs[$locale]);
             }
         }
+
+        $canChangeStructure = $isDefaultLocale || !$sameLangStructure;
+        $canChangeMedia = $isDefaultLocale || !$sameLangMedia;
 
         $url = $this->generateUrl('nyrocms_admin_composer', array_filter(array('type' => $type, 'id' => $id, 'lang' => $lang)));
         /* @var $composerService \NyroDev\NyroCmsBundle\Services\ComposerService */
@@ -90,6 +97,7 @@ class AdminComposerController extends AbstractAdminController
 
             $contentsKey = $request->request->get('contentsKey');
             $contentsType = $request->request->get('contentsType');
+            $contentsId = $request->request->get('contentsId');
             $contentsDel = $request->request->get('contentsDel');
             $contents = $request->request->get('contents');
 
@@ -100,9 +108,9 @@ class AdminComposerController extends AbstractAdminController
                 if (isset($contentsType[$key]) && isset($contents[$key])) {
                     if (isset($contentsDel[$key]) && $contentsDel[$key]) {
                         // Delete this block
-                        $composerService->deleteBlock($row, $contentsType[$key], $contents[$key]);
+                        $composerService->deleteBlock($row, $contentsId[$key], $contentsType[$key], $contents[$key]);
                     } else {
-                        $block = $composerService->getBlock($row, $contentsType[$key], $contents[$key], true);
+                        $block = $composerService->getBlock($row, $contentsId[$key], $contentsType[$key], $contents[$key], true);
                         foreach ($block['texts'] as $t) {
                             if (AbstractHandler::TEMPLATE_INDICATOR != $t) {
                                 $newTexts[] = html_entity_decode(strip_tags($t));
@@ -123,6 +131,8 @@ class AdminComposerController extends AbstractAdminController
             $row->setFirstImage($firstImage);
 
             $this->get(DbAbstractService::class)->flush();
+
+            $composerService->afterComposerEdition($row);
 
             return $this->redirect($url);
         } elseif ($request->query->has('block')) {
@@ -160,6 +170,8 @@ class AdminComposerController extends AbstractAdminController
             'availableBlocks' => $availableBlocks,
             'canChangeTheme' => $canChangeTheme,
             'canChangeLang' => $canChangeLang,
+            'canChangeStructure' => $canChangeStructure,
+            'canChangeMedia' => $canChangeMedia,
             'themes' => $themes,
         ));
     }

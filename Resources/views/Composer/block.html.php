@@ -14,6 +14,7 @@
 	<?php if ($admin): ?>
 		<input type="hidden" name="contentsKey[]" value="<?php echo $nb; ?>" />
 		<input type="hidden" name="contentsType[<?php echo $nb; ?>]" value="<?php echo $block['type']; ?>" />
+		<input type="hidden" name="contentsId[<?php echo $nb; ?>]" value="<?php echo $block['id']; ?>" />
 		<div class="composerButtons">
 			<?php if ('handler' != $block['type'] && !$handlerInContentsKey): ?>
 				<a href="#" class="composerDelete"><?php echo $view['nyrocms_admin']->getIcon('delete').'<span> '.$view['nyrodev']->trans('admin.composer.action.delete'); ?></span></a>

@@ -113,6 +113,7 @@ class Configuration implements ConfigurationInterface
                 'images' => array(
                     'image' => true,
                     'multiple' => true,
+                    'multipleFields' => [],
                     'big' => array(
                         'w' => 1500,
                         'h' => 1000,
@@ -131,6 +132,13 @@ class Configuration implements ConfigurationInterface
             ),
             'video' => array(
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_video.html.php',
+                'url' => array(
+                    'treatAsMedia' => true,
+                    'linkedFields' => array(
+                        'embed',
+                        'autoplay',
+                    ),
+                ),
             ),
             'handler' => array(
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_handler.html.php',
@@ -230,6 +238,8 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->booleanNode('change_lang')->defaultTrue()->end()
+                                ->booleanNode('same_lang_structure')->defaultFalse()->end()
+                                ->booleanNode('same_lang_media')->defaultFalse()->end()
                                 ->booleanNode('change_theme')->defaultTrue()->end()
                                 ->scalarNode('global_composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composer.html.php')->end()
                                 ->scalarNode('composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composerTemplate.html.php')->end()
@@ -353,6 +363,8 @@ class Configuration implements ConfigurationInterface
                             ->prototype('array')
                                 ->children()
                                     ->booleanNode('change_lang')->end()
+                                    ->booleanNode('same_lang_structure')->end()
+                                    ->booleanNode('same_lang_media')->end()
                                     ->booleanNode('change_theme')->end()
                                     ->scalarNode('global_composer_template')->end()
                                     ->scalarNode('composer_template')->end()
