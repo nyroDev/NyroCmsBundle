@@ -7,6 +7,7 @@ use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractContro
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AdminController extends NyroDevAbstractController
@@ -57,7 +58,8 @@ class AdminController extends NyroDevAbstractController
     public function ccAction()
     {
         $fs = new Filesystem();
-        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+
+        $cacheDir = $this->get(KernelInterface::class)->getCacheDir();
 
         $ret = 'Nothing to remove';
         try {

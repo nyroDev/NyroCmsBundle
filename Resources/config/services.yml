@@ -10,7 +10,9 @@ services:
 
     NyroDev\NyroCmsBundle\Services\UserService:
         public: true
-        arguments: ['@service_container', '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface']
+        arguments:
+            - '@service_container'
+            - '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface'
         tags:
           - { name: templating.helper, alias: nyrocms_user }
     nyrocms_user:
@@ -28,7 +30,10 @@ services:
 
     NyroDev\NyroCmsBundle\Services\ComposerService:
         public: true
-        arguments: ['@service_container', '@templating.helper.assets']
+        arguments:
+            - '@service_container'
+            - '@templating.helper.assets'
+            - '@Symfony\Component\HttpKernel\KernelInterface'
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
     nyrocms_composer:

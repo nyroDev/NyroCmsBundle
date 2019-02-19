@@ -307,7 +307,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setTitle($title, $addDefault = true)
     {
-        $this->get(ShareService::class)->setTitle($this->get(NyroCmsService::class)->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->container->getParameter('nyroDev_utility.share.title'))) : ''));
+        $this->get(ShareService::class)->setTitle($this->get(NyroCmsService::class)->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->getParameter('nyroDev_utility.share.title'))) : ''));
     }
 
     protected function setDescription($description)

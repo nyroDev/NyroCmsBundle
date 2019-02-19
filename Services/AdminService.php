@@ -8,8 +8,9 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
-use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\MemberService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
 class AdminService extends nyroDevAbstractService
@@ -19,7 +20,7 @@ class AdminService extends nyroDevAbstractService
      */
     protected $assetsHelper;
 
-    public function __construct($container, AssetsHelper $assetsHelper)
+    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper)
     {
         parent::__construct($container);
         $this->assetsHelper = $assetsHelper;

@@ -24,6 +24,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AbstractHandler
 {
@@ -323,7 +324,7 @@ abstract class AbstractHandler
      */
     public function getUploadRootDir()
     {
-        return $this->get('kernel')->getProjectDir().'/public/'.$this->getUploadDir();
+        return $this->get(KernelInterface::class)->getProjectDir().'/public/'.$this->getUploadDir();
     }
 
     /**

@@ -13,8 +13,10 @@ use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ComposerService extends AbstractService
 {
@@ -23,10 +25,16 @@ class ComposerService extends AbstractService
      */
     protected $assetsHelper;
 
-    public function __construct($container, AssetsHelper $assetsHelper)
+    /**
+     * @var KernelInterface
+     */
+    protected $kernel;
+
+    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper, KernelInterface $kernel)
     {
         parent::__construct($container);
         $this->assetsHelper = $assetsHelper;
+        $this->kernel = $kernel;
     }
 
     public function getContainer()
@@ -586,7 +594,7 @@ class ComposerService extends AbstractService
     protected function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {
-            $this->rootImageDir = $this->get('kernel')->getProjectDir().'/public/'.$this->getImageDir();
+            $this->rootImageDir = $this->kernel->getProjectDir().'/public/'.$this->getImageDir();
             $fs = new \Symfony\Component\Filesystem\Filesystem();
             if (!$fs->exists($this->rootImageDir)) {
                 $fs->mkdir($this->rootImageDir);
