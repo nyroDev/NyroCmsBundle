@@ -70,36 +70,50 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 input[type="radio"], input[type="checkbox"] {
   display: none;
 }
-input[type="radio"] + label:before, input[type="checkbox"] + label:before {
-	content: '';
+input[type="radio"] + label, input[type="checkbox"] + label {
 	position: relative;
-	top: 1px;
-	display: inline-block;
-	margin-right: 5px;
-	width: 15px;
-	height: 15px;
-	background-image: url(images/admin/form.png);
+	padding-left: 20px;
+}
+input[type="radio"] + label:before, input[type="checkbox"] + label:before,
+input[type="radio"] + label:after, input[type="checkbox"] + label:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	display: block;
 	cursor: pointer;
 }
-input[type="radio"]:checked + label:before {
-	background-position: 0 -25px;
+input[type="radio"] + label:before, input[type="checkbox"] + label:before {
+	left: 0;
+	margin-top: -8px;
+	width: 15px;
+	height: 15px;
+	border: 1px solid red;
 }
-input[type="radio"][disabled] + label:before {
-	background-position: 0 -50px;
+input[type="radio"] + label:after, input[type="checkbox"] + label:after {
+	left: 4px;
+	margin-top: -4px;
+	width: 9px;
+	height: 9px;
+	background: red;
+	opacity: 0;
+	transition: opacity 150ms;
+}
+input[type="radio"] + label:before, input[type="radio"] + label:after {
+	border-radius: 50%;
+}
+input[type="radio"]:checked + label:after, input[type="checkbox"]:checked + label:after {
+	opacity: 1;
+}
+input[type="radio"][disabled] + label:before, input[type="checkbox"][disabled] + label:before {
+	border-color: #d1d1d1;
 	cursor: auto;
 }
-input[type="checkbox"] + label:before {
-	width: 14px;
-	height: 14px;
-	background-position: 0 -75px;
-}
-input[type="checkbox"]:checked + label:before {
-	background-position: 0 -99px;
-}
-input[type="checkbox"][disabled] + label:before {
-	background-position: 0 -123px;
+input[type="radio"][disabled] + label:after, input[type="checkbox"][disabled] + label:after {
+	background-color: #d1d1d1;
 	cursor: auto;
 }
+
+
 .form_row_tinymce label, .form_row_rawhtml label {
 	float: none;
 	margin-right: 0;

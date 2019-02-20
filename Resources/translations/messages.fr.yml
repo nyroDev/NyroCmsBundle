@@ -124,6 +124,7 @@ admin:
     title: Titre
     theme: Thème
     lang: Langue
+    themeSelectInput: Thème
     themeEmpty: Thème parent
     moreBlocks: Plus de blocs
     state: État

@@ -53,68 +53,80 @@ $nbButtons = 0;
 $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 ?>
 <form id="composer" <?php echo $attrsHtml; ?> method="post" enctype="multipart/form-data">
-	<div id="composerTools"><!--
+
+	<?php if (
+        ($canChangeLang && count($langs) > 0)
+        ||
+        ($canChangeStructure && $canChangeTheme && count($themes) > 1)
+    ): ?>
+	<nav id="composerNavTool">
+		<?php if ($canChangeStructure): ?>
+			<nav id="composerAvlBlocks" class="composerNav">
+				<input type="checkbox" name="" id="avlBlocksInput" />
+				<label for="avlBlocksInput">Ajouter</label>
+				<nav id="availableBlocks">
+					<?php foreach ($availableBlocks as $b): ?>
+						<a href="<?php echo $composerUrl.'?block='.$b; ?>"
+							class="composerNavElt availableBlock <?php echo $b; ?>"
+							title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?>">
+							<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?></span>
+						</a>
+					<?php endforeach; ?>
+				</nav>
+			</nav>
+		<?php endif; ?>
 		<?php if ($canChangeStructure && $canChangeTheme && count($themes) > 1): ?>
-		--><div class="select">
-			<a href="#themeSelect" class="selectLink">
-				<span><?php echo $view['nyrodev']->trans('admin.content.theme'); ?></span>
-				<span id="themeDemo" class="bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
-			</a>
-			<div id="themeSelect" class="selecter">
-				<div class="selectList">
-					<input id="theme_parent" type="radio" name="theme" value="" <?php echo !$row->getTheme() ? 'checked="checked" ' : ''; ?> data-parent="<?php echo $view['nyrocms_composer']->getCssTheme($row->getParent()); ?>"/>
-					<label class="bg_<?php echo $view['nyrocms_composer']->getCssTheme($row->getParent()); ?>" for="theme_parent">
-						<?php echo $view['nyrodev']->trans('admin.content.themeEmpty'); ?>
-					</label>
+			<nav id="themeSelect" class="composerNav">
+				<input type="checkbox" name="" id="themeSelectInput" />
+				<label for="themeSelectInput">
+					<?php echo $view['nyrodev']->trans('admin.content.themeSelectInput'); ?>
+					<span id="themeDemo" class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
+				</label>
+				<nav id="themeSelectChoices">
+					<?php if ($row->getParent()): ?>
+						<input id="theme_parent" type="radio" name="theme" value="" <?php echo !$row->getTheme() ? 'checked="checked"' : ''; ?> data-parent="<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"/>
+						<label class="composerNavElt" for="theme_parent" title="<?php echo $view['nyrodev']->trans('admin.content.themeEmpty'); ?>">
+							<span class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
+						</label>
+					<?php endif; ?>
 					<?php foreach ($themes as $k => $v): ?>
 						<input id="theme_<?php echo $k; ?>" type="radio" name="theme" value="<?php echo $k; ?>"<?php echo $k == $row->getTheme() ? ' checked="checked" ' : ''; ?>/>
-						<label class="bg_<?php echo $k; ?>" for="theme_<?php echo $k; ?>"></label>
+						<label class="composerNavElt" for="theme_<?php echo $k; ?>" title="<?php echo $v; ?>">
+							<span class="bg_theme bg_<?php echo $k; ?>"></span>
+						</label>
 					<?php endforeach; ?>
-				</div>
-			</div>
-		</div><!--
-		<?php ++$nbButtons; endif; ?>
-		<?php if ($canChangeLang && count($langs) > 0): ?>
-		--><div class="select">
-			<a href="#langSelect" class="selectLink">
-				<span><?php echo $view['nyrodev']->trans('admin.content.lang'); ?></span>
-				<strong><?php echo $lang; ?></strong>
-			</a>
-			<div id="langSelect" class="selecter selecterLink" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.langChange'); ?>">
-				<div class="selectList">
-					<?php foreach ($langs as $lg => $lang): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => $type, 'id' => $id, 'lang' => $lg)); ?>" class="langChange"><?php echo $lg; ?></a>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div><!--
-		<?php ++$nbButtons; endif; ?>
-		--><?php if ($canChangeStructure): ?><nav id="availableBlocks"><!--
-				<?php foreach ($availableBlocks as $b): ?>
-				<?php if ($nbButtons == $maxButtons): ?>
-					--><div class="select">
-						<a href="#moreBlocksSelect" class="selectLink" id="moreBlocks">
-							<span><?php echo $view['nyrodev']->trans('admin.content.moreBlocks'); ?></span>
-							<strong>+</strong>
-						</a>
-						<div id="moreBlocksSelect" class="selecter"><!--
-				<?php endif; ?>
-				--><a href="<?php echo $composerUrl.'?block='.$b; ?>" class="availableBlock <?php echo $b; ?>" title="<?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?>">
-					<span><?php echo $view['translator']->trans('admin.composer.blocks.'.$b); ?></span>
-				</a><!--
-				<?php ++$nbButtons; endforeach; ?>
-				<?php if ($nbButtons - 1 >= $maxButtons): ?>
-						--></div><!--
-					--></div><!--
-				<?php endif; ?>
-			<?php endif; ?>
-		--></nav>
-	</div>
+				</nav>
+			</nav>
+		<?php endif; ?>
+	</nav>
+	<?php endif; ?>
+
 	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), array(
         'row' => $row,
     )); ?>
-	<button type="submit" class="composerSubmit"><?php echo $view['nyrodev']->trans('admin.composer.action.save'); ?></button>
-	<a href="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>" class="cancel button" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.cancelConfirm'); ?>"><?php echo $view['nyrodev']->trans('admin.misc.cancel'); ?></a>
+	
+	<nav id="composerNavButtons">
+		<button type="submit" class="composerSubmit"><?php echo $view['nyrodev']->trans('admin.composer.action.save'); ?></button>
+		<a href="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>" class="cancel button" data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.cancelConfirm'); ?>"><?php echo $view['nyrodev']->trans('admin.misc.cancel'); ?></a>
+
+		<?php if ($canChangeLang && count($langs) > 0): ?>
+			<div id="langSelect" class="composerNav composerNavLeft">
+				<input type="checkbox" name="" id="langSelectInput" />
+				<label for="langSelectInput">
+					<span><?php echo $view['nyrodev']->trans('admin.content.lang'); ?></span>
+					<strong><?php echo $lang; ?></strong>
+				</label>
+				<nav>
+					<?php foreach ($langs as $lg => $lang): ?>
+						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => $type, 'id' => $id, 'lang' => $lg)); ?>"
+							class="composerNavElt langChange composerNavConfirm"
+							data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.langChange'); ?>"
+						><?php echo $lg; ?></a>
+					<?php endforeach; ?>
+				</nav>
+			</div>
+		<?php endif; ?>
+	</nav>
 </form>
 </body>
 </html>

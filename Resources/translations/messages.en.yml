@@ -116,6 +116,7 @@ admin:
     title: Title
     theme: Theme
     lang: Language
+    themeSelectInput: Theme
     themeEmpty: Parent theme
     moreBlocks: More blocks
     state: State

@@ -150,6 +150,7 @@
 	margin-right: 10px;
 	float: none;
 	border-radius: 0;
+	border:none;
 	cursor: pointer;
 }
 .nmConfirm button:hover {
@@ -164,6 +165,11 @@
 	color: #000;
 	margin-bottom: 20px;
 	text-align: left;
+}
+.nmConfirm input:not([type="checkbox"]) {
+	width: 100%;
+	font-size: 14px;
+	padding: 2px 5px;
 }
 .nmConfirm select {
 	font-family: 'Roboto', sans-serif;

@@ -11,8 +11,7 @@ jQuery(function ($) {
 			getIcon = function (name) {
 				return composer.data('icon').replace(/TPL/g, name);
 			},
-			tools = composer.children('#composerTools'),
-			themeDemo = tools.find('#themeDemo'),
+			themeDemo = composer.find('#themeDemo'),
 			saveButton = composer.children('button').attr('disabled', 'disabled').prop('disabled', 'disabled'),
 			cont = main.children('#composerCont'),
 			tinymceurl = composer.data('tinymceurl'),
@@ -420,25 +419,7 @@ jQuery(function ($) {
 			ed.on('change', changed);
 		};
 
-		tools
-			.on('click', '.selectLink', function (e) {
-				e.preventDefault();
-				$(this).closest('.select').toggleClass('opened');
-			})
-			.on('click', '.selecterLink a', function (e) {
-				if (hasChanged) {
-					e.preventDefault();
-					var me = $(this);
-					$.nmConfirm({
-						text: me.closest('.selecterLink').data('confirm'),
-						ok: txtConfirm,
-						cancel: txtCancel,
-						clbOk: function () {
-							document.location.href = me.attr('href');
-						}
-					});
-				}
-			})
+		composer
 			.find('input[name="theme"]').on('change', function () {
 				var me = $(this);
 				if (me.is(':checked')) {
@@ -447,13 +428,25 @@ jQuery(function ($) {
 						val = me.data('parent');
 					}
 					cont.attr('class', 'composer composer_' + val);
-					themeDemo.attr('class', 'bg_' + val);
+					themeDemo.attr('class', 'bg_theme bg_' + val);
 					changed();
 					me.closest('.select').toggleClass('opened');
 				}
-			});
-
-		composer
+			}).end()
+			.on('click', '.composerNavConfirm', function(e) {
+				if (hasChanged) {
+					e.preventDefault();
+					var me = $(this);
+					$.nmConfirm({
+						text: me.data('confirm'),
+						ok: txtConfirm,
+						cancel: txtCancel,
+						clbOk: function () {
+							document.location.href = me.attr('href');
+						}
+					});
+				}
+			})
 			.on('composerChanged', function () {
 				changed();
 			})
@@ -516,20 +509,19 @@ jQuery(function ($) {
 			});
 		}
 
-		tools
-			.children('#availableBlocks')
-			.find('a.availableBlock')
-			.on('click', function (e) {
-				e.preventDefault();
-				addBlock($(this).attr('href'));
-			})
-			.draggable({
-				revert: true,
-				connectToSortable: cont,
-				helper: function () {
-					return $(this).clone();
-				}
-			});
+		composer
+			.find('#availableBlocks a.availableBlock')
+				.on('click', function (e) {
+					e.preventDefault();
+					addBlock($(this).attr('href'));
+				})
+				.draggable({
+					revert: true,
+					connectToSortable: cont,
+					helper: function () {
+						return $(this).clone();
+					}
+				});
 
 		initComposable(main);
 	}

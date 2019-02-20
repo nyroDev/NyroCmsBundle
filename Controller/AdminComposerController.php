@@ -68,7 +68,7 @@ class AdminComposerController extends AbstractAdminController
                     new \Symfony\Component\Validator\Constraints\NotBlank(),
                     new \NyroDev\UtilityBundle\Validator\Constraints\EmbedUrl(),
                 );
-                $errors = $this->get('validator')->validateValue($url, $constraints);
+                $errors = $this->get('validator')->validate($url, $constraints);
 
                 if (0 == count($errors)) {
                     $dataUrl = $this->get(EmbedService::class)->data($url);

@@ -1,11 +1,4 @@
-body {
-	padding-left: 0;
-}
-main {
-	margin: 0 auto;
-	max-width: 1500px;
-	overflow: hidden;
-}
+
 .icon {
 	width: 30px;
 	height: 30px;
@@ -14,18 +7,23 @@ main {
 	background: #7495c2;
 	transition: all 300ms;
 }
+
 #composer {
-	margin: 40px 0;
+	margin-bottom: 40px;
 }
+
 .composableImgCont {
 	position: relative;
 }
+
 #composer textarea {
 	display: none;
 }
+
 #composer .composer_handler textarea {
 	display: inline;
 }
+
 .composableImgCont .pluploadCont {
 	position: absolute !important;
 	top: 0;
@@ -33,9 +31,11 @@ main {
 	right: 0;
 	bottom: 0;
 }
+
 .composableImg {
 	display: block !important;
 }
+
 .composableImgCont .pluploadBrowse {
 	position: absolute !important;
 	top: 0;
@@ -47,168 +47,35 @@ main {
 	border-radius: 0;
 	padding: 0;
 }
-header {
-	font-family: 'Roboto', sans-serif;
-}
-#composerTools {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	font-size: 14px;
-	height: 140px;
-	background: #000;
-	font-family: 'Roboto', sans-serif;
-	text-align: center;
-	z-index: 10;
-}
-#composerTools a {
-	text-decoration: none;
-}
-#composerTools #availableBlocks, #composerTools .select {
-	position: relative;
+
+.bg_theme {
 	display: inline-block;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
+	background: #fff;
 }
-#composerTools span {
-	color: #7495c2;
-	font-weight: 900;
+#themeDemo.bg_theme {
+	margin: -2px 0 0 5px;
 }
-#composerTools .selectLink, #composerTools #availableBlocks .availableBlock {
-	position: relative;
-	display: inline-block;
-	width: 130px;
-	height: 120px;
-	background-color: #202020;
-	transition: background-color 300ms;
-	margin-right: 1px;
-	padding: 20px 0 0;
-}
-#composerTools .selectLink:after, #composerTools #availableBlocks .availableBlock:after {
-	top: 100%;
-	left: 50%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-	border-color: rgba(32, 32, 32, 0);
-	border-top-color: #202020;
-	border-width: 8px;
-	margin-left: -8px;
-}
-#composerTools .selectLink:after {
-	top: auto;
-    bottom: 3%;
-	border-top-color: #000;
-}
-#composerTools .selectLink strong {
-	position: absolute;
-	top: 60px;;
-	left: 0;
-	right: 0;
-	color: #000;
-	font-weight: 900;
-	text-transform: uppercase;
-}
-.selecterLink .selectList a {
-	display: block;
-	line-height: 140px;
-	font-weight: 900;
-	color: #fff;
-	text-transform: uppercase;
-}
-.selecterLink .selectList a:hover {
-	text-decoration: none;
-	color: #7495c2;
-}
-#composerTools .selectLink:hover {
-	text-decoration: none;
-}
-#composerTools .selectLink:hover:after, #composerTools .opened .selectLink:after {
-	border-top-color: #7495c2;
-}
-#composerTools #availableBlocks .availableBlock:hover {
-	border-top-color: #7495c2;
-}
-#composerTools .selectLink {
-	background: #e1e1e1; 
-}
-#composerTools .selecter {
- 	display: none;
-	position: absolute;
-	top: 140px;
-	left: 0;
-}
-#composerTools .selectList {
-	margin-top: 1px;
-	background: #000;
-	width: 130px;
-	overflow: hidden;
-}
-#composerTools .selectList label {
-	width: auto; 
-}
-#composerTools .opened .selecter {
- 	display: block;
-}
-#themeDemo, #composerTools #themeSelect label {
-	display: block;
-	width: 75px;
-	height: 42px;
-	margin: 0 auto;
-	padding-top: 3px;
-	text-align: center;
-	color: #fff;
-}
-#themeDemo {
- 	margin-top: 10px;
-}
-#composerTools #themeSelect .selectList {
-	padding: 10px 0;
-	background: #000;
-}
-#composerTools #themeSelect label {
-	border: 4px solid #000;
-}
-#composerTools #themeSelect label:hover, #composerTools #themeSelect input:checked + label {
-	border: 4px solid #fff;
-	cursor: pointer;
-}
-#composerTools #themeSelect input {
- 	display: none;
-}
-#availableBlocks .availableBlock {
-	background-image: url(images/admin/composer.png);
-}
-#availableBlocks .intro { background-position: 0 0; }
-#availableBlocks .texte { background-position: -130px 0; }
-#availableBlocks .image { background-position: -260px 0; }
-#availableBlocks .image2 { background-position: -390px 0; }
-#availableBlocks .image3 { background-position: -520px 0; }
-#availableBlocks .video { background-position: -650px 0; }
-#availableBlocks .column2 { background-position: -780px 0; }
-#availableBlocks .column3 { background-position: -910px 0; }
-#availableBlocks .slideshow { background-position: -1040px 0; }
-#availableBlocks .image_text { background-position: -1170px 0; }
-#availableBlocks .text_image { background-position: -1300px 0; }
-#availableBlocks .separator { background-position: -1430px 0; }
-#composerTools #availableBlocks .availableBlock:hover {
-	text-decoration: none;
- 	background-color: #000;
-}
-#composerTools #availableBlocks .availableBlock:hover:after {
-	border-top-color: #000;
-}
-#composerContents {
-	margin-top: 150px;
-}
+
 #backgroundTable {
 	margin-top: 150px;
 }
+
 .composerBlock {
 	position: relative;
 }
+
+.composerBlock:after {
+    content: '';
+    position: absolute;
+    left: -100vw;
+    right: -100vw;
+    bottom: 0;
+    border-bottom: 1px dotted #7495c2;
+}
+
 .composerButtons {
 	position: absolute;
 	top: 0;
@@ -216,30 +83,69 @@ header {
 	z-index: 1;
 	display: none;
 }
+
 .composerBlock:hover .composerButtons {
 	display: block;
 	z-index: 2;
 }
+
 .noChangeStructure .composerBlock .composerButtons {
 	display: none;
 }
-.composerButtons a {
+
+#composerNavButtons,
+#composerNavTool {
+	position: fixed;
+	top: 0;
+	display: flex;
+	flex-direction: column;
+	padding-top: 10px;
+}
+#composerNavTool {
+	left: 0;
+}
+#composerNavButtons {
+	right: 0;
+}
+
+#composerNavTool>nav,
+#composerNavButtons>button,
+#composerNavButtons a {
+	margin-bottom: 10px;
+}
+
+.composerButtons a,
+.composerNav > label,
+.composerNavElt,
+#composer .composerSubmit,
+#composer .button.cancel {
+	display: inline-block;
+	vertical-align: middle;
 	text-decoration: none;
 	background: #7495c2;
 	color: #fff;
+	font-size: 12px;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 900;
+	text-align: center;
 	text-transform: uppercase;
-	padding: 2px 10px 2px 5px;
-	font-size: 12px;
-	display: inline-block;
-	vertical-align: middle;
+	border: none;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+	padding: 8px 14px;
 	transition: background 300ms;
 }
-.composerButtons a:hover {
-	background: #000;
-	text-decoration: none;
+.composerNav > label {
+	position: relative;
+	width: 100%;
+	box-sizing: border-box;
 }
+
+.composerButtons a {
+	padding: 2px 10px 2px 5px;
+}
+
 .composerButtons .icon {
 	display: inline;
 	vertical-align: middle;
@@ -248,53 +154,125 @@ header {
 	width: 25px;
 	background: transparent;
 }
+
+.composerButtons a:hover,
+.composerNav > label:hover,
+.composerNavElt:hover,
+.composerNav input:checked+label,
+#composer .composerSubmit:hover,
+#composer .button.cancel:hover {
+	cursor: pointer;
+	background: #000;
+	text-decoration: none;
+}
+
+.composerNav > label span {
+	font-weight: normal;
+}
+.composerNav > label:after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	border: solid transparent;
+	height: 0;
+	width: 0;
+	pointer-events: none;
+	border-width: 15px;
+	margin-top: -15px;
+    opacity: 0;
+    visibility: hidden;
+    transition: border-left-color 300ms, visibility 300ms, opacity 300ms;
+}
+.composerNav:not(.composerNavLeft) > label:after {
+	left: 100%;
+	border-left-color: #7495c2;
+}
+.composerNav.composerNavLeft > label:after {
+	right: 100%;
+	border-right-color: #7495c2;
+}
+.composerNav input:checked+label:after {
+    opacity: 1;
+    visibility: visible;
+}
+.composerNav:not(.composerNavLeft) input:checked+label:after {
+	border-left-color: #000;
+}
+.composerNav.composerNavLeft input:checked+label:after {
+	border-right-color: #000;
+}
+
+#themeSelect > label {
+	padding: 0 14px;
+	line-height: 30px;
+	vertical-align: middle;
+}
+#themeSelectChoices label {
+	display: block;
+}
+
+.composerNav {
+    position: relative;
+}
+.composerNav input {
+    display: none;
+}
+.composerNav nav {
+    position: absolute;
+	top: 0;
+    display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	max-height: calc(100vh - 20px);
+    opacity: 0;
+	visibility: hidden;
+    transition: visibility 300ms, opacity 300ms;
+}
+.composerNav:not(.composerNavLeft) nav {
+    left: 100%;
+    margin-left: 20px;
+}
+.composerNavLeft.composerNavLeft nav {
+	right: 100%;
+    margin-right: 20px;
+} 
+.composerNav input:checked ~ nav {
+    opacity: 1;
+    visibility: visible;
+}
+.composerNavElt {
+	margin-bottom: 1px;
+	margin-right: 1px;
+}
+
 #composer .ui-state-highlight {
 	display: block;
 	min-height: 100px;
 }
-#composer .composerSubmit, #composer .button.cancel, .addFormStep .button {
-	position: fixed;
-	top: 140px;
-	right: 0;
-	color: #fff;
-	font-family: 'Roboto', sans-serif;
-	font-weight: 900;
-	text-transform: uppercase;
-	padding: 10px 14px;
-	background: #7495c2;
-	border: none;
-	-webkit-border-radius: 0;
-	border-radius: 0;
-	-webkit-appearance: none;
-	transition: background 300ms;
-	font-size: 14px;
-}
-#composer .button.cancel {
-	margin-top: 45px;
-}
-#composer .composerSubmit:hover, #composer .button.cancel:hover, .addFormStep .button:hover {
-	cursor: pointer;
-	background: #000;
-}
-.composableSimple:not(.but):not(strong), .composableHtml {
+
+.composableSimple:not(.but):not(strong),
+.composableHtml {
 	min-width: 20px;
 	background: rgba(255, 255, 255, 0.1);
 }
+
 .composableVideo {
 	position: relative;
 }
+
 .composableVideo a {
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
-	bottom: 0;
+	bottom: 8%;
 	text-align: center;
 	font-size: 50px;
 	color: #ddd;
 	padding-top: 15%;
 	background: rgba(0, 0, 0, 0.5);
 }
+
 .composableVideo a:hover {
 	text-decoration: none;
 	color: #fff;
@@ -303,136 +281,95 @@ header {
 .block_slideshow ul {
 	display: block;
 }
+
 .block_slideshow .pluploadCont {
 	position: relative;
 	display: inline;
 }
+
 .block_slideshow .pluploadList {
 	position: absolute;
 	left: 20px;
 	bottom: 250%;
 	width: 300px;
 }
+
 .block_slideshow li {
 	border-right: 1px solid #989898;
 	border-bottom: 1px solid #989898;
 	padding-bottom: 5px;
 }
+
 .block_slideshow .pluploadList div {
 	width: auto;
 }
+
 .block_slideshow .pluploadBrowse {
 	margin: 0;
 	display: inline-block;
 	text-align: center;
 	box-sizing: border-box;
 	font-family: 'Roboto', sans-serif;
-	font-weight: 900;
 	text-transform: uppercase;
 	line-height: 30px;
-	padding: 0 22px;
+	font-size: 12px;
+	padding: 0 15px;
 	background: #7495c2;
 	border-radius: 0;
 	transition: background 300ms;
 }
+
 .block_slideshow .pluploadBrowse:hover {
 	background: #000;
 }
+
 .block_slideshow_big .pluploadCont {
 	position: absolute;
 	right: 20px;
 	bottom: 20px;
 }
+
 .block_slideshow_big .pluploadList {
 	bottom: 150%;
 	left: auto;
 	right: 0;
 }
+
 #composer .block_slideshow .ui-state-highlight {
-	min-height: 210px; 
+	min-height: 210px;
 }
-.composableSlideshowDrag, .composableSlideshowEdit, .composableSlideshowDelete {
+
+/* @todo */
+.composableSlideshowDrag,
+.composableSlideshowEdit,
+.composableSlideshowDelete {
 	position: relative;
 	top: 10px;
 	margin-left: 5px;
 }
-.composableSlideshowDrag:hover .icon, .composableSlideshowEdit:hover .icon, .composableSlideshowDelete:hover .icon {
+
+.composableSlideshowDrag:hover .icon,
+.composableSlideshowEdit:hover .icon,
+.composableSlideshowDelete:hover .icon {
 	background: #000;
 }
-.composer_handler, .block_home_public_handler, .home_extranet_handler {
+
+.composer_handler,
+.block_home_public_handler,
+.home_extranet_handler {
 	position: relative;
 }
-.composer_handler:before, .block_home_public_handler:before, .home_extranet_handler:before {
+
+.composer_handler:before,
+.block_home_public_handler:before,
+.home_extranet_handler:before {
 	content: '';
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
-	background: url(images/admin/stripe.png);
+	background: repeating-linear-gradient(45deg, #989898, #989898 4px, #fff 4px, #fff 12px);
 	opacity: 0.5;
 	z-index: 1;
-}
-#composerTools #moreBlocks strong {
-	top: 50px;
-	font-size: 40px;
-}
-@media all and (max-width: 1460px) {
-	#composerTools {
-		height: 9.2vw;
-	}
-	#composerTools span {
-		font-size: 11px;
-	}
-	#moreBlocks span {
-		font-size: 11px;
-		height: 100px;
-		display: inline-block;
-		padding: 0;
-	}
-	#composerTools .select, #composerTools .selectLink {
-		width: 8.6vw;
-		height: 9.2vw;
-		box-sizing: border-box;
-	}
-	#composerTools #availableBlocks .availableBlock {
-		width: 8.6vw;
-		height: 9.2vw;
-		box-sizing: border-box;
-		background-size: 103vw 9.2vw;
-	}
-	#composerTools .selectLink, #composerTools #availableBlocks .availableBlock {
-		padding-top: 15px;
-	}
-	#availableBlocks .intro { background-position: 0 0; }
-	#availableBlocks .texte { background-position: -8.6vw 0; }
-	#availableBlocks .image { background-position: -17.2vw 0; }
-	#availableBlocks .image2 { background-position: -25.8vw 0; }
-	#availableBlocks .image3 { background-position: -34.4vw 0; }
-	#availableBlocks .video { background-position: -43vw 0; }
-	#availableBlocks .column2 { background-position: -51.6vw 0; }
-	#availableBlocks .column3 { background-position: -60.2vw 0; }
-	#availableBlocks .slideshow { background-position: -68.8vw 0; }
-	#availableBlocks .image_text { background-position: -77.4vw 0; }
-	#availableBlocks .text_image { background-position: -86vw 0; }
-	#composerTools .selecter {
-		top: 9.2vw;
-	}
-	#composerTools .selectList {
-		width: 8.6vw;
-	}
-	.selecterLink .selectList a {
-		line-height: 9.2vw;
-	}
-	#themeDemo, #composerTools #themeSelect label {
-		width: 65%;
-		height: 3vw;
-	}
-	#composerTools #availableBlocks #moreBlocksSelect .availableBlock {
-		padding-top: 5px;
-	}
-}
-
-.bg_public {
-	background: #fff;
 }
