@@ -65,7 +65,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $search = '"'.$field.'":'.str_replace('\\', '\\\\', json_encode($value));
 
         $sql = 'SELECT * FROM content_log cl
-					WHERE cl.data LIKE \'%'.$search.'%\' ESCAPE \'|\'
+					WHERE cl.data LIKE ? ESCAPE \'|\'
 					GROUP BY cl.object_id
 					ORDER BY cl.id DESC
 			';
@@ -74,6 +74,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $rsm->addRootEntityFromClassMetadata(str_replace('\Entity\Content', '\Entity\Log\Content', $this->getClassName()).'Log', 'cl');
 
         $q = $this->getEntityManager()->createNativeQuery($sql, $rsm);
+        $q->setParameter(1, '%'.$search.'%');
         $logValues = $q->getResult();
 
         $ret = array();
