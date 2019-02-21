@@ -87,14 +87,14 @@ input[type="radio"] + label:before, input[type="checkbox"] + label:before {
 	margin-top: -8px;
 	width: 15px;
 	height: 15px;
-	border: 1px solid red;
+	border: 1px solid #7495c2;
 }
 input[type="radio"] + label:after, input[type="checkbox"] + label:after {
 	left: 4px;
 	margin-top: -4px;
 	width: 9px;
 	height: 9px;
-	background: red;
+	background: #7495c2;
 	opacity: 0;
 	transition: opacity 150ms;
 }
