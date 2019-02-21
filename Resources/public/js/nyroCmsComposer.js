@@ -9,5 +9,6 @@ import './../../../../utility-bundle/Resources/public/js/_tinymce.js';
 import './../../../../utility-bundle/Resources/public/js/_plupload.js';
 
 import './public/200_utilities.js';
+import './public/501_slideshow.js';
 
 import './composer/composer.js';
