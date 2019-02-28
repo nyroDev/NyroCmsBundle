@@ -3,7 +3,7 @@
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
             'image' => $contents['image1'],
             'title' => $row->getTitle(),
-            'class' => 'composableImg',
+            'class' => $view['nyrocms_composer']->canChangeMedia($row) ? 'composableImg' : '',
             'config' => $config['image1'],
         )); ?>
 		<textarea name="contents[<?php echo $nb; ?>][image1]" id="contents_<?php echo $nb; ?>_image1"><?php echo $contents['image1']; ?></textarea>
@@ -12,7 +12,7 @@
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
             'image' => $contents['image2'],
             'title' => $row->getTitle(),
-            'class' => 'composableImg',
+            'class' => $view['nyrocms_composer']->canChangeMedia($row) ? 'composableImg' : '',
             'config' => $config['image2'],
         )); ?>
 		<textarea name="contents[<?php echo $nb; ?>][image2]" id="contents_<?php echo $nb; ?>_image2"><?php echo $contents['image2']; ?></textarea>

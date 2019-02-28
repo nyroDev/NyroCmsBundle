@@ -11,6 +11,7 @@ jQuery(function ($) {
 			getIcon = function (name) {
 				return composer.data('icon').replace(/TPL/g, name);
 			},
+			avlBlocksInput = composer.find('#avlBlocksInput'),
 			themeDemo = composer.find('#themeDemo'),
 			saveButton = composer.children('button').attr('disabled', 'disabled').prop('disabled', 'disabled'),
 			cont = main.children('#composerCont'),
@@ -409,6 +410,7 @@ jQuery(function ($) {
 					changed();
 
 					curAdd++;
+					avlBlocksInput.prop('checked', false);
 				}
 			};
 

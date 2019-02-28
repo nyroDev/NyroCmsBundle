@@ -12,12 +12,14 @@ class ComposerBlockVarsEvent extends Event
     protected $row;
     protected $template;
     protected $vars;
+    protected $blockConfig;
 
-    public function __construct(Composable $row, $template, array $vars)
+    public function __construct(Composable $row, $template, array $vars, array $blockConfig)
     {
         $this->row = $row;
         $this->template = $template;
         $this->vars = $vars;
+        $this->blockConfig = $blockConfig;
     }
 
     /**
@@ -63,8 +65,28 @@ class ComposerBlockVarsEvent extends Event
         return isset($this->vars['block'][$key]) ? $this->vars['block'][$key] : null;
     }
 
+    public function getInBlockContentVars($key)
+    {
+        $contents = $this->getInBlockVars('contents');
+        if (!is_array($contents)) {
+            return null;
+        }
+
+        return isset($contents[$key]) ? $contents[$key] : null;
+    }
+
     public function getBlockType()
     {
         return $this->getInBlockVars('type');
+    }
+
+    public function getBlockConfig()
+    {
+        return $this->blockConfig;
+    }
+
+    public function getInBlockConfig($key)
+    {
+        return isset($this->blockConfig[$key]) ? $this->blockConfig[$key] : null;
     }
 }

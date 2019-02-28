@@ -578,7 +578,8 @@ class ComposerService extends AbstractService
             'admin' => $admin,
             'customClass' => null,
             'customAttrs' => null,
-        ));
+        ), $this->getBlockConfig($row, $block['type']));
+
         $this->get('event_dispatcher')->dispatch(ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS, $event);
 
         return $this->get('templating')->render($event->getTemplate(), $event->getVars())."\n\n";

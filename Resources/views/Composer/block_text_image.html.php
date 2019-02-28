@@ -12,7 +12,7 @@
 		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
             'image' => $contents['image'],
             'title' => $row->getTitle(),
-            'class' => 'composableImg',
+            'class' => $view['nyrocms_composer']->canChangeMedia($row) ? 'composableImg' : '',
             'config' => $config['image'],
         )); ?>
 		<textarea name="contents[<?php echo $nb; ?>][image]" id="contents_<?php echo $nb; ?>_image"><?php echo $contents['image']; ?></textarea>

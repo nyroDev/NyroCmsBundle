@@ -1,4 +1,4 @@
-<?php if ($admin): ?>
+<?php if ($admin && $view['nyrocms_composer']->canChangeMedia($row)): ?>
 	<div data-name="contents_<?php echo $nb; ?>_image" class="composableVideo">
 		<iframe <?php echo $contents['embed'] ? 'src="'.$contents['embed'].'"' : null; ?> frameborder="0" allowfullscreen allow="autoplay"></iframe>
 		<a href="#"><?php echo $view['nyrodev']->trans('admin.composer.action.video'); ?></a>
