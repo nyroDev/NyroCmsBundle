@@ -1,5 +1,5 @@
 jQuery(function ($) {
-	var slideshows = $('.block_slideshow');
+	var slideshows = $('.nyroCmsSlideshow');
 
 	$.fn.extend({
 		slideshow: function () {
@@ -7,12 +7,12 @@ jQuery(function ($) {
 				if ($(this).data('slidehowInited'))
 					return;
 				var me = $(this).data('slidehowInited', true),
-					big = me.find('.block_slideshow_big'),
+					big = me.find('.nyroCmsSlideshow_big'),
 					bigImg = big.children('img'),
 					bigSpan = big.children('span'),
-					bigImgAnim = $('<img class="block_slideshow_big_anim"/>').appendTo(big),
-					prev = $('<a href="#" class="block_slideshow_arrow block_slideshow_prev" />').appendTo(big),
-					next = $('<a href="#" class="block_slideshow_arrow block_slideshow_next" />').appendTo(big),
+					bigImgAnim = $('<img class="nyroCmsSlideshow_big_anim"/>').appendTo(big),
+					prev = $('<a href="#" class="nyroCmsSlideshow_arrow nyroCmsSlideshow_prev" />').appendTo(big),
+					next = $('<a href="#" class="nyroCmsSlideshow_arrow nyroCmsSlideshow_next" />').appendTo(big),
 					ul = me.find('ul'),
 					excludeSelector = '.deleted, .ui-state-highlight',
 					animating = false,
@@ -76,7 +76,7 @@ jQuery(function ($) {
 						timer = setTimeout(showNext, 5000);
 					};
 
-				ul.on('click', '.block_slideshow_thumb', function (e) {
+				ul.on('click', '.nyroCmsSlideshow_thumb', function (e) {
 					if (!e.isDefaultPrevented()) {
 						e.preventDefault();
 						show($(this).closest('li'));

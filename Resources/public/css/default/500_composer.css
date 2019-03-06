@@ -36,32 +36,32 @@ body {
 	max-height: 88rem;
 }
 
-.block_slideshow {
+.nyroCmsSlideshow {
 	overflow: hidden;
 }
 
-.block_slideshow:after {
+.nyroCmsSlideshow:after {
 	content: '';
 	display: block;
 	clear: both;
 	width: 100%;
-	height: 1px;
+	height: 0;
 }
 
-.block_slideshow img {
+.nyroCmsSlideshow img {
 	display: block;
 }
 
-.block_slideshow_big {
+.nyroCmsSlideshow_big {
 	position: relative;
 }
 
-.block_slideshow_big img {
+.nyroCmsSlideshow_big img {
 	width: 100%;
 	height: auto;
 }
 
-.block_slideshow_big span {
+.nyroCmsSlideshow_big span {
 	position: absolute;
 	bottom: 1rem;
 	left: 1rem;
@@ -71,31 +71,31 @@ body {
 	text-shadow: 0 0 2px #000;
 }
 
-.block_slideshow ul {
+.nyroCmsSlideshow ul {
 	display: none;
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
 
-.block_slideshow li {
+.nyroCmsSlideshow li {
 	float: left;
 	box-sizing: border-box;
 }
 
-.block_slideshow li img {
+.nyroCmsSlideshow li img {
 	border: 0.5rem solid transparent;
 	box-sizing: border-box;
 	-webkit-transition: border-color 300ms;
 	transition: border-color 300ms;
 }
 
-.block_slideshow li a:hover img,
-.block_slideshow .active img {
+.nyroCmsSlideshow li a:hover img,
+.nyroCmsSlideshow .active img {
 	border-color: #ccc;
 }
 
-.block_slideshow .block_slideshow_big_anim {
+.nyroCmsSlideshow .nyroCmsSlideshow_big_anim {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -105,19 +105,19 @@ body {
 	transition: opacity 300ms;
 }
 
-.block_slideshow .block_slideshow_big_anim.show {
+.nyroCmsSlideshow .nyroCmsSlideshow_big_anim.show {
 	visibility: visible;
 	opacity: 1;
 }
 
-.block_slideshow .block_slideshow_big_anim.hide {
+.nyroCmsSlideshow .nyroCmsSlideshow_big_anim.hide {
 	visibility: hidden;
 	opacity: 0;
 	-webkit-transition: none;
 	transition: none;
 }
 
-.block_slideshow_arrow {
+.nyroCmsSlideshow_arrow {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -126,8 +126,8 @@ body {
 	min-width: 5rem;
 }
 
-.block_slideshow_arrow:before,
-.block_slideshow_arrow:after {
+.nyroCmsSlideshow_arrow:before,
+.nyroCmsSlideshow_arrow:after {
 	content: '';
 	position: absolute;
 	top: 50%;
@@ -141,44 +141,44 @@ body {
 	transition: background-color 300ms;
 }
 
-.block_slideshow_arrow:hover:before,
-.block_slideshow_arrow:hover:after {
+.nyroCmsSlideshow_arrow:hover:before,
+.nyroCmsSlideshow_arrow:hover:after {
 	background-color: #ccc;
 }
 
-.block_slideshow_prev {
+.nyroCmsSlideshow_prev {
 	left: 0;
 }
 
-.block_slideshow_next {
+.nyroCmsSlideshow_next {
 	right: 0;
 }
 
-.block_slideshow_prev:before,
-.block_slideshow_prev:after {
+.nyroCmsSlideshow_prev:before,
+.nyroCmsSlideshow_prev:after {
 	left: 1rem;
 	transform-origin: 0 50%;
 }
 
-.block_slideshow_next:before,
-.block_slideshow_next:after {
+.nyroCmsSlideshow_next:before,
+.nyroCmsSlideshow_next:after {
 	right: 1rem;
 	transform-origin: 100% 50%;
 }
 
-.block_slideshow_prev:before {
+.nyroCmsSlideshow_prev:before {
 	transform: rotate(45deg) translate(0, -1px);
 }
 
-.block_slideshow_next:after {
+.nyroCmsSlideshow_next:after {
 	transform: rotate(45deg) translate(0, 1px);
 }
 
-.block_slideshow_prev:after {
+.nyroCmsSlideshow_prev:after {
 	transform: rotate(-45deg) translate(0, 1px);
 }
 
-.block_slideshow_next:before {
+.nyroCmsSlideshow_next:before {
 	transform: rotate(-45deg) translate(0, -1px);
 }
 

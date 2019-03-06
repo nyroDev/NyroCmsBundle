@@ -1,3 +1,4 @@
+<div class="slideshow nyroCmsSlideshow">
 <?php if ($admin): ?>
 <div class="composableSlideshow"
 	data-nb="<?php echo $nb; ?>"
@@ -30,7 +31,7 @@
             $bigSrc = $view['nyrocms_composer']->imageResizeConfig($img['file'], $config['images']['big']);
             $thumbSrc = $view['nyrocms_composer']->imageResizeConfig($img['file'], $config['images']['thumb']);
             if (!$big) {
-                $big = '<div class="block_slideshow_big">';
+                $big = '<div class="nyroCmsSlideshow_big">';
                 $big .= '<img src="'.$bigSrc.'" alt="'.$view->escape($img['title']).'" />';
                 $big .= '<span>'.$img['title'].'</span>';
                 $big .= '</div>';
@@ -43,12 +44,12 @@
                 $addThumb .= '<textarea name="contents['.$nb.'][titles][]">'.$img['title'].'</textarea>';
                 $addThumb .= '<textarea name="contents['.$nb.'][deletes][]"></textarea>';
             }
-            $thumbs[] = '<li'.($first ? ' class="active"' : '').'><a href="'.$bigSrc.'" class="block_slideshow_thumb"><img src="'.$thumbSrc.'" alt="'.$view->escape($img['title']).'" /></a>'.$addThumb.'</li>';
+            $thumbs[] = '<li'.($first ? ' class="active"' : '').'><a href="'.$bigSrc.'" class="nyroCmsSlideshow_thumb"><img src="'.$thumbSrc.'" alt="'.$view->escape($img['title']).'" /></a>'.$addThumb.'</li>';
             $first = false;
         }
     }
     if (!$big && $admin) {
-        $big = '<div class="block_slideshow_big"><img src="" alt="" /><span></span></div>';
+        $big = '<div class="nyroCmsSlideshow_big"><img src="" alt="" /><span></span></div>';
     }
     echo $big;
     echo '<ul>'.implode(' ', $thumbs).'</ul>';
@@ -57,3 +58,4 @@
 <?php if ($admin): ?>
 </div>
 <?php endif; ?>
+</div>

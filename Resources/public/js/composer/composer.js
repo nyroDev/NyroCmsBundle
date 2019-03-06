@@ -224,7 +224,7 @@ jQuery(function ($) {
 					}).end()
 					.find('.composableSlideshow').each(function () {
 						var me = $(this),
-							big = me.find('.block_slideshow_big'),
+							big = me.find('.nyroCmsSlideshow_big'),
 							myPluploadOptions = $.extend(true, {}, pluploadOptions),
 							nb = me.data('nb'),
 							nav = me.children('ul'),
@@ -248,14 +248,14 @@ jQuery(function ($) {
 								$li = $(up.settings.drop_element).closest('li'),
 								textarea = $li.find('textarea[name*="images"]');
 							$li
-								.children('.block_slideshow_thumb').attr('href', $data.resized)
+								.children('.nyroCmsSlideshow_thumb').attr('href', $data.resized)
 								.children('img').attr('src', $data.resized2);
 							textarea.val(textarea.val() + "\n" + $data.file);
 							changed();
 						};
 
 						me
-							.on('click', '.block_slideshow_thumb', function (e) {
+							.on('click', '.nyroCmsSlideshow_thumb', function (e) {
 								e.preventDefault();
 							})
 							.on('click', '.composableSlideshowDelete', function (e) {
@@ -313,7 +313,7 @@ jQuery(function ($) {
 										inputValue: input.val(),
 										clbOk: function (val) {
 											input.val(val);
-											$li.find('.block_slideshow_thumb').children('img').attr('alt', val);
+											$li.find('.nyroCmsSlideshow_thumb').children('img').attr('alt', val);
 											changed();
 										}
 									});
@@ -331,7 +331,7 @@ jQuery(function ($) {
 							myPluploadOptionsAdd.events.FileUploaded = function (up, file, data) {
 								var $data = $.parseJSON(data.response),
 									htmlNew = '<li>';
-								htmlNew += '<a href="' + $data.resized + '" class="block_slideshow_thumb"><img src="' + $data.resized2 + '" alt="" /></a>';
+								htmlNew += '<a href="' + $data.resized + '" class="nyroCmsSlideshow_thumb"><img src="' + $data.resized2 + '" alt="" /></a>';
 								htmlNew += '<a href="#" class="composableSlideshowUpload">Upload</a><a href="#" class="composableSlideshowDrag">' + getIcon('drag') + '</a><a href="#" class="composableSlideshowEdit">' + getIcon('pencil') + '</a><a href="#" class="composableSlideshowDelete">' + getIcon('delete') + '</a>';
 								htmlNew += '<textarea name="contents[' + nb + '][ids][]">img-' + Date.now() + '</textarea>';
 								htmlNew += '<textarea name="contents[' + nb + '][images][]">' + $data.file + '</textarea>';
@@ -345,10 +345,10 @@ jQuery(function ($) {
 								htmlNew += '</li>';
 								var $li = $(htmlNew).appendTo(nav).find('.composableSlideshowUpload').nyroPlupload(myPluploadOptions).end();
 								if (nbLi == 0) {
-									me.closest('.block_slideshow').trigger('slideshowShow', [$li]);
+									me.closest('.nyroCmsSlideshow').trigger('slideshowShow', [$li]);
 									nbLi = 1;
 								} else {
-									me.closest('.block_slideshow').trigger('slideshowStartTimer');
+									me.closest('.nyroCmsSlideshow').trigger('slideshowStartTimer');
 								}
 								me.trigger('composableSlideshowAdded', [$li]);
 								changed();
@@ -371,7 +371,7 @@ jQuery(function ($) {
 						}
 
 						if (!parent.is('#composer') && $.fn.extend.slideshow) {
-							me.closest('.block_slideshow').slideshow();
+							me.closest('.nyroCmsSlideshow').slideshow();
 						}
 						me
 							.trigger('composableSlideshowInited')
