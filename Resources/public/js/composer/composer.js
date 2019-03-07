@@ -24,7 +24,10 @@ jQuery(function ($) {
 				multi_selection: false,
 				events: {
 					PostInit: function (up) {
-						$(up.settings.container).prev('.composableImg').show();
+						var imgBut = $(up.settings.container).prev('.composableImg');
+						if (!imgBut.closest('.composableImgCont').is('.composableImgBig')) {
+							imgBut.show();
+						}
 					},
 					BeforeUpload: function (up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
