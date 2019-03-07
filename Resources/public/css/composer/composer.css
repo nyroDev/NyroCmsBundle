@@ -1,4 +1,3 @@
-
 .icon {
 	width: 30px;
 	height: 30px;
@@ -30,10 +29,7 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-}
-
-.composableImg {
-	display: block !important;
+	text-align: left;
 }
 
 .composableImgCont .pluploadBrowse {
@@ -43,9 +39,36 @@
 	right: 0;
 	bottom: 0;
 	text-indent: -99em;
-	background: transparent !important;
+	background: #7495c2 !important;
 	border-radius: 0;
 	padding: 0;
+	opacity: 0;
+	transition: opacity 300ms;
+}
+
+.composableImgCont .pluploadBrowse:hover {
+	opacity: 0.5;
+}
+
+.composableImgCont.composableImgBig>.composableImg {
+	display: none;
+}
+
+.composableImgCont.composableImgBig>.pluploadCont {
+	bottom: auto;
+	right: auto;
+	z-index: 100;
+}
+
+.pluploadCont input {
+	cursor: pointer;
+}
+
+.composableImgCont.composableImgBig>.pluploadCont .pluploadBrowse {
+	text-indent: 0;
+	position: static !important;
+	opacity: 1;
+	padding: 5px 10px;
 }
 
 .bg_theme {
@@ -55,6 +78,7 @@
 	vertical-align: middle;
 	background: #fff;
 }
+
 #themeDemo.bg_theme {
 	margin: -2px 0 0 5px;
 }
@@ -68,28 +92,42 @@
 }
 
 .composerBlock:after {
-    content: '';
-    position: absolute;
-    left: -100vw;
-    right: -100vw;
-    bottom: 0;
-    border-bottom: 1px dotted #7495c2;
+	content: '';
+	position: absolute;
+	left: -100vw;
+	right: -100vw;
+	bottom: 0;
+	border-bottom: 1px dotted #7495c2;
 }
 
-.composerButtons {
+#composer .composerButtons {
 	position: absolute;
 	top: 0;
 	right: 0;
 	z-index: 1;
 	display: none;
+	text-align: right;
 }
 
-.composerBlock:hover .composerButtons {
+#composer .composableSel {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	display: none;
+}
+
+.composableSel>span:not(.active) {
+	display: none;
+}
+
+#composer .composerBlock:hover .composerButtons,
+#composer .composerBlock:hover .composableSel {
 	display: block;
 	z-index: 2;
 }
 
-.noChangeStructure .composerBlock .composerButtons {
+.noChangeStructure #composer .composerBlock .composerButtons {
 	display: none;
 }
 
@@ -102,9 +140,11 @@
 	padding-top: 10px;
 	z-index: 10;
 }
+
 #composerNavTool {
 	left: 0;
 }
+
 #composerNavButtons {
 	right: 0;
 }
@@ -116,7 +156,8 @@
 }
 
 .composerButtons a,
-.composerNav > label,
+.composableSel,
+.composerNav>label,
 .composerNavElt,
 #composer .composerSubmit,
 #composer .button.cancel {
@@ -137,7 +178,8 @@
 	padding: 8px 14px;
 	transition: background 300ms;
 }
-.composerNav > label {
+
+.composerNav>label {
 	position: relative;
 	width: 100%;
 	box-sizing: border-box;
@@ -157,7 +199,8 @@
 }
 
 .composerButtons a:hover,
-.composerNav > label:hover,
+.composableSel:hover,
+.composerNav>label:hover,
 .composerNavElt:hover,
 .composerNav input:checked+label,
 #composer .composerSubmit:hover,
@@ -167,10 +210,11 @@
 	text-decoration: none;
 }
 
-.composerNav > label span {
+.composerNav>label span {
 	font-weight: normal;
 }
-.composerNav > label:after {
+
+.composerNav>label:after {
 	content: '';
 	position: absolute;
 	top: 50%;
@@ -180,67 +224,79 @@
 	pointer-events: none;
 	border-width: 15px;
 	margin-top: -15px;
-    opacity: 0;
-    visibility: hidden;
-    transition: border-left-color 300ms, visibility 300ms, opacity 300ms;
+	opacity: 0;
+	visibility: hidden;
+	transition: border-left-color 300ms, visibility 300ms, opacity 300ms;
 }
-.composerNav:not(.composerNavLeft) > label:after {
+
+.composerNav:not(.composerNavLeft)>label:after {
 	left: 100%;
 	border-left-color: #7495c2;
 }
-.composerNav.composerNavLeft > label:after {
+
+.composerNav.composerNavLeft>label:after {
 	right: 100%;
 	border-right-color: #7495c2;
 }
+
 .composerNav input:checked+label:after {
-    opacity: 1;
-    visibility: visible;
+	opacity: 1;
+	visibility: visible;
 }
+
 .composerNav:not(.composerNavLeft) input:checked+label:after {
 	border-left-color: #000;
 }
+
 .composerNav.composerNavLeft input:checked+label:after {
 	border-right-color: #000;
 }
 
-#themeSelect > label {
+#themeSelect>label {
 	padding: 0 14px;
 	line-height: 30px;
 	vertical-align: middle;
 }
+
 #themeSelectChoices label {
 	display: block;
 }
 
 .composerNav {
-    position: relative;
+	position: relative;
 }
+
 .composerNav input {
-    display: none;
+	display: none;
 }
+
 .composerNav nav {
-    position: absolute;
+	position: absolute;
 	top: 0;
-    display: flex;
+	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
 	max-height: calc(100vh - 20px);
-    opacity: 0;
+	opacity: 0;
 	visibility: hidden;
-    transition: visibility 300ms, opacity 300ms;
+	transition: visibility 300ms, opacity 300ms;
 }
+
 .composerNav:not(.composerNavLeft) nav {
-    left: 100%;
-    margin-left: 20px;
+	left: 100%;
+	margin-left: 20px;
 }
+
 .composerNavLeft.composerNavLeft nav {
 	right: 100%;
-    margin-right: 20px;
-} 
-.composerNav input:checked ~ nav {
-    opacity: 1;
-    visibility: visible;
+	margin-right: 20px;
 }
+
+.composerNav input:checked~nav {
+	opacity: 1;
+	visibility: visible;
+}
+
 .composerNavElt {
 	margin-bottom: 1px;
 	margin-right: 1px;

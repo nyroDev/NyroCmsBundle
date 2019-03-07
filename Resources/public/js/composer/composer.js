@@ -23,6 +23,9 @@ jQuery(function ($) {
 				addFormVars: false,
 				multi_selection: false,
 				events: {
+					PostInit: function (up) {
+						$(up.settings.container).prev('.composableImg').show();
+					},
 					BeforeUpload: function (up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
 						up.settings.file_data_name = 'image',
@@ -83,7 +86,7 @@ jQuery(function ($) {
 									compImg.removeClass('composableImgExists');
 									textarea.val(textarea.val() + "\nDELETE");
 									if (compImg.is('.composableImgBig')) {
-										compImg.closest('.composerBlock').css('background-image', 'none');		
+										compImg.closest('.composerBlock').css('background-image', 'none');
 									}
 									changed();
 								}
@@ -118,6 +121,7 @@ jQuery(function ($) {
 							isObject = me.is('.composableObjectId'),
 							classPrefix = me.data('classprefix'),
 							name = me.data('name'),
+							spans = me.children('span'),
 							composerBlock = me.closest('.composerBlock'),
 							applyTo = composerBlock,
 							inputVal = composerBlock.find('#' + name);
@@ -128,7 +132,7 @@ jQuery(function ($) {
 							e.preventDefault();
 							var sels = [],
 								classes = [];
-							me.children('span').each(function () {
+							spans.each(function () {
 								var sp = $(this);
 								sels.push({
 									val: sp.data('val'),
@@ -154,6 +158,9 @@ jQuery(function ($) {
 												.trigger('composerSelChange', [name, newVal]);
 										} else {
 											applyTo.removeClass(classes.join(' ')).addClass(classPrefix + newVal);
+											spans
+												.filter('.active').removeClass('active').end()
+												.filter('[data-val="' + newVal + '"]').addClass('active');
 											composerBlock.trigger('composerSelChange', [name, newVal]);
 										}
 										inputVal.val(newVal);
@@ -324,10 +331,10 @@ jQuery(function ($) {
 						if (!$b.is('.noChangeMedia')) {
 							var addButton = $('<a href="#" class="composableSlideshowUpload">' + composer.data('addphoto') + '</a>').appendTo(big),
 								myPluploadOptionsAdd = $.extend(true, {}, myPluploadOptions);
-	
+
 							myPluploadOptionsAdd.texts.browse = composer.data('addphoto');
 							myPluploadOptionsAdd.multi_selection = true;
-	
+
 							myPluploadOptionsAdd.events.FileUploaded = function (up, file, data) {
 								var $data = $.parseJSON(data.response),
 									htmlNew = '<li>';
@@ -395,8 +402,8 @@ jQuery(function ($) {
 					var ident = 'new-' + curAdd,
 						html = $(
 							cacheBlock[url]
-								.replace(/--NEW--/g, ident)
-								.replace(/--ID--/g, Date.now())
+							.replace(/--NEW--/g, ident)
+							.replace(/--ID--/g, Date.now())
 						);
 
 					if (inserter) {
@@ -435,7 +442,7 @@ jQuery(function ($) {
 					me.closest('.select').toggleClass('opened');
 				}
 			}).end()
-			.on('click', '.composerNavConfirm', function(e) {
+			.on('click', '.composerNavConfirm', function (e) {
 				if (hasChanged) {
 					e.preventDefault();
 					var me = $(this);
@@ -513,17 +520,17 @@ jQuery(function ($) {
 
 		composer
 			.find('#availableBlocks a.availableBlock')
-				.on('click', function (e) {
-					e.preventDefault();
-					addBlock($(this).attr('href'));
-				})
-				.draggable({
-					revert: true,
-					connectToSortable: cont,
-					helper: function () {
-						return $(this).clone();
-					}
-				});
+			.on('click', function (e) {
+				e.preventDefault();
+				addBlock($(this).attr('href'));
+			})
+			.draggable({
+				revert: true,
+				connectToSortable: cont,
+				helper: function () {
+					return $(this).clone();
+				}
+			});
 
 		initComposable(main);
 	}
