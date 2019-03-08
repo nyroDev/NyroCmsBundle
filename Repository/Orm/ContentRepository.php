@@ -2,9 +2,10 @@
 
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
-use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 
 class ContentRepository extends NestedTreeRepository implements ContentRepositoryInterface
 {
@@ -132,7 +133,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $qb->getQuery()->getResult();
     }
 
-    public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null)
     {
         if ('\\' !== substr($class, 0, 1)) {
             $class = '\\'.$class;
@@ -146,13 +147,17 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
             $qb->andWhere('c.root = :root')->setParameter('root', $root->getId());
         }
 
+        if ($parent) {
+            $qb->andWhere('c.parent = :parent')->setParameter('parent', $parent->getId());
+        }
+
         $q = $qb->getQuery();
         $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
 
         return $q->getOneOrNullResult();
     }
 
-    protected function getQueryMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    protected function getQueryMenuOption($menuOption, Content $root = null, Content $parent = null)
     {
         $qb = $this->createQueryBuilder('c')
                 ->andWhere('c.menuOption LIKE :menuOption')
@@ -162,20 +167,24 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
             $qb->andWhere('c.root = :root')->setParameter('root', $root->getId());
         }
 
+        if ($parent) {
+            $qb->andWhere('c.parent = :parent')->setParameter('parent', $parent->getId());
+        }
+
         $q = $qb->getQuery();
         $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
 
         return $q;
     }
 
-    public function findOneByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null)
     {
-        return $this->getQueryMenuOption($menuOption, $root)->getOneOrNullResult();
+        return $this->getQueryMenuOption($menuOption, $root, $parent)->getOneOrNullResult();
     }
 
-    public function findByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null)
     {
-        return $this->getQueryMenuOption($menuOption, $root)->getResult();
+        return $this->getQueryMenuOption($menuOption, $root, $parent)->getResult();
     }
 
     public function getFormQueryBuilder($root, $ignoreId = null)

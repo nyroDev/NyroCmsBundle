@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Repository;
 
 use Gedmo\Tree\RepositoryInterface;
+use NyroDev\NyroCmsBundle\Model\Content;
 
 interface ContentRepositoryInterface extends RepositoryInterface
 {
@@ -18,11 +19,11 @@ interface ContentRepositoryInterface extends RepositoryInterface
 
     public function findWithContentHandler($rootId = null, $state = null);
 
-    public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null);
+    public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null);
 
-    public function findOneByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null);
+    public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null);
 
-    public function findByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null);
+    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null);
 
     public function getFormQueryBuilder($root, $ignoreId = null);
 }
