@@ -1,4 +1,4 @@
-<div class="slideshow nyroCmsSlideshow">
+<div class="slideshow nyroCmsSlideshow"<?php echo isset($timerSecond) ? ' data-timer-second="'.$timerSecond.'"' : ''; ?>>
 <?php if ($admin): ?>
 <div class="composableSlideshow"
 	data-nb="<?php echo $nb; ?>"

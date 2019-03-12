@@ -5,6 +5,7 @@ Cms Bundle for Symfony
 - copy-webpack-plugin
 - jquery
 - jquery-ui
+- jquery-mobile (for slideshow swipe feature)
 
 # Needed configuration
 config/packages/nyrodev.yaml

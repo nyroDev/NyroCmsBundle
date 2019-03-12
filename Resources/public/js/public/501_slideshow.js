@@ -4,8 +4,9 @@ jQuery(function ($) {
 	$.fn.extend({
 		slideshow: function () {
 			return this.each(function () {
-				if ($(this).data('slidehowInited'))
+				if ($(this).data('slidehowInited')) {
 					return;
+				}
 				var me = $(this).data('slidehowInited', true),
 					big = me.find('.nyroCmsSlideshow_big'),
 					bigImg = big.children('img'),
@@ -16,6 +17,7 @@ jQuery(function ($) {
 					ul = me.find('ul'),
 					excludeSelector = '.deleted, .ui-state-highlight',
 					animating = false,
+					timerSecond = parseInt(me.data('timerSecond')) || 5,
 					timer,
 					show = function (li) {
 						if (animating) {
@@ -73,7 +75,9 @@ jQuery(function ($) {
 					},
 					startTimer = function () {
 						endTimer();
-						timer = setTimeout(showNext, 5000);
+						if (timerSecond > 0) {
+							timer = setTimeout(showNext, timerSecond * 1000);
+						}
 					};
 
 				ul.on('click', '.nyroCmsSlideshow_thumb', function (e) {
@@ -91,6 +95,7 @@ jQuery(function ($) {
 					e.preventDefault();
 					showPrev();
 				});
+
 				big
 					.on('swiperight', function () {
 						prev.trigger('click');
@@ -98,6 +103,7 @@ jQuery(function ($) {
 					.on('swipeleft', function () {
 						next.trigger('click');
 					});
+
 				me
 					.on('slideshowShow', function (e, li) {
 						show(li);
