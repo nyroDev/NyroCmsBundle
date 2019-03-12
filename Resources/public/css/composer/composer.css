@@ -23,7 +23,14 @@
 	display: inline;
 }
 
-.composableImgCont .pluploadCont {
+.composableFileCont {
+	position: relative;
+	width: 100px;
+	height: 30px;
+}
+
+.composableImgCont .pluploadCont,
+.composableFileCont .pluploadCont {
 	position: absolute !important;
 	top: 0;
 	left: 0;
@@ -32,16 +39,20 @@
 	text-align: left;
 }
 
-.composableImgCont .pluploadBrowse {
+.composableImgCont .pluploadBrowse,
+.composableFileCont .pluploadBrowse {
 	position: absolute !important;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	text-indent: -99em;
 	background: #7495c2 !important;
 	border-radius: 0;
 	padding: 0;
+}
+
+.composableImgCont .pluploadBrowse {
+	text-indent: -99em;
 	opacity: 0;
 	transition: opacity 300ms;
 }
@@ -64,7 +75,8 @@
 	cursor: pointer;
 }
 
-.composableImgCont.composableImgBig>.pluploadCont .pluploadBrowse {
+.composableImgCont.composableImgBig>.pluploadCont .pluploadBrowse,
+.composableFileCont .pluploadBrowse {
 	text-indent: 0;
 	position: static !important;
 	opacity: 1;

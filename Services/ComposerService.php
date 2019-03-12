@@ -9,12 +9,18 @@ use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Composable;
+use NyroDev\NyroCmsBundle\Model\ComposableHandler;
+use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -161,7 +167,7 @@ class ComposerService extends AbstractService
     public function cancelUrl(Composable $row)
     {
         $ret = '#';
-        if ($row instanceof \NyroDev\NyroCmsBundle\Model\ContentSpec) {
+        if ($row instanceof ContentSpec) {
             $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $ret = $this->get(NyrodevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
@@ -254,22 +260,26 @@ class ComposerService extends AbstractService
     }
 
     protected $existingImages = array();
+    protected $existingFiles = array();
 
     public function initComposerFor(Composable $row, $lang, $contentFieldName = 'content')
     {
         $this->existingImages = array();
+        $this->existingFiles = array();
 
         if ($lang != $this->get(NyroCmsService::class)->getDefaultLocale($row)) {
-            $this->existingImages = $this->getImages($row->getContent());
+            $tmp = $this->getImagesAndFiles($row, $row->getContent());
+            $this->existingImages = $tmp[0];
+            $this->existingFiles = $tmp[1];
         }
 
         foreach ($row->getTranslations() as $tr) {
             if ($tr->getField() == $contentFieldName && $tr->getLocale() != $lang) {
-                $this->existingImages += $this->getImages(json_decode($tr->getContent(), true));
+                $tmp = $this->getImagesAndFiles($row, json_decode($tr->getContent(), true));
+                $this->existingImages += $tmp[0];
+                $this->existingFiles += $tmp[1];
             }
         }
-
-        return $this->existingImages;
     }
 
     public function setExistingImages(array $images)
@@ -277,25 +287,54 @@ class ComposerService extends AbstractService
         $this->existingImages = $images;
     }
 
-    protected function getImages(array $blocks)
+    public function getExistingImages()
     {
+        return $this->existingImages;
+    }
+
+    public function setExistingFiles(array $files)
+    {
+        $this->existingFiles = $files;
+    }
+
+    public function getExistingFiles()
+    {
+        return $this->existingFiles;
+    }
+
+    protected function getImagesAndFiles(Composable $row, array $blocks)
+    {
+        $configs = [];
+
         $images = array();
+        $files = array();
         foreach ($blocks as $content) {
+            if (!isset($configs[$content['type']])) {
+                $configs[$content['type']] = $this->getBlockConfig($row, $content['type']);
+            }
+
             $contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : array();
-            foreach ($contents as $name => $c) {
-                if ('images' == $name) {
-                    foreach ($c as $img) {
-                        if (isset($img['file'])) {
-                            $images[] = $img['file'];
+
+            foreach ($configs[$content['type']] as $k => $v) {
+                if (isset($contents[$k]) && $contents[$k]) {
+                    if (isset($v['image']) && $v['image']) {
+                        if (isset($v['multiple']) && $v['multiple']) {
+                            if (is_array($contents[$k])) {
+                                foreach ($contents[$k] as $k => $img) {
+                                    $images[] = $img['file'];
+                                }
+                            }
+                        } else {
+                            $images[] = $contents[$k];
                         }
+                    } elseif (isset($v['file']) && $v['file']) {
+                        $files[] = $contents[$k];
                     }
-                } elseif (isset($c['file']) && $c['file']) {
-                    $images[] = $c['file'];
                 }
             }
         }
 
-        return $images;
+        return [$images, $files];
     }
 
     public function getBlockConfig(Composable $row, $block)
@@ -325,6 +364,7 @@ class ComposerService extends AbstractService
         if ($addExtract) {
             $ret['texts'] = array();
             $ret['images'] = array();
+            $ret['files'] = array();
         }
         $cfg = $this->getConfig($row);
         if (isset($cfg['default_blocks']) && isset($cfg['default_blocks'][$block])) {
@@ -338,7 +378,7 @@ class ComposerService extends AbstractService
                             if (is_array($defaults[$k])) {
                                 $multipleFields = isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields']);
                                 if (is_array($defaults[$k][0])) {
-                                    // We're coming from a non request call, so transform structure as it shoudl have been
+                                    // We're coming from a non request call, so transform structure as it should have been
                                     $tmp = [];
                                     $defaults['titles'] = [];
                                     $defaults['ids'] = [];
@@ -397,6 +437,11 @@ class ComposerService extends AbstractService
                                 $ret['images'][] = $ret['contents'][$k];
                             }
                         }
+                    } elseif (isset($blockConfig[$k]) && isset($blockConfig[$k]['file']) && $blockConfig[$k]['file']) {
+                        $ret['contents'][$k] = $this->handleDefaultFile($defaults[$k]);
+                        if ($addExtract) {
+                            $ret['files'][] = $ret['contents'][$k];
+                        }
                     } else {
                         $ret['contents'][$k] = $defaults[$k];
                         if ($addExtract) {
@@ -432,6 +477,9 @@ class ComposerService extends AbstractService
                         $images = array_filter(explode("\n", trim($contents[$k])));
                         $this->removeImages($images);
                     }
+                } elseif (isset($v['file']) && $v['file']) {
+                    $files = array_filter(explode("\n", trim($contents[$k])));
+                    $this->removeFiles($files);
                 }
             }
         }
@@ -450,19 +498,7 @@ class ComposerService extends AbstractService
             $ret['resized2'] = $this->imageResizeConfig($file, $request->request->get('cfg2'));
         }
 
-        if ($request->request->has('more')) {
-            // We have a size defined here, it's for home_extranet block
-            $more = $request->request->get('more');
-            $tmp = $this->getExtranetImages($file, $more);
-            if (count($tmp)) {
-                $ret['datas'] = array();
-                foreach ($tmp as $k => $v) {
-                    $ret['datas']['image_'.$k] = $v;
-                }
-            }
-        }
-
-        return new \Symfony\Component\HttpFoundation\JsonResponse($ret);
+        return new JsonResponse($ret);
     }
 
     protected function handleDefaultImage($defaults, &$changed = false)
@@ -487,7 +523,7 @@ class ComposerService extends AbstractService
     {
         // Clean images to keep existing ones
         $images = array_diff(array_map('trim', $images), $this->existingImages);
-        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs = new Filesystem();
         foreach ($images as $image) {
             if (trim($image) && 'DELETE' != $image) {
                 $file = $this->getRootImageDir().'/'.trim($image);
@@ -499,13 +535,57 @@ class ComposerService extends AbstractService
         }
     }
 
+    public function handleFileUpload(Request $request)
+    {
+        $fileUp = $request->files->get('file');
+        $file = $this->fileUpload($fileUp);
+        $ret = array(
+            'file' => $file,
+        );
+
+        return new JsonResponse($ret);
+    }
+
+    protected function handleDefaultFile($defaults, &$changed = false)
+    {
+        $ret = null;
+        $tmp = array_filter(explode("\n", trim($defaults)));
+        $nb = count($tmp);
+        if ($nb > 0) {
+            $ret = $tmp[$nb - 1];
+            if ('DELETE' == $ret) {
+                $ret = null;
+            }
+            unset($tmp[$nb - 1]);
+            $changed = count($tmp) > 0;
+            $this->removeFiles($tmp);
+        }
+
+        return $ret;
+    }
+
+    protected function removeFiles(array $files)
+    {
+        // Clean files to keep existing ones
+        $files = array_diff(array_map('trim', $files), $this->existingFiles);
+        $fs = new Filesystem();
+        foreach ($files as $file) {
+            if (trim($file) && 'DELETE' != $file) {
+                $fileUp = $this->getRootImageDir().'/'.trim($file);
+                if ($fs->exists($fileUp)) {
+                    $fs->remove($fileUp);
+                }
+            }
+        }
+    }
+
     public function render(Composable $row, $handlerContent = null, $handlerAction = null, $admin = false)
     {
         $ret = null;
         $ret = '<div class="composer composer_'.$this->getCssTheme($row).' '.$this->getWrapperCssTheme($row).'"'.($admin ? ' id="composerCont"' : '').'>';
         $blockName = 'div';
 
-        $hasHandler = $row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler();
+        $hasHandler = $row instanceof ComposableHandler && $row->getContentHandler();
         if (0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
@@ -596,7 +676,7 @@ class ComposerService extends AbstractService
     {
         if (is_null($this->rootImageDir)) {
             $this->rootImageDir = $this->kernel->getProjectDir().'/public/'.$this->getImageDir();
-            $fs = new \Symfony\Component\Filesystem\Filesystem();
+            $fs = new Filesystem();
             if (!$fs->exists($this->rootImageDir)) {
                 $fs->mkdir($this->rootImageDir);
             }
@@ -605,7 +685,7 @@ class ComposerService extends AbstractService
         return $this->rootImageDir;
     }
 
-    public function imageUpload(\Symfony\Component\HttpFoundation\File\UploadedFile $image)
+    public function imageUpload(UploadedFile $image)
     {
         $dir = $this->getRootImageDir();
         $filename = $this->get(NyrodevService::class)->getUniqFileName($dir, $image->getClientOriginalName());
@@ -645,10 +725,24 @@ class ComposerService extends AbstractService
         }
 
         if (!$ret) {
-            $ret = 'data:'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::CONTENT_TYPE.';base64,'.\NyroDev\UtilityBundle\Utility\TransparentPixelResponse::IMAGE_CONTENT;
+            $ret = 'data:'.TransparentPixelResponse::CONTENT_TYPE.';base64,'.TransparentPixelResponse::IMAGE_CONTENT;
         }
 
         return $ret;
+    }
+
+    public function getFileUrl($file)
+    {
+        return $this->assetsHelper->getUrl($this->getImageDir().'/'.$file);
+    }
+
+    public function fileUpload(UploadedFile $file)
+    {
+        $dir = $this->getRootImageDir();
+        $filename = $this->get(NyrodevService::class)->getUniqFileName($dir, $file->getClientOriginalName());
+        $file->move($dir, $filename);
+
+        return $filename;
     }
 
     public function afterComposerEdition(Composable $row)
@@ -812,6 +906,7 @@ class ComposerService extends AbstractService
                             }
                             unset($block['texts']);
                             unset($block['images']);
+                            unset($block['files']);
                             $newConts[] = $block;
                         }
 

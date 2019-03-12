@@ -31,11 +31,11 @@ jQuery(function ($) {
 					},
 					BeforeUpload: function (up, file) {
 						var compImg = $(up.settings.drop_element).closest('.composableImgCont');
-						up.settings.file_data_name = 'image',
-							up.settings.multipart_params = {
-								imageUpload: 1,
-								cfg: compImg.data('cfg')
-							};
+						up.settings.file_data_name = 'image';
+						up.settings.multipart_params = {
+							imageUpload: 1,
+							cfg: compImg.data('cfg')
+						};
 						if (compImg.data('more')) {
 							up.settings.multipart_params.more = compImg.data('more');
 						}
@@ -43,7 +43,7 @@ jQuery(function ($) {
 					FileUploaded: function (up, file, data) {
 						var $data = $.parseJSON(data.response),
 							compImg = $(up.settings.drop_element).closest('.composableImgCont'),
-							textarea = compImg.find('textarea'),
+							textarea = compImg.find('textarea#'+compImg.data('name')),
 							block = compImg.closest('.composerBlock');
 						if (compImg.is('.composableImgBig')) {
 							block.css('background-image', 'url(' + $data.resized + ')');
@@ -57,6 +57,40 @@ jQuery(function ($) {
 							block.trigger('composerImgChange');
 						}
 						compImg.addClass('composableImgExists');
+						textarea.val(textarea.val() + "\n" + $data.file);
+						changed();
+					}
+				},
+				onAllComplete: false
+			}),
+			pluploadFileOptions = composer.nyroPluploadDataSearch({
+				showCancelAll: false,
+				addFormVars: false,
+				multi_selection: false,
+				events: {
+					BeforeUpload: function (up, file) {
+						var compFile = $(up.settings.drop_element).closest('.composableFileCont');
+						up.settings.file_data_name = 'file';
+						up.settings.multipart_params = {
+							fileUpload: 1,
+							cfg: compFile.data('cfg')
+						};
+						if (compFile.data('more')) {
+							up.settings.multipart_params.more = compFile.data('more');
+						}
+					},
+					FileUploaded: function (up, file, data) {
+						var $data = $.parseJSON(data.response),
+							compFile = $(up.settings.drop_element).closest('.composableFileCont'),
+							textarea = compFile.find('textarea'),
+							block = compFile.closest('.composerBlock');
+						if ($data.datas) {
+							$.each($data.datas, function (k, v) {
+								block.data(k, v);
+							});
+							block.trigger('composerFileChange');
+						}
+						compFile.addClass('composableFileExists');
 						textarea.val(textarea.val() + "\n" + $data.file);
 						changed();
 					}
@@ -91,6 +125,36 @@ jQuery(function ($) {
 									if (compImg.is('.composableImgBig')) {
 										compImg.closest('.composerBlock').css('background-image', 'none');
 									}
+									changed();
+								}
+							});
+						});
+					}).end()
+					.find('.composableFile')
+						.each(function() {
+							var me = $(this),
+								compFile = me.closest('.composableFileCont'),
+								opts = $.extend({}, pluploadFileOptions);
+
+							if (compFile.data('cfgUpload')) {
+								opts = $.extend(opts, compFile.data('cfgUpload'));
+							}
+
+							me.nyroPlupload(opts);
+						}).end()
+					.find('.composableFileDelete').each(function () {
+						var me = $(this),
+							compFile = me.prev('.composableFileCont'),
+							textarea = compFile.find('textarea');
+						me.on('click', function (e) {
+							e.preventDefault();
+							$.nmConfirm({
+								text: me.data('confirm'),
+								ok: txtConfirm,
+								cancel: txtCancel,
+								clbOk: function () {
+									compImg.removeClass('composableFileExists');
+									textarea.val(textarea.val() + "\nDELETE");
 									changed();
 								}
 							});

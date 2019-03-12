@@ -60,6 +60,8 @@ class AdminComposerController extends AbstractAdminController
         if ($request->isMethod('post')) {
             if ($request->request->has('imageUpload') && $request->files->has('image')) {
                 return $composerService->handleImageUpload($request);
+            } elseif ($request->request->has('fileUpload') && $request->files->has('file')) {
+                return $composerService->handleFileUpload($request);
             } elseif ($request->request->has('video')) {
                 $ret = array();
 
@@ -121,6 +123,7 @@ class AdminComposerController extends AbstractAdminController
                         }
                         unset($block['texts']);
                         unset($block['images']);
+                        unset($block['files']);
                         $newContents[] = $block;
                     }
                 }
