@@ -164,7 +164,7 @@ jQuery(function ($) {
 						var me = $(this),
 							name = me.data('name'),
 							inputUrl = me.closest('.composerBlock').find('#' + name),
-							handler = $('<a href="#" class="composableUrlHandler" title="' + composer.data('linkurl') + '"></a>').insertAfter(me);
+							handler = $('<a href="#" class="composableUrlHandler" title="' + composer.data('linkurl') + '">' + composer.data('linkurl') + '</a>').insertAfter(me);
 						handler.on('click', function (e) {
 							e.preventDefault();
 							$.nmConfirm({

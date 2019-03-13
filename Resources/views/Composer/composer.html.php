@@ -42,6 +42,7 @@ $attrs['data-addphoto'] = $view['nyrodev']->trans('admin.composer.action.addPhot
 $attrs['data-slideshowtitle'] = $view['nyrodev']->trans('admin.composer.action.slideshowTitle');
 $attrs['data-slideshowdelete'] = $view['nyrodev']->trans('admin.composer.action.slideshowDelete');
 $attrs['data-deleteblock'] = $view['nyrodev']->trans('admin.composer.action.deleteBlock');
+$attrs['data-linkurl'] = $view['nyrodev']->trans('admin.composer.action.linkUrl');
 $attrs['data-icon'] = $view['nyrocms_admin']->getIcon('TPL');
 
 $attrsHtml = null;

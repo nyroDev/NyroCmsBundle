@@ -72,7 +72,8 @@ admin:
       deleteBlock: Êtes-vous sûr de vouloir supprimer ce bloc ?
       deleteImgConfirm: Êtes-vous sûr de vouloir supprimer cette image ?
       video: Sélectionner une URL vidéo
-      videoAutoplay: Lecture automatique?
+      videoAutoplay: Lecture automatique ?
+      linkUrl: Modifier la destination
       home_linkUrl: Modifier la destination
       home_title_bg: Modifier la couleur de fond du titre
       home_text_bg: Modifier la couleur de fond du texte

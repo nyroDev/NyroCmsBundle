@@ -171,6 +171,7 @@
 .composableSel,
 .composerNav>label,
 .composerNavElt,
+.composableUrlHandler,
 #composer .composerSubmit,
 #composer .button.cancel {
 	display: inline-block;
@@ -214,6 +215,7 @@
 .composableSel:hover,
 .composerNav>label:hover,
 .composerNavElt:hover,
+.composableUrlHandler:hover,
 .composerNav input:checked+label,
 #composer .composerSubmit:hover,
 #composer .button.cancel:hover {
