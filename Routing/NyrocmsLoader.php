@@ -2,13 +2,14 @@
 
 namespace NyroDev\NyroCmsBundle\Routing;
 
+use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class NyrocmsLoader extends Loader
+class NyroCmsLoader extends Loader
 {
     private $loaded = array();
 
@@ -136,6 +137,21 @@ class NyrocmsLoader extends Loader
         $this->loaded[$res[0]] = true;
 
         return $routes;
+    }
+
+    public function findMatchingController(Content $content)
+    {
+        $handler = $content->getVeryParent()->getHandler();
+
+        $resources = $this->container->get(NyroCmsService::class)->getParameter('nyrocms.route_resources');
+        foreach ($resources as $resource) {
+            $res = explode('@', $resource);
+            if ($res[0] === $handler) {
+                return $res[1];
+            }
+        }
+
+        return null;
     }
 
     public function supports($resource, $type = null)

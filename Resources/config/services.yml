@@ -40,7 +40,7 @@ services:
         alias: NyroDev\NyroCmsBundle\Services\ComposerService
         public: true
     
-    NyroDev\NyroCmsBundle\Routing\NyrocmsLoader:
+    NyroDev\NyroCmsBundle\Routing\NyroCmsLoader:
         arguments: ['@service_container']
         tags:
             - { name: routing.loader }

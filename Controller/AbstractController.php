@@ -114,25 +114,34 @@ abstract class AbstractController extends NyroDevAbstractController
         return $this->handleContent($request, $content, $contentSpec, $handler);
     }
 
-    protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null): Response
+    public function directContent(Request $request, Content $content): Response
+    {
+        $this->setGlobalRootContent();
+
+        return $this->handleContent($request, $content, null, null, true);
+    }
+
+    protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null, $ignoreRedirects = false): Response
     {
         $routePrm = array();
         if ($handlerAction) {
             $routePrm['handler'] = $handlerAction;
         }
 
-        $redirect = null;
+        if (!$ignoreRedirects) {
+            $redirect = null;
 
-        if ($content->getGoUrl()) {
-            $redirect = $this->redirect($content->getGoUrl());
-        }
+            if ($content->getGoUrl()) {
+                $redirect = $this->redirect($content->getGoUrl());
+            }
 
-        if (!$redirect) {
-            $redirect = $this->get(NyrodevService::class)->redirectIfNotUrl($this->get(NyroCmsService::class)->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
-        }
+            if (!$redirect) {
+                $redirect = $this->get(NyrodevService::class)->redirectIfNotUrl($this->get(NyroCmsService::class)->getUrlFor($contentSpec ? $contentSpec : $content, false, $routePrm), $this->getAllowedParams($content));
+            }
 
-        if ($redirect) {
-            return $redirect;
+            if ($redirect) {
+                return $redirect;
+            }
         }
 
         if (0 === count($content->getContent()) || $content->getRedirectToChildren()) {
