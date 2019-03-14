@@ -90,7 +90,7 @@ class UserService extends nyroDevAbstractService
 
             $now = new \DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
-                $form = $this->get('form.factory')->createBuilder('form')
+                $form = $this->get('form.factory')->createBuilder()
                     ->add('password', RepeatedType::class, array(
                         'type' => PasswordType::class,
                         'first_options' => array(
