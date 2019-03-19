@@ -228,7 +228,7 @@ jQuery(function ($) {
 							nb = me.data('nb'),
 							nav = me.children('ul'),
 							nbLi = nav.children().length,
-							multipleFields = me.data('multiplefields').split(','),
+							multipleFields = me.data('multiplefields') ? me.data('multiplefields').split(',') : false,
 							sizebig = me.data('sizebig'),
 							sizebigCfg = me.data('sizebigcfg'),
 							sizethumbCfg = me.data('sizethumbcfg'),
