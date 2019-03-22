@@ -15,15 +15,15 @@ interface ContentRepositoryInterface extends RepositoryInterface
 
     public function findByLog($field, $value);
 
-    public function search(array $searches, $rootId = null, $state = null);
+    public function search(array $searches, $rootId = null, $state = null, $sortByField = null, $direction = 'ASC');
 
-    public function findWithContentHandler($rootId = null, $state = null);
+    public function findWithContentHandler($rootId = null, $state = null, $sortByField = null, $direction = 'ASC');
 
     public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null);
 
     public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null);
 
-    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null);
+    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC');
 
     public function getFormQueryBuilder($root, $ignoreId = null);
 }

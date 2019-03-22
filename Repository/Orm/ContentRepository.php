@@ -93,7 +93,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $ret;
     }
 
-    public function search(array $searches, $rootId = null, $state = null)
+    public function search(array $searches, $rootId = null, $state = null, $sortByField = null, $direction = 'ASC')
     {
         $query = $parameters = array();
         foreach ($searches as $k => $v) {
@@ -112,12 +112,14 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
             $qb->andWhere('c.state = :state')->setParameter('state', $state);
         }
 
+        $this->addQbSort($qb, $sortByField, $direction);
+
         return $qb->getQuery()
                 ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
                 ->getResult();
     }
 
-    public function findWithContentHandler($rootId = null, $state = null)
+    public function findWithContentHandler($rootId = null, $state = null, $sortByField = null, $direction = 'ASC')
     {
         $qb = $this->createQueryBuilder('c')
                 ->andWhere('c.contentHandler IS NOT NULL');
@@ -129,6 +131,8 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         if (!is_null($state)) {
             $qb->andWhere('c.state = :state')->setParameter('state', $state);
         }
+
+        $this->addQbSort($qb, $sortByField, $direction);
 
         return $qb->getQuery()->getResult();
     }
@@ -157,7 +161,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $q->getOneOrNullResult();
     }
 
-    protected function getQueryMenuOption($menuOption, Content $root = null, Content $parent = null)
+    protected function getQueryMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC')
     {
         $qb = $this->createQueryBuilder('c')
                 ->andWhere('c.menuOption LIKE :menuOption')
@@ -171,10 +175,29 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
             $qb->andWhere('c.parent = :parent')->setParameter('parent', $parent->getId());
         }
 
+        $this->addQbSort($qb, $sortByField, $direction);
+
         $q = $qb->getQuery();
         $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
 
         return $q;
+    }
+
+    protected function addQbSort($qb, $sortByField = null, $direction = 'ASC')
+    {
+        if (!$sortByField) {
+            $config = $this->listener->getConfiguration($this->_em, $this->getClassMetadata()->name);
+            $qb->orderBy('c.'.$config['left'], 'ASC');
+        } elseif (is_array($sortByField)) {
+            $fields = '';
+            foreach ($sortByField as $field) {
+                $fields .= 'c.'.$field.',';
+            }
+            $fields = rtrim($fields, ',');
+            $qb->orderBy($fields, $direction);
+        } else {
+            $qb->orderBy('c.'.$sortByField, $direction);
+        }
     }
 
     public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null)
@@ -182,9 +205,9 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $this->getQueryMenuOption($menuOption, $root, $parent)->getOneOrNullResult();
     }
 
-    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null)
+    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC')
     {
-        return $this->getQueryMenuOption($menuOption, $root, $parent)->getResult();
+        return $this->getQueryMenuOption($menuOption, $root, $parent, $sortByField, $direction)->getResult();
     }
 
     public function getFormQueryBuilder($root, $ignoreId = null)
