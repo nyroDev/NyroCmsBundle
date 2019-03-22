@@ -24,6 +24,34 @@ nyro_dev_nyro_cms:
         namespace: App\Entity
 ```
 
+config/packages/stof_doctrine_extensions.yaml
+```yaml
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    translation_fallback: true
+    class:
+        loggable: NyroDev\UtilityBundle\EventListener\LoggableListener
+        translatable: NyroDev\UtilityBundle\EventListener\TranslatableListener
+    orm:
+        default:
+            tree: true
+            sortable: true
+            loggable: true
+            translatable: true
+            timestampable: true
+            softdeleteable: true
+```
+
+config/packages/doctrine.yaml
+```yaml
+doctrine:
+    orm:
+        filters:
+            softdeleteable:
+                class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
+                enabled: true
+```
+
 config/routes/nyrocms.yaml
 ```yaml
 nyrocms_admin:
