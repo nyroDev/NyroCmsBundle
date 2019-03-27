@@ -277,7 +277,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->setGlobalRootContent();
         $urls = array();
         foreach ($this->get(NyroCmsService::class)->getLocales($this->getRootContent()) as $locale) {
-            $urls[] = $this->generateUrl($this->getRootHandler().'_sitemapXml', array('_locale' => $locale, '_format' => 'xml'), true);
+            $urls[] = $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_sitemapXml', array('_locale' => $locale, '_format' => 'xml'), true);
         }
 
         return $this->render('NyroDevNyroCmsBundle:Default:sitemapIndex.xml.php', array(
