@@ -18,6 +18,7 @@ parameters:
 
 nyro_dev_utility:
     db_driver: orm
+    setLocale: true
 
 nyro_dev_nyro_cms:
     model:
