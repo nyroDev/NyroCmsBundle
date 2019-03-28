@@ -6,9 +6,12 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TransatableHintTrait;
 
 class ContentSpecRepository extends SortableRepository implements ContentSpecRepositoryInterface
 {
+    use TransatableHintTrait;
+
     /**
      * @param type                                          $contentHandlerId
      * @param type                                          $state
@@ -82,19 +85,20 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
             $qb->setMaxResults($limit);
         }
 
-        return $qb
-                ->getQuery()
-                ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-                ->getResult();
+        $q = $qb->getQuery();
+        $this->setHint($q);
+
+        return $q->getResult();
     }
 
     public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array())
     {
-        return $this
-                ->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)
-                ->getQuery()
-                ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-                ->getOneOrNullResult();
+        $q = $this
+            ->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)
+            ->getQuery();
+        $this->setHint($q);
+
+        return $q->getOneOrNullResult();
     }
 
     public function getAfters(ContentSpec $contentSpec)
@@ -121,11 +125,12 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
             $qb->andWhere('cs.state IN (:states)')->setParameter('states', $states);
         }
 
-        return $qb
-                ->setMaxResults(1)
-                ->getQuery()
-                ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-                ->getOneOrNullResult();
+        $q = $qb
+            ->setMaxResults(1)
+            ->getQuery();
+        $this->setHint($q);
+
+        return $q->getOneOrNullResult();
     }
 
     public function search(array $searches, array $contentHandlersIds = array(), $state = null)
@@ -147,8 +152,10 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
             $qb->andWhere('cs.state = :state')->setParameter('state', $state);
         }
 
-        return $qb->getQuery()
-            ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-            ->getResult();
+        $q = $qb->getQuery();
+
+        $this->setHint($q);
+
+        return $q->getResult();
     }
 }

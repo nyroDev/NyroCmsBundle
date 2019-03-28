@@ -6,13 +6,16 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TransatableHintTrait;
 
 class ContentRepository extends NestedTreeRepository implements ContentRepositoryInterface
 {
+    use TransatableHintTrait;
+
     public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
         $q = $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
-        $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
+        $this->setHint($q);
 
         return $q->getResult();
     }
@@ -22,7 +25,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $qb = $this->childrenQueryBuilder($node, $direct);
         $qb->andWhere('node.state = :state')->setParameter('state', \NyroDev\NyroCmsBundle\Model\Content::STATE_ACTIVE);
         $q = $qb->getQuery();
-        $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
+        $this->setHint($q);
 
         return $q->getResult();
     }
@@ -38,7 +41,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         }
 
         $q = $qb->getQuery();
-        $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
+        $this->setHint($q);
 
         return $q->getResult();
     }
@@ -53,11 +56,10 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
             $qb->andWhere('c.state IN (:states)')->setParameter('states', $states);
         }
 
-        return $qb
-            ->setMaxResults(1)
-            ->getQuery()
-            ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-            ->getOneOrNullResult();
+        $q = $qb->setMaxResults(1)->getQuery();
+        $this->setHint($q);
+
+        return $q->getOneOrNullResult();
     }
 
     public function findByLog($field, $value)
@@ -114,9 +116,10 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 
         $this->addQbSort($qb, $sortByField, $direction);
 
-        return $qb->getQuery()
-                ->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker')
-                ->getResult();
+        $q = $qb->getQuery();
+        $this->setHint($q);
+
+        return $q->getResult();
     }
 
     public function findWithContentHandler($rootId = null, $state = null, $sortByField = null, $direction = 'ASC')
@@ -156,7 +159,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         }
 
         $q = $qb->getQuery();
-        $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
+        $this->setHint($q);
 
         return $q->getOneOrNullResult();
     }
@@ -178,7 +181,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $this->addQbSort($qb, $sortByField, $direction);
 
         $q = $qb->getQuery();
-        $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
+        $this->setHint($q);
 
         return $q;
     }
