@@ -6,11 +6,11 @@ use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
-use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TransatableHintTrait;
+use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TranslatableHintTrait;
 
 class ContentSpecRepository extends SortableRepository implements ContentSpecRepositoryInterface
 {
-    use TransatableHintTrait;
+    use TranslatableHintTrait;
 
     /**
      * @param type                                          $contentHandlerId

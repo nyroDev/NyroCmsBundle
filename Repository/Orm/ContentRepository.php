@@ -6,11 +6,11 @@ use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
-use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TransatableHintTrait;
+use NyroDev\NyroCmsBundle\Repository\Orm\Traits\TranslatableHintTrait;
 
 class ContentRepository extends NestedTreeRepository implements ContentRepositoryInterface
 {
-    use TransatableHintTrait;
+    use TranslatableHintTrait;
 
     public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
     {
