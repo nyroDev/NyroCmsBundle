@@ -1,4 +1,5 @@
-<div class="slideshow nyroCmsSlideshow"<?php echo isset($timerSecond) ? ' data-timer-second="'.$timerSecond.'"' : ''; ?>>
+<?php $nbImages = isset($contents['images']) && is_array($contents['images']) ? count($contents['images']) : 0; ?>
+<div class="slideshow nyroCmsSlideshow nyroCmsSlideshow-nb-<?php echo $nbImages; ?>"<?php echo isset($timerSecond) ? ' data-timer-second="'.$timerSecond.'"' : ''; ?>>
 <?php if ($admin): ?>
 <div class="composableSlideshow"
 	data-nb="<?php echo $nb; ?>"
@@ -9,7 +10,7 @@
     data-multiplefields="<?php echo $view->escape(implode(',', $config['images']['multipleFields'])); ?>"
 	data-placehold="https://placehold.it/">
 <?php endif; ?>
-<?php if ((isset($contents['images']) && is_array($contents['images']) && count($contents['images'])) || $admin): ?>
+<?php if ($nbImages || $admin): ?>
 	<?php
     $thumbs = array();
     $big = null;
