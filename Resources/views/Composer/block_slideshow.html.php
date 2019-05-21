@@ -33,7 +33,7 @@
             $thumbSrc = $view['nyrocms_composer']->imageResizeConfig($img['file'], $config['images']['thumb']);
             if (!$big) {
                 $big = '<div class="nyroCmsSlideshow_big">';
-                $big .= '<img src="'.$bigSrc.'" alt="'.$view->escape($img['title']).'" />';
+                $big .= '<img src="'.$bigSrc.'" alt="'.$view->escape($img['title']).'"  width="'.$config['images']['big']['w'].'" height="'.$config['images']['big']['h'].'"/>';
                 $big .= '<span>'.$img['title'].'</span>';
                 $big .= '</div>';
             }
