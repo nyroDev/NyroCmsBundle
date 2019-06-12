@@ -45,6 +45,13 @@ class Contact extends AbstractHandler
         return false;
     }
 
+    public function getAllowedParams()
+    {
+        return array(
+            'sent',
+        );
+    }
+
     public function getOtherAdminRoutes()
     {
         $ret = null;
