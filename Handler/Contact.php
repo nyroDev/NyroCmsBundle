@@ -234,7 +234,7 @@ class Contact extends AbstractHandler
                 if ('dest' == $k && $v) {
                     $v = $contactEmails[$v]['name'];
                 }
-                if ('_token' != $k && $v) {
+                if ('_token' != $k && $v && $field->vars['label']) {
                     $message[] = '<strong>'.$field->vars['label'].'</strong> : '.nl2br($v).'<br />';
                     if ($saveInDb && $accessor->isWritable($contactMessage, $k)) {
                         $accessor->setValue($contactMessage, $k, $v);
