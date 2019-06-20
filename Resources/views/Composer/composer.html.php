@@ -58,7 +58,9 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 	<?php if (
         ($canChangeLang && count($langs) > 0)
         ||
-        ($canChangeStructure && $canChangeTheme && count($themes) > 1)
+        $canChangeStructure
+        ||
+        ($canChangeTheme && count($themes) > 1)
     ): ?>
 	<nav id="composerNavTool">
 		<?php if ($canChangeStructure): ?>
