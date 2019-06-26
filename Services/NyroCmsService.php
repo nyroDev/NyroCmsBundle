@@ -359,7 +359,6 @@ class NyroCmsService extends nyroDevAbstractService
     {
         if (is_null($this->foundHandlers)) {
             $this->foundHandlers = array();
-            dump($GLOBALS['loader']);
             if (isset($GLOBALS['loader']) && $GLOBALS['loader'] instanceof \Composer\Autoload\ClassLoader) {
                 $classes = array_keys($GLOBALS['loader']->getClassMap());
                 foreach ($classes as $class) {
