@@ -163,6 +163,11 @@ abstract class AbstractHandler
         return array();
     }
 
+    public function getSitemapXmlUrls()
+    {
+        return array();
+    }
+
     /**
      * Get an application parameter.
      *

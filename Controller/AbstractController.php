@@ -297,11 +297,15 @@ abstract class AbstractController extends NyroDevAbstractController
             if (!$content->getGoUrl() && !$content->getRedirectToChildren()) {
                 $urls[] = $this->get(NyroCmsService::class)->getUrlFor($content, true);
             }
-            if ($content->getContentHandler() && $this->get(NyroCmsService::class)->getHandler($content->getContentHandler())->hasContentSpecUrl()) {
-                $contentSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
-                foreach ($contentSpecs as $contentSpec) {
-                    $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, array(), $content);
+            if ($content->getContentHandler()) {
+                $contentHandler = $this->get(NyroCmsService::class)->getHandler($content->getContentHandler());
+                if ($contentHandler->hasContentSpecUrl()) {
+                    $contentSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
+                    foreach ($contentSpecs as $contentSpec) {
+                        $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, array(), $content);
+                    }
                 }
+                $urls = array_merge($urls, $contentHandler->getSitemapXmlUrls());
             }
         }
 
