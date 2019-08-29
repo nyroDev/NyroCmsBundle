@@ -305,7 +305,7 @@ abstract class AbstractController extends NyroDevAbstractController
                         $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, array(), $content);
                     }
                 }
-                $urls = array_merge($urls, $contentHandler->getSitemapXmlUrls());
+                $urls = array_merge($urls, $contentHandler->getSitemapXmlUrls($content));
             }
         }
 

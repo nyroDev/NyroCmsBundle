@@ -163,7 +163,7 @@ abstract class AbstractHandler
         return array();
     }
 
-    public function getSitemapXmlUrls()
+    public function getSitemapXmlUrls(Content $content)
     {
         return array();
     }
