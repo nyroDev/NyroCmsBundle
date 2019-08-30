@@ -10,6 +10,7 @@ use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 use NyroDev\UtilityBundle\Form\Type\TinymceType;
+use NyroDev\UtilityBundle\Model\Sharable;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -541,6 +542,18 @@ abstract class AbstractHandler
     public function isWrappedAs()
     {
         return false;
+    }
+
+    protected $sharable;
+
+    protected function setSharable(Sharable $sharable)
+    {
+        $this->sharable = $sharable;
+    }
+
+    public function getSharable()
+    {
+        return $this->sharable;
     }
 
     protected $preparedView;

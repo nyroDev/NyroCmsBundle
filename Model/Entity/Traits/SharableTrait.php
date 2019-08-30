@@ -168,4 +168,9 @@ trait SharableTrait
             ),
         );
     }
+
+    public function getShareOgImage()
+    {
+        return $this->getAbsolutePath('ogImage');
+    }
 }

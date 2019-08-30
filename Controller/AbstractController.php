@@ -165,6 +165,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->get(NyroCmsService::class)->setActiveIds($activeIds);
         $this->get(NyroCmsService::class)->setPathInfoObject($contentSpec ? $contentSpec : $content);
 
+        $handler = null;
         if ($content->getContentHandler()) {
             $handler = $this->get(NyroCmsService::class)->getHandler($content->getContentHandler());
             $handler->init($request);
@@ -196,6 +197,9 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->get(ShareService::class)->setSharable($content);
         if ($contentSpec) {
             $this->get(ShareService::class)->setSharable($contentSpec);
+        }
+        if ($handler && $handler->getSharable()) {
+            $this->get(ShareService::class)->setSharable($handler->getSharable());
         }
 
         return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
