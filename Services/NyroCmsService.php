@@ -6,11 +6,9 @@ use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use NyroDev\UtilityBundle\Services\ShareService;
 
 class NyroCmsService extends nyroDevAbstractService
 {
@@ -373,35 +371,4 @@ class NyroCmsService extends nyroDevAbstractService
         return $this->foundHandlers;
     }
 
-    public function inlineText($text)
-    {
-        return preg_replace('/\s\s+/', ' ', preg_replace('/\s/', ' ', trim($text, " \t\n\r\0\x0B:·-")));
-    }
-
-    public function setSharableContent(Sharable $sharable)
-    {
-        $shareService = $this->get(ShareService::class);
-        $shareService->setTitle($this->inlineText($sharable.''));
-
-        if ($sharable->getMetaTitle()) {
-            $shareService->setTitle($this->inlineText($sharable->getMetaTitle()));
-        }
-        if ($sharable->getMetaDescription()) {
-            $shareService->setDescription($this->inlineText($sharable->getMetaDescription()));
-        }
-        if ($sharable->getMetaKeywords()) {
-            $shareService->setKeywords($this->inlineText($sharable->getMetaKeywords()));
-        }
-        if ($sharable->getOgTitle()) {
-            $shareService->set('og:title', $this->inlineText($sharable->getOgTitle()), true);
-            $shareService->set('twitter:title', $this->inlineText($sharable->getOgTitle()));
-        }
-        if ($sharable->getOgDescription()) {
-            $shareService->set('og:description', $this->inlineText($sharable->getOgDescription()), true);
-            $shareService->set('twitter:description', $this->inlineText($sharable->getOgDescription()));
-        }
-        if ($sharable->getOgImageFile()) {
-            $shareService->setImage($sharable->getWebPath('ogImage'));
-        }
-    }
 }

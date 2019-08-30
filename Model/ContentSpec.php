@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Model;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
+use NyroDev\UtilityBundle\Model\Sharable;
 
 /**
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)

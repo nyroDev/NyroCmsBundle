@@ -4,7 +4,6 @@ namespace NyroDev\NyroCmsBundle\Controller;
 
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use NyroDev\NyroCmsBundle\Model\Sharable;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Services\ComposerService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
@@ -194,9 +193,9 @@ abstract class AbstractController extends NyroDevAbstractController
             $this->setImage($this->get(ComposerService::class)->imageResize($image, 1000));
         }
 
-        $this->setSharableContent($content);
+        $this->get(ShareService::class)->setSharable($content);
         if ($contentSpec) {
-            $this->setSharableContent($contentSpec);
+            $this->get(ShareService::class)->setSharable($contentSpec);
         }
 
         return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
@@ -320,12 +319,12 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function setTitle($title, $addDefault = true)
     {
-        $this->get(ShareService::class)->setTitle($this->get(NyroCmsService::class)->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->getParameter('nyroDev_utility.share.title'))) : ''));
+        $this->get(ShareService::class)->setTitle($this->get(NyrodevService::class)->inlineText($title).($addDefault ? ' - '.$this->trans(trim($this->getParameter('nyroDev_utility.share.title'))) : ''));
     }
 
     protected function setDescription($description)
     {
-        $this->get(ShareService::class)->setDescription($this->get(NyroCmsService::class)->inlineText($description));
+        $this->get(ShareService::class)->setDescription($this->get(NyrodevService::class)->inlineText($description));
     }
 
     protected function setImage($image)
@@ -335,8 +334,4 @@ abstract class AbstractController extends NyroDevAbstractController
         }
     }
 
-    protected function setSharableContent(Sharable $sharable)
-    {
-        $this->get(NyroCmsService::class)->setSharableContent($sharable);
-    }
 }

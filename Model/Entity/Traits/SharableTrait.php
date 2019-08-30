@@ -117,6 +117,11 @@ trait SharableTrait
         return $this;
     }
 
+    public function getShareOthers()
+    {
+        return null;
+    }
+
     public function getOgImageFile()
     {
         return $this->ogImageFile;
