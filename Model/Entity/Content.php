@@ -3,7 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
 use NyroDev\NyroCmsBundle\Model\Content as ContentModel;
-use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTrait;
+use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTranslatableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -20,7 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Content extends ContentModel
 {
-    use SharableTrait { getFileFields as protected sharableGetFileFields; }
+    use SharableTranslatableTrait { getFileFields as protected sharableGetFileFields; }
 
     /**
      * @ORM\OneToMany(targetEntity="Content", mappedBy="parent")

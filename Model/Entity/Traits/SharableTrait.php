@@ -14,7 +14,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="meta_title", type="string", length=250, nullable=true)
-     * @Gedmo\Translatable
      */
     protected $metaTitle;
 
@@ -22,7 +21,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="meta_description", type="text", nullable=true)
-     * @Gedmo\Translatable
      */
     protected $metaDescription;
 
@@ -30,7 +28,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="meta_keywords", type="text", nullable=true)
-     * @Gedmo\Translatable
      */
     protected $metaKeywords;
 
@@ -38,7 +35,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="og_title", type="string", length=250, nullable=true)
-     * @Gedmo\Translatable
      */
     protected $ogTitle;
 
@@ -46,7 +42,6 @@ trait SharableTrait
      * @var string
      *
      * @ORM\Column(name="og_description", type="text", nullable=true)
-     * @Gedmo\Translatable
      */
     protected $ogDescription;
 
