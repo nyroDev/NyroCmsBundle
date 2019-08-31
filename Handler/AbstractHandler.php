@@ -169,6 +169,11 @@ abstract class AbstractHandler
         return array();
     }
 
+    public function getSitemapUrls(Content $content)
+    {
+        return array();
+    }
+
     /**
      * Get an application parameter.
      *

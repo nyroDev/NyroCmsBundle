@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Handler;
 
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 
 class Sitemap extends AbstractHandler
 {
@@ -26,9 +27,16 @@ class Sitemap extends AbstractHandler
         $ret = array();
 
         foreach ($this->getContentRepo()->childrenForMenu($content, true) as $sub) {
+            $contents = $this->getHierarchy($sub);
+
+            if ($sub->getContentHandler()) {
+                $contentHandler = $this->get(NyroCmsService::class)->getHandler($sub->getContentHandler());
+                $contents = array_merge($contents, $contentHandler->getSitemapUrls($sub));
+            }
+
             $ret[] = array(
                 'content' => $sub,
-                'contents' => $this->getHierarchy($sub),
+                'contents' => $contents,
             );
         }
 
