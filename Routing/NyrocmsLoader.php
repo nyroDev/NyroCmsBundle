@@ -41,6 +41,7 @@ class NyroCmsLoader extends Loader
         }
         /* @var $rootContent \NyroDev\NyroCmsBundle\Model\Content */
 
+        $env = $this->container->getParameter('kernel.environment');
         $routes = new RouteCollection();
 
         $locale = $this->container->get(NyroCmsService::class)->getDefaultLocale($rootContent);
@@ -136,7 +137,7 @@ class NyroCmsLoader extends Loader
         $routes->add($res[0].'_content', new Route(
                 $prefixUrlLocale.'/{url}',
                 array('_controller' => $res[1].':content', '_locale' => $locale, '_config' => $res[0]),
-                array('_locale' => $locales, 'url' => '.+'),
+                array('_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt.).+' : '.+'),
                 array(),
                 $rootContent->getHost()
             )
