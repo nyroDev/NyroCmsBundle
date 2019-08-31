@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
@@ -202,7 +203,7 @@ abstract class AbstractController extends NyroDevAbstractController
             $this->get(ShareService::class)->setSharable($handler->getSharable());
         }
 
-        return $this->handleContentView($request, $content, $parents, $contentSpec, $handlerAction);
+        return $this->handleContentView($request, $content, $parents, $contentSpec, $handler, $handlerAction);
     }
 
     protected function getAllowedParams(Content $content)
@@ -217,7 +218,7 @@ abstract class AbstractController extends NyroDevAbstractController
         return $ret;
     }
 
-    abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, $handlerAction = null): Response;
+    abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, AbstractHandler $handler = null, $handlerAction = null): Response;
 
     public function search(Request $request, $_config = null): Response
     {
@@ -337,5 +338,4 @@ abstract class AbstractController extends NyroDevAbstractController
             $this->get(ShareService::class)->setImage($image);
         }
     }
-
 }
