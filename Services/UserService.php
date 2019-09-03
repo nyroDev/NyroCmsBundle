@@ -44,7 +44,7 @@ class UserService extends nyroDevAbstractService
         }
     }
 
-    public function sendWelcomeEmail(User $user)
+    public function sendWelcomeEmail(User $user, $locale = null)
     {
         $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
         $end = new \DateTime('+1month');
@@ -59,7 +59,7 @@ class UserService extends nyroDevAbstractService
                 'id' => $user->getId(),
                 'key' => $user->getPasswordKey(),
             ), true),
-        ))));
+        ))), null, $locale);
     }
 
     public function sendChangedPasswordEmail(User $user)

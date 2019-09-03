@@ -64,8 +64,9 @@ class SendDeferredWelcomeCommand extends Command
             $output->writeln($nbUsers.' are activated or has as password key which ends today.');
 
             if ($nbUsers > 0) {
+                $defaultLocale = $this->params->get('locale');
                 foreach ($users as $user) {
-                    $this->user->sendWelcomeEmail($user);
+                    $this->user->sendWelcomeEmail($user, $defaultLocale);
                 }
             }
 
