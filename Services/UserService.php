@@ -199,8 +199,6 @@ class UserService extends nyroDevAbstractService
             'lastname',
         );
 
-        $this->sendChangedPasswordEmail($user);
-
         $form = $this->get('form.factory')->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
             $form->add($f, null, array(
