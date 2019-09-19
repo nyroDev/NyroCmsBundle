@@ -137,7 +137,7 @@ class NyroCmsLoader extends Loader
         $routes->add($res[0].'_content', new Route(
                 $prefixUrlLocale.'/{url}',
                 array('_controller' => $res[1].':content', '_locale' => $locale, '_config' => $res[0]),
-                array('_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt.).+' : '.+'),
+                array('_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt|_profiler|_error.).+' : '.+'),
                 array(),
                 $rootContent->getHost()
             )
