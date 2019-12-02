@@ -25,7 +25,6 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 abstract class AbstractHandler
 {
@@ -54,9 +53,9 @@ abstract class AbstractHandler
 
     public function getAdminRoutePrm()
     {
-        return array(
+        return [
             'chid' => $this->contentHandler->getId(),
-        );
+        ];
     }
 
     public function getOtherAdminRoutes()
@@ -151,7 +150,7 @@ abstract class AbstractHandler
 
     protected function getFormFields($action)
     {
-        return array();
+        return [];
     }
 
     protected function hasContentSpecificContent()
@@ -161,17 +160,17 @@ abstract class AbstractHandler
 
     public function getAllowedParams()
     {
-        return array();
+        return [];
     }
 
     public function getSitemapXmlUrls(Content $content)
     {
-        return array();
+        return [];
     }
 
     public function getSitemapUrls(Content $content)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -210,7 +209,7 @@ abstract class AbstractHandler
      *
      * @return string The translation
      */
-    public function trans($key, array $parameters = array(), $domain = 'messages', $locale = null)
+    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
     {
         return $this->get('translator')->trans($key, $parameters, $domain, $locale);
     }
@@ -224,7 +223,7 @@ abstract class AbstractHandler
      *
      * @return string The generated URL
      */
-    public function generateUrl($route, $parameters = array(), $absolute = false)
+    public function generateUrl($route, $parameters = [], $absolute = false)
     {
         return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }
@@ -245,7 +244,7 @@ abstract class AbstractHandler
         return $this->get(DbAbstractService::class)->getContentSpecRepository();
     }
 
-    protected $contents = array();
+    protected $contents = [];
 
     /**
      * Get content by id.
@@ -263,14 +262,14 @@ abstract class AbstractHandler
         return $this->contents[$id];
     }
 
-    public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = array(), array $translations = array())
+    public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = [], array $translations = [])
     {
         $after = $this->hasValidDates() ? 'validEnd' : 'state';
         $content = $this->hasComposer() ? $row->getData() : $row->getContent();
-        $translationsContent = array();
+        $translationsContent = [];
         $fieldTr = $this->hasComposer() ? 'data' : 'content';
         foreach ($translations as $lg => $trs) {
-            $translationsContent[$lg] = array();
+            $translationsContent[$lg] = [];
             foreach ($trs as $field => $tr) {
                 if ($field == $fieldTr) {
                     $translationsContent[$lg] = json_decode($tr->getContent(), true);
@@ -297,7 +296,7 @@ abstract class AbstractHandler
                 unset($cfg['data']);
             }
             if (!isset($cfg['position'])) {
-                $cfg['position'] = array('after' => $after);
+                $cfg['position'] = ['after' => $after];
                 $after = $k;
             }
 
@@ -318,10 +317,10 @@ abstract class AbstractHandler
                             $cfg['showDelete'] = $cfg['showDelete'].'_'.$lg;
                         }
                     }
-                    $form->add($fieldName, $type, array_merge($curCfg, array(
+                    $form->add($fieldName, $type, array_merge($curCfg, [
                         'label' => $curCfg['label'].' '.strtoupper($lg),
                         'data' => $data,
-                    )));
+                    ]));
                     $after = $fieldName;
                 }
             }
@@ -335,7 +334,7 @@ abstract class AbstractHandler
      */
     public function getUploadRootDir()
     {
-        return $this->get(KernelInterface::class)->getProjectDir().'/public/'.$this->getUploadDir();
+        return $this->get(NyrodevService::class)->getKernel()->getProjectDir().'/public/'.$this->getUploadDir();
     }
 
     /**
@@ -350,7 +349,7 @@ abstract class AbstractHandler
 
     public function flushClb($action, ContentSpec $row, Form $form)
     {
-        $newContents = $newContentTexts = array();
+        $newContents = $newContentTexts = [];
         foreach ($this->getFormFields($action) as $k => $cfg) {
             $data = $form->get($k)->getData();
             if (FileType::class == $cfg['type']) {
@@ -384,12 +383,12 @@ abstract class AbstractHandler
 
     public function flushLangClb($action, ContentSpec $row, Form $form, $lg)
     {
-        $newContents = $newContentTexts = array();
+        $newContents = $newContentTexts = [];
         if (AbstractAdminController::ADD == $action) {
             if ($this->hasComposer()) {
-                $row->setData(array());
+                $row->setData([]);
             } else {
-                $row->setContent(array());
+                $row->setContent([]);
             }
         }
 
@@ -431,7 +430,7 @@ abstract class AbstractHandler
         }
     }
 
-    protected $fileUploaded = array();
+    protected $fileUploaded = [];
 
     protected function handleFileUpload($field, $data, $action, ContentSpec $row, $fieldForm = null)
     {
@@ -501,7 +500,7 @@ abstract class AbstractHandler
         $this->isAdmin = $isAdmin;
     }
 
-    protected $contentSpec = array();
+    protected $contentSpec = [];
 
     /**
      * @param int     $id
@@ -514,9 +513,9 @@ abstract class AbstractHandler
     {
         if (!isset($this->contentSpec[$id])) {
             $this->contentSpec[$id] = $this->getContentSpecRespository()
-                                        ->getOneOrNullForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, array(
+                                        ->getOneOrNullForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, [
                                             'id' => $id,
-                                        ));
+                                        ]);
 
             if ($this->contentSpec[$id] && $locale) {
                 $this->contentSpec[$id]->setTranslatableLocale($locale);
@@ -527,10 +526,10 @@ abstract class AbstractHandler
         return $this->contentSpec[$id];
     }
 
-    public function getContentSpecs(Content $content = null, $start = null, $limit = null, array $where = array(), $state = ContentSpec::STATE_ACTIVE)
+    public function getContentSpecs(Content $content = null, $start = null, $limit = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
     {
         return $this->getContentSpecRespository()
-                        ->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, array($this->orderField() => $this->isReversePositionOrder() ? 'DESC' : 'ASC'), $start, $limit);
+                        ->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, [$this->orderField() => $this->isReversePositionOrder() ? 'DESC' : 'ASC'], $start, $limit);
     }
 
     public function getTotalContentSpec(Content $content = null, $state = ContentSpec::STATE_ACTIVE)
@@ -587,6 +586,6 @@ abstract class AbstractHandler
 
     protected function _prepareHomeView(Content $content)
     {
-        return array();
+        return [];
     }
 }

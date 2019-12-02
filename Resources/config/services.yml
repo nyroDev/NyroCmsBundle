@@ -33,7 +33,6 @@ services:
         arguments:
             - '@service_container'
             - '@templating.helper.assets'
-            - '@Symfony\Component\HttpKernel\KernelInterface'
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
     nyrocms_composer:

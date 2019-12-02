@@ -22,7 +22,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class ComposerService extends AbstractService
 {
@@ -31,16 +30,10 @@ class ComposerService extends AbstractService
      */
     protected $assetsHelper;
 
-    /**
-     * @var KernelInterface
-     */
-    protected $kernel;
-
-    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper, KernelInterface $kernel)
+    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper)
     {
         parent::__construct($container);
         $this->assetsHelper = $assetsHelper;
-        $this->kernel = $kernel;
     }
 
     public function getContainer()
@@ -48,7 +41,7 @@ class ComposerService extends AbstractService
         return $this->container;
     }
 
-    protected $configs = array();
+    protected $configs = [];
 
     public function getConfig(Composable $row)
     {
@@ -56,9 +49,9 @@ class ComposerService extends AbstractService
         if (!isset($this->configs[$class])) {
             $composableConfig = $this->getParameter('nyrocms.composable');
 
-            $ret = isset($composableConfig[$class]) ? $composableConfig[$class] : array();
-            $cfgArrays = array('themes', 'available_blocks');
-            $cfgArraysMerge = array('default_blocks', 'config_blocks');
+            $ret = isset($composableConfig[$class]) ? $composableConfig[$class] : [];
+            $cfgArrays = ['themes', 'available_blocks'];
+            $cfgArraysMerge = ['default_blocks', 'config_blocks'];
 
             foreach ($cfgArrays as $cfg) {
                 if (isset($ret[$cfg]) && 0 === count($ret[$cfg])) {
@@ -68,7 +61,7 @@ class ComposerService extends AbstractService
 
             $this->configs[$class] = array_merge($composableConfig['default'], $ret);
             foreach ($cfgArraysMerge as $cfg) {
-                $this->configs[$class][$cfg] = array_replace_recursive($composableConfig['default'][$cfg], isset($ret[$cfg]) ? $ret[$cfg] : array());
+                $this->configs[$class][$cfg] = array_replace_recursive($composableConfig['default'][$cfg], isset($ret[$cfg]) ? $ret[$cfg] : []);
             }
         }
 
@@ -86,12 +79,12 @@ class ComposerService extends AbstractService
 
     public function canChangeLang(Composable $row)
     {
-        return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'change_lang');
+        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'change_lang');
     }
 
     public function isSameLangStructure(Composable $row)
     {
-        return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'same_lang_structure');
+        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_structure');
     }
 
     public function canChangeStructure(Composable $row)
@@ -103,7 +96,7 @@ class ComposerService extends AbstractService
 
     public function isSameLangMedia(Composable $row)
     {
-        return  is_callable(array($row, 'setTranslatableLocale')) && $this->getQuickConfig($row, 'same_lang_media');
+        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_media');
     }
 
     public function canChangeMedia(Composable $row)
@@ -115,7 +108,7 @@ class ComposerService extends AbstractService
 
     public function canChangeTheme(Composable $row)
     {
-        return is_callable(array($row, 'setTheme')) && $this->getQuickConfig($row, 'change_theme');
+        return is_callable([$row, 'setTheme']) && $this->getQuickConfig($row, 'change_theme');
     }
 
     public function cssTemplate(Composable $row)
@@ -147,15 +140,15 @@ class ComposerService extends AbstractService
             $cfg['plugins'] .= ',responsivefilemanager';
             $normalUrl = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route'));
             if ($this->getQuickConfig($row, 'tinymce_browser')) {
-                $url = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route_per_root'), array(
+                $url = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route_per_root'), [
                     'dirName' => 'tinymce_'.$row->getVeryParent()->getId(),
-                ));
+                ]);
             } else {
                 $url = $normalUrl;
             }
             $cfg['external_filemanager_path'] = $url.'/';
             $cfg['filemanager_title'] = $this->trans('nyrodev.browser.title');
-            $cfg['external_plugins'] = array('filemanager' => $normalUrl.'/plugin.min.js');
+            $cfg['external_plugins'] = ['filemanager' => $normalUrl.'/plugin.min.js'];
         }
 
         $tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
@@ -172,7 +165,7 @@ class ComposerService extends AbstractService
             $ret = $this->get(NyrodevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
             $cfg = $this->getConfig($row);
-            $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : array();
+            $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : [];
             if ($cfg['cancel_url']['need_id']) {
                 $routePrm['id'] = $row->getId();
             } elseif ($cfg['cancel_url']['need_veryParent_id']) {
@@ -187,7 +180,7 @@ class ComposerService extends AbstractService
     public function getThemes(Composable $row)
     {
         $cfg = $this->getConfig($row);
-        $ret = array();
+        $ret = [];
         foreach ($cfg['themes'] as $theme) {
             $trIdent = 'admin.composable.themes.'.$theme;
             $tr = $this->trans($trIdent);
@@ -221,7 +214,7 @@ class ComposerService extends AbstractService
         return $row->getTheme() ? $row->getTheme() : $this->getCssTheme($row->getParent());
     }
 
-    protected $wrapperCssthemeEvents = array();
+    protected $wrapperCssthemeEvents = [];
 
     public function getWrapperCssTheme(Composable $row, $position = WrapperCssThemeEvent::POSITION_NORMAL)
     {
@@ -235,7 +228,7 @@ class ComposerService extends AbstractService
 
     public function tinymceAttrs(Composable $row, $prefix, $simple = false)
     {
-        $ret = array();
+        $ret = [];
         foreach ($this->getTinymceConfig($row, $simple) as $k => $v) {
             $ret[$prefix.$k] = is_array($v) ? json_encode($v) : $v;
         }
@@ -245,7 +238,7 @@ class ComposerService extends AbstractService
 
     protected function tinymceAttrsTrRec(array $values)
     {
-        $ret = array();
+        $ret = [];
         foreach ($values as $k => $v) {
             if (is_array($v)) {
                 $ret[$k] = $this->tinymceAttrsTrRec($v);
@@ -259,13 +252,13 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    protected $existingImages = array();
-    protected $existingFiles = array();
+    protected $existingImages = [];
+    protected $existingFiles = [];
 
     public function initComposerFor(Composable $row, $lang, $contentFieldName = 'content')
     {
-        $this->existingImages = array();
-        $this->existingFiles = array();
+        $this->existingImages = [];
+        $this->existingFiles = [];
 
         if ($lang != $this->get(NyroCmsService::class)->getDefaultLocale($row)) {
             $tmp = $this->getImagesAndFiles($row, $row->getContent());
@@ -306,14 +299,14 @@ class ComposerService extends AbstractService
     {
         $configs = [];
 
-        $images = array();
-        $files = array();
+        $images = [];
+        $files = [];
         foreach ($blocks as $content) {
             if (!isset($configs[$content['type']])) {
                 $configs[$content['type']] = $this->getBlockConfig($row, $content['type']);
             }
 
-            $contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : array();
+            $contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : [];
 
             foreach ($configs[$content['type']] as $k => $v) {
                 if (isset($contents[$k]) && $contents[$k]) {
@@ -341,7 +334,7 @@ class ComposerService extends AbstractService
     {
         $cfg = $this->getConfig($row);
 
-        return isset($cfg['config_blocks']) && is_array($cfg['config_blocks']) && isset($cfg['config_blocks'][$block]) ? $cfg['config_blocks'][$block] : array();
+        return isset($cfg['config_blocks']) && is_array($cfg['config_blocks']) && isset($cfg['config_blocks'][$block]) ? $cfg['config_blocks'][$block] : [];
     }
 
     public function getBlockTemplate(Composable $row, $block)
@@ -354,17 +347,17 @@ class ComposerService extends AbstractService
         return $config['template'];
     }
 
-    public function getBlock(Composable $row, $id, $block, array $defaults = array(), $addExtract = false)
+    public function getBlock(Composable $row, $id, $block, array $defaults = [], $addExtract = false)
     {
-        $ret = array(
+        $ret = [
             'id' => $id,
             'type' => $block,
-            'contents' => array(),
-        );
+            'contents' => [],
+        ];
         if ($addExtract) {
-            $ret['texts'] = array();
-            $ret['images'] = array();
-            $ret['files'] = array();
+            $ret['texts'] = [];
+            $ret['images'] = [];
+            $ret['files'] = [];
         }
         $cfg = $this->getConfig($row);
         if (isset($cfg['default_blocks']) && isset($cfg['default_blocks'][$block])) {
@@ -374,7 +367,7 @@ class ComposerService extends AbstractService
                 if (isset($defaults[$k])) {
                     if (isset($blockConfig[$k]) && isset($blockConfig[$k]['image']) && $blockConfig[$k]['image']) {
                         if (isset($blockConfig[$k]['multiple']) && $blockConfig[$k]['multiple']) {
-                            $ret['contents'][$k] = array();
+                            $ret['contents'][$k] = [];
                             if (is_array($defaults[$k])) {
                                 $multipleFields = isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields']);
                                 if (is_array($defaults[$k][0])) {
@@ -402,15 +395,15 @@ class ComposerService extends AbstractService
                                     $defaults[$k] = $tmp;
                                 }
 
-                                $deletes = isset($defaults['deletes']) ? $defaults['deletes'] : array();
+                                $deletes = isset($defaults['deletes']) ? $defaults['deletes'] : [];
                                 foreach ($defaults[$k] as $kk => $img) {
                                     if (!isset($deletes[$kk]) || !$deletes[$kk]) {
                                         $image = $this->handleDefaultImage($img);
-                                        $val = array(
+                                        $val = [
                                             'id' => isset($defaults['ids']) && isset($defaults['ids'][$kk]) ? $defaults['ids'][$kk] : 'img-'.time() * 1000,
                                             'title' => isset($defaults['titles']) && isset($defaults['titles'][$kk]) ? $defaults['titles'][$kk] : null,
                                             'file' => $image,
-                                        );
+                                        ];
 
                                         if ($multipleFields) {
                                             foreach ($multipleFields as $field) {
@@ -460,7 +453,7 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    public function deleteBlock(Composable $row, $id, $block, array $contents = array())
+    public function deleteBlock(Composable $row, $id, $block, array $contents = [])
     {
         $blockConfig = $this->getBlockConfig($row, $block);
         foreach ($blockConfig as $k => $v) {
@@ -489,10 +482,10 @@ class ComposerService extends AbstractService
     {
         $image = $request->files->get('image');
         $file = $this->imageUpload($image);
-        $ret = array(
+        $ret = [
             'file' => $file,
             'resized' => $this->imageResizeConfig($file, $request->request->get('cfg')),
-        );
+        ];
 
         if ($request->request->get('cfg2')) {
             $ret['resized2'] = $this->imageResizeConfig($file, $request->request->get('cfg2'));
@@ -539,9 +532,9 @@ class ComposerService extends AbstractService
     {
         $fileUp = $request->files->get('file');
         $file = $this->fileUpload($fileUp);
-        $ret = array(
+        $ret = [
             'file' => $file,
-        );
+        ];
 
         return new JsonResponse($ret);
     }
@@ -589,11 +582,11 @@ class ComposerService extends AbstractService
         if (0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
-                $content = array($this->getBlock($row, 'intro-intro', 'intro'));
+                $content = [$this->getBlock($row, 'intro-intro', 'intro')];
                 if ($hasHandler) {
                     $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
                     if ($handler->isWrapped() && $handler->isWrappedAs()) {
-                        $tmp = array($handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR);
+                        $tmp = [$handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR];
                         $content[] = $this->getBlock($row, 'wrapper-'.$handler->isWrapped(), $handler->isWrapped(), $tmp);
                     } else {
                         $content[] = $this->getBlock($row, 'handler-handler', 'handler');
@@ -602,7 +595,7 @@ class ComposerService extends AbstractService
 
                 $row->setContent($content);
             } elseif ($hasHandler) {
-                $content = array($this->getBlock($row, 'handler-handler', 'handler'));
+                $content = [$this->getBlock($row, 'handler-handler', 'handler')];
                 $row->setContent($content);
             }
         } elseif ($hasHandler) {
@@ -619,7 +612,7 @@ class ComposerService extends AbstractService
             }
             if (!$hasHandlerPlaced) {
                 if ($admin && $isWrapped) {
-                    $tmp = array($wrappedAs => AbstractHandler::TEMPLATE_INDICATOR);
+                    $tmp = [$wrappedAs => AbstractHandler::TEMPLATE_INDICATOR];
                     $content[] = $this->getBlock($row, 'wrapper-'.$isWrapped, $isWrapped, $tmp);
                 } else {
                     $content[] = $this->getBlock($row, 'handler-handler', 'handler');
@@ -641,7 +634,7 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    public function renderNew(Composable $row, $block, $admin = false, array $defaults = array())
+    public function renderNew(Composable $row, $block, $admin = false, array $defaults = [])
     {
         $cont = $this->getBlock($row, $block.'---ID--', $block, $defaults);
 
@@ -650,7 +643,7 @@ class ComposerService extends AbstractService
 
     protected function renderBlock(Composable $row, $nb, $handlerContent, $block, $admin)
     {
-        $event = new ComposerBlockVarsEvent($row, $this->getQuickConfig($row, 'block_template'), array(
+        $event = new ComposerBlockVarsEvent($row, $this->getQuickConfig($row, 'block_template'), [
             'nb' => $nb,
             'row' => $row,
             'handlerContent' => $handlerContent,
@@ -658,7 +651,7 @@ class ComposerService extends AbstractService
             'admin' => $admin,
             'customClass' => null,
             'customAttrs' => null,
-        ), $this->getBlockConfig($row, $block['type']));
+        ], $this->getBlockConfig($row, $block['type']));
 
         $this->get('event_dispatcher')->dispatch(ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS, $event);
 
@@ -675,7 +668,7 @@ class ComposerService extends AbstractService
     protected function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {
-            $this->rootImageDir = $this->kernel->getProjectDir().'/public/'.$this->getImageDir();
+            $this->rootImageDir = $this->get(NyrodevService::class)->getKernel()->getProjectDir().'/public/'.$this->getImageDir();
             $fs = new Filesystem();
             if (!$fs->exists($this->rootImageDir)) {
                 $fs->mkdir($this->rootImageDir);
@@ -696,13 +689,13 @@ class ComposerService extends AbstractService
 
     public function imageResize($file, $w, $h = null)
     {
-        return $this->imageResizeConfig($file, array(
+        return $this->imageResizeConfig($file, [
             'name' => $w.'_'.$h,
             'w' => $w,
             'h' => $h,
             'fit' => true,
             'quality' => 80,
-        ));
+        ]);
     }
 
     public function imageResizeConfig($file, array $config)
@@ -937,7 +930,7 @@ class ComposerService extends AbstractService
 
     protected function idifyContents(array $contents)
     {
-        $ret = array();
+        $ret = [];
         foreach ($contents as $content) {
             $ret[$content['id']] = $content;
         }
