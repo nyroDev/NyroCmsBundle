@@ -45,10 +45,15 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         if (count($where)) {
             foreach ($where as $k => $v) {
                 $operator = '=';
-                if ('!' == $k[0]) {
+
+                if (is_array($v)) {
+                    $operator = $v['operator'];
+                    $v = $v['value'];
+                } else if ('!' == $k[0]) {
                     $operator = '<>';
                     $k = substr($k, 1);
                 }
+
                 $qb->andWhere('cs.'.$k.' '.$operator.' :'.$k.'_wh')
                     ->setParameter($k.'_wh', $v);
             }
