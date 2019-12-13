@@ -16,12 +16,10 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
      * @param type                                          $contentHandlerId
      * @param type                                          $state
      * @param \NyroDev\NyroCmsBundle\Repository\Orm\Content $specificContent
-     * @param array                                         $where
-     * @param array                                         $order
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getQbForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array())
+    public function getQbForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [])
     {
         $qb = $this->createQueryBuilder('cs')
                 ->andWhere('cs.contentHandler = :chid')
@@ -49,7 +47,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
                 if (is_array($v)) {
                     $operator = $v['operator'];
                     $v = $v['value'];
-                } else if ('!' == $k[0]) {
+                } elseif ('!' == $k[0]) {
                     $operator = '<>';
                     $k = substr($k, 1);
                 }
@@ -68,7 +66,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         return $qb;
     }
 
-    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array())
+    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [])
     {
         $qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where);
 
@@ -79,7 +77,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
                 ->getQuery()->getSingleScalarResult();
     }
 
-    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array(), $start = null, $limit = null)
+    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [], $start = null, $limit = null)
     {
         $qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order);
 
@@ -96,10 +94,11 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         return $q->getResult();
     }
 
-    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = array(), array $order = array())
+    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [])
     {
         $q = $this
             ->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)
+            ->setMaxResults(1)
             ->getQuery();
         $this->setHint($q);
 
@@ -118,7 +117,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
                     ->getResult();
     }
 
-    public function findForAction($id, $contentHandlerId, array $states = array())
+    public function findForAction($id, $contentHandlerId, array $states = [])
     {
         $qb = $this->createQueryBuilder('cs')
                 ->andWhere('cs.id = :id')
@@ -138,9 +137,9 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         return $q->getOneOrNullResult();
     }
 
-    public function search(array $searches, array $contentHandlersIds = array(), $state = null)
+    public function search(array $searches, array $contentHandlersIds = [], $state = null)
     {
-        $query = $parameters = array();
+        $query = $parameters = [];
         foreach ($searches as $k => $v) {
             $query[] = 'cs.contentText LIKE :text'.$k;
             $parameters['text'.$k] = '%'.$v.'%';
