@@ -140,7 +140,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $qb->getQuery()->getResult();
     }
 
-    public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null)
+    protected function getQueryContentHandlerClass($class, Content $root = null, Content $parent = null)
     {
         if ('\\' !== substr($class, 0, 1)) {
             $class = '\\'.$class;
@@ -161,7 +161,18 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $q = $qb->getQuery();
         $this->setHint($q);
 
-        return $q->getOneOrNullResult();
+
+        return $q;
+    }
+
+    public function findContentHandlerClass($class, Content $root = null)
+    {
+        return $this->getQueryContentHandlerClass($class, $root)->getResult();
+    }
+
+    public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null)
+    {
+        return $this->getQueryContentHandlerClass($class, $root, $parent)->getOneOrNullResult();
     }
 
     protected function getQueryMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC')

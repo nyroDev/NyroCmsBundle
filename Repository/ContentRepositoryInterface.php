@@ -19,6 +19,8 @@ interface ContentRepositoryInterface extends RepositoryInterface
 
     public function findWithContentHandler($rootId = null, $state = null, $sortByField = null, $direction = 'ASC');
 
+    public function findContentHandlerClass($class, Content $root = null);
+
     public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null);
 
     public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null);
