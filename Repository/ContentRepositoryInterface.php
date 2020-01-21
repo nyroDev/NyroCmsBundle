@@ -18,6 +18,8 @@ interface ContentRepositoryInterface extends RepositoryInterface
 
     public function findWithContentHandler($rootId = null, $state = null);
 
+    public function findContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null);
+
     public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null);
 
     public function findOneByMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null);

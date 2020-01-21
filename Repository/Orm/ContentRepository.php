@@ -132,7 +132,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $qb->getQuery()->getResult();
     }
 
-    public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    protected function getQueryContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null)
     {
         if ('\\' !== substr($class, 0, 1)) {
             $class = '\\'.$class;
@@ -149,7 +149,18 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $q = $qb->getQuery();
         $q->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Gedmo\\Translatable\\Query\\TreeWalker\\TranslationWalker');
 
-        return $q->getOneOrNullResult();
+
+        return $q;
+    }
+
+    public function findContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    {
+        return $this->getQueryContentHandlerClass($class, $root)->getResult();
+    }
+
+    public function findOneByContentHandlerClass($class, \NyroDev\NyroCmsBundle\Model\Content $root = null)
+    {
+        return $this->getQueryContentHandlerClass($class, $root)->getOneOrNullResult();
     }
 
     protected function getQueryMenuOption($menuOption, \NyroDev\NyroCmsBundle\Model\Content $root = null)
