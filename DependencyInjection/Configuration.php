@@ -185,6 +185,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('route_resources')
                     ->prototype('scalar')->end()
                 ->end()
+                ->scalarNode('route_handler_path')->defaultValue('handler')->end()
                 ->variableNode('disabled_locale_urls')->defaultValue(false)->end()
                 ->arrayNode('model')->isRequired()
                     ->children()

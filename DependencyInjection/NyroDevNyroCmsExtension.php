@@ -36,6 +36,7 @@ class NyroDevNyroCmsExtension extends Extension
 
         $container->setParameter('nyrocms.user_types', $config['user_types']);
         $container->setParameter('nyrocms.route_resources', $config['route_resources']);
+        $container->setParameter('nyrocms.route_handler_path', $config['route_handler_path']);
         $container->setParameter('nyrocms.disabled_locale_urls', $config['disabled_locale_urls']);
 
         $container->setParameter('nyrocms.content.maxlevel', $config['content']['maxlevel']);

@@ -53,6 +53,11 @@ class NyroCmsLoader extends Loader
             $prefixUrlLocale = null;
         }
 
+        $routeHandlerPath = $this->container->get(NyroCmsService::class)->getParameter('nyrocms.route_handler_path');
+        if ($routeHandlerPath) {
+            $routeHandlerPath.= '/';
+        }
+
         if (isset($typeCfg['homepage'])) {
             $routes->add('_homepage', new Route(
                     '/',
@@ -111,7 +116,7 @@ class NyroCmsLoader extends Loader
             )
         );
         $routes->add($res[0].'_content_spec_handler', new Route(
-                $prefixUrlLocale.'/{url}/{id}/{title}/handler/{handler}',
+                $prefixUrlLocale.'/{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
                 ['_controller' => $res[1].':contentSpec', '_locale' => $locale, '_config' => $res[0]],
                 ['_locale' => $locales, 'url' => '.+', 'id' => '\d+', 'handler' => '.+'],
                 [],
@@ -127,7 +132,7 @@ class NyroCmsLoader extends Loader
             )
         );
         $routes->add($res[0].'_content_handler', new Route(
-                $prefixUrlLocale.'/{url}/handler/{handler}',
+                $prefixUrlLocale.'/{url}/'.$routeHandlerPath.'{handler}',
                 ['_controller' => $res[1].':content', '_locale' => $locale, '_config' => $res[0]],
                 ['_locale' => $locales, 'url' => '.+', 'handler' => '.+'],
                 [],
