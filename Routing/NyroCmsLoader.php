@@ -118,7 +118,7 @@ class NyroCmsLoader extends Loader
         $routes->add($res[0].'_content_spec_handler', new Route(
                 $prefixUrlLocale.'/{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
                 ['_controller' => $res[1].':contentSpec', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '.+', 'id' => '\d+', 'handler' => '.+'],
+                ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+', 'handler' => '.+'],
                 [],
                 $rootContent->getHost()
             )
@@ -126,7 +126,7 @@ class NyroCmsLoader extends Loader
         $routes->add($res[0].'_content_spec', new Route(
                 $prefixUrlLocale.'/{url}/{id}/{title}',
                 ['_controller' => $res[1].':contentSpec', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '.+', 'id' => '\d+'],
+                ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+'],
                 [],
                 $rootContent->getHost()
             )
@@ -134,7 +134,7 @@ class NyroCmsLoader extends Loader
         $routes->add($res[0].'_content_handler', new Route(
                 $prefixUrlLocale.'/{url}/'.$routeHandlerPath.'{handler}',
                 ['_controller' => $res[1].':content', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '.+', 'handler' => '.+'],
+                ['_locale' => $locales, 'url' => '[^/]+', 'handler' => '.+'],
                 [],
                 $rootContent->getHost()
             )
