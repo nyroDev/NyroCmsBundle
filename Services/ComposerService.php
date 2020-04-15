@@ -139,7 +139,7 @@ class ComposerService extends AbstractService
             // Browser enable, add elements for it
             $cfg['plugins'] .= ',responsivefilemanager';
             $normalUrl = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route'));
-            if ($this->getQuickConfig($row, 'tinymce_browser')) {
+            if ($this->getQuickConfig($row, 'tinymce_browser_per_root')) {
                 $url = $this->generateUrl($this->getQuickConfig($row, 'tinymce_browser_route_per_root'), [
                     'dirName' => 'tinymce_'.$row->getVeryParent()->getId(),
                 ]);
