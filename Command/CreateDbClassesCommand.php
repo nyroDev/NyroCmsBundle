@@ -12,18 +12,19 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\KernelInterface;
+use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 
 class CreateDbClassesCommand extends Command
 {
+    use KernelInterfaceServiceableTrait;
+
     protected $db;
     protected $params;
-    protected $kernel;
 
-    public function __construct(DbAbstractService $db, ParameterBagInterface $params, KernelInterface $kernel)
+    public function __construct(DbAbstractService $db, ParameterBagInterface $params)
     {
         $this->db = $db;
         $this->params = $params;
-        $this->kernel = $kernel;
 
         parent::__construct();
     }
@@ -66,7 +67,7 @@ class CreateDbClassesCommand extends Command
 
             $originalNamespace = 'NyroDev\NyroCmsBundle\Model\\'.$dirname;
 
-            $projectDir = $this->kernel->getProjectDir();
+            $projectDir = $this->getKernelInterface()->getProjectDir();
 
             $srcDir = $projectDir.'/src';
 

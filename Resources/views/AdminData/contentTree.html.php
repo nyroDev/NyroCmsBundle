@@ -1,4 +1,4 @@
-<?php $view->extend('NyroDevNyroCmsBundle:Admin:_layout.html.php'); ?>
+<?php $view->extend('@NyroDevNyroCms/Admin/_layout.html.php'); ?>
 
 <?php $view['slots']->start('content'); ?>
 	<article>
@@ -37,7 +37,7 @@
 				<?php endif; ?>
 				<button type="submit" class="button"><?php echo $view['nyrodev']->trans('admin.misc.send'); ?></button>
 			</div>
-			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDevNyroCmsBundle:AdminData:contentTreeSub', array(
+			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', array(
                 'parent' => $parent,
             ))); ?>
 			<div class="listButtons">

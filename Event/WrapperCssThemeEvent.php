@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use NyroDev\NyroCmsBundle\Model\Composable;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class WrapperCssThemeEvent extends Event
 {
@@ -14,7 +14,7 @@ class WrapperCssThemeEvent extends Event
     const POSITION_ADMIN_BODY = 'admin.body';
 
     protected $row;
-    protected $wrapperCssTheme = array();
+    protected $wrapperCssTheme = [];
 
     public function __construct(Composable $row)
     {

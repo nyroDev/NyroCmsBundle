@@ -52,7 +52,7 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         $orderField = $handler->orderField();
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
                     array(
                         'title' => $ch->getName(),
@@ -263,7 +263,7 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         $adminForm['title'] = $row->getContentHandler()->getName();
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
     protected $translationFields = array(

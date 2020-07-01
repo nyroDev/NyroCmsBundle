@@ -255,7 +255,7 @@ class Contact extends AbstractHandler
             return new RedirectResponse($this->get(NyroCmsService::class)->getUrlFor($content, false, array('sent' => 1)));
         }
 
-        $view = 'NyroDevNyroCmsBundle:Handler:contact';
+        $view = '@NyroDevNyroCms/Handler/contact';
 
         return array(
             'view' => $view.'.html.php',

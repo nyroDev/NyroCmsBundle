@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use NyroDev\NyroCmsBundle\Model\Composable;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class ComposerBlockVarsEvent extends Event
 {

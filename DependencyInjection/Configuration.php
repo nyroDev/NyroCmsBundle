@@ -74,42 +74,42 @@ class Configuration implements ConfigurationInterface
 
         $defaultConfigs = array(
             'intro' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_intro.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_intro.html.php',
             ),
             'text' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_text.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_text.html.php',
             ),
             'column2' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_column2.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_column2.html.php',
             ),
             'column3' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_column3.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_column3.html.php',
             ),
             'image' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_image.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_image.html.php',
                 'image' => array('image' => true, 'w' => 1500, 'h' => 600, 'name' => 'image', 'fit' => true, 'quality' => 80),
             ),
             'image_text' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_image_text.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_image_text.html.php',
                 'image' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80),
             ),
             'text_image' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_text_image.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_text_image.html.php',
                 'image' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80),
             ),
             'image2' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_image2.html.php',
                 'image1' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80),
                 'image2' => array('image' => true, 'w' => 1000, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80),
             ),
             'image3' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_image3.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_image3.html.php',
                 'image1' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80),
                 'image2' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80),
                 'image3' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image3', 'fit' => true, 'quality' => 80),
             ),
             'slideshow' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_slideshow.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_slideshow.html.php',
                 'images' => array(
                     'image' => true,
                     'multiple' => true,
@@ -131,7 +131,7 @@ class Configuration implements ConfigurationInterface
                 ),
             ),
             'video' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_video.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_video.html.php',
                 'url' => array(
                     'treatAsMedia' => true,
                     'linkedFields' => array(
@@ -141,10 +141,10 @@ class Configuration implements ConfigurationInterface
                 ),
             ),
             'handler' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_handler.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_handler.html.php',
             ),
             'separator' => array(
-                'template' => 'NyroDevNyroCmsBundle:Composer:block_separator.html.php',
+                'template' => '@NyroDevNyroCms/Composer/block_separator.html.php',
             ),
         );
 
@@ -227,9 +227,9 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode('email')->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('global_template')->defaultValue('NyroDevNyroCmsBundle:Tpl:email.html.php')->end()
-                        ->scalarNode('styles_template')->defaultValue('NyroDevNyroCmsBundle:Tpl:emailStyles.html.php')->end()
-                        ->scalarNode('body_template')->defaultValue('NyroDevNyroCmsBundle:Tpl:emailBody.html.php')->end()
+                        ->scalarNode('global_template')->defaultValue('@NyroDevNyroCms/Tpl/email.html.php')->end()
+                        ->scalarNode('styles_template')->defaultValue('@NyroDevNyroCms/Tpl/emailStyles.html.php')->end()
+                        ->scalarNode('body_template')->defaultValue('@NyroDevNyroCms/Tpl/emailBody.html.php')->end()
                         ->scalarNode('router_scheme')->defaultValue('http')->end()
                         ->scalarNode('router_host')->defaultValue('localhost')->end()
                         ->scalarNode('router_base_url')->defaultValue('')->end()
@@ -245,9 +245,9 @@ class Configuration implements ConfigurationInterface
                                 ->booleanNode('same_lang_structure')->defaultFalse()->end()
                                 ->booleanNode('same_lang_media')->defaultFalse()->end()
                                 ->booleanNode('change_theme')->defaultTrue()->end()
-                                ->scalarNode('global_composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composer.html.php')->end()
-                                ->scalarNode('composer_template')->defaultValue('NyroDevNyroCmsBundle:Composer:composerTemplate.html.php')->end()
-                                ->scalarNode('block_template')->defaultValue('NyroDevNyroCmsBundle:Composer:block.html.php')->end()
+                                ->scalarNode('global_composer_template')->defaultValue('@NyroDevNyroCms/Composer/composer.html.php')->end()
+                                ->scalarNode('composer_template')->defaultValue('@NyroDevNyroCms/Composer/composerTemplate.html.php')->end()
+                                ->scalarNode('block_template')->defaultValue('@NyroDevNyroCms/Composer/block.html.php')->end()
                                 ->scalarNode('css_template')->defaultValue('Front/NyroCms/cssTemplate.html.php')->end()
                                 ->integerNode('max_composer_buttons')->defaultValue(10)->end()
                                 ->arrayNode('cancel_url')

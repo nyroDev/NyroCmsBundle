@@ -5,36 +5,35 @@ namespace NyroDev\NyroCmsBundle\Command;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\UserService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Services\Traits\LockFactoryServiceableTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Lock\Factory;
 use Symfony\Component\Routing\RouterInterface;
 
 class SendDeferredWelcomeCommand extends Command
 {
+    use LockFactoryServiceableTrait;
+
     protected $nyrodev;
     protected $db;
     protected $user;
     protected $router;
     protected $params;
-    protected $lock;
 
     public function __construct(
         NyrodevService $nyrodev,
         DbAbstractService $db,
         UserService $user,
         RouterInterface $router,
-        ParameterBagInterface $params,
-        Factory $lockFactory
+        ParameterBagInterface $params
     ) {
         $this->nyrodev = $nyrodev;
         $this->db = $db;
         $this->user = $user;
         $this->router = $router;
         $this->params = $params;
-        $this->lockFactory = $lockFactory;
 
         parent::__construct();
     }
@@ -48,7 +47,7 @@ class SendDeferredWelcomeCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $lock = $this->lockFactory->createLock('sendDeferredWelcome.lock');
+        $lock = $this->getLockFactory()->createLock('sendDeferredWelcome.lock');
 
         if ($lock->acquire()) {
             $this->nyrodev->increasePhpLimits();

@@ -15,9 +15,9 @@ use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService;
 use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
+use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
-use Psr\Container\ContainerInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,16 +25,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ComposerService extends AbstractService
 {
-    /**
-     * @var AssetsHelper
-     */
-    protected $assetsHelper;
-
-    public function __construct(ContainerInterface $container, AssetsHelper $assetsHelper)
-    {
-        parent::__construct($container);
-        $this->assetsHelper = $assetsHelper;
-    }
+    use AssetsPackagesServiceableTrait;
+    use TwigServiceableTrait;
 
     public function getContainer()
     {
@@ -72,7 +64,7 @@ class ComposerService extends AbstractService
     {
         $cfg = $this->getConfig($row);
         $event = new ComposerConfigEvent($row, $key, isset($cfg[$key]) ? $cfg[$key] : null);
-        $this->get('event_dispatcher')->dispatch(ComposerConfigEvent::COMPOSER_CONFIG, $event);
+        $this->get('event_dispatcher')->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
 
         return $event->getConfig();
     }
@@ -152,7 +144,7 @@ class ComposerService extends AbstractService
         }
 
         $tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
-        $this->get('event_dispatcher')->dispatch(TinymceConfigEvent::TINYMCE_CONFIG, $tinymceConfigEvent);
+        $this->get('event_dispatcher')->dispatch($tinymceConfigEvent, TinymceConfigEvent::TINYMCE_CONFIG);
 
         return $this->tinymceAttrsTrRec($tinymceConfigEvent->getConfig());
     }
@@ -220,7 +212,7 @@ class ComposerService extends AbstractService
     {
         if (!isset($this->wrapperCssthemeEvents[$row->getId()])) {
             $this->wrapperCssthemeEvents[$row->getId()] = new WrapperCssThemeEvent($row);
-            $this->get('event_dispatcher')->dispatch(WrapperCssThemeEvent::WRAPPER_CSS_THEME, $this->wrapperCssthemeEvents[$row->getId()]);
+            $this->get('event_dispatcher')->dispatch($this->wrapperCssthemeEvents[$row->getId()], WrapperCssThemeEvent::WRAPPER_CSS_THEME);
         }
 
         return $this->wrapperCssthemeEvents[$row->getId()]->getWrapperCssTheme($position);
@@ -653,9 +645,9 @@ class ComposerService extends AbstractService
             'customAttrs' => null,
         ], $this->getBlockConfig($row, $block['type']));
 
-        $this->get('event_dispatcher')->dispatch(ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS, $event);
+        $this->get('event_dispatcher')->dispatch($event, ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS);
 
-        return $this->get('templating')->render($event->getTemplate(), $event->getVars())."\n\n";
+        return $this->getTwig()->render($event->getTemplate(), $event->getVars())."\n\n";
     }
 
     public function getImageDir()
@@ -712,7 +704,7 @@ class ComposerService extends AbstractService
                 $resizedPath = $this->get(ImageService::class)->_resize($absoluteFile, $config);
 
                 $tmp = explode('/public/', $resizedPath);
-                $ret = $this->assetsHelper->getUrl($tmp[1]);
+                $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
             } catch (\Exception $e) {
             }
         }
@@ -726,7 +718,7 @@ class ComposerService extends AbstractService
 
     public function getFileUrl($file)
     {
-        return $this->assetsHelper->getUrl($this->getImageDir().'/'.$file);
+        return $this->getAssetsPackages()->getUrl($this->getImageDir().'/'.$file);
     }
 
     public function fileUpload(UploadedFile $file)
@@ -909,7 +901,7 @@ class ComposerService extends AbstractService
 
                         $om->flush();
 
-                        $this->get('event_dispatcher')->dispatch(ComposerEvent::COMPOSER_LANG_SAME, $event);
+                        $this->get('event_dispatcher')->dispatch($event, ComposerEvent::COMPOSER_LANG_SAME);
                     }
 
                     $row->setTranslatableLocale($curLocale);
@@ -924,7 +916,7 @@ class ComposerService extends AbstractService
         }
 
         if ($eventName) {
-            $this->get('event_dispatcher')->dispatch($eventName, $event);
+            $this->get('event_dispatcher')->dispatch($event, $eventName);
         }
     }
 

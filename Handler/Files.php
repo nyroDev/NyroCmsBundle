@@ -75,7 +75,7 @@ class Files extends AbstractHandler
 
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
-        $view = 'NyroDevNyroCmsBundle:Handler:files';
+        $view = '@NyroDevNyroCms/Handler/files';
         $vars = array(
             'content' => $content,
         );

@@ -23,7 +23,7 @@ class AdminTplController extends NyroDevAbstractController
         return $this->redirectToRoute('nyrocms_admin_data_content_tree', array('id' => $id));
     }
 
-    public function headerAction(Request $request)
+    public function header(Request $request)
     {
         $vars = array(
             'logged' => $this->get(MemberService::class)->isLogged(),
@@ -149,16 +149,16 @@ class AdminTplController extends NyroDevAbstractController
 
             $adminMenuEvent = new AdminMenuEvent($tmpUri, $adminPerRoot, $rootContents, $curRootId);
             $adminMenuEvent->setMenu($menu);
-            $this->get('event_dispatcher')->dispatch(AdminMenuEvent::ADMIN_MENU, $adminMenuEvent);
+            $this->get('event_dispatcher')->dispatch($adminMenuEvent, AdminMenuEvent::ADMIN_MENU);
 
             $vars['menu'] = $adminMenuEvent->getMenu();
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:header.html.php', $vars);
+        return $this->render('@NyroDevNyroCms/AdminTpl/header.html.php', $vars);
     }
 
-    public function footerAction()
+    public function footer()
     {
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:footer.html.php');
+        return $this->render('@NyroDevNyroCms/AdminTpl/footer.html.php');
     }
 }

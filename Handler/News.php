@@ -33,7 +33,7 @@ class News extends AbstractHandler
 
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
-        $view = 'NyroDevNyroCmsBundle:Handler:news';
+        $view = '@NyroDevNyroCms/Handler/news';
         $vars = array(
             'content' => $content,
         );
@@ -97,7 +97,7 @@ class News extends AbstractHandler
     protected function _prepareHomeView(Content $content)
     {
         return array(
-            'view' => 'NyroDevNyroCmsBundle:handler:newsHome.html.php',
+            'view' => '@NyroDevNyroCms/Handler/newsHome.html.php',
             'vars' => array(
                 'news' => $this->getFeatured($content, 4),
                 'handlerContent' => $content,

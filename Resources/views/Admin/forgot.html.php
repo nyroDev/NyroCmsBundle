@@ -1,4 +1,4 @@
-<?php $view->extend('NyroDevNyroCmsBundle:Admin:_layout.html.php'); ?>
+<?php $view->extend('@NyroDevNyroCms/Admin/_layout.html.php'); ?>
 
 <?php $view['slots']->set('bodyId', 'loginpage'); ?>
 

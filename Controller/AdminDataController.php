@@ -87,7 +87,7 @@ class AdminDataController extends AbstractAdminController
             return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(array('id' => $id)));
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminData:contentTree.html.php', array(
+        return $this->render('@NyroDevNyroCms/AdminData/contentTree.html.php', array(
             'parent' => $parent,
             'canRootComposer' => $canRootComposer,
             'candDirectAdd' => $canAdminContent && $this->get(AdminService::class)->canHaveSub($parent),
@@ -116,11 +116,11 @@ class AdminDataController extends AbstractAdminController
         return $this->redirectToRoute('nyrocms_admin_data_content_tree', array_filter(array('id' => $id)));
     }
 
-    public function contentTreeSubAction(\NyroDev\NyroCmsBundle\Model\Content $parent = null)
+    public function contentTreeSub(\NyroDev\NyroCmsBundle\Model\Content $parent = null)
     {
         $route = 'nyrocms_admin_data_content';
 
-        return $this->render('NyroDevNyroCmsBundle:AdminData:contentTreeSub.html.php', array(
+        return $this->render('@NyroDevNyroCms/AdminData/contentTreeSub.html.php', array(
             'route' => $route,
             'parent' => $parent,
             'canEditParent' => $this->get(AdminService::class)->canAdminContent($parent),
@@ -238,7 +238,7 @@ class AdminDataController extends AbstractAdminController
             return $adminForm;
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
     protected $contentTranslationFields = array(
@@ -320,14 +320,14 @@ class AdminDataController extends AbstractAdminController
 
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
         $adminFormEvent->setTranslations($this->translations);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_CONTENT, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::UPDATE_CONTENT);
     }
 
     protected function contentFlush($action, $row, $form)
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
         $adminFormEvent->setTranslations($this->translations);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_CONTENT, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::BEFOREFLUSH_CONTENT);
 
         $this->contentForm = $form;
         $this->get(AdminService::class)->updateContentUrl($row, self::EDIT == $action);
@@ -337,7 +337,7 @@ class AdminDataController extends AbstractAdminController
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $this->contentForm);
         $adminFormEvent->setTranslations($this->translations);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_CONTENT, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::AFTERFLUSH_CONTENT);
 
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
@@ -376,7 +376,7 @@ class AdminDataController extends AbstractAdminController
         }
         $route = 'nyrocms_admin_data_userRole';
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
                     array(
                         'name' => 'userRole',
@@ -427,6 +427,7 @@ class AdminDataController extends AbstractAdminController
             'contents' => $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content')),
             'submit' => array(
                 'attr' => array(
+                    'more' => 'hello',
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
                 ),
             ),
@@ -443,7 +444,7 @@ class AdminDataController extends AbstractAdminController
             return $adminForm;
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -455,7 +456,7 @@ class AdminDataController extends AbstractAdminController
 
         $route = 'nyrocms_admin_data_contentHandler';
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
                     array(
                         'name' => 'contentHandler',
@@ -543,7 +544,7 @@ class AdminDataController extends AbstractAdminController
             return $adminForm;
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
     ///////////////////////////////////////////////////////////////
@@ -574,7 +575,7 @@ class AdminDataController extends AbstractAdminController
         $route = 'nyrocms_admin_data_contactMessage';
         $routePrm = array('chid' => $chid);
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
                     array(
                         'name' => 'contactMessage',
@@ -605,7 +606,7 @@ class AdminDataController extends AbstractAdminController
         $repo = $this->get(DbAbstractService::class)->getUserRepository();
         $filter = UserFilterType::class;
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:list.html.php',
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
                     array(
                         'name' => 'user',
@@ -691,7 +692,7 @@ class AdminDataController extends AbstractAdminController
             return $adminForm;
         }
 
-        return $this->render('NyroDevNyroCmsBundle:AdminTpl:form.html.php', $adminForm);
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
     protected $origUserPassword;
@@ -702,19 +703,19 @@ class AdminDataController extends AbstractAdminController
         $form->get('valid')->setRequired(false);
 
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::UPDATE_USER, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::UPDATE_USER);
     }
 
     protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form)
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::BEFOREFLUSH_USER, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::BEFOREFLUSH_USER);
     }
 
     protected function userFormAfterFlush($response, $action, $row)
     {
         $adminFormEvent = new AdminFormEvent($action, $row);
-        $this->get('event_dispatcher')->dispatch(AdminFormEvent::AFTERFLUSH_USER, $adminFormEvent);
+        $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::AFTERFLUSH_USER);
 
         if (self::ADD == $action) {
             $this->get(UserService::class)->handleAddUser($row);

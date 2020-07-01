@@ -9,7 +9,7 @@
 			<a href="<?php echo $content['url']; ?>"><?php echo $content['name']; ?></a>
 		<?php endif; ?>
 		<?php if (isset($content['contents']) && count($content['contents'])): ?>
-			<?php echo $view->render('NyroDevNyroCmsBundle:Handler:sitemap.html.php', array(
+			<?php echo $view->render('@NyroDevNyroCms/Handler/sitemap.html.php', array(
                 'contents' => $content['contents'],
             )); ?>
 		<?php endif; ?>

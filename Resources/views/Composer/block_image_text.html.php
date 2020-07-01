@@ -1,6 +1,6 @@
 <?php if ($admin): ?>
 	<div data-name="contents_<?php echo $nb; ?>_image" class="composableImgCont image1" data-cfg="<?php echo $view->escape(json_encode($config['image'])); ?>">
-		<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
+		<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', array(
             'image' => $contents['image'],
             'title' => $row->getTitle(),
             'class' => $view['nyrocms_composer']->canChangeMedia($row) ? 'composableImg' : '',
@@ -18,7 +18,7 @@
 	<?php endif; ?>
 	<textarea name="contents[<?php echo $nb; ?>][text]" id="contents_<?php echo $nb; ?>_text"><?php echo $contents['text']; ?></textarea>
 <?php else: ?>
-	<?php echo $view->render('NyroDevNyroCmsBundle:Composer:_image.html.php', array(
+	<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', array(
         'image' => $contents['image'],
         'title' => $row->getTitle(),
         'class' => 'image1',

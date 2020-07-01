@@ -7,14 +7,14 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
-use Symfony\Bundle\TwigBundle\Controller\ExceptionController as SrcExceptionController;
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ErrorController as BaseErrorController;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 use Twig\Environment;
 
-class ExceptionController extends SrcExceptionController
+class ExceptionController extends BaseErrorController
 {
     protected $nyroCms;
 

@@ -31,6 +31,7 @@
         "symfony/yaml": "^5.0",
 		"stof/doctrine-extensions-bundle": "^1.4",
 		"becklyn/ordered-form-bundle": "^1.2",
+        "nyrodev/php-template-bundle": "dev-master",
         "nyrodev/utility-bundle": "dev-master"
     },
     "suggest": {

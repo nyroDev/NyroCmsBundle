@@ -2,7 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 class UrlGenerationEvent extends Event
 {
@@ -15,7 +15,7 @@ class UrlGenerationEvent extends Event
     protected $object;
     protected $parent;
 
-    public function __construct($routeName, array $routePrm = array(), $absolute = false, $object = null, $parent = null)
+    public function __construct($routeName, array $routePrm = [], $absolute = false, $object = null, $parent = null)
     {
         $this->routeName = $routeName;
         $this->routePrm = $routePrm;

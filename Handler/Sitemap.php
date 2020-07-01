@@ -13,7 +13,7 @@ class Sitemap extends AbstractHandler
         $root = $this->getContentById($content->getRoot());
 
         return array(
-            'view' => 'NyroDevNyroCmsBundle:Handler:sitemap.html.php',
+            'view' => '@NyroDevNyroCms/Handler/sitemap.html.php',
             'vars' => array(
                 'content' => $content,
                 'contents' => $this->getHierarchy($root),

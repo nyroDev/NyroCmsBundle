@@ -33,7 +33,7 @@ class AdminController extends NyroDevAbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('NyroDevNyroCmsBundle:Admin:login.html.php', array(
+        return $this->render('@NyroDevNyroCms/Admin/login.html.php', array(
             // last username entered by the user
             'last_username' => $lastUsername,
             'error' => $error,
@@ -47,12 +47,12 @@ class AdminController extends NyroDevAbstractController
 
     public function forgotAction(Request $request, $id = null, $key = null, $welcome = false)
     {
-        return $this->render('NyroDevNyroCmsBundle:Admin:forgot.html.php', $this->get(UserService::class)->handleForgot('admin', $request, $id, $key, $welcome));
+        return $this->render('@NyroDevNyroCms/Admin/forgot.html.php', $this->get(UserService::class)->handleForgot('admin', $request, $id, $key, $welcome));
     }
 
     public function accountAction(Request $request)
     {
-        return $this->render('NyroDevNyroCmsBundle:Admin:account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
+        return $this->render('@NyroDevNyroCms/Admin/account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
     }
 
     public function ccAction()

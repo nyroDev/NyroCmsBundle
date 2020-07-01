@@ -2,6 +2,9 @@ services:
     NyroDev\NyroCmsBundle\Services\NyroCmsService:
         public: true
         arguments: ['@service_container']
+        calls:
+            - [setTwig, ['@twig']]
+            - [setMailerInterface, ['@mailer']]
         tags:
           - { name: templating.helper, alias: nyrocms }
     nyrocms:
@@ -21,7 +24,9 @@ services:
 
     NyroDev\NyroCmsBundle\Services\AdminService:
         public: true
-        arguments: ['@service_container', '@templating.helper.assets']
+        arguments: ['@service_container']
+        calls:
+            - [setAssetsPackages, ['@assets.packages']]
         tags:
           - { name: templating.helper, alias: nyrocms_admin }
     nyrocms_admin:
@@ -30,9 +35,10 @@ services:
 
     NyroDev\NyroCmsBundle\Services\ComposerService:
         public: true
-        arguments:
-            - '@service_container'
-            - '@templating.helper.assets'
+        arguments: ['@service_container']
+        calls:
+            - [setAssetsPackages, ['@assets.packages']]
+            - [setTwig, ['@twig']]
         tags:
           - { name: templating.helper, alias: nyrocms_composer }
     nyrocms_composer:
