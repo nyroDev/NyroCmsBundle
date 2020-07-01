@@ -5,10 +5,10 @@
 		<h1><?php echo $view['nyrodev']->trans('admin.content.viewTitle'); ?></h1>
 		
 		<?php
-        $introKeys = array(
+        $introKeys = [
             'admin.content.intro_'.$parent->getHandler(),
             'admin.content.intro',
-        );
+        ];
         foreach ($introKeys as $introKey) {
             $intro = $view['translator']->trans($introKey);
             if ($intro && $intro != $introKey) {
@@ -19,7 +19,7 @@
         ?>
 
 		<?php if ($canRootComposer && $view['nyrocms_admin']->canAdminContent($parent)): ?>
-			<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => 'Content', 'id' => $parent->getId())); ?>" id="composerHomeEdit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
+			<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" id="composerHomeEdit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
 				<?php echo $view['nyrocms_admin']->getIcon('pencil'); ?>
 				<?php echo $view['nyrodev']->trans('admin.composer.rootEdit'); ?>
 			</a>
@@ -30,19 +30,19 @@
 			<a href="#" class="reduceAll"><?php echo $view['nyrodev']->trans('admin.content.reduceAll'); ?></a><br />
 			<div class="listButtons">
 				<?php if ($candDirectAdd): ?>
-				<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', array('pid' => $parent->getId())); ?>" class="button add">
+				<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', ['pid' => $parent->getId()]); ?>" class="button add">
 					<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
 					<?php echo $view['translator']->trans('admin.misc.add'); ?>
 				</a>
 				<?php endif; ?>
 				<button type="submit" class="button"><?php echo $view['nyrodev']->trans('admin.misc.send'); ?></button>
 			</div>
-			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', array(
+			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', [
                 'parent' => $parent,
-            ))); ?>
+            ])); ?>
 			<div class="listButtons">
 				<?php if ($candDirectAdd): ?>
-				<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', array('pid' => $parent->getId())); ?>" class="button add">
+				<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', ['pid' => $parent->getId()]); ?>" class="button add">
 					<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
 					<?php echo $view['translator']->trans('admin.misc.add'); ?>
 				</a>

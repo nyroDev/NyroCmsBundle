@@ -52,10 +52,10 @@ class AdminComposerController extends AbstractAdminController
         $canChangeStructure = $isDefaultLocale || !$sameLangStructure;
         $canChangeMedia = $isDefaultLocale || !$sameLangMedia;
 
-        $url = $this->generateUrl('nyrocms_admin_composer', array_filter(array('type' => $type, 'id' => $id, 'lang' => $lang)));
+        $url = $this->generateUrl('nyrocms_admin_composer', array_filter(['type' => $type, 'id' => $id, 'lang' => $lang]));
         /* @var $composerService \NyroDev\NyroCmsBundle\Services\ComposerService */
         $availableBlocks = $composerService->getAvailableBlocks($row);
-        $themes = $canChangeTheme ? $composerService->getThemes($row->getParent() ? $row->getParent() : $row) : array();
+        $themes = $canChangeTheme ? $composerService->getThemes($row->getParent() ? $row->getParent() : $row) : [];
 
         if ($request->isMethod('post')) {
             if ($request->request->has('imageUpload') && $request->files->has('image')) {
@@ -63,13 +63,13 @@ class AdminComposerController extends AbstractAdminController
             } elseif ($request->request->has('fileUpload') && $request->files->has('file')) {
                 return $composerService->handleFileUpload($request);
             } elseif ($request->request->has('video')) {
-                $ret = array();
+                $ret = [];
 
                 $url = $request->request->get('url');
-                $constraints = array(
+                $constraints = [
                     new \Symfony\Component\Validator\Constraints\NotBlank(),
                     new \NyroDev\UtilityBundle\Validator\Constraints\EmbedUrl(),
-                );
+                ];
                 $errors = $this->get('validator')->validate($url, $constraints);
 
                 if (0 == count($errors)) {
@@ -78,12 +78,12 @@ class AdminComposerController extends AbstractAdminController
                     if ($request->request->get('autoplay')) {
                         $embedUrl .= (false === strpos($embedUrl, '?') ? '?' : '&').'autoplay=1';
                     }
-                    $ret = array(
+                    $ret = [
                         'url' => $url,
                         'embed' => $embedUrl,
-                    );
+                    ];
                 } else {
-                    $tmp = array();
+                    $tmp = [];
                     foreach ($errors as $err) {
                         $tmp[] = $err->getMessage();
                     }
@@ -103,8 +103,8 @@ class AdminComposerController extends AbstractAdminController
             $contentsDel = $request->request->get('contentsDel');
             $contents = $request->request->get('contents');
 
-            $newContents = array();
-            $newTexts = array($row->getTitle());
+            $newContents = [];
+            $newTexts = [$row->getTitle()];
             $firstImage = null;
             foreach ($contentsKey as $key) {
                 if (isset($contentsType[$key]) && isset($contents[$key])) {
@@ -163,7 +163,7 @@ class AdminComposerController extends AbstractAdminController
             }
         }
 
-        return $this->render($this->get(ComposerService::class)->globalComposerTemplate($row), array(
+        return $this->render($this->get(ComposerService::class)->globalComposerTemplate($row), [
             'type' => $type,
             'id' => $id,
             'composerUrl' => $url,
@@ -176,6 +176,6 @@ class AdminComposerController extends AbstractAdminController
             'canChangeStructure' => $canChangeStructure,
             'canChangeMedia' => $canChangeMedia,
             'themes' => $themes,
-        ));
+        ]);
     }
 }

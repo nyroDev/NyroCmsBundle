@@ -26,17 +26,17 @@ class News extends AbstractHandler
 
     public function getAllowedParams()
     {
-        return array(
+        return [
             'page',
-        );
+        ];
     }
 
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
         $view = '@NyroDevNyroCms/Handler/news';
-        $vars = array(
+        $vars = [
             'content' => $content,
-        );
+        ];
 
         $routCfg = $this->get(NyroCmsService::class)->getRouteFor($content);
         $route = $routCfg['route'];
@@ -71,19 +71,19 @@ class News extends AbstractHandler
             $vars['pager'] = $pager;
         }
 
-        return array(
+        return [
             'view' => $view.'.html.php',
             'vars' => $vars,
-        );
+        ];
     }
 
     public function getFeatured(Content $content, $nb = 2, $forceNb = true)
     {
-        $results = $this->getContentSpecs($content, 0, $nb, array('featured' => 1));
+        $results = $this->getContentSpecs($content, 0, $nb, ['featured' => 1]);
 
         $count = count($results);
         if ($forceNb && $count < $nb) {
-            $results = array_merge($results, $this->getContentSpecs($content, 0, $nb - $count, array('!featured' => 1)));
+            $results = array_merge($results, $this->getContentSpecs($content, 0, $nb - $count, ['!featured' => 1]));
         }
 
         return $results;
@@ -96,12 +96,12 @@ class News extends AbstractHandler
 
     protected function _prepareHomeView(Content $content)
     {
-        return array(
+        return [
             'view' => '@NyroDevNyroCms/Handler/newsHome.html.php',
-            'vars' => array(
+            'vars' => [
                 'news' => $this->getFeatured($content, 4),
                 'handlerContent' => $content,
-            ),
-        );
+            ],
+        ];
     }
 }

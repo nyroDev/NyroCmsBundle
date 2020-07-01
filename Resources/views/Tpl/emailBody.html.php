@@ -10,7 +10,7 @@
 								<tr>
 									<td valign="top" align="center">
 										<br /><br />
-										<a href="<?php echo $view['nyrodev']->generateUrl('_homepage', array(), true); ?>" target="_blank"><img src="<?php echo $view['nyrodev']->getFullUrl($view['assets']->getUrl('images/email.png')); ?>" alt="email" width="125" height="125" /></a>
+										<a href="<?php echo $view['nyrodev']->generateUrl('_homepage', [], true); ?>" target="_blank"><img src="<?php echo $view['nyrodev']->getFullUrl($view['assets']->getUrl('images/email.png')); ?>" alt="email" width="125" height="125" /></a>
 										<br /><br />
 									</td>
 								</tr>
@@ -28,7 +28,7 @@
 							<table border="0" cellpadding="8" cellspacing="0" width="600" style="background-color:#23305c;">
 								<tr>
 									<td valign="top" align="center">
-										<a href="<?php echo $view['nyrodev']->generateUrl('_homepage', array(), true); ?>" style="color:#fff;font-weight:bold;text-decoration:none;font-size:16px;" target="_blank">website</a>
+										<a href="<?php echo $view['nyrodev']->generateUrl('_homepage', [], true); ?>" style="color:#fff;font-weight:bold;text-decoration:none;font-size:16px;" target="_blank">website</a>
 									</td>
 								</tr>
 							</table>

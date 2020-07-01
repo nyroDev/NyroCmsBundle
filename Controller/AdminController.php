@@ -33,11 +33,11 @@ class AdminController extends NyroDevAbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('@NyroDevNyroCms/Admin/login.html.php', array(
+        return $this->render('@NyroDevNyroCms/Admin/login.html.php', [
             // last username entered by the user
             'last_username' => $lastUsername,
             'error' => $error,
-        ));
+        ]);
     }
 
     public function indexAction()

@@ -27,11 +27,11 @@
 							</a>
 						<?php endif; ?>
 					<?php endif; ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => 'Content', 'id' => $content->getId())); ?>" class="edit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
+					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $content->getId()]); ?>" class="edit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('pencil'); ?>
 					</a>
 				<?php endif; ?>
-				<a href="<?php echo $view['nyrocms']->getUrlFor($content, true, array('_locale' => $view['nyrocms']->getDefaultLocale($content))); ?>" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.misc.watch'); ?>">
+				<a href="<?php echo $view['nyrocms']->getUrlFor($content, true, ['_locale' => $view['nyrocms']->getDefaultLocale($content)]); ?>" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.misc.watch'); ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('eye'); ?>
 				</a>
 			</span>
@@ -39,7 +39,7 @@
 				<a href="#" class="move" title="<?php echo $view['nyrodev']->trans('admin.content.drag'); ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('drag'); ?>
 				</a>
-				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array('id' => $content->getId())); ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
+				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', ['id' => $content->getId()]); ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
 				</a>
 			<?php else: ?>
@@ -52,7 +52,7 @@
 			<?php endif; ?>
 			<?php if ($maxLevel > 1): ?>
 				<?php if ($canEdit && $curCanHavSub): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', array('pid' => $content->getId())); ?>" class="addNode" title="<?php echo $view['translator']->trans('admin.misc.add'); ?>">
+					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', ['pid' => $content->getId()]); ?>" class="addNode" title="<?php echo $view['translator']->trans('admin.misc.add'); ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
 					</a>
 				<?php else: ?>
@@ -62,7 +62,7 @@
 				<?php endif; ?>
 			<?php endif; ?>
 			<?php if (true === $canEdit): ?>
-				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array('id' => $content->getId())); ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
+				<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', ['id' => $content->getId()]); ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
 				</a>
 			<?php else: ?>
@@ -73,7 +73,7 @@
 		</span>
 		
 		<?php if ($curCanHavSub): ?>
-			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', array('parent' => $content))); ?>
+			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', ['parent' => $content])); ?>
 		<?php endif; ?>
 	</li>
 	<?php endforeach; ?>

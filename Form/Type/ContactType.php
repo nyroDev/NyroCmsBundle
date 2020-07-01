@@ -29,62 +29,62 @@ class ContactType extends AbstractType
     {
         $resolver
             ->setRequired('contacts')
-            ->setAllowedTypes('contacts', array('array'));
+            ->setAllowedTypes('contacts', ['array']);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         if (count($options['contacts']) > 1) {
-            $choices = array();
+            $choices = [];
             foreach ($options['contacts'] as $k => $v) {
                 $choices[$k] = $this->container->get(NyrodevService::class)->trans($v['name']);
             }
 
-            $builder->add('dest', ChoiceType::class, array(
+            $builder->add('dest', ChoiceType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.dest'),
                 'placeholder' => '',
                 'choices' => array_flip($choices),
                 'required' => true,
-            ));
+            ]);
         }
 
         $builder
-            ->add('lastname', TextType::class, array(
+            ->add('lastname', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.lastname'),
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
-                ),
-            ))
-            ->add('firstname', TextType::class, array(
+                ],
+            ])
+            ->add('firstname', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.firstname'),
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
-                ),
-            ))
-            ->add('company', TextType::class, array(
+                ],
+            ])
+            ->add('company', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.company'),
                 'required' => false,
-            ))
-            ->add('phone', TextType::class, array(
+            ])
+            ->add('phone', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.phone'),
                 'required' => false,
-            ))
-            ->add('email', EmailType::class, array(
+            ])
+            ->add('email', EmailType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.email'),
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
                     new Constraints\Email(),
-                ),
-            ))
-            ->add('message', TextareaType::class, array(
+                ],
+            ])
+            ->add('message', TextareaType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.message'),
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
-                ),
-            ))
-            ->add('submit', SubmitType::class, array(
+                ],
+            ])
+            ->add('submit', SubmitType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.send'),
-            ));
+            ]);
     }
 
     public function getBlockPrefix()

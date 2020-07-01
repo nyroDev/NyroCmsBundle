@@ -41,9 +41,6 @@ class AddRootContentCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -79,14 +76,14 @@ class AddRootContentCommand extends Command
         if (is_null($xmlSitemap)) {
             $question = new ChoiceQuestion(
                 'Is Xml sitemap enabled?',
-                array('false', 'true'),
+                ['false', 'true'],
                 1);
             $xmlSitemap = $helper->ask($input, $output, $question);
         }
         if (is_null($userRole)) {
             $question = new ChoiceQuestion(
                 'Add user role too?',
-                array('false', 'true'),
+                ['false', 'true'],
                 1);
             $userRole = $helper->ask($input, $output, $question);
         }

@@ -2,9 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\Config\Resource\FileResource;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ValidationPass implements CompilerPassInterface
 {
@@ -21,7 +21,7 @@ class ValidationPass implements CompilerPassInterface
         if ($container->hasDefinition('validator.builder')) {
             // Symfony 2.5+
             $container->getDefinition('validator.builder')
-                ->addMethodCall('addXmlMapping', array($validationFile));
+                ->addMethodCall('addXmlMapping', [$validationFile]);
 
             return;
         }

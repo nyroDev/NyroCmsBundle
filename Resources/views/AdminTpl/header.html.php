@@ -15,7 +15,7 @@
 			<div class="selectCont">
 				<select class="selectRedirect">
 					<?php foreach ($rootContents as $id => $rootContent): ?>
-					<option value="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_switch_rootContent', array('id' => $id)); ?>"<?php echo $id == $curRootId ? ' selected="selected"' : ''; ?>>
+					<option value="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_switch_rootContent', ['id' => $id]); ?>"<?php echo $id == $curRootId ? ' selected="selected"' : ''; ?>>
 						<?php echo $rootContent->getTitle(); ?>
 					</option>
 					<?php endforeach; ?>

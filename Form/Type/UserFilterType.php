@@ -12,17 +12,17 @@ class UserFilterType extends Type\AbstractFilterType
     {
         $builder
             ->setAction($this->generateUrl('nyrocms_admin_data_user'))
-            ->add('id', Type\FilterIntType::class, array('label' => $this->trans('admin.user.id')))
-            ->add('email', Type\FilterType::class, array('label' => $this->trans('admin.user.email')))
-            ->add('firstname', Type\FilterType::class, array('label' => $this->trans('admin.user.firstname')))
-            ->add('lastname', Type\FilterType::class, array('label' => $this->trans('admin.user.lastname')))
-            ->add('userType', Type\FilterChoiceType::class, array(
+            ->add('id', Type\FilterIntType::class, ['label' => $this->trans('admin.user.id')])
+            ->add('email', Type\FilterType::class, ['label' => $this->trans('admin.user.email')])
+            ->add('firstname', Type\FilterType::class, ['label' => $this->trans('admin.user.firstname')])
+            ->add('lastname', Type\FilterType::class, ['label' => $this->trans('admin.user.lastname')])
+            ->add('userType', Type\FilterChoiceType::class, [
                 'label' => $this->trans('admin.user.userType'),
-                'choiceOptions' => array(
+                'choiceOptions' => [
                     'choices' => array_flip($this->get(AdminService::class)->getUserTypeChoices()),
-                ),
-            ))
-            ->add('valid', Type\FilterBoolType::class, array('label' => $this->trans('admin.user.valid')))
+                ],
+            ])
+            ->add('valid', Type\FilterBoolType::class, ['label' => $this->trans('admin.user.valid')])
             ;
         parent::buildForm($builder, $options);
     }

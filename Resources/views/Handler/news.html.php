@@ -2,9 +2,9 @@
 	<div class="listCont">
 	<?php foreach ($results as $news): ?>
 		<div class="list news">
-			<h3><a href="<?php echo $view['nyrocms']->getUrlFor($news, false, array(), $content); ?>"><?php echo $news->getTitle(); ?></a></h3>
+			<h3><a href="<?php echo $view['nyrocms']->getUrlFor($news, false, [], $content); ?>"><?php echo $news->getTitle(); ?></a></h3>
 			<p><?php echo nl2br($news->getSummary(500)); ?></p>
-			<a href="<?php echo $view['nyrocms']->getUrlFor($news, false, array(), $content); ?>" class="but"><?php echo $view['nyrodev']->trans('nyrocms.handler.news.more'); ?></a>
+			<a href="<?php echo $view['nyrocms']->getUrlFor($news, false, [], $content); ?>" class="but"><?php echo $view['nyrodev']->trans('nyrocms.handler.news.more'); ?></a>
 		</div>
 	<?php endforeach; ?>
 	</div>

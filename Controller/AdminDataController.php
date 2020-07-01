@@ -37,7 +37,7 @@ class AdminDataController extends AbstractAdminController
     {
         $repo = $this->get(DbAbstractService::class)->getContentRepository();
 
-        $parent = $id ? $repo->find($id) : $repo->findOneBy(array('level' => 0));
+        $parent = $id ? $repo->find($id) : $repo->findOneBy(['level' => 0]);
         if (!$parent) {
             throw $this->createNotFoundException();
         }
@@ -51,14 +51,14 @@ class AdminDataController extends AbstractAdminController
             $treeLevel = $request->request->get('treeLevel');
             $treeChanged = $request->request->get('treeChanged');
 
-            $contents = array();
+            $contents = [];
             foreach ($repo->children($parent) as $c) {
                 $contents[$c->getId()] = $c;
             }
 
-            $lastChild = array(
+            $lastChild = [
                 0 => $parent,
-            );
+            ];
             $lastLevel = null;
             if (count($tree)) {
                 foreach ($tree as $t) {
@@ -84,14 +84,14 @@ class AdminDataController extends AbstractAdminController
                 }
             }
 
-            return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(array('id' => $id)));
+            return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(['id' => $id]));
         }
 
-        return $this->render('@NyroDevNyroCms/AdminData/contentTree.html.php', array(
+        return $this->render('@NyroDevNyroCms/AdminData/contentTree.html.php', [
             'parent' => $parent,
             'canRootComposer' => $canRootComposer,
             'candDirectAdd' => $canAdminContent && $this->get(AdminService::class)->canHaveSub($parent),
-        ));
+        ]);
     }
 
     public function contentFixAction($id = null)
@@ -102,7 +102,7 @@ class AdminDataController extends AbstractAdminController
         $repo->recover();
         $this->get(DbAbstractService::class)->flush();
 
-        $parent = $id ? $repo->find($id) : $repo->findOneBy(array('level' => 0));
+        $parent = $id ? $repo->find($id) : $repo->findOneBy(['level' => 0]);
         if (!$parent) {
             throw $this->createNotFoundException();
         }
@@ -113,20 +113,20 @@ class AdminDataController extends AbstractAdminController
 
         $this->get(DbAbstractService::class)->flush();
 
-        return $this->redirectToRoute('nyrocms_admin_data_content_tree', array_filter(array('id' => $id)));
+        return $this->redirectToRoute('nyrocms_admin_data_content_tree', array_filter(['id' => $id]));
     }
 
     public function contentTreeSub(\NyroDev\NyroCmsBundle\Model\Content $parent = null)
     {
         $route = 'nyrocms_admin_data_content';
 
-        return $this->render('@NyroDevNyroCms/AdminData/contentTreeSub.html.php', array(
+        return $this->render('@NyroDevNyroCms/AdminData/contentTreeSub.html.php', [
             'route' => $route,
             'parent' => $parent,
             'canEditParent' => $this->get(AdminService::class)->canAdminContent($parent),
             'canHaveSub' => $this->get(AdminService::class)->canHaveSub($parent),
             'contents' => $this->get(DbAbstractService::class)->getContentRepository()->children($parent, true),
-        ));
+        ]);
     }
 
     public function contentDeleteAction($id)
@@ -137,7 +137,7 @@ class AdminDataController extends AbstractAdminController
             $this->get(DbAbstractService::class)->flush();
         }
 
-        return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(array('id' => $row->getRoot())));
+        return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(['id' => $row->getRoot()]));
     }
 
     public function contentAddAction(Request $request, $pid = null)
@@ -169,40 +169,40 @@ class AdminDataController extends AbstractAdminController
 
     public function contentForm($request, $action, $row)
     {
-        $routePrm = array(
+        $routePrm = [
             'id' => $row->getVeryParent()->getId(),
-        );
+        ];
 
         $themes = $this->get(ComposerService::class)->getThemes($row->getParent());
-        $moreOptions = array(
-            'theme' => array(
+        $moreOptions = [
+            'theme' => [
                 'type' => ChoiceType::class,
                 'choices' => array_flip($themes),
-            ),
-            'state' => array(
+            ],
+            'state' => [
                 'type' => ChoiceType::class,
                 'choices' => array_flip($this->get(AdminService::class)->getContentStateChoices()),
-            ),
-            'relateds' => array(
+            ],
+            'relateds' => [
                 'choice_label' => function ($row) {
                     return $row.''.($row->getParent() ? ' ('.$row->getParent().')' : '');
                 },
                 'query_builder' => function (ContentRepositoryInterface $er) use ($row) {
                     return $er->getFormQueryBuilder($row->getParent()->getRoot(), $row->getId());
                 },
-                'attr' => array(
+                'attr' => [
                     'class' => 'autocompleteSelMul',
                     'placeholder' => $this->trans('admin.content.relatedsPlaceholder'),
-                ),
-            ),
-            'submit' => array(
-                'attr' => array(
+                ],
+            ],
+            'submit' => [
+                'attr' => [
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_content_tree', $routePrm),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $fields = array_filter(array(
+        $fields = array_filter([
             'title',
             count($themes) > 1 ? 'theme' : null,
             'state',
@@ -216,17 +216,17 @@ class AdminDataController extends AbstractAdminController
             'ogTitle',
             'ogDescription',
             'ogImage',
-        ));
+        ]);
 
         if ($this->get(AdminService::class)->isDeveloper()) {
             $fields[] = 'contentHandler';
             $fields[] = 'menuOption';
             $repoContentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository();
-            $moreOptions['contentHandler'] = array(
+            $moreOptions['contentHandler'] = [
                 'query_builder' => function ($er) use ($repoContentHandler) {
                     return $repoContentHandler->getFormQueryBuilder();
                 },
-            );
+            ];
         }
 
         if ($row instanceof AbstractUploadable) {
@@ -241,36 +241,36 @@ class AdminDataController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    protected $contentTranslationFields = array(
-        'title' => array(
+    protected $contentTranslationFields = [
+        'title' => [
             'type' => TextType::class,
             'required' => true,
-        ),
-        'goUrl' => array(
+        ],
+        'goUrl' => [
             'type' => UrlType::class,
             'required' => false,
-        ),
-        'metaTitle' => array(
+        ],
+        'metaTitle' => [
             'type' => TextType::class,
             'required' => false,
-        ),
-        'metaDescription' => array(
+        ],
+        'metaDescription' => [
             'type' => TextareaType::class,
             'required' => false,
-        ),
-        'metaKeywords' => array(
+        ],
+        'metaKeywords' => [
             'type' => TextareaType::class,
             'required' => false,
-        ),
-        'ogTitle' => array(
+        ],
+        'ogTitle' => [
             'type' => TextType::class,
             'required' => false,
-        ),
-        'ogDescription' => array(
+        ],
+        'ogDescription' => [
             'type' => TextareaType::class,
             'required' => false,
-        ),
-    );
+        ],
+    ];
 
     protected $translations;
     protected $langs;
@@ -286,10 +286,10 @@ class AdminDataController extends AbstractAdminController
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
         unset($langs[$defaultLocale]);
 
-        $this->translations = array();
+        $this->translations = [];
         foreach ($row->getTranslations() as $tr) {
             if (!isset($this->translations[$tr->getLocale()])) {
-                $this->translations[$tr->getLocale()] = array();
+                $this->translations[$tr->getLocale()] = [];
             }
             $this->translations[$tr->getLocale()][$tr->getField()] = $tr;
         }
@@ -305,15 +305,15 @@ class AdminDataController extends AbstractAdminController
                     $fieldName = 'lang_'.$lg.'_'.$field;
 
                     if (isset($options['required']) && $options['required']) {
-                        $options['constraints'] = array(new Constraints\NotBlank());
+                        $options['constraints'] = [new Constraints\NotBlank()];
                     }
 
-                    $form->add($fieldName, $type, array_merge($options, array(
+                    $form->add($fieldName, $type, array_merge($options, [
                         'label' => $this->trans('admin.content.'.$field).' '.strtoupper($lg),
                         'mapped' => false,
                         'data' => isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
-                        'position' => array('after' => $field),
-                    )));
+                        'position' => ['after' => $field],
+                    ]));
                 }
             }
         }
@@ -378,18 +378,18 @@ class AdminDataController extends AbstractAdminController
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
-                    array(
+                    [
                         'name' => 'userRole',
                         'route' => $route,
-                        'fields' => array_filter(array(
+                        'fields' => array_filter([
                             'id',
                             'name',
                             $isDev ? 'roleName' : null,
                             $isDev ? 'internal' : null,
                             'updated',
-                        )),
-                    ),
-                    $this->createList($request, $repo, $route, array(), 'id', 'desc', null, $qb)
+                        ]),
+                    ],
+                    $this->createList($request, $repo, $route, [], 'id', 'desc', null, $qb)
                 ));
     }
 
@@ -423,23 +423,23 @@ class AdminDataController extends AbstractAdminController
 
     public function userRoleForm(Request $request, $action, $row)
     {
-        $moreOptions = array(
+        $moreOptions = [
             'contents' => $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content')),
-            'submit' => array(
-                'attr' => array(
+            'submit' => [
+                'attr' => [
                     'more' => 'hello',
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $isDev = $this->get(AdminService::class)->isDeveloper();
-        $adminForm = $this->createAdminForm($request, 'userRole', $action, $row, array_filter(array(
+        $adminForm = $this->createAdminForm($request, 'userRole', $action, $row, array_filter([
                     'name',
                     $isDev ? 'roleName' : null,
                     $isDev ? 'internal' : null,
                     'contents',
-                )), 'nyrocms_admin_data_userRole', array(), null, null, null, $moreOptions);
+                ]), 'nyrocms_admin_data_userRole', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }
@@ -458,18 +458,18 @@ class AdminDataController extends AbstractAdminController
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
-                    array(
+                    [
                         'name' => 'contentHandler',
                         'route' => $route,
-                        'fields' => array(
+                        'fields' => [
                             'id',
                             'name',
                             'class',
                             'hasAdmin',
                             'updated',
-                        ),
-                    ),
-                    $this->createList($request, $repo, $route, array(), 'name', 'asc', ContentHandlerFilterType::class)
+                        ],
+                    ],
+                    $this->createList($request, $repo, $route, [], 'name', 'asc', ContentHandlerFilterType::class)
                 ));
     }
 
@@ -505,11 +505,11 @@ class AdminDataController extends AbstractAdminController
     {
         $classes = $this->get(NyroCmsService::class)->getFoundHandlers();
 
-        $moreOptions = array(
-            'class' => array(
+        $moreOptions = [
+            'class' => [
                 'placeholder' => '',
-                'constraints' => array(
-                    new Constraints\Callback(array(
+                'constraints' => [
+                    new Constraints\Callback([
                         'callback' => function ($data, $context) {
                             if ($data) {
                                 if (!class_exists($data)) {
@@ -520,26 +520,26 @@ class AdminDataController extends AbstractAdminController
                                 }
                             }
                         },
-                    )),
-                ),
-            ),
-            'submit' => array(
-                'attr' => array(
+                    ]),
+                ],
+            ],
+            'submit' => [
+                'attr' => [
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_contentHandler'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         if (count($classes)) {
             $moreOptions['class']['type'] = ChoiceType::class;
             $moreOptions['class']['choices'] = array_combine($classes, $classes);
         }
 
-        $adminForm = $this->createAdminForm($request, 'contentHandler', $action, $row, array(
+        $adminForm = $this->createAdminForm($request, 'contentHandler', $action, $row, [
                     'name',
                     'class',
                     'hasAdmin',
-                ), 'nyrocms_admin_data_contentHandler', array(), null, null, null, $moreOptions);
+                ], 'nyrocms_admin_data_contentHandler', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }
@@ -566,32 +566,32 @@ class AdminDataController extends AbstractAdminController
         $qb = $this->get(nyroDevDbService::class)->getQueryBuilder($repo);
         $qb->addWhere('contentHandler', '=', $contentHandler->getId());
 
-        $exportConfig = array(
+        $exportConfig = [
             'title' => $this->trans('admin.contactMessage.viewTitle'),
             'prefix' => 'contactMessage',
             'fields' => $handler->getAdminMessageExportFields(),
-        );
+        ];
 
         $route = 'nyrocms_admin_data_contactMessage';
-        $routePrm = array('chid' => $chid);
+        $routePrm = ['chid' => $chid];
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
-                    array(
+                    [
                         'name' => 'contactMessage',
                         'route' => $route,
                         'fields' => $handler->getAdminMessageListFields(),
-                        'moreGlobalActions' => array(
-                            'export' => array(
+                        'moreGlobalActions' => [
+                            'export' => [
                                 'route' => $route,
-                                'routePrm' => array_merge($routePrm, array('export' => 1)),
+                                'routePrm' => array_merge($routePrm, ['export' => 1]),
                                 'name' => $this->trans('admin.contactMessage.export'),
                                 'attrs' => 'target="_blank"',
-                            ),
-                        ),
+                            ],
+                        ],
                         'noAdd' => true,
                         'noActions' => true,
-                    ),
+                    ],
                     $this->createList($request, $repo, $route, $routePrm, 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
                 ));
     }
@@ -608,10 +608,10 @@ class AdminDataController extends AbstractAdminController
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
-                    array(
+                    [
                         'name' => 'user',
                         'route' => $route,
-                        'fields' => array(
+                        'fields' => [
                             'id',
                             'email',
                             'firstname',
@@ -619,9 +619,9 @@ class AdminDataController extends AbstractAdminController
                             'userType',
                             'valid',
                             'updated',
-                        ),
-                    ),
-                    $this->createList($request, $repo, $route, array(), 'id', 'desc', $filter)
+                        ],
+                    ],
+                    $this->createList($request, $repo, $route, [], 'id', 'desc', $filter)
                 ));
     }
 
@@ -655,28 +655,28 @@ class AdminDataController extends AbstractAdminController
 
     public function userForm(Request $request, $action, $row)
     {
-        $moreOptions = array(
-            'userType' => array(
+        $moreOptions = [
+            'userType' => [
                 'type' => ChoiceType::class,
                 'placeholder' => '',
                 'choices' => array_flip($this->get(AdminService::class)->getUserTypeChoices()),
-            ),
+            ],
             'validStart' => $this->get(NyroCmsService::class)->getDateFormOptions(),
             'validEnd' => $this->get(NyroCmsService::class)->getDateFormOptions(),
-            'userRoles' => array(
+            'userRoles' => [
                 'expanded' => true,
                 'query_builder' => function (UserRoleRepositoryInterface $er) {
                     return $er->getFormQueryBuilder();
                 },
-            ),
-            'submit' => array(
-                'attr' => array(
+            ],
+            'submit' => [
+                'attr' => [
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_user'),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $adminForm = $this->createAdminForm($request, 'user', $action, $row, array_filter(array(
+        $adminForm = $this->createAdminForm($request, 'user', $action, $row, array_filter([
                     'email',
                     'firstname',
                     'lastname',
@@ -687,7 +687,7 @@ class AdminDataController extends AbstractAdminController
                     'validEnd',
                     $this->get(AdminService::class)->isDeveloper() ? 'developper' : null,
                     'userRoles',
-                )), 'nyrocms_admin_data_user', array(), 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
+                ]), 'nyrocms_admin_data_user', [], 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
         if (!is_array($adminForm)) {
             return $adminForm;
         }

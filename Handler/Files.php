@@ -4,9 +4,9 @@ namespace NyroDev\NyroCmsBundle\Handler;
 
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
-use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints;
 
 class Files extends AbstractHandler
 {
@@ -59,33 +59,33 @@ class Files extends AbstractHandler
     {
         $isAdd = AbstractAdminController::ADD == $action;
 
-        return array(
-            'file' => array(
+        return [
+            'file' => [
                 'type' => FileType::class,
                 'translatable' => true,
                 'label' => $this->trans('nyrocms.handler.files.file'),
                 'required' => $isAdd,
-                'constraints' => array_filter(array(
+                'constraints' => array_filter([
                     $isAdd ? new Constraints\NotBlank() : null,
                     new Constraints\File(),
-                )),
-            ),
-        );
+                ]),
+            ],
+        ];
     }
 
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
         $view = '@NyroDevNyroCms/Handler/files';
-        $vars = array(
+        $vars = [
             'content' => $content,
-        );
+        ];
 
         $vars['results'] = $this->getContentSpecs($content);
         $vars['uploadDir'] = $this->getUploadDir();
 
-        return array(
+        return [
             'view' => $view.'.html.php',
             'vars' => $vars,
-        );
+        ];
     }
 }

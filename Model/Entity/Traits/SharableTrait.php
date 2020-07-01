@@ -4,9 +4,8 @@ namespace NyroDev\NyroCmsBundle\Model\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 trait SharableTrait
 {
@@ -156,12 +155,12 @@ trait SharableTrait
 
     protected function getFileFields()
     {
-        return array(
-            'ogImage' => array(
+        return [
+            'ogImage' => [
                 AbstractUploadable::CONFIG_FIELD => 'ogImageFile',
                 AbstractUploadable::CONFIG_DIR => 'uploads/sharable',
-            ),
-        );
+            ],
+        ];
     }
 
     public function getShareOgImage()

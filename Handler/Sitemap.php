@@ -12,19 +12,19 @@ class Sitemap extends AbstractHandler
     {
         $root = $this->getContentById($content->getRoot());
 
-        return array(
+        return [
             'view' => '@NyroDevNyroCms/Handler/sitemap.html.php',
-            'vars' => array(
+            'vars' => [
                 'content' => $content,
                 'contents' => $this->getHierarchy($root),
                 'isRoot' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getHierarchy(Content $content)
     {
-        $ret = array();
+        $ret = [];
 
         foreach ($this->getContentRepo()->childrenForMenu($content, true) as $sub) {
             $contents = $this->getHierarchy($sub);
@@ -34,10 +34,10 @@ class Sitemap extends AbstractHandler
                 $contents = array_merge($contents, $contentHandler->getSitemapUrls($sub));
             }
 
-            $ret[] = array(
+            $ret[] = [
                 'content' => $sub,
                 'contents' => $contents,
-            );
+            ];
         }
 
         return $ret;

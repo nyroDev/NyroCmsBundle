@@ -2,9 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity\Log;
 
-use NyroDev\NyroCmsBundle\Model\ContentSpecLog as ContentSpecLogModel;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\NyroCmsBundle\Model\ContentSpecLog as ContentSpecLogModel;
 
 /**
  * Content.

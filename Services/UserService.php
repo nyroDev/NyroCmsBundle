@@ -5,8 +5,8 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
-use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\MemberService;
+use NyroDev\UtilityBundle\Services\NyrodevService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -53,31 +53,31 @@ class UserService extends nyroDevAbstractService
         $user->setPasswordKeyEnd($end);
         $this->get(DbAbstractService::class)->flush();
 
-        $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', array(
+        $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            '%url%' => $this->generateUrl('nyrocms_admin_welcome', array(
+            '%url%' => $this->generateUrl('nyrocms_admin_welcome', [
                 'id' => $user->getId(),
                 'key' => $user->getPasswordKey(),
-            ), true),
-        ))), null, $locale);
+            ], true),
+        ])), null, $locale);
     }
 
     public function sendChangedPasswordEmail(User $user)
     {
-        return $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', array(
+        return $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', [
                 '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            ))));
+            ])));
     }
 
     public function handleForgot($place, Request $request, $id, $key, $welcome = false)
     {
-        $ret = array(
+        $ret = [
             'step' => 1,
             'notFound' => false,
             'sent' => false,
             'form' => null,
             'welcome' => $welcome,
-        );
+        ];
         $repo = $this->get(DbAbstractService::class)->getUserRepository();
 
         if ($id || $welcome) {
@@ -91,28 +91,28 @@ class UserService extends nyroDevAbstractService
             $now = new \DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
                 $form = $this->get('form.factory')->createBuilder()
-                    ->add('password', RepeatedType::class, array(
+                    ->add('password', RepeatedType::class, [
                         'type' => PasswordType::class,
-                        'first_options' => array(
+                        'first_options' => [
                             'label' => $this->trans('admin.user.password'),
-                            'attr' => array('placeholder' => $this->trans('admin.user.newPassword')),
-                            'constraints' => array(
+                            'attr' => ['placeholder' => $this->trans('admin.user.newPassword')],
+                            'constraints' => [
                                 new NotBlank(),
-                            ),
-                        ),
-                        'second_options' => array(
+                            ],
+                        ],
+                        'second_options' => [
                             'label' => $this->trans('admin.user.passwordConfirm'),
-                            'attr' => array('placeholder' => $this->trans('admin.user.passwordConfirm')),
-                            'constraints' => array(
+                            'attr' => ['placeholder' => $this->trans('admin.user.passwordConfirm')],
+                            'constraints' => [
                                 new NotBlank(),
-                            ),
-                        ),
+                            ],
+                        ],
                         'required' => true,
                         'invalid_message' => $this->trans('admin.user.samePassword'),
-                    ))
-                    ->add('submit', SubmitType::class, array(
+                    ])
+                    ->add('submit', SubmitType::class, [
                         'label' => $this->trans('admin.misc.send'),
-                    ))
+                    ])
                     ->getForm();
 
                 $form->handleRequest($request);
@@ -136,17 +136,17 @@ class UserService extends nyroDevAbstractService
             }
         } else {
             $form = $this->get('form.factory')->createBuilder()
-                ->add('email', EmailType::class, array(
+                ->add('email', EmailType::class, [
                     'label' => $this->trans('admin.user.email'),
-                    'constraints' => array(
+                    'constraints' => [
                         new NotBlank(),
                         new Email(),
-                    ),
-                    'attr' => array('placeholder' => $this->trans('admin.user.email')),
-                ))
-                ->add('submit', SubmitType::class, array(
+                    ],
+                    'attr' => ['placeholder' => $this->trans('admin.user.email')],
+                ])
+                ->add('submit', SubmitType::class, [
                     'label' => $this->trans('admin.misc.send'),
-                ))
+                ])
                 ->getForm();
 
             $form->handleRequest($request);
@@ -165,13 +165,13 @@ class UserService extends nyroDevAbstractService
                     $user->setPasswordKeyEnd($end);
                     $this->get(DbAbstractService::class)->flush();
 
-                    $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', array(
+                    $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', [
                         '%name%' => $user->getFirstname().' '.$user->getLastName(),
-                        '%url%' => $this->generateUrl('nyrocms_'.$place.'_forgot', array(
+                        '%url%' => $this->generateUrl('nyrocms_'.$place.'_forgot', [
                             'id' => $user->getId(),
                             'key' => $user->getPasswordKey(),
-                        ), true),
-                    ))));
+                        ], true),
+                    ])));
                     $ret['sent'] = true;
                 } else {
                     $ret['notFound'] = true;
@@ -186,60 +186,60 @@ class UserService extends nyroDevAbstractService
 
     public function handleAccount($place, Request $request)
     {
-        $this->get(NyroCmsService::class)->setActiveIds(array('account' => 'account'));
-        $ret = array(
+        $this->get(NyroCmsService::class)->setActiveIds(['account' => 'account']);
+        $ret = [
             'fields' => false,
             'password' => false,
-        );
+        ];
 
         $user = $this->get(MemberService::class)->getUser();
-        $fields = array(
+        $fields = [
             'email',
             'firstname',
             'lastname',
-        );
+        ];
 
         $form = $this->get('form.factory')->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
-            $form->add($f, null, array(
+            $form->add($f, null, [
                 'label' => $this->trans('admin.user.'.$f),
-            ));
+            ]);
         }
-        $form->add('submit', SubmitType::class, array(
+        $form->add('submit', SubmitType::class, [
             'label' => $this->trans('admin.misc.send'),
-        ));
+        ]);
 
         $formFields = $form->getForm();
 
         $formPassword = $this->get('form.factory')->createNamedBuilder('password', FormType::class, $user)
-            ->add('curPassword', PasswordType::class, array(
+            ->add('curPassword', PasswordType::class, [
                     'label' => $this->trans('admin.user.curPassword'),
                     'required' => true,
                     'mapped' => false,
-                    'constraints' => array(
+                    'constraints' => [
                         new NotBlank(),
-                        new UserPassword(array(
+                        new UserPassword([
                             'message' => $this->trans('admin.user.wrongPassword'),
-                        )),
-                    ), ))
-            ->add('password', RepeatedType::class, array(
+                        ]),
+                    ], ])
+            ->add('password', RepeatedType::class, [
                     'mapped' => false,
                     'first_name' => 'pwd1',
                     'second_name' => 'pwd2',
-                    'constraints' => array(new NotBlank()),
+                    'constraints' => [new NotBlank()],
                     'required' => true,
                     'type' => PasswordType::class,
-                    'first_options' => array(
+                    'first_options' => [
                         'label' => $this->trans('admin.user.newPassword'),
-                    ),
-                    'second_options' => array(
+                    ],
+                    'second_options' => [
                         'label' => $this->trans('admin.user.passwordConfirm'),
-                    ),
+                    ],
                     'invalid_message' => $this->trans('admin.user.samePassword'),
-                ))
-            ->add('submit', SubmitType::class, array(
+                ])
+            ->add('submit', SubmitType::class, [
                 'label' => $this->trans('admin.misc.send'),
-            ))
+            ])
             ->getForm();
 
         $formFields->handleRequest($request);

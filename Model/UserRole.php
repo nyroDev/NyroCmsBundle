@@ -176,8 +176,6 @@ abstract class UserRole
     /**
      * Add contents.
      *
-     * @param Content $contents
-     *
      * @return UserRole
      */
     public function addContent(Content $contents)
@@ -189,8 +187,6 @@ abstract class UserRole
 
     /**
      * Remove contents.
-     *
-     * @param Content $contents
      */
     public function removeContent(Content $contents)
     {

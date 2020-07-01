@@ -137,8 +137,6 @@ abstract class ContentHandler
     /**
      * Add contents.
      *
-     * @param Content $contents
-     *
      * @return Content
      */
     public function addContent(Content $contents)
@@ -150,8 +148,6 @@ abstract class ContentHandler
 
     /**
      * Remove contents.
-     *
-     * @param Content $contents
      */
     public function removeContent(Content $contents)
     {
@@ -160,8 +156,6 @@ abstract class ContentHandler
 
     /**
      * Set contents.
-     *
-     * @param \Doctrine\Common\Collections\Collection $contents
      *
      * @return ContentHandler
      */
@@ -185,8 +179,6 @@ abstract class ContentHandler
     /**
      * Add contentHandlerConfigs.
      *
-     * @param ContentHandlerConfig $contentHandlerConfigs
-     *
      * @return ContentHandlerConfig
      */
     public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
@@ -198,8 +190,6 @@ abstract class ContentHandler
 
     /**
      * Remove contentHandlerConfigs.
-     *
-     * @param ContentHandlerConfig $contentHandlerConfigs
      */
     public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
     {
@@ -210,8 +200,6 @@ abstract class ContentHandler
 
     /**
      * Set contentHandlerConfigs.
-     *
-     * @param \Doctrine\Common\Collections\Collection $contentHandlerConfigs
      *
      * @return ContentHandlerConfigHandler
      */

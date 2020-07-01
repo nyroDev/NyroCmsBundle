@@ -3,9 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Model\Sharable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
@@ -212,8 +212,6 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
     /**
      * Set content.
      *
-     * @param array $content
-     *
      * @return ContentSpec
      */
     public function setContent(array $content)
@@ -259,8 +257,6 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
 
     /**
      * Set data.
-     *
-     * @param array $data
      *
      * @return ContentSpec
      */
@@ -582,8 +578,6 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
     /**
      * Add contents.
      *
-     * @param Content $contents
-     *
      * @return ContentSpec
      */
     public function addContent(Content $contents)
@@ -595,8 +589,6 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
 
     /**
      * Remove contents.
-     *
-     * @param Content $contents
      */
     public function removeContent(Content $contents)
     {

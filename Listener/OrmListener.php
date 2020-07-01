@@ -11,9 +11,9 @@ class OrmListener extends nyroDevAbstractService implements EventSubscriber
 {
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'postLoad',
-        );
+        ];
     }
 
     public function postLoad(LifecycleEventArgs $args = null)

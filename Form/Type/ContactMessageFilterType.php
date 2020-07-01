@@ -12,16 +12,16 @@ class ContactMessageFilterType extends Type\AbstractFilterType
     {
         $pathInfo = $this->get(NyroCmsService::class)->getPathInfo();
         $builder
-            ->setAction($this->generateUrl('nyrocms_admin_data_contactMessage', array('chid' => $pathInfo['routePrm']['chid'])))
-            ->add('id', Type\FilterIntType::class, array('label' => $this->trans('admin.contactMessage.id')))
-            ->add('dest', Type\FilterType::class, array('label' => $this->trans('admin.contactMessage.dest')))
-            ->add('lastname', Type\FilterType::class, array('label' => $this->trans('admin.contactMessage.lastname')))
-            ->add('firstname', Type\FilterType::class, array('label' => $this->trans('admin.contactMessage.firstname')))
-            ->add('email', Type\FilterType::class, array('label' => $this->trans('admin.contactMessage.email')))
-            ->add('inserted', Type\FilterRangeDateType::class, array(
+            ->setAction($this->generateUrl('nyrocms_admin_data_contactMessage', ['chid' => $pathInfo['routePrm']['chid']]))
+            ->add('id', Type\FilterIntType::class, ['label' => $this->trans('admin.contactMessage.id')])
+            ->add('dest', Type\FilterType::class, ['label' => $this->trans('admin.contactMessage.dest')])
+            ->add('lastname', Type\FilterType::class, ['label' => $this->trans('admin.contactMessage.lastname')])
+            ->add('firstname', Type\FilterType::class, ['label' => $this->trans('admin.contactMessage.firstname')])
+            ->add('email', Type\FilterType::class, ['label' => $this->trans('admin.contactMessage.email')])
+            ->add('inserted', Type\FilterRangeDateType::class, [
                 'label' => $this->trans('admin.contactMessage.inserted'),
-                'valueOptions' => array('options' => $this->get(NyroCmsService::class)->getDateFormOptions()),
-            ))
+                'valueOptions' => ['options' => $this->get(NyroCmsService::class)->getDateFormOptions()],
+            ])
             ;
         parent::buildForm($builder, $options);
     }

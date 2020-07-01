@@ -7,8 +7,8 @@
     $formView = $view['form']->form($form);
     if ($isAdmin) {
         $formView = str_replace(
-            array('<form ', '</form>', 'required="required"'),
-            array('<div ', '</div>', ''),
+            ['<form ', '</form>', 'required="required"'],
+            ['<div ', '</div>', ''],
             $formView);
     }
     echo $formView;

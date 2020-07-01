@@ -38,8 +38,6 @@ abstract class UserLogin
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return UserLogin
      */
     public function setUser(User $user)

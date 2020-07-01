@@ -37,7 +37,7 @@ abstract class AbstractController extends NyroDevAbstractController
     protected function getRootContent()
     {
         if (is_null($this->rootContent)) {
-            $this->rootContent = $this->getContentRepo()->findOneBy(array('level' => 0, 'handler' => $this->getRootHandler()));
+            $this->rootContent = $this->getContentRepo()->findOneBy(['level' => 0, 'handler' => $this->getRootHandler()]);
             if (!$this->rootContent) {
                 throw new \RuntimeException('Cannot find rootContent "'.$this->getRootHandler().'"');
             }
@@ -61,10 +61,10 @@ abstract class AbstractController extends NyroDevAbstractController
 
     abstract protected function handleIndex(Request $request): Response;
 
-    protected $enabledStates = array(
+    protected $enabledStates = [
         Content::STATE_ACTIVE,
         Content::STATE_INVISIBLE,
-    );
+    ];
 
     protected function getContentByUrl($url)
     {
@@ -123,7 +123,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null, $ignoreRedirects = false): Response
     {
-        $routePrm = array();
+        $routePrm = [];
         if ($handlerAction) {
             $routePrm['handler'] = $handlerAction;
         }
@@ -154,8 +154,8 @@ abstract class AbstractController extends NyroDevAbstractController
 
         $parents = $this->getContentRepo()->getPathForBreacrumb($content, $contentSpec ? false : true);
 
-        $titles = array();
-        $activeIds = array();
+        $titles = [];
+        $activeIds = [];
         foreach ($parents as $parent) {
             $activeIds[$parent->getId()] = $parent->getId();
             $titles[] = $parent->getTitle();
@@ -208,7 +208,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
     protected function getAllowedParams(Content $content)
     {
-        $ret = array();
+        $ret = [];
 
         if ($content->getContentHandler()) {
             $handler = $this->get(NyroCmsService::class)->getHandler($content->getContentHandler());
@@ -218,7 +218,7 @@ abstract class AbstractController extends NyroDevAbstractController
         return $ret;
     }
 
-    abstract protected function handleContentView(Request $request, Content $content, array $parents = array(), ContentSpec $contentSpec = null, AbstractHandler $handler = null, $handlerAction = null): Response;
+    abstract protected function handleContentView(Request $request, Content $content, array $parents = [], ContentSpec $contentSpec = null, AbstractHandler $handler = null, $handlerAction = null): Response;
 
     public function search(Request $request, $_config = null): Response
     {
@@ -227,13 +227,13 @@ abstract class AbstractController extends NyroDevAbstractController
         $q = strip_tags($request->query->get('q'));
 
         $title = $this->trans('public.header.search');
-        $results = array();
+        $results = [];
         if ($q) {
             $this->get(NyroCmsService::class)->setPathInfoSearch($q);
-            $title = $this->trans('nyrocms.search.title', array('%q%' => $q));
+            $title = $this->trans('nyrocms.search.title', ['%q%' => $q]);
             $root = $this->getRootContent();
             $tmpQ = array_filter(array_map('trim', explode(' ', trim($q))));
-            $query = $parameters = array();
+            $query = $parameters = [];
             foreach ($tmpQ as $k => $v) {
                 $query[] = '.contentText LIKE :text'.$k;
                 $parameters['text'.$k] = '%'.$v.'%';
@@ -242,23 +242,23 @@ abstract class AbstractController extends NyroDevAbstractController
             $results['contents'] = $this->getContentRepo()->search($tmpQ, $root->getId(), Content::STATE_ACTIVE);
 
             $total = count($results['contents']);
-            $cts = array();
+            $cts = [];
             $tmp = $this->getContentRepo()->findWithContentHandler($root->getId(), Content::STATE_ACTIVE);
             foreach ($tmp as $t) {
                 $cts[$t->getContentHandler()->getId()] = $t;
             }
 
-            $results['contentSpecs'] = array();
+            $results['contentSpecs'] = [];
             if (count($cts)) {
                 $tmpSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->search($tmpQ, array_keys($cts), ContentSpec::STATE_ACTIVE);
 
                 foreach ($tmpSpecs as $tmp) {
                     $chId = $tmp->getContentHandler()->getId();
                     if (!isset($results['contentSpecs'][$chId])) {
-                        $results['contentSpecs'][$chId] = array(
+                        $results['contentSpecs'][$chId] = [
                             'content' => $cts[$chId],
-                            'contentSpecs' => array(),
-                        );
+                            'contentSpecs' => [],
+                        ];
                     }
                     $results['contentSpecs'][$chId]['contentSpecs'][] = $tmp;
                     ++$total;
@@ -279,23 +279,23 @@ abstract class AbstractController extends NyroDevAbstractController
     {
         $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
-        $urls = array();
+        $urls = [];
         foreach ($this->get(NyroCmsService::class)->getLocales($this->getRootContent()) as $locale) {
-            $urls[] = $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_sitemapXml', array('_locale' => $locale, '_format' => 'xml'), true);
+            $urls[] = $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_sitemapXml', ['_locale' => $locale, '_format' => 'xml'], true);
         }
 
-        return $this->render('NyroDevNyroCmsBundle:Default:sitemapIndex.xml.php', array(
+        return $this->render('NyroDevNyroCmsBundle:Default:sitemapIndex.xml.php', [
             'urls' => $urls,
-        ));
+        ]);
     }
 
     public function sitemapXml(Request $request, $_config = null): Response
     {
         $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
-        $urls = array(
-            $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), array(), true),
-        );
+        $urls = [
+            $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_homepage'.('fr' == $request->getLocale() ? '_noLocale' : ''), [], true),
+        ];
 
         foreach ($this->getContentRepo()->childrenForMenu($this->getRootContent(), false) as $content) {
             if (!$content->getGoUrl() && !$content->getRedirectToChildren()) {
@@ -306,7 +306,7 @@ abstract class AbstractController extends NyroDevAbstractController
                 if ($contentHandler->hasContentSpecUrl()) {
                     $contentSpecs = $this->get(DbAbstractService::class)->getContentSpecRepository()->getForHandler($content->getContentHandler()->getId(), ContentSpec::STATE_ACTIVE);
                     foreach ($contentSpecs as $contentSpec) {
-                        $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, array(), $content);
+                        $urls[] = $this->get(NyroCmsService::class)->getUrlFor($contentSpec, true, [], $content);
                     }
                 }
                 $urls = array_merge($urls, $contentHandler->getSitemapXmlUrls($content));
@@ -317,9 +317,9 @@ abstract class AbstractController extends NyroDevAbstractController
         $response->setPublic();
         $response->setSharedMaxAge(60 * 60);
 
-        return $this->render('NyroDevNyroCmsBundle:Default:sitemap.xml.php', array(
+        return $this->render('NyroDevNyroCmsBundle:Default:sitemap.xml.php', [
             'urls' => $urls,
-        ), $response);
+        ], $response);
     }
 
     protected function setTitle($title, $addDefault = true)

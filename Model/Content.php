@@ -3,9 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Model\Sharable;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Gedmo\Tree(type="nested")
@@ -292,8 +292,6 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
 
     /**
      * Set content.
-     *
-     * @param array $content
      *
      * @return Content
      */
@@ -797,8 +795,6 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     /**
      * Add children.
      *
-     * @param Content $children
-     *
      * @return Content
      */
     public function addChild(Content $children)
@@ -810,8 +806,6 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
 
     /**
      * Remove children.
-     *
-     * @param Content $children
      */
     public function removeChild(Content $children)
     {
@@ -831,8 +825,6 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     /**
      * Add relateds.
      *
-     * @param Content $relateds
-     *
      * @return Content
      */
     public function addRelated(Content $relateds)
@@ -844,8 +836,6 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
 
     /**
      * Remove relateds.
-     *
-     * @param Content $relateds
      */
     public function removeRelated(Content $relateds)
     {

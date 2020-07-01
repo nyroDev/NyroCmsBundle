@@ -3,9 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Doctrine\ORM\NoResultException;
 
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {

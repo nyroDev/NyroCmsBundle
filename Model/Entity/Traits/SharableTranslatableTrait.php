@@ -3,15 +3,12 @@
 namespace NyroDev\NyroCmsBundle\Model\Entity\Traits;
 
 use Doctrine\ORM\Mapping as ORM;
-use NyroDev\UtilityBundle\Model\AbstractUploadable;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 trait SharableTranslatableTrait
 {
     use SharableTrait;
-    
+
     /**
      * @var string
      *
@@ -51,5 +48,4 @@ trait SharableTranslatableTrait
      * @Gedmo\Translatable
      */
     protected $ogDescription;
-
 }

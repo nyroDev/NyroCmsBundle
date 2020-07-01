@@ -423,14 +423,15 @@ abstract class ContentHandlerConfig extends AbstractUploadable
     public function getTranslationsByLocale()
     {
         $ret = [];
-        foreach($this->getTranslations() as $tr) {
+        foreach ($this->getTranslations() as $tr) {
             $ret[$tr->getLocale()] = $tr;
         }
+
         return $ret;
     }
 
     protected function getFileFields()
     {
-        return array();
+        return [];
     }
 }

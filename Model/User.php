@@ -3,9 +3,9 @@
 namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use NyroDev\UtilityBundle\Model\AbstractUploadable;
 
 /**
  * User.
@@ -493,8 +493,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     /**
      * Add userRoles.
      *
-     * @param UserRole $userRoles
-     *
      * @return User
      */
     public function addUserRole(UserRole $userRoles)
@@ -506,8 +504,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
 
     /**
      * Remove userRoles.
-     *
-     * @param UserRole $userRoles
      */
     public function removeUserRole(UserRole $userRoles)
     {
@@ -524,13 +520,13 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
         return $this->userRoles;
     }
 
-    protected $serializeVars = array(
+    protected $serializeVars = [
         'id',
         'email',
         'password',
         'salt',
         'userType',
-    );
+    ];
 
     public function eraseCredentials()
     {
@@ -551,7 +547,7 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
 
     public function serialize()
     {
-        $vars = array();
+        $vars = [];
         foreach ($this->serializeVars as $field) {
             $vars[$field] = $this->{$field};
         }
@@ -569,10 +565,10 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
 
     public function getRoles()
     {
-        $ret = array(
+        $ret = [
             'ROLE_USER',
             'ROLE_'.strtoupper($this->getUserType()),
-        );
+        ];
         if ($this->getDevelopper()) {
             $ret[] = 'ROLE_DEVELOPPER';
         }
@@ -602,6 +598,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
 
     protected function getFileFields()
     {
-        return array();
+        return [];
     }
 }

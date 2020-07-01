@@ -12,7 +12,7 @@
 <?php endif; ?>
 <?php if ($nbImages || $admin): ?>
 	<?php
-    $thumbs = array();
+    $thumbs = [];
     $big = null;
     $first = true;
     if (is_array($contents['images'])) {

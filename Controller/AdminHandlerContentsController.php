@@ -46,48 +46,48 @@ class AdminHandlerContentsController extends AbstractAdminController
                 ->addWhere('contentHandler', '=', $ch->getId());
 
         $route = 'nyrocms_admin_handler_contents';
-        $routePrm = array(
+        $routePrm = [
             'chid' => $ch->getId(),
-        );
+        ];
 
         $orderField = $handler->orderField();
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
                 array_merge(
-                    array(
+                    [
                         'title' => $ch->getName(),
                         'routePrmAdd' => $routePrm,
                         'routePrmEdit' => $routePrm,
                         'routePrmDelete' => $routePrm,
                         'name' => 'contentSpec',
                         'route' => $route,
-                        'fields' => array_unique(array_filter(array(
+                        'fields' => array_unique(array_filter([
                             'id',
                             'title',
                             $orderField,
                             'updated',
-                        ))),
-                        'moreActions' => array_filter(array(
-                            'up' => $handler->hasMoveActions() ? array(
+                        ])),
+                        'moreActions' => array_filter([
+                            'up' => $handler->hasMoveActions() ? [
                                 'name' => '↑',
                                 'route' => 'nyrocms_admin_handler_contents_up',
                                 'routePrm' => $routePrm,
-                            ) : false,
-                            'down' => $handler->hasMoveActions() ? array(
+                            ] : false,
+                            'down' => $handler->hasMoveActions() ? [
                                 'name' => '↓',
                                 'route' => 'nyrocms_admin_handler_contents_down',
                                 'routePrm' => $routePrm,
-                            ) : false,
-                            'composer' => $handler->hasComposer() ? array(
+                            ] : false,
+                            'composer' => $handler->hasComposer() ? [
                                 'name' => $this->get(AdminService::class)->getIcon('pencil'),
                                 '_blank' => true,
                                 'route' => 'nyrocms_admin_composer',
-                                'routePrm' => array(
+                                'routePrm' => [
                                     'type' => 'ContentSpec',
-                                ),
-                            ) : false,
-                        )),
-                    ),
+                                ],
+                            ] : false,
+                        ]),
+                    ],
                     $this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
                 ));
     }
@@ -117,7 +117,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             $this->get(DbAbstractService::class)->flush();
         }
 
-        return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', array('chid' => $ch->getId())));
+        return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', ['chid' => $ch->getId()]));
     }
 
     public function addAction(Request $request, $chid)
@@ -165,26 +165,26 @@ class AdminHandlerContentsController extends AbstractAdminController
         $row->setPosition($position);
         $this->get(DbAbstractService::class)->flush();
 
-        return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', array('chid' => $ch->getId())));
+        return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', ['chid' => $ch->getId()]));
     }
 
     public function form(Request $request, $action, $row)
     {
         $row->setService($this->get(NyrodevService::class));
-        $routePrm = array('chid' => $row->getContentHandler()->getId());
-        $moreOptions = array(
-            'state' => array(
+        $routePrm = ['chid' => $row->getContentHandler()->getId()];
+        $moreOptions = [
+            'state' => [
                 'type' => ChoiceType::class,
                 'choices' => array_flip($this->get(AdminService::class)->getContentSpecStateChoices()),
-            ),
+            ],
             'validStart' => $this->get(NyroCmsService::class)->getDateFormOptions(),
             'validEnd' => $this->get(NyroCmsService::class)->getDateFormOptions(),
-            'submit' => array(
-                'attr' => array(
+            'submit' => [
+                'attr' => [
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_handler_contents', $routePrm),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
         $handler->init($request, true);
@@ -194,12 +194,12 @@ class AdminHandlerContentsController extends AbstractAdminController
         }
 
         if ($handler->isIntroRequired()) {
-            $moreOptions['intro'] = array(
+            $moreOptions['intro'] = [
                 'required' => true,
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
-                ),
-            );
+                ],
+            ];
             $this->translationFields['intro']['required'] = true;
         }
 
@@ -210,7 +210,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             }
         }
 
-        $fields = array_filter(array(
+        $fields = array_filter([
             'title',
             $handler->hasIntro() ? 'intro' : null,
             $handler->hasFeatured() ? 'featured' : null,
@@ -218,7 +218,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             $handler->useDateSpec() ? 'dateSpec' : null,
             $handler->hasValidDates() ? 'validStart' : null,
             $handler->hasValidDates() ? 'validEnd' : null,
-        ));
+        ]);
 
         if (!$handler->hasIntro()) {
             unset($this->translationFields['intro']);
@@ -228,32 +228,32 @@ class AdminHandlerContentsController extends AbstractAdminController
             $fields[] = 'metaTitle';
             $fields[] = 'metaDescription';
             $fields[] = 'metaKeywords';
-            $this->translationFields['metaTitle'] = array(
+            $this->translationFields['metaTitle'] = [
                 'type' => TextType::class,
                 'required' => false,
-            );
-            $this->translationFields['metaDescription'] = array(
+            ];
+            $this->translationFields['metaDescription'] = [
                 'type' => TextareaType::class,
                 'required' => false,
-            );
-            $this->translationFields['metaKeywords'] = array(
+            ];
+            $this->translationFields['metaKeywords'] = [
                 'type' => TextareaType::class,
                 'required' => false,
-            );
+            ];
         }
 
         if ($handler->hasOgs()) {
             $fields[] = 'ogTitle';
             $fields[] = 'ogDescription';
             $fields[] = 'ogImage';
-            $this->translationFields['ogTitle'] = array(
+            $this->translationFields['ogTitle'] = [
                 'type' => TextType::class,
                 'required' => false,
-            );
-            $this->translationFields['ogDescription'] = array(
+            ];
+            $this->translationFields['ogDescription'] = [
                 'type' => TextareaType::class,
                 'required' => false,
-            );
+            ];
         }
 
         $adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');
@@ -266,16 +266,16 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    protected $translationFields = array(
-        'title' => array(
+    protected $translationFields = [
+        'title' => [
             'type' => TextType::class,
             'required' => true,
-        ),
-        'intro' => array(
+        ],
+        'intro' => [
             'type' => TextareaType::class,
             'required' => false,
-        ),
-    );
+        ],
+    ];
     protected $translations;
     /**
      * @var \Symfony\Component\Form\Form
@@ -288,10 +288,10 @@ class AdminHandlerContentsController extends AbstractAdminController
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
         unset($langs[$defaultLocale]);
 
-        $this->translations = array();
+        $this->translations = [];
         foreach ($row->getTranslations() as $tr) {
             if (!isset($this->translations[$tr->getLocale()])) {
-                $this->translations[$tr->getLocale()] = array();
+                $this->translations[$tr->getLocale()] = [];
             }
             $this->translations[$tr->getLocale()][$tr->getField()] = $tr;
         }
@@ -309,15 +309,15 @@ class AdminHandlerContentsController extends AbstractAdminController
                     $fieldName = 'lang_'.$lg.'_'.$field;
 
                     if (isset($options['required']) && $options['required']) {
-                        $options['constraints'] = array(new Constraints\NotBlank());
+                        $options['constraints'] = [new Constraints\NotBlank()];
                     }
 
-                    $form->add($fieldName, $type, array_merge($options, array(
+                    $form->add($fieldName, $type, array_merge($options, [
                         'label' => $this->trans('admin.contentSpec.'.$field).' '.strtoupper($lg),
                         'mapped' => false,
                         'data' => isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
-                        'position' => array('after' => $field),
-                    )));
+                        'position' => ['after' => $field],
+                    ]));
                 }
             }
         }

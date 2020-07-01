@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
-use NyroDev\NyroCmsBundle\Model\ContactMessage as ContactMessageModel;
 use Doctrine\ORM\Mapping as ORM;
+use NyroDev\NyroCmsBundle\Model\ContactMessage as ContactMessageModel;
 
 /**
  * ContactMessage.

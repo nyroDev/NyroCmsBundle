@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
-use NyroDev\NyroCmsBundle\Model\UserRole as UserRoleModel;
 use Doctrine\ORM\Mapping as ORM;
+use NyroDev\NyroCmsBundle\Model\UserRole as UserRoleModel;
 
 /**
  * UserRole.

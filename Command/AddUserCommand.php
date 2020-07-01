@@ -45,9 +45,6 @@ class AddUserCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -94,14 +91,14 @@ class AddUserCommand extends Command
         if (is_null($developper)) {
             $question = new ChoiceQuestion(
                 'Is developper?',
-                array('false', 'true'),
+                ['false', 'true'],
                 0);
             $developper = $helper->ask($input, $output, $question);
         }
 
         if ($userroles) {
             $userroles = explode(',', $userroles);
-            $tmp = array();
+            $tmp = [];
             $error = false;
             foreach ($userroles as $id) {
                 if (isset($userRolesDb[$id])) {
@@ -114,16 +111,16 @@ class AddUserCommand extends Command
             if (!$error) {
                 $userroles = $tmp;
             } else {
-                $userroles = array();
+                $userroles = [];
             }
         } else {
             $userroles = [];
         }
 
         if (0 === count($userroles) && count($userRolesDb) > 0) {
-            $userRolesDbList = array(
+            $userRolesDbList = [
                 '0' => 'nothing',
-            );
+            ];
             foreach ($userRolesDb as $id => $tmp) {
                 $userRolesDbList[$id] = $id.' - '.$tmp.'';
             }

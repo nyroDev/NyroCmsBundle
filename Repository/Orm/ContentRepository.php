@@ -46,7 +46,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $q->getResult();
     }
 
-    public function findByUrl($url, $rootId, array $states = array())
+    public function findByUrl($url, $rootId, array $states = [])
     {
         $qb = $this->createQueryBuilder('c')
             ->andWhere('c.root = :root')->setParameter('root', $rootId)
@@ -80,7 +80,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         $q->setParameter(1, '%'.$search.'%');
         $logValues = $q->getResult();
 
-        $ret = array();
+        $ret = [];
         foreach ($logValues as $logValue) {
             $object = $this->find($logValue->getObjectId());
             if ($object) {
@@ -97,7 +97,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 
     public function search(array $searches, $rootId = null, $state = null, $sortByField = null, $direction = 'ASC')
     {
-        $query = $parameters = array();
+        $query = $parameters = [];
         foreach ($searches as $k => $v) {
             $query[] = 'c.contentText LIKE :text'.$k;
             $parameters['text'.$k] = '%'.$v.'%';
@@ -160,7 +160,6 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 
         $q = $qb->getQuery();
         $this->setHint($q);
-
 
         return $q;
     }

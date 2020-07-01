@@ -17,7 +17,7 @@
 			<a href="#filter" class="switcher filterSwitcher"><?php echo $view['translator']->trans('admin.misc.filter'); ?></a>
 			<div id="filter">
 				<?php echo $view['form']->form($filter); ?>
-				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, array('clearFilter' => 1))); ?>" class="clearFilter"><?php echo $view['translator']->trans('admin.misc.clearFilter'); ?></a>
+				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, ['clearFilter' => 1])); ?>" class="clearFilter"><?php echo $view['translator']->trans('admin.misc.clearFilter'); ?></a>
 			</div>
 		<?php endif; ?>
 		
@@ -25,7 +25,7 @@
 			<div class="listButtons">
 				<?php if (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions)): ?>
 					<?php foreach ($moreGlobalActions as $k => $action): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], (isset($action['routePrm']) ? $action['routePrm'] : array())); ?>" class="button <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
+						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], (isset($action['routePrm']) ? $action['routePrm'] : [])); ?>" class="button <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
 							<?php if (isset($action['icon']) && $action['icon']): ?>
 								<?php echo $view['nyrocms_admin']->getIcon($action['icon']); ?>
 							<?php endif; ?>
@@ -34,7 +34,7 @@
 					<?php endforeach; ?>
 				<?php endif; ?>
 				<?php if (!isset($noAdd) || !$noAdd): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : array()); ?>" class="button add">
+					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : []); ?>" class="button add">
 						<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
 						<?php echo $view['translator']->trans('admin.misc.add'); ?>
 					</a>
@@ -52,8 +52,8 @@
                         $prm = $routePrm;
                         $prm['page'] = 1;
                         $prm['sort'] = $field;
-                        $linkAsc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, array('order' => 'asc')));
-                        $linkDesc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, array('order' => 'desc')));
+                        $linkAsc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'asc']));
+                        $linkDesc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'desc']));
                         $current = isset($routePrm['sort']) && $routePrm['sort'] == $field ? $routePrm['order'] : false;
                         ?>
 						<th><?php
@@ -86,18 +86,18 @@
 						<td class="actions">
 							<?php if (isset($moreActions) && is_array($moreActions)): ?>
 								<?php foreach ($moreActions as $k => $action): ?>
-									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge((isset($action['routePrm']) ? $action['routePrm'] : array()), array('id' => $r->getId()))); ?>" class="<?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?>>
+									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge((isset($action['routePrm']) ? $action['routePrm'] : []), ['id' => $r->getId()])); ?>" class="<?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?>>
 										<?php echo $action['name']; ?>
 									</a>
 								<?php endforeach; ?>
 							<?php endif; ?>
 							<?php if (!isset($noEdit) || !$noEdit): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : array(), array('id' => $r->getId()))); ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
+								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()])); ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
 								</a>
 							<?php endif; ?>
 							<?php if (!isset($noDelete) || !$noDelete): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : array(), array('id' => $r->getId()))); ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
+								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : [], ['id' => $r->getId()])); ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
 								</a>
 							<?php endif; ?>

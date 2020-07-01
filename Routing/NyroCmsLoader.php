@@ -55,7 +55,7 @@ class NyroCmsLoader extends Loader
 
         $routeHandlerPath = $this->container->get(NyroCmsService::class)->getParameter('nyrocms.route_handler_path');
         if ($routeHandlerPath) {
-            $routeHandlerPath.= '/';
+            $routeHandlerPath .= '/';
         }
 
         if (isset($typeCfg['homepage'])) {

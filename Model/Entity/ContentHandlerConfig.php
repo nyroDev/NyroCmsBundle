@@ -2,9 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
-use NyroDev\NyroCmsBundle\Model\ContentHandlerConfig as ContentHandlerConfigModel;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\NyroCmsBundle\Model\ContentHandlerConfig as ContentHandlerConfigModel;
 
 /**
  * Content.

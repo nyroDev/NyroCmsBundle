@@ -2,10 +2,10 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity;
 
-use NyroDev\NyroCmsBundle\Model\Content as ContentModel;
-use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTranslatableTrait;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\NyroCmsBundle\Model\Content as ContentModel;
+use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTranslatableTrait;
 
 /**
  * Content.

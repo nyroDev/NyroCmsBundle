@@ -2,14 +2,14 @@
 	<?php
     $handlerIndicator = NyroDev\NyroCmsBundle\Handler\AbstractHandler::TEMPLATE_INDICATOR;
     $handlerInContentsKey = array_search($handlerIndicator, $block['contents'], true);
-    $handlerInContent = $handlerInContentsKey ? $view->render($view['nyrocms_composer']->getBlockTemplate($row, 'handler'), array(
+    $handlerInContent = $handlerInContentsKey ? $view->render($view['nyrocms_composer']->getBlockTemplate($row, 'handler'), [
         'nb' => $nb,
         'row' => $row,
         'config' => $view['nyrocms_composer']->getBlockConfig($row, 'handler'),
         'handlerContent' => $handlerContent,
         'admin' => $admin,
         'isWrapped' => true,
-    )) : null;
+    ]) : null;
     ?>
 	<?php if ($admin): ?>
 		<input type="hidden" name="contentsKey[]" value="<?php echo $nb; ?>" />
@@ -22,7 +22,7 @@
 			<a href="#" class="composerDrag"><?php echo $view['nyrocms_admin']->getIcon('drag').'<span> '.$view['nyrodev']->trans('admin.composer.action.drag'); ?></span></a>
 		</div>
 	<?php endif; ?>
-	<?php echo $view->render($view['nyrocms_composer']->getBlockTemplate($row, $block['type']), array(
+	<?php echo $view->render($view['nyrocms_composer']->getBlockTemplate($row, $block['type']), [
         'nb' => $nb,
         'row' => $row,
         'config' => $view['nyrocms_composer']->getBlockConfig($row, $block['type']),
@@ -32,5 +32,5 @@
         'handlerInContent' => $handlerInContent,
         'contents' => $block['contents'],
         'admin' => $admin,
-    )); ?>
+    ]); ?>
 </div>

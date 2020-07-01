@@ -31,7 +31,7 @@ class AbstractAdminController extends SrcAbstractAdminController
      */
     protected $translationForm;
     protected $translationPrefix;
-    protected $translationFields = array();
+    protected $translationFields = [];
     protected $translations;
 
     protected function translationFormClb($action, $row, \Symfony\Component\Form\FormBuilder $form)
@@ -41,10 +41,10 @@ class AbstractAdminController extends SrcAbstractAdminController
             $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
             unset($langs[$defaultLocale]);
 
-            $this->translations = array();
+            $this->translations = [];
             foreach ($row->getTranslations() as $tr) {
                 if (!isset($this->translations[$tr->getLocale()])) {
-                    $this->translations[$tr->getLocale()] = array();
+                    $this->translations[$tr->getLocale()] = [];
                 }
                 $this->translations[$tr->getLocale()][$tr->getField()] = $tr;
             }
@@ -59,15 +59,15 @@ class AbstractAdminController extends SrcAbstractAdminController
                     $fieldName = 'lang_'.$lg.'_'.$field;
 
                     if (isset($options['required']) && $options['required']) {
-                        $options['constraints'] = array(new Constraints\NotBlank());
+                        $options['constraints'] = [new Constraints\NotBlank()];
                     }
 
-                    $form->add($fieldName, $type, array_merge(array(
+                    $form->add($fieldName, $type, array_merge([
                         'label' => $this->trans('admin.'.$this->translationPrefix.'.'.$field).' '.strtoupper($lg),
                         'mapped' => false,
                         'data' => isset($this->translations[$lg]) && isset($this->translations[$lg][$field]) ? $this->translations[$lg][$field]->getContent() : $propertyAccess->getValue($row, $field),
-                        'position' => array('after' => $field),
-                    ), $options));
+                        'position' => ['after' => $field],
+                    ], $options));
                 }
             }
         }

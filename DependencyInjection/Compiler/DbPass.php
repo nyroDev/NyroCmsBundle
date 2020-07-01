@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class DbPass implements CompilerPassInterface
@@ -25,7 +25,7 @@ class DbPass implements CompilerPassInterface
         }
         $definition = $container->getDefinition($managerService);
         if (method_exists($definition, 'setFactory')) {
-            $definition->setFactory(array(new Reference($doctrineService), 'getManager'));
+            $definition->setFactory([new Reference($doctrineService), 'getManager']);
         } else {
             $definition->setFactoryService($doctrineService);
             $definition->setFactoryMethod('getManager');

@@ -2,11 +2,11 @@
 
 namespace NyroDev\NyroCmsBundle\Form\Extension;
 
-use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 
 class FileTypeExtension extends AbstractTypeExtension
 {
@@ -26,10 +26,6 @@ class FileTypeExtension extends AbstractTypeExtension
 
     /**
      * Pass the image URL to the view.
-     *
-     * @param FormView      $view
-     * @param FormInterface $form
-     * @param array         $options
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {

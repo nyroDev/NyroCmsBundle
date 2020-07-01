@@ -5,9 +5,9 @@
     <title>Composer for <?php echo $row; ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), array(
+	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), [
         'row' => $row,
-    )); ?>
+    ]); ?>
 
 	<?php echo $view['nyrodev_tagRender']->renderWebpackLinkTags('css/admin/nyroCmsComposer', 'type="text/css" media="screen"'); ?>
 
@@ -20,7 +20,7 @@ $prefixTinymceSimple = 'data-tinymcesimple_';
 
 $attrs = array_merge(
     $view['nyrodev_form']->getPluploadAttrs(),
-    array(
+    [
         'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),
@@ -31,7 +31,7 @@ $attrs = array_merge(
         $prefixTinymceSimple.'inline' => 'true',
         $prefixTinymceSimple.'menubar' => 'false',
         $prefixTinymceSimple.'valid_elements' => '',
-    ),
+    ],
     $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymce),
     $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymceSimple, true)
 );
@@ -104,9 +104,9 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 	</nav>
 	<?php endif; ?>
 
-	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), array(
+	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), [
         'row' => $row,
-    )); ?>
+    ]); ?>
 	
 	<nav id="composerNavButtons">
 		<button type="submit" class="composerSubmit"><?php echo $view['nyrodev']->trans('admin.composer.action.save'); ?></button>
@@ -121,7 +121,7 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 				</label>
 				<nav>
 					<?php foreach ($langs as $lg => $lang): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', array('type' => $type, 'id' => $id, 'lang' => $lg)); ?>"
+						<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => $type, 'id' => $id, 'lang' => $lg]); ?>"
 							class="composerNavElt langChange composerNavConfirm"
 							data-confirm="<?php echo $view['nyrodev']->trans('admin.composer.action.langChange'); ?>"
 						><?php echo $lg; ?></a>

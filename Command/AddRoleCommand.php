@@ -36,9 +36,6 @@ class AddRoleCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -58,7 +55,7 @@ class AddRoleCommand extends Command
         if (is_null($internal)) {
             $question = new ChoiceQuestion(
                 'Is this role internal?',
-                array('false', 'true'),
+                ['false', 'true'],
                 0);
             $internal = $helper->ask($input, $output, $question);
         }

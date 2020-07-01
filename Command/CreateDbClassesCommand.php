@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Command;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -11,8 +12,6 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
-use Symfony\Component\HttpKernel\KernelInterface;
-use NyroDev\UtilityBundle\Services\Traits\KernelInterfaceServiceableTrait;
 
 class CreateDbClassesCommand extends Command
 {
@@ -42,9 +41,6 @@ class CreateDbClassesCommand extends Command
 
     /**
      * Executes the command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -93,7 +89,7 @@ class CreateDbClassesCommand extends Command
                 $src = $source->getRealPath();
                 $dstClass = $this->db->getClass($classname, false);
 
-                $dst = str_replace(array('/', '\\'), array(DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR), $srcDir.'/'.$namespaceDir.'/'.$dstClass.'.php');
+                $dst = str_replace(['/', '\\'], [DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR], $srcDir.'/'.$namespaceDir.'/'.$dstClass.'.php');
 
                 $exists = $fs->exists($dst);
 

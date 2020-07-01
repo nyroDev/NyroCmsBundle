@@ -11,7 +11,7 @@ interface ContentRepositoryInterface extends RepositoryInterface
 
     public function getPathForBreacrumb($node, $excludeNode = true);
 
-    public function findByUrl($url, $rootId, array $states = array());
+    public function findByUrl($url, $rootId, array $states = []);
 
     public function findByLog($field, $value);
 

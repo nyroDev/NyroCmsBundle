@@ -50,24 +50,24 @@ class Contact extends AbstractHandler
 
     public function getAllowedParams()
     {
-        return array(
+        return [
             'sent',
-        );
+        ];
     }
 
     public function getOtherAdminRoutes()
     {
         $ret = null;
         if ($this->saveInDb()) {
-            $ret = array(
-                'contactMessage' => array(
+            $ret = [
+                'contactMessage' => [
                     'route' => 'nyrocms_admin_data_contactMessage',
-                    'routePrm' => array(
+                    'routePrm' => [
                         'chid' => $this->contentHandler->getId(),
-                    ),
+                    ],
                     'name' => $this->contentHandler->getName().' '.$this->trans('admin.contactMessage.viewTitle'),
-                ),
-            );
+                ],
+            ];
         }
 
         return $ret;
@@ -75,14 +75,14 @@ class Contact extends AbstractHandler
 
     public function getAdminMessageListFields()
     {
-        return array(
+        return [
             'id',
             'dest',
             'firstname',
             'lastname',
             'email',
             'inserted',
-        );
+        ];
     }
 
     public function getAdminMessageFilterType()
@@ -92,7 +92,7 @@ class Contact extends AbstractHandler
 
     public function getAdminMessageExportFields()
     {
-        return array(
+        return [
             'id',
             'dest',
             'firstname',
@@ -102,26 +102,26 @@ class Contact extends AbstractHandler
             'email',
             'message',
             'inserted',
-        );
+        ];
     }
 
     protected $validatedEmails;
 
     protected function getFormFields($action)
     {
-        $ret = array();
+        $ret = [];
         if ($this->contentHandler->getHasAdmin()) {
-            $ret['emails'] = array(
+            $ret['emails'] = [
                 'type' => TextareaType::class,
                 'translatable' => false,
                 'label' => $this->trans('nyrocms.handler.contact.emails'),
                 'required' => true,
-                'constraints' => array(
+                'constraints' => [
                     new Constraints\NotBlank(),
-                    new Constraints\Callback(array(
+                    new Constraints\Callback([
                         'callback' => function ($data, ExecutionContextInterface $context) {
                             $emails = array_filter(array_map('trim', preg_split('/[\ \n\,;]+/', $data)));
-                            $errors = array();
+                            $errors = [];
                             foreach ($emails as $email) {
                                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                                     $errors[] = $email;
@@ -138,10 +138,10 @@ class Contact extends AbstractHandler
                                 $this->validatedEmails = implode(', ', $emails);
                             }
                         },
-                    )),
-                ),
-                'position' => array('before' => 'state'),
-            );
+                    ]),
+                ],
+                'position' => ['before' => 'state'],
+            ];
         }
 
         return $ret;
@@ -157,24 +157,24 @@ class Contact extends AbstractHandler
 
     protected function getEmails(Content $content)
     {
-        $ret = array();
+        $ret = [];
 
         if ($this->contentHandler->getHasAdmin()) {
             foreach ($this->getContentSpecs($content) as $spec) {
-                $ret['spec_'.$spec->getId()] = array(
+                $ret['spec_'.$spec->getId()] = [
                     'emails' => array_map('trim', explode(',', $spec->getInContent('emails'))),
                     'name' => $spec->getTitle(),
-                );
+                ];
             }
         }
 
         if (0 == count($ret)) {
-            $ret = array(
-                'contact' => array(
-                    'emails' => array($this->trans('nyrocms.handler.contact.defaultTo.email')),
+            $ret = [
+                'contact' => [
+                    'emails' => [$this->trans('nyrocms.handler.contact.defaultTo.email')],
                     'name' => $this->trans('nyrocms.handler.contact.defaultTo.name'),
-                ),
-            );
+                ],
+            ];
         }
 
         return $ret;
@@ -187,27 +187,27 @@ class Contact extends AbstractHandler
 
     protected function getFormOptions(Content $content)
     {
-        return array();
+        return [];
     }
 
     protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
     {
         $contactEmails = $this->getEmails($content);
 
-        $form = $this->get('form.factory')->create($this->getFormType($content), null, array_merge(array(
-            'attr' => array(
+        $form = $this->get('form.factory')->create($this->getFormType($content), null, array_merge([
+            'attr' => [
                 'id' => 'contactForm',
                 'class' => 'publicForm',
-            ),
+            ],
             'contacts' => $contactEmails,
-        ), $this->getFormOptions($content)));
+        ], $this->getFormOptions($content)));
         $this->get(FormService::class)->addDummyCaptcha($form);
 
         /* @var $form \Symfony\Component\Form\Form */
         $form->handleRequest($this->request);
         if ($form->isSubmitted() && $form->isValid()) {
             $subject = $this->trans('nyrocms.handler.contact.subject');
-            $message = array();
+            $message = [];
             $message[] = '<h1>'.$subject.'</h1>';
             $message[] = '<p>';
 
@@ -252,20 +252,20 @@ class Contact extends AbstractHandler
                 $this->get(DbAbstractService::class)->flush();
             }
 
-            return new RedirectResponse($this->get(NyroCmsService::class)->getUrlFor($content, false, array('sent' => 1)));
+            return new RedirectResponse($this->get(NyroCmsService::class)->getUrlFor($content, false, ['sent' => 1]));
         }
 
         $view = '@NyroDevNyroCms/Handler/contact';
 
-        return array(
+        return [
             'view' => $view.'.html.php',
-            'vars' => array(
+            'vars' => [
                 'content' => $content,
                 'form' => $form->createView(),
                 'sent' => $this->request->query->getBoolean('sent'),
                 'isAdmin' => $this->isAdmin,
-            ),
-        );
+            ],
+        ];
     }
 
     protected function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
