@@ -7,7 +7,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 trait SharableTranslatableTrait
 {
-    use SharableTrait;
 
     /**
      * @var string

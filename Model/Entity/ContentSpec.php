@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Model\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\NyroCmsBundle\Model\ContentSpec as ContentSpecModel;
+use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTrait;
 use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTranslatableTrait;
 
 /**
@@ -19,7 +20,8 @@ use NyroDev\NyroCmsBundle\Model\Entity\Traits\SharableTranslatableTrait;
  */
 class ContentSpec extends ContentSpecModel
 {
-    use SharableTranslatableTrait { getFileFields as protected sharableGetFileFields; }
+    use SharableTrait { getFileFields as protected sharableGetFileFields; }
+    use SharableTranslatableTrait;
 
     /**
      * @ORM\ManyToMany(targetEntity="Content", cascade={"remove", "persist"})
