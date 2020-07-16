@@ -227,7 +227,9 @@ abstract class AbstractController extends NyroDevAbstractController
         $q = strip_tags($request->query->get('q'));
 
         $title = $this->trans('public.header.search');
-        $results = [];
+        $results = [
+            'total' => 0,
+        ];
         if ($q) {
             $this->get(NyroCmsService::class)->setPathInfoSearch($q);
             $title = $this->trans('nyrocms.search.title', ['%q%' => $q]);
@@ -284,7 +286,7 @@ abstract class AbstractController extends NyroDevAbstractController
             $urls[] = $this->get(NyrodevService::class)->generateUrl($this->getRootHandler().'_sitemapXml', ['_locale' => $locale, '_format' => 'xml'], true);
         }
 
-        return $this->render('NyroDevNyroCmsBundle:Default:sitemapIndex.xml.php', [
+        return $this->render('@NyroDevNyroCms/Default/sitemapIndex.xml.php', [
             'urls' => $urls,
         ]);
     }
@@ -317,7 +319,7 @@ abstract class AbstractController extends NyroDevAbstractController
         $response->setPublic();
         $response->setSharedMaxAge(60 * 60);
 
-        return $this->render('NyroDevNyroCmsBundle:Default:sitemap.xml.php', [
+        return $this->render('@NyroDevNyroCms/Default/sitemap.xml.php', [
             'urls' => $urls,
         ], $response);
     }

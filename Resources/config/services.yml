@@ -5,8 +5,10 @@ services:
         calls:
             - [setTwig, ['@twig']]
             - [setMailerInterface, ['@mailer']]
+            - [setRouteLoader, ['@nyrocms_routeLoader']]
         tags:
           - { name: templating.helper, alias: nyrocms }
+          - { name: kernel.event_listener, event: kernel.exception }
     nyrocms:
         alias: NyroDev\NyroCmsBundle\Services\NyroCmsService
         public: true

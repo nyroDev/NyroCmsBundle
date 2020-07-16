@@ -3,20 +3,35 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
+use NyroDev\NyroCmsBundle\Handler\Sitemap;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
+use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Mime\Email;
 
 class NyroCmsService extends nyroDevAbstractService
 {
     use TwigServiceableTrait;
     use MailerInterfaceServiceableTrait;
+
+    protected $routeLoader;
+
+    /**
+     * @Required
+     */
+    public function setRouteLoader(NyroCmsLoader $routeLoader)
+    {
+        $this->routeLoader = $routeLoader;
+    }
 
     protected $handlers = [];
 
@@ -375,5 +390,63 @@ class NyroCmsService extends nyroDevAbstractService
         }
 
         return $this->foundHandlers;
+    }
+
+    public function onKernelException(ExceptionEvent $event)
+    {
+        $request = $event->getRequest();
+        if (
+            $request->server->get('APP_DEBUG')
+            ||
+            'html' !== $request->getRequestFormat()
+        ) {
+            return;
+        }
+
+        // We're in prod HTML
+
+        $code = $event->getThrowable()->getStatusCode();
+        if (!$code) {
+            $code = 404;
+        }
+        $repo = $this->get(DbAbstractService::class)->getContentRepository();
+
+        // @todo define rootContent regarding URL
+        $rootContent = null;
+
+        $errorMenu = $repo->findOneByMenuOption('_error', $rootContent);
+        if ($errorMenu) {
+            $response = $this->forwardTo($request, $event->getKernel(), $errorMenu, $code);
+            if ($response) {
+                $event->setResponse($response);
+            }
+        }
+
+        $sitemapHandler = $repo->findOneByContentHandlerClass(Sitemap::class, $rootContent);
+        if ($sitemapHandler) {
+            $response = $this->forwardTo($request, $event->getKernel(), $sitemapHandler, $code);
+            if ($response) {
+                $event->setResponse($response);
+            }
+        }
+    }
+
+    protected function forwardTo(Request $request, HttpKernelInterface $kernel, Content $content, $code)
+    {
+        $controller = $this->routeLoader->findMatchingController($content);
+        if (!$controller) {
+            return null;
+        }
+
+        $subRequest = $request->duplicate([], null, [
+            '_controller' => $controller.'::directContent',
+            'content' => $content,
+        ]);
+
+        $response = $kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+
+        $response->setStatusCode($code);
+
+        return $response;
     }
 }

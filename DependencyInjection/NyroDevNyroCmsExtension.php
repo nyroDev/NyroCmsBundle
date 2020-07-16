@@ -2,9 +2,6 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection;
 
-use NyroDev\NyroCmsBundle\Controller\ExceptionController;
-use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
-use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -84,20 +81,5 @@ class NyroDevNyroCmsExtension extends Extension
 
         $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Controller'));
         $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Controller\\', './*');
-
-        // Load ExceptionController
-        $definition = new Definition();
-        $definition
-            ->setAutowired(true)
-            ->setAutoconfigured(true)
-            ->setPublic(true)
-            ->addArgument(new Reference('twig'))
-            ->addArgument('%kernel.debug%')
-            ->addArgument(new Reference(NyroCmsService::class))
-            ->addArgument(new Reference(NyroCmsLoader::class))
-            ->addTag('controller.service_arguments')
-        ;
-
-        $container->setDefinition(ExceptionController::class, $definition);
     }
 }

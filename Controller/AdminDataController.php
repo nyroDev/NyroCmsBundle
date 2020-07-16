@@ -195,6 +195,9 @@ class AdminDataController extends AbstractAdminController
                     'placeholder' => $this->trans('admin.content.relatedsPlaceholder'),
                 ],
             ],
+            'ogImage' => [
+                'showDelete' => 'ogImageDelete',
+            ],
             'submit' => [
                 'attr' => [
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_content_tree', $routePrm),
@@ -231,6 +234,10 @@ class AdminDataController extends AbstractAdminController
 
         if ($row instanceof AbstractUploadable) {
             $row->setService($this->get(NyrodevService::class));
+
+            if ($request->request->get('ogImageDelete')) {
+                $row->removeFile('ogImage');
+            }
         }
 
         $adminForm = $this->createAdminForm($request, 'content', $action, $row, $fields, 'nyrocms_admin_data_content_tree', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush', $this->get(DbAbstractService::class)->getObjectManager());
