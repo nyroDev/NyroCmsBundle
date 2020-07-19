@@ -51,3 +51,5 @@ services:
         arguments: ['@service_container']
         tags:
             - { name: routing.loader }
+    nyrocms_routeLoader:
+        alias: NyroDev\NyroCmsBundle\Routing\NyroCmsLoader
