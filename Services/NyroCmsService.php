@@ -404,8 +404,10 @@ class NyroCmsService extends nyroDevAbstractService
         }
 
         // We're in prod HTML
-
-        $code = $event->getThrowable()->getStatusCode();
+        $code = null;
+        if ($event->getThrowable() instanceof HttpExceptionInterface) {
+            $code = $event->getThrowable()->getStatusCode();
+        }
         if (!$code) {
             $code = 404;
         }
