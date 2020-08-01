@@ -532,10 +532,10 @@ abstract class AbstractHandler
                         ->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, [$this->orderField() => $this->isReversePositionOrder() ? 'DESC' : 'ASC'], $start, $limit);
     }
 
-    public function getTotalContentSpec(Content $content = null, $state = ContentSpec::STATE_ACTIVE)
+    public function getTotalContentSpec(Content $content = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
     {
         return $this->getContentSpecRespository()
-                        ->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null);
+                        ->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where);
     }
 
     public function isWrapped()
