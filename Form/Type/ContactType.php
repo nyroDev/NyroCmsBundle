@@ -51,26 +51,41 @@ class ContactType extends AbstractType
         $builder
             ->add('lastname', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.lastname'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.lastnamePlaceholder'),
+                ],
                 'constraints' => [
                     new Constraints\NotBlank(),
                 ],
             ])
             ->add('firstname', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.firstname'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.firstnamePlaceholder'),
+                ],
                 'constraints' => [
                     new Constraints\NotBlank(),
                 ],
             ])
             ->add('company', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.company'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.companyPlaceholder'),
+                ],
                 'required' => false,
             ])
             ->add('phone', TextType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.phone'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.phonePlaceholder'),
+                ],
                 'required' => false,
             ])
             ->add('email', EmailType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.email'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.emailPlaceholder'),
+                ],
                 'constraints' => [
                     new Constraints\NotBlank(),
                     new Constraints\Email(),
@@ -78,6 +93,9 @@ class ContactType extends AbstractType
             ])
             ->add('message', TextareaType::class, [
                 'label' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.message'),
+                'attr' => [
+                    'placeholder' => $this->container->get(NyrodevService::class)->trans('nyrocms.handler.contact.messagePlaceholder'),
+                ],
                 'constraints' => [
                     new Constraints\NotBlank(),
                 ],

@@ -308,11 +308,17 @@ nyrocms:
         name: Contact
       dest: Pour
       firstname: Prénom
+      firstnamePlaceholder: Jean
       lastname: Nom
+      lastnamePlaceholder: Dupont
       company: Société
+      companyPlaceholder: Dupont Père et fils
       phone: Téléphone
+      phonePlaceholder: 03 03 03 03 03
       email: E-mail
+      emailPlaceholder: jean.dupont@email.com
       message: Message
+      messagePlaceholder: Bonjour, ...
       send: OK
       sent: |
         Votre message a bien été envoyé.

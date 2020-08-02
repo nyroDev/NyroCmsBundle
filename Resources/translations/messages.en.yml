@@ -295,11 +295,17 @@ nyrocms:
         name: Contact
       dest: For
       firstname: First name
+      firstnamePlaceholder: John
       lastname: Last name
+      lastnamePlaceholder: Doe
       company: Company
+      companyPlaceholder: Doe Corp.
       phone: Phone number
+      phonePlaceholder: 123 456 8765
       email: E-mail
+      emailPlaceholder: john.doe@email.com
       message: Message
+      messagePlaceholder: Hello, ...
       send: OK
       sent: |
         Your message has been sent.
