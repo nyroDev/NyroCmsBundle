@@ -160,5 +160,7 @@ class AddUserCommand extends Command
         $this->db->flush();
 
         $output->writeln('New user "'.$email.'" added with ID: '.$newUser->getId());
+
+        return 0;
     }
 }

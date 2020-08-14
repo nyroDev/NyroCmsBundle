@@ -112,5 +112,7 @@ class AddRootContentCommand extends Command
         if ($userRole) {
             $output->writeln('New user role "'.$title.'" added with ID: '.$userRole->getId());
         }
+
+        return 0;
     }
 }

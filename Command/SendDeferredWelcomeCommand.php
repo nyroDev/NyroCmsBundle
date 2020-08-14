@@ -71,8 +71,12 @@ class SendDeferredWelcomeCommand extends Command
 
             $output->writeln('End of welcome email sending.');
             $lock->release();
+
+            return 0;
         } else {
             $output->writeln('sendDeferredWelcome command is locked.');
+
+            return 1;
         }
     }
 }

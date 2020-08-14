@@ -133,8 +133,12 @@ class CreateDbClassesCommand extends Command
                     $output->writeln('Exists: '.$dst);
                 }
             }
+
+            return 0;
         } else {
             $output->writeln($db_driver.' is not supported.');
+
+            return 1;
         }
     }
 }

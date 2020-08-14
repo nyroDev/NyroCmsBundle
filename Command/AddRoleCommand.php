@@ -71,5 +71,7 @@ class AddRoleCommand extends Command
         $this->db->flush();
 
         $output->writeln('New role "'.$name.'" added with ID: '.$newRole->getId());
+
+        return 0;
     }
 }
