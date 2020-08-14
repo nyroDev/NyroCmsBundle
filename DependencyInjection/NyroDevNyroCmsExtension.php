@@ -2,7 +2,6 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection;
 
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -66,7 +65,7 @@ class NyroDevNyroCmsExtension extends Extension
             ->setAutoconfigured(true)
             ->setPublic(false)
         ;
-        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
+        $dirLoader = new Loader\DirectoryLoader(service_container$container, new FileLocator(__DIR__.'/../Command'));
         $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Command\\', './*');
 
         // Load controllers
@@ -75,7 +74,7 @@ class NyroDevNyroCmsExtension extends Extension
             ->setAutowired(true)
             ->setAutoconfigured(true)
             ->setPublic(false)
-            ->addMethodCall('setContainer', [new Reference(ContainerInterface::class)])
+            ->addMethodCall('setContainer', [new Reference('service_container')])
             ->addTag('controller.service_arguments')
         ;
 
