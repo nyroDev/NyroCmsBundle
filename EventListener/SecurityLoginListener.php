@@ -1,12 +1,12 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Listener;
+namespace NyroDev\NyroCmsBundle\EventListener;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
-class SecurityLoginListener extends nyroDevAbstractService
+class SecurityLoginListener extends NyroDevAbstractService
 {
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
     {

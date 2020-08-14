@@ -7,7 +7,6 @@ use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -23,9 +22,8 @@ class UserService extends nyroDevAbstractService
 {
     protected $passwordEncoder;
 
-    public function __construct(ContainerInterface $container, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
-        parent::__construct($container);
         $this->passwordEncoder = $passwordEncoder;
     }
 

@@ -1,8 +1,8 @@
 services:
     NyroDev\NyroCmsBundle\Services\NyroCmsService:
         public: true
-        arguments: ['@service_container']
         calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
             - [setTwig, ['@twig']]
             - [setMailerInterface, ['@mailer']]
             - [setRouteLoader, ['@nyrocms_routeLoader']]
@@ -16,8 +16,9 @@ services:
     NyroDev\NyroCmsBundle\Services\UserService:
         public: true
         arguments:
-            - '@service_container'
             - '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface'
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
           - { name: templating.helper, alias: nyrocms_user }
     nyrocms_user:
@@ -26,8 +27,8 @@ services:
 
     NyroDev\NyroCmsBundle\Services\AdminService:
         public: true
-        arguments: ['@service_container']
         calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
             - [setAssetsPackages, ['@assets.packages']]
         tags:
           - { name: templating.helper, alias: nyrocms_admin }
@@ -37,8 +38,8 @@ services:
 
     NyroDev\NyroCmsBundle\Services\ComposerService:
         public: true
-        arguments: ['@service_container']
         calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
             - [setAssetsPackages, ['@assets.packages']]
             - [setTwig, ['@twig']]
         tags:
@@ -48,7 +49,8 @@ services:
         public: true
     
     NyroDev\NyroCmsBundle\Routing\NyroCmsLoader:
-        arguments: ['@service_container']
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: routing.loader }
     nyrocms_routeLoader:

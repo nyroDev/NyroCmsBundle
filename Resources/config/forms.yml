@@ -1,21 +1,25 @@
 services:
     NyroDev\NyroCmsBundle\Form\Type\UserFilterType:
-        arguments: ['@service_container']
+        calls:
+          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
           - { name: form.type }
 
     NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType:
-        arguments: ['@service_container']
+        calls:
+          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
           - { name: form.type }
 
     NyroDev\NyroCmsBundle\Form\Type\ContactType:
-        arguments: ['@service_container']
+        calls:
+          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
           - { name: form.type }
     
     NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType:
-        arguments: ['@service_container']
+        calls:
+          - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
           - { name: form.type }
     

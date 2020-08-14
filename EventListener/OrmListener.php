@@ -1,13 +1,13 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Listener;
+namespace NyroDev\NyroCmsBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 
-class OrmListener extends nyroDevAbstractService implements EventSubscriber
+class OrmListener extends NyroDevAbstractService implements EventSubscriber
 {
     public function getSubscribedEvents()
     {

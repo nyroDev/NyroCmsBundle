@@ -5,23 +5,16 @@ namespace NyroDev\NyroCmsBundle\Routing;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
+use NyroDev\UtilityBundle\Services\Traits\ContainerInterfaceServiceableTrait;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 class NyroCmsLoader extends Loader
 {
+    use ContainerInterfaceServiceableTrait;
+
     private $loaded = [];
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
 
     public function load($resource, $type = null)
     {

@@ -5,12 +5,14 @@ services:
 
     NyroDev\NyroCmsBundle\Services\Db\OrmService:
         public: true
-        arguments: ['@service_container']
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
     nyrocms_db:
         alias: NyroDev\NyroCmsBundle\Services\Db\OrmService
         public: true
 
-    NyroDev\NyroCmsBundle\Listener\OrmListener:
-        arguments: ['@service_container']
+    NyroDev\NyroCmsBundle\EventListener\OrmListener:
+        calls:
+            - [setContainerInterface, ['@Psr\Container\ContainerInterface']]
         tags:
             - { name: doctrine.event_subscriber }
