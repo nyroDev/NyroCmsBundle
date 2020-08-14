@@ -15,16 +15,6 @@ use Symfony\Component\Validator\Constraints;
 
 class ContactType extends AbstractType
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function __construct($container)
-    {
-        $this->container = $container;
-    }
-
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver
