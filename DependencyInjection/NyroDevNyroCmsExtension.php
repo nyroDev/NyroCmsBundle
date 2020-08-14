@@ -65,7 +65,7 @@ class NyroDevNyroCmsExtension extends Extension
             ->setAutoconfigured(true)
             ->setPublic(false)
         ;
-        $dirLoader = new Loader\DirectoryLoader(service_container$container, new FileLocator(__DIR__.'/../Command'));
+        $dirLoader = new Loader\DirectoryLoader($container, new FileLocator(__DIR__.'/../Command'));
         $dirLoader->registerClasses($definition, 'NyroDev\\NyroCmsBundle\\Command\\', './*');
 
         // Load controllers
