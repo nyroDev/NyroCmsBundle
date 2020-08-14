@@ -224,8 +224,6 @@ admin:
     
     export: Exporter
 nyrocms:
-  user:
-    email_already_used: Cette adresse email existe déjà.
   header:
     menu: menu
     search: Rechercher

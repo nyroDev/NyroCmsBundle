@@ -56,7 +56,7 @@ doctrine:
 config/routes/nyrocms.yaml
 ```yaml
 nyrocms_admin:
-    resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdmin.yml"
+    resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdmin.yaml"
     prefix:   /admin
 
 frontenay:

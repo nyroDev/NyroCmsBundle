@@ -54,9 +54,9 @@ class NyroDevNyroCmsExtension extends Extension
 
         $dbDriver = $container->getParameter('nyroDev_utility.db_driver');
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
-        $loader->load('forms.yml');
-        $loader->load('services_'.$dbDriver.'.yml');
+        $loader->load('services.yaml');
+        $loader->load('forms.yaml');
+        $loader->load('services_'.$dbDriver.'.yaml');
 
         // Load commands
         $definition = new Definition();

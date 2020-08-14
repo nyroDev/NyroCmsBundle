@@ -119,7 +119,7 @@ class AdminTplController extends NyroDevAbstractController
             }
 
             if ($nyrocmsAdmin->isSuperAdmin()) {
-                // Don't forget to protect these URLs in security.yml!
+                // Don't forget to protect these URLs in security.yaml!
 
                 if ($nyrocmsAdmin->isDeveloper()) {
                     $menu['contents']['contenthandler'] = [

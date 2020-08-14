@@ -1,0 +1,3 @@
+nyrocms:
+  user:
+    email_already_used: Cette adresse email existe déjà.

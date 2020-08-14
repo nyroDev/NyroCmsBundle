@@ -45,5 +45,5 @@ nyrocms_admin_tinymce_browser:
         file: .+
 
 nyrocms_admin_data:
-    resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdminData.yml"
+    resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdminData.yaml"
     prefix:   /

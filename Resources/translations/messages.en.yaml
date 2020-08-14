@@ -212,8 +212,6 @@ admin:
     
     export: Export
 nyrocms:
-  user:
-    email_already_used: This email address is already registered
   header:
     menu: Menu
     search: Search
