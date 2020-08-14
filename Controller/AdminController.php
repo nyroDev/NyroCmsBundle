@@ -12,21 +12,10 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AdminController extends NyroDevAbstractController
 {
-    use Traits\SubscribedServiceTrait {
-        getSubscribedServices as protected traitGetSubscribedServices;
-    }
+    use Traits\SubscribedServiceTrait;
 
-    public static function getSubscribedServices()
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
     {
-        return array_merge(self::traitGetSubscribedServices(), [
-            AuthenticationUtils::class,
-        ]);
-    }
-
-    public function loginAction(Request $request)
-    {
-        $authenticationUtils = $this->get(AuthenticationUtils::class);
-
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
