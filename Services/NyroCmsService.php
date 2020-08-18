@@ -216,12 +216,19 @@ class NyroCmsService extends nyroDevAbstractService
             $from = $this->getParameter('noreply_email');
         }
 
-        $email = (new Email())
-                    ->to($to)
-                    ->subject($subject)
-                    ->from($from)
-                    ->text($text)
-                    ->html($html);
+        $email = new Email();
+
+        if (is_array($to)) {
+            foreach ($to as $toAddress) {
+                $email->addTo($toAddress);
+            }
+        }
+        $email
+            ->subject($subject)
+            ->from($from)
+            ->text($text)
+            ->html($html)
+        ;
 
         return $this->getMailerInterface()->send($email);
     }
