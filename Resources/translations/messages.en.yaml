@@ -30,7 +30,7 @@ admin:
     public: Public
   composer:
     title: Compose
-    rootEdit: Root composer
+    rootEdit: Edit Homepage
     home_pos: Chart
     home_move: Move
     home_move_up: Up

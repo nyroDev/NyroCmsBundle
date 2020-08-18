@@ -30,7 +30,7 @@ admin:
     public: Public
   composer:
     title: Composer
-    rootEdit: Modifier la racine
+    rootEdit: Modifier la page d'accueil
     home_pos: Tableau
     home_move: Déplacer
     home_move_up: Monter

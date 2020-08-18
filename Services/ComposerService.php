@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 
 use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
+use NyroDev\NyroCmsBundle\Event\ComposerDefaultBlockEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerEvent;
 use NyroDev\NyroCmsBundle\Event\TinymceConfigEvent;
 use NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent;
@@ -574,7 +575,11 @@ class ComposerService extends AbstractService
         if (0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
-                $content = [$this->getBlock($row, 'intro-intro', 'intro')];
+                $event = new ComposerDefaultBlockEvent($row, [$this->getBlock($row, 'intro-intro', 'intro')]);
+                $this->get('event_dispatcher')->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
+
+                $content = $event->getContent();
+
                 if ($hasHandler) {
                     $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
                     if ($handler->isWrapped() && $handler->isWrappedAs()) {
