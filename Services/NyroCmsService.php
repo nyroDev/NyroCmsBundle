@@ -222,7 +222,10 @@ class NyroCmsService extends nyroDevAbstractService
             foreach ($to as $toAddress) {
                 $email->addTo($toAddress);
             }
+        } else {
+            $email->addTo($to);
         }
+
         $email
             ->subject($subject)
             ->from($from)
