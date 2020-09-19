@@ -154,6 +154,9 @@ aside nav .selectCont select {
 main {
 	margin: 80px 30px 50px 30px;
 }
+#fullWidth main {
+	flex-grow: 1;
+}
 main h1 {
 	font-size: 18px;
 	line-height: 1em;

@@ -514,7 +514,6 @@ class AdminDataController extends AbstractAdminController
 
         $moreOptions = [
             'class' => [
-                'placeholder' => '',
                 'constraints' => [
                     new Constraints\Callback([
                         'callback' => function ($data, $context) {
@@ -539,6 +538,7 @@ class AdminDataController extends AbstractAdminController
 
         if (count($classes)) {
             $moreOptions['class']['type'] = ChoiceType::class;
+            $moreOptions['class']['placeholder'] = '';
             $moreOptions['class']['choices'] = array_combine($classes, $classes);
         }
 
