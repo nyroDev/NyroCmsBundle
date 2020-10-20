@@ -3,7 +3,7 @@
 namespace NyroDev\NyroCmsBundle\EventListener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 
