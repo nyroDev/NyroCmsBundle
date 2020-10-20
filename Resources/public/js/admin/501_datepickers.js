@@ -1,15 +1,33 @@
 jQuery(function ($) {
+
+	$.fn.extend({
+		myDatepickerDataSearch: function (opts, tKey) {
+			if (!opts) {
+				opts = {};
+			}
+			tKey = tKey || 'datepicker_';
+			var tKeyLn = tKey.length;
+			$.each($(this).first().data(), function (i, e) {
+				if (i.indexOf(tKey) == 0) {
+					opts[i.substring(tKeyLn)] = e;
+				}
+			});
+
+			return opts;
+		}
+	});
+
 	var dates = $('.datepicker');
 
 	if (dates.length) {
 		dates.each(function () {
 			var me = $(this);
-			var options = {
+			var options = me.myDatepickerDataSearch({
 				showOtherMonths: true,
 				selectOtherMonths: true,
 				changeMonth: true,
 				changeYear: true
-			};
+			});
 
 			if (me.data('future')) {
 				options.minDate = '+1D';
