@@ -171,6 +171,7 @@ body {
 	margin-bottom: 10px;
 }
 
+.composerBut,
 .composerButtons a,
 .composableSel,
 .composerNav>label,
@@ -215,6 +216,7 @@ body {
 	background: transparent;
 }
 
+.composerBut:hover,
 .composerButtons a:hover,
 .composableSel:hover,
 .composerNav>label:hover,

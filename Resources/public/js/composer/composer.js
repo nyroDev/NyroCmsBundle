@@ -124,6 +124,8 @@ jQuery(function ($) {
 									textarea.val(textarea.val() + "\nDELETE");
 									if (compImg.is('.composableImgBig')) {
 										compImg.closest('.composerBlock').css('background-image', 'none');
+									} else if (!compImg.is('.composableImgMobile') && me.data('placeholder')) {
+										compImg.find('img').attr('src', me.data('placeholder'));
 									}
 									changed();
 								}
