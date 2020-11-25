@@ -121,6 +121,11 @@ abstract class AbstractController extends NyroDevAbstractController
         return $this->handleContent($request, $content, null, null, true);
     }
 
+    protected function getFirstTitles()
+    {
+        return [];
+    }
+
     protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null, $ignoreRedirects = false): Response
     {
         $routePrm = [];
@@ -154,7 +159,7 @@ abstract class AbstractController extends NyroDevAbstractController
 
         $parents = $this->getContentRepo()->getPathForBreacrumb($content, $contentSpec ? false : true);
 
-        $titles = [];
+        $titles = $this->getFirstTitles();
         $activeIds = [];
         foreach ($parents as $parent) {
             $activeIds[$parent->getId()] = $parent->getId();
@@ -195,12 +200,12 @@ abstract class AbstractController extends NyroDevAbstractController
             $this->setImage($this->get(ComposerService::class)->imageResize($image, 1000));
         }
 
-        $this->get(ShareService::class)->setSharable($content);
+        $this->get(ShareService::class)->setSharable($content, false);
         if ($contentSpec) {
-            $this->get(ShareService::class)->setSharable($contentSpec);
+            $this->get(ShareService::class)->setSharable($contentSpec, false);
         }
         if ($handler && $handler->getSharable()) {
-            $this->get(ShareService::class)->setSharable($handler->getSharable());
+            $this->get(ShareService::class)->setSharable($handler->getSharable(), false);
         }
 
         return $this->handleContentView($request, $content, $parents, $contentSpec, $handler, $handlerAction);
