@@ -36,6 +36,9 @@ class ContactType extends AbstractType
                 'label' => $this->trans('nyrocms.handler.contact.dest'),
                 'placeholder' => '',
                 'choices' => array_flip($choices),
+                'constraints' => [
+                    new Constraints\NotBlank(),
+                ],
                 'required' => true,
             ]);
         }
