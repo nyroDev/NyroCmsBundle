@@ -126,6 +126,11 @@ abstract class AbstractController extends NyroDevAbstractController
         return [];
     }
 
+    protected function getLastTitles()
+    {
+        return [];
+    }
+
     protected function handleContent(Request $request, Content $content, ContentSpec $contentSpec = null, $handlerAction = null, $ignoreRedirects = false): Response
     {
         $routePrm = [];
@@ -165,6 +170,8 @@ abstract class AbstractController extends NyroDevAbstractController
             $activeIds[$parent->getId()] = $parent->getId();
             $titles[] = $parent->getTitle();
         }
+
+        $titles = array_merge($titles, $this->getLastTitles());
 
         $activeIds[$content->getId()] = $content->getId();
 
