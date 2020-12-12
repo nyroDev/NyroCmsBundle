@@ -281,7 +281,7 @@ class Configuration implements ConfigurationInterface
                                                     if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : ('style_formats' == $k ? array_merge($ret[$k], $v) : array_replace_recursive($ret[$k], $v));
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -303,7 +303,7 @@ class Configuration implements ConfigurationInterface
                                                     if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : ('style_formats' == $k ? array_merge($ret[$k], $v) : array_replace_recursive($ret[$k], $v));
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }

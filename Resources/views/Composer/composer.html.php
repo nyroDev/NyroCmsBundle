@@ -24,7 +24,7 @@ $attrs = array_merge(
         'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),
-        $prefixTinymce.'theme' => 'modern',
+        $prefixTinymce.'theme' => 'silver',
         $prefixTinymce.'relative_urls' => 'false',
         $prefixTinymce.'browser_spellcheck' => 'true',
 

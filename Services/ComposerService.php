@@ -72,12 +72,12 @@ class ComposerService extends AbstractService
 
     public function canChangeLang(Composable $row)
     {
-        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'change_lang');
+        return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'change_lang');
     }
 
     public function isSameLangStructure(Composable $row)
     {
-        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_structure');
+        return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_structure');
     }
 
     public function canChangeStructure(Composable $row)
@@ -89,7 +89,7 @@ class ComposerService extends AbstractService
 
     public function isSameLangMedia(Composable $row)
     {
-        return  is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_media');
+        return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_media');
     }
 
     public function canChangeMedia(Composable $row)
