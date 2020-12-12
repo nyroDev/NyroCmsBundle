@@ -77,7 +77,7 @@ abstract class DbAbstractService extends AbstractServiceSrc
     /**
      * @param string $name class name
      *
-     * @return \Doctrine\Common\Persistence\ObjectRepository
+     * @return \Doctrine\Persistence\ObjectRepository
      */
     public function getRepository($name)
     {

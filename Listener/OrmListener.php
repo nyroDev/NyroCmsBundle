@@ -3,7 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 
@@ -11,9 +11,9 @@ class OrmListener extends nyroDevAbstractService implements EventSubscriber
 {
     public function getSubscribedEvents()
     {
-        return array(
+        return [
             'postLoad',
-        );
+        ];
     }
 
     public function postLoad(LifecycleEventArgs $args = null)
