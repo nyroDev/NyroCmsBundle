@@ -20,166 +20,166 @@ class Configuration implements ConfigurationInterface
         $builder = new TreeBuilder('nyro_dev_nyro_cms');
         $rootNode = $builder->getRootNode($builder, 'nyro_dev_nyro_cms');
 
-        $defaultBlocks = array(
-            'intro' => array(
+        $defaultBlocks = [
+            'intro' => [
                 'title' => 'OBJECT::getTitle',
                 'subtitle' => 'admin.composer.default.subtitle',
                 'text' => 'admin.composer.default.text',
-            ),
-            'text' => array(
+            ],
+            'text' => [
                 'text' => 'admin.composer.default.text',
-            ),
-            'column2' => array(
+            ],
+            'column2' => [
                 'text1' => 'admin.composer.default.mediumText',
                 'text2' => 'admin.composer.default.mediumText',
-            ),
-            'column3' => array(
+            ],
+            'column3' => [
                 'text1' => 'admin.composer.default.mediumText',
                 'text2' => 'admin.composer.default.mediumText',
                 'text3' => 'admin.composer.default.mediumText',
-            ),
-            'image_text' => array(
+            ],
+            'image_text' => [
                 'text' => 'admin.composer.default.mediumText',
                 'image' => null,
-            ),
-            'text_image' => array(
+            ],
+            'text_image' => [
                 'text' => 'admin.composer.default.mediumText',
                 'image' => null,
-            ),
-            'image' => array(
+            ],
+            'image' => [
                 'image' => null,
-            ),
-            'image2' => array(
+            ],
+            'image2' => [
                 'image1' => null,
                 'image2' => null,
                 'text' => 'admin.composer.default.shortText',
-            ),
-            'image3' => array(
+            ],
+            'image3' => [
                 'image1' => null,
                 'image2' => null,
                 'image3' => null,
                 'text' => 'admin.composer.default.shortText',
-            ),
-            'slideshow' => array(
+            ],
+            'slideshow' => [
                 'images' => null,
-            ),
-            'video' => array(
+            ],
+            'video' => [
                 'url' => null,
                 'embed' => null,
                 'autoplay' => null,
-            ),
-            'separator' => array(
-            ),
-        );
+            ],
+            'separator' => [
+            ],
+        ];
 
-        $defaultConfigs = array(
-            'intro' => array(
+        $defaultConfigs = [
+            'intro' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_intro.html.php',
-            ),
-            'text' => array(
+            ],
+            'text' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_text.html.php',
-            ),
-            'column2' => array(
+            ],
+            'column2' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_column2.html.php',
-            ),
-            'column3' => array(
+            ],
+            'column3' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_column3.html.php',
-            ),
-            'image' => array(
+            ],
+            'image' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_image.html.php',
-                'image' => array('image' => true, 'w' => 1500, 'h' => 600, 'name' => 'image', 'fit' => true, 'quality' => 80),
-            ),
-            'image_text' => array(
+                'image' => ['image' => true, 'w' => 1500, 'h' => 600, 'name' => 'image', 'fit' => true, 'quality' => 80],
+            ],
+            'image_text' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_image_text.html.php',
-                'image' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80),
-            ),
-            'text_image' => array(
+                'image' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80],
+            ],
+            'text_image' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_text_image.html.php',
-                'image' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80),
-            ),
-            'image2' => array(
+                'image' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80],
+            ],
+            'image2' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_image2.html.php',
-                'image1' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80),
-                'image2' => array('image' => true, 'w' => 1000, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80),
-            ),
-            'image3' => array(
+                'image1' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80],
+                'image2' => ['image' => true, 'w' => 1000, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80],
+            ],
+            'image3' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_image3.html.php',
-                'image1' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80),
-                'image2' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80),
-                'image3' => array('image' => true, 'w' => 500, 'h' => 500, 'name' => 'image3', 'fit' => true, 'quality' => 80),
-            ),
-            'slideshow' => array(
+                'image1' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80],
+                'image2' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80],
+                'image3' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image3', 'fit' => true, 'quality' => 80],
+            ],
+            'slideshow' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_slideshow.html.php',
-                'images' => array(
+                'images' => [
                     'image' => true,
                     'multiple' => true,
                     'multipleFields' => [],
-                    'big' => array(
+                    'big' => [
                         'w' => 1500,
                         'h' => 1000,
                         'name' => 'big',
                         'fit' => true,
                         'quality' => 80,
-                    ),
-                    'thumb' => array(
+                    ],
+                    'thumb' => [
                         'w' => 100,
                         'h' => 100,
                         'name' => 'thumb',
                         'fit' => true,
                         'quality' => 80,
-                    ),
-                ),
-            ),
-            'video' => array(
+                    ],
+                ],
+            ],
+            'video' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_video.html.php',
-                'url' => array(
+                'url' => [
                     'treatAsMedia' => true,
-                    'linkedFields' => array(
+                    'linkedFields' => [
                         'embed',
                         'autoplay',
-                    ),
-                ),
-            ),
-            'handler' => array(
+                    ],
+                ],
+            ],
+            'handler' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_handler.html.php',
-            ),
-            'separator' => array(
+            ],
+            'separator' => [
                 'template' => 'NyroDevNyroCmsBundle:Composer:block_separator.html.php',
-            ),
-        );
+            ],
+        ];
 
-        $defaultTinymce = array(
+        $defaultTinymce = [
             'plugins' => 'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount',
             'menubar' => 'insert edit view table tools',
             'toolbar' => 'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media fullpage',
-            'style_formats' => array(
-                array('title' => 'admin.composer.tinymce.styleFormats.blocks', 'items' => array(
-                    array('title' => 'admin.composer.tinymce.styleFormats.block.title1', 'block' => 'h1'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.block.title2', 'block' => 'h2'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.block.title3', 'block' => 'h3'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.block.title4', 'block' => 'h4'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.block.paragraph', 'block' => 'p'),
-                )),
-                array('title' => 'admin.composer.tinymce.styleFormats.formatting', 'items' => array(
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.bold', 'icon' => 'bold', 'format' => 'bold'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.italic', 'icon' => 'italic', 'format' => 'italic'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.underline', 'icon' => 'underline', 'format' => 'underline'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.strikethrough', 'icon' => 'strikethrough', 'format' => 'strikethrough'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.superscript', 'icon' => 'superscript', 'format' => 'superscript'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.subscript', 'icon' => 'subscript', 'format' => 'subscript'),
-                    array('title' => 'admin.composer.tinymce.styleFormats.formats.code', 'icon' => 'code', 'format' => 'code'),
-                )),
-            ),
-        );
+            'style_formats' => [
+                ['title' => 'admin.composer.tinymce.styleFormats.blocks', 'items' => [
+                    ['title' => 'admin.composer.tinymce.styleFormats.block.title1', 'block' => 'h1'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.block.title2', 'block' => 'h2'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.block.title3', 'block' => 'h3'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.block.title4', 'block' => 'h4'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.block.paragraph', 'block' => 'p'],
+                ]],
+                ['title' => 'admin.composer.tinymce.styleFormats.formatting', 'items' => [
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.bold', 'icon' => 'bold', 'format' => 'bold'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.italic', 'icon' => 'italic', 'format' => 'italic'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.underline', 'icon' => 'underline', 'format' => 'underline'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.strikethrough', 'icon' => 'strikethrough', 'format' => 'strikethrough'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.superscript', 'icon' => 'superscript', 'format' => 'superscript'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.subscript', 'icon' => 'subscript', 'format' => 'subscript'],
+                    ['title' => 'admin.composer.tinymce.styleFormats.formats.code', 'icon' => 'code', 'format' => 'code'],
+                ]],
+            ],
+        ];
 
-        $defaultTinymceSimple = array(
+        $defaultTinymceSimple = [
             'toolbar' => 'undo redo',
-        );
+        ];
 
         $rootNode
             ->children()
                 ->arrayNode('user_types')
-                    ->defaultValue(array('admin', 'superadmin'))
+                    ->defaultValue(['admin', 'superadmin'])
                     ->prototype('scalar')->end()
                 ->end()
                 ->arrayNode('route_resources')
@@ -256,14 +256,14 @@ class Configuration implements ConfigurationInterface
                                         ->scalarNode('route')->defaultValue('nyrocms_admin_data_content_tree')->end()
                                         ->booleanNode('need_id')->defaultFalse()->end()
                                         ->booleanNode('need_veryParent_id')->defaultTrue()->end()
-                                        ->variableNode('route_prm')->defaultValue(array())->end()
+                                        ->variableNode('route_prm')->defaultValue([])->end()
                                     ->end()
                                 ->end()
                                 ->arrayNode('themes')
                                     ->prototype('scalar')->end()
                                 ->end()
                                 ->arrayNode('available_blocks')
-                                    ->defaultValue(array('intro', 'text', 'column2', 'column3', 'image_text', 'text_image', 'image', 'image2', 'image3', 'slideshow', 'video', 'separator'))
+                                    ->defaultValue(['intro', 'text', 'column2', 'column3', 'image_text', 'text_image', 'image', 'image2', 'image3', 'slideshow', 'video', 'separator'])
                                     ->prototype('scalar')->end()
                                 ->end()
                                 ->booleanNode('tinymce_browser')->defaultTrue()->end()
@@ -281,7 +281,7 @@ class Configuration implements ConfigurationInterface
                                                     if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : ('style_formats' == $k ? array_merge($ret[$k], $v) : array_replace_recursive($ret[$k], $v));
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
@@ -303,7 +303,7 @@ class Configuration implements ConfigurationInterface
                                                     if (false !== $hasReplace) {
                                                         unset($v[$hasReplace]);
                                                     }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
+                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : ('style_formats' == $k ? array_merge($ret[$k], $v) : array_replace_recursive($ret[$k], $v));
                                                 } else {
                                                     $ret[$k] = $v;
                                                 }
