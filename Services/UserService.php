@@ -27,7 +27,7 @@ class UserService extends nyroDevAbstractService
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    public function handleAddUser(User $user)
+    public function handleAddUser(User $user, $locale = null, $place = 'admin')
     {
         $now = new \DateTime();
         if (
@@ -38,11 +38,11 @@ class UserService extends nyroDevAbstractService
             (!$user->getValidEnd() || $user->getValidEnd() >= $now)
             ) {
             // user is valid, we can send it an email
-            $this->sendWelcomeEmail($user);
+            $this->sendWelcomeEmail($user, $locale, $place);
         }
     }
 
-    public function sendWelcomeEmail(User $user, $locale = null)
+    public function sendWelcomeEmail(User $user, $locale = null, $place = 'admin')
     {
         $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
         $end = new \DateTime('+1month');
@@ -53,7 +53,7 @@ class UserService extends nyroDevAbstractService
 
         $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            '%url%' => $this->generateUrl('nyrocms_admin_welcome', [
+            '%url%' => $this->generateUrl('nyrocms_'.$place.'_welcome', [
                 'id' => $user->getId(),
                 'key' => $user->getPasswordKey(),
             ], true),
