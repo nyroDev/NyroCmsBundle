@@ -284,7 +284,7 @@ nyrocms:
         <strong>Bonjour %name%,</strong>
         
         Votre compte vient d'être activé.
-        Pour choisir un mot de passe at vous connecter, cliquez sur le lien suivant :
+        Pour choisir un mot de passe et vous connecter, cliquez sur le lien suivant :
         <a href="%url%">%url%</a>
         Ce lien sera valide pendant 1 semaine.
   handler:
