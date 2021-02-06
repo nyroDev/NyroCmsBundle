@@ -264,7 +264,7 @@ nyrocms:
         
         Vous venez de demander la récupération de votre mot passe.
         Pour en choisir un nouveau, cliquez sur le lien suivant :
-        <strong><a href="%url%">%url%</a></strong>
+        <a href="%url%">%url%</a>
         Ce lien sera valide pendant 24 heures.
         
         Si vous n'avez rien demandé, vous pouvez ignorer ce message.
@@ -285,7 +285,7 @@ nyrocms:
         
         Votre compte vient d'être activé.
         Pour choisir un mot de passe at vous connecter, cliquez sur le lien suivant :
-        <strong><a href="%url%">%url%</a></strong>
+        <a href="%url%">%url%</a>
         Ce lien sera valide pendant 1 semaine.
   handler:
     news:
