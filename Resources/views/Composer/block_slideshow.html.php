@@ -5,7 +5,7 @@
 	data-sizebigcfg="<?php echo $view->escape(json_encode($config['images']['big'])); ?>"
 	data-sizethumb="<?php echo(isset($config['images']['thumb']['placeholdW']) ? $config['images']['thumb']['placeholdW'] : $config['images']['thumb']['w']).'x'.(isset($config['images']['thumb']['placeholdH']) ? $config['images']['thumb']['placeholdH'] : $config['images']['thumb']['h']); ?>"
 	data-sizethumbcfg="<?php echo $view->escape(json_encode($config['images']['thumb'])); ?>"
-	data-placehold="https://placehold.it/">
+	data-placehold="https://via.placeholder.com/">
 <?php endif; ?>
 <?php if (count($contents['images']) || $admin): ?>
 	<?php
