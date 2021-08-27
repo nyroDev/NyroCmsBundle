@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use Composer\Autoload\ClassLoader;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Handler\Sitemap;
 use NyroDev\NyroCmsBundle\Model\Content;
@@ -13,6 +14,7 @@ use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
+use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -388,18 +390,46 @@ class NyroCmsService extends nyroDevAbstractService
     {
         if (is_null($this->foundHandlers)) {
             $this->foundHandlers = [];
-            if (isset($GLOBALS['loader']) && $GLOBALS['loader'] instanceof \Composer\Autoload\ClassLoader) {
-                $classes = array_keys($GLOBALS['loader']->getClassMap());
-                foreach ($classes as $class) {
-                    if (strpos($class, '\\Handler\\') && is_subclass_of($class, \NyroDev\NyroCmsBundle\Handler\AbstractHandler::class, true)) {
-                        $this->foundHandlers[] = '\\'.$class;
-                    }
+
+            foreach ($this->getClassesInComposerClassMaps() as $class) {
+                if (strpos($class, '\\Handler\\') && is_subclass_of($class, \NyroDev\NyroCmsBundle\Handler\AbstractHandler::class, true)) {
+                    $this->foundHandlers[] = '\\'.$class;
                 }
-                sort($this->foundHandlers);
             }
+            sort($this->foundHandlers);
         }
 
         return $this->foundHandlers;
+    }
+
+    private $classesInComposerClassMaps;
+
+    // From Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass::getClassesInComposerClassMaps
+    private function getClassesInComposerClassMaps(): array
+    {
+        if ($this->classesInComposerClassMaps) {
+            return $this->classesInComposerClassMaps;
+        }
+
+        $this->classesInComposerClassMaps = [];
+
+        foreach (spl_autoload_functions() as $function) {
+            if (!\is_array($function)) {
+                continue;
+            }
+
+            if ($function[0] instanceof DebugClassLoader) {
+                $function = $function[0]->getClassLoader();
+            }
+
+            if (\is_array($function) && $function[0] instanceof ClassLoader) {
+                $this->classesInComposerClassMaps += array_filter($function[0]->getClassMap());
+            }
+        }
+
+        $this->classesInComposerClassMaps = array_keys($this->classesInComposerClassMaps);
+
+        return $this->classesInComposerClassMaps;
     }
 
     public function onKernelException(ExceptionEvent $event)

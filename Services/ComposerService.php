@@ -473,15 +473,15 @@ class ComposerService extends AbstractService
 
     public function handleImageUpload(Request $request)
     {
-        $image = $request->files->get('image');
+        $image = $request->files->all('image');
         $file = $this->imageUpload($image);
         $ret = [
             'file' => $file,
-            'resized' => $this->imageResizeConfig($file, $request->request->get('cfg')),
+            'resized' => $this->imageResizeConfig($file, $request->request->all('cfg')),
         ];
 
-        if ($request->request->get('cfg2')) {
-            $ret['resized2'] = $this->imageResizeConfig($file, $request->request->get('cfg2'));
+        if ($request->request->all('cfg2')) {
+            $ret['resized2'] = $this->imageResizeConfig($file, $request->request->all('cfg2'));
         }
 
         return new JsonResponse($ret);
@@ -523,7 +523,7 @@ class ComposerService extends AbstractService
 
     public function handleFileUpload(Request $request)
     {
-        $fileUp = $request->files->get('file');
+        $fileUp = $request->files->all('file');
         $file = $this->fileUpload($fileUp);
         $ret = [
             'file' => $file,

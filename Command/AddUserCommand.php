@@ -10,19 +10,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AddUserCommand extends Command
 {
     protected $db;
     protected $admin;
-    protected $passwordEncoder;
+    protected $passwordHasher;
 
-    public function __construct(DbAbstractService $db, AdminService $admin, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(DbAbstractService $db, AdminService $admin, UserPasswordHasherInterface $passwordHasher)
     {
         $this->db = $db;
         $this->admin = $admin;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
         parent::__construct();
     }
 
@@ -143,8 +143,8 @@ class AddUserCommand extends Command
         $newUser->setFirstname($firstname);
         $newUser->setLastname($lastname);
 
-        $passwordSalted = $this->passwordEncoder->encodePassword($newUser, $password);
-        $newUser->setPassword($passwordSalted);
+        $passwordHashed = $this->passwordHasher->hashPassword($newUser, $password);
+        $newUser->setPassword($passwordHashed);
 
         $newUser->setUserType($usertype);
         $newUser->setDevelopper('true' === $developper);

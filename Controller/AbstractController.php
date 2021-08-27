@@ -236,7 +236,7 @@ abstract class AbstractController extends NyroDevAbstractController
     {
         $this->get(NyroCmsService::class)->setRouteConfig($_config);
         $this->setGlobalRootContent();
-        $q = strip_tags($request->query->get('q'));
+        $q = strip_tags($request->query->all('q'));
 
         $title = $this->trans('public.header.search');
         $results = [

@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\FormService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -13,18 +14,18 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UserService extends nyroDevAbstractService
 {
-    protected $passwordEncoder;
+    protected $passwordHasher;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
     {
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function handleAddUser(User $user, $locale = null, $place = 'admin')
@@ -82,13 +83,13 @@ class UserService extends nyroDevAbstractService
             $ret['step'] = 2;
             $user = $repo->find($id);
 
-            if ($user && $welcome && 'dummy' != $user->getSalt()) {
+            if ($user && $welcome && 'dummy' != $user->getPassword()) {
                 $user = null;
             }
 
             $now = new \DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
-                $form = $this->get('form.factory')->createBuilder()
+                $form = $this->get(FormService::class)->getFormFactory()->createBuilder()
                     ->add('password', RepeatedType::class, [
                         'type' => PasswordType::class,
                         'first_options' => [
@@ -117,7 +118,7 @@ class UserService extends nyroDevAbstractService
                 if ($form->isSubmitted() && $form->isValid()) {
                     $data = $form->getData();
 
-                    $password = $this->passwordEncoder->encodePassword($user, $data['password']);
+                    $password = $this->passwordHasher->hashPassword($user, $data['password']);
                     $user->setPassword($password);
                     $user->setPasswordKey(null);
                     $user->setPasswordKeyEnd(null);
@@ -133,7 +134,7 @@ class UserService extends nyroDevAbstractService
                 $ret['notFound'] = true;
             }
         } else {
-            $form = $this->get('form.factory')->createBuilder()
+            $form = $this->get(FormService::class)->getFormFactory()->createBuilder()
                 ->add('email', EmailType::class, [
                     'label' => $this->trans('admin.user.email'),
                     'constraints' => [
@@ -151,7 +152,7 @@ class UserService extends nyroDevAbstractService
             if ($form->isSubmitted() && $form->isValid()) {
                 $data = $form->getData();
                 try {
-                    $user = $repo->loadUserByUsername($data['email']);
+                    $user = $repo->loadUserByIdentifier($data['email']);
                 } catch (\Exception $e) {
                     $user = null;
                 }
@@ -197,7 +198,7 @@ class UserService extends nyroDevAbstractService
             'lastname',
         ];
 
-        $form = $this->get('form.factory')->createNamedBuilder('fields', FormType::class, $user);
+        $form = $this->get(FormService::class)->getFormFactory()->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
             $form->add($f, null, [
                 'label' => $this->trans('admin.user.'.$f),
@@ -209,7 +210,7 @@ class UserService extends nyroDevAbstractService
 
         $formFields = $form->getForm();
 
-        $formPassword = $this->get('form.factory')->createNamedBuilder('password', FormType::class, $user)
+        $formPassword = $this->get(FormService::class)->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
             ->add('curPassword', PasswordType::class, [
                     'label' => $this->trans('admin.user.curPassword'),
                     'required' => true,
@@ -247,7 +248,7 @@ class UserService extends nyroDevAbstractService
             $ret['fields'] = true;
         } elseif ($formPassword->isSubmitted() && $formPassword->isValid()) {
             $newPassword = $formPassword->get('password')->getData();
-            $password = $this->passwordEncoder->encodePassword($user, $newPassword);
+            $password = $this->passwordHasher->hashPassword($user, $newPassword);
             $user->setPassword($password);
             $user->setPasswordKey(null);
             $user->setPasswordKeyEnd(null);

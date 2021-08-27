@@ -4,6 +4,8 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -12,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
  */
-abstract class User extends AbstractUploadable implements UserInterface, \Symfony\Component\Security\Core\User\EquatableInterface, \Serializable
+abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface, \Serializable
 {
     protected $id;
 
@@ -45,11 +47,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
      * @var string
      */
     protected $password = 'dummy';
-
-    /**
-     * @var string
-     */
-    protected $salt = 'dummy';
 
     /**
      * @var string
@@ -221,33 +218,9 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
      *
      * @return string
      */
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
-    }
-
-    /**
-     * Set salt.
-     *
-     * @param string $salt
-     *
-     * @return User
-     */
-    public function setSalt($salt)
-    {
-        $this->salt = $salt;
-
-        return $this;
-    }
-
-    /**
-     * Get salt.
-     *
-     * @return string
-     */
-    public function getSalt()
-    {
-        return $this->salt;
     }
 
     /**
@@ -524,7 +497,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
         'id',
         'email',
         'password',
-        'salt',
         'userType',
     ];
 
@@ -536,7 +508,6 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
     {
         if (!$user instanceof self ||
                 $this->getPassword() !== $user->getPassword() ||
-                $this->getSalt() !== $user->getSalt() ||
                 $this->getUsername() !== $user->getUsername() ||
                 $this->getId() !== $user->getId()) {
             return false;
@@ -586,9 +557,19 @@ abstract class User extends AbstractUploadable implements UserInterface, \Symfon
         return in_array($role, $this->getRoles());
     }
 
-    public function getUsername()
+    public function getUserIdentifier()
     {
         return $this->getEmail();
+    }
+
+    public function getUsername()
+    {
+        return $this->getUserIdentifier();
+    }
+
+    public function getSalt()
+    {
+        return null;
     }
 
     public function __toString()

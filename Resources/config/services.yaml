@@ -16,7 +16,7 @@ services:
     NyroDev\NyroCmsBundle\Services\UserService:
         public: true
         arguments:
-            - '@Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface'
+            - '@Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface'
         calls:
             - [setContainerInterface, ['@service_container']]
         tags:

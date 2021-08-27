@@ -194,7 +194,7 @@ class Contact extends AbstractHandler
     {
         $contactEmails = $this->getEmails($content);
 
-        $form = $this->get('form.factory')->create($this->getFormType($content), null, array_merge([
+        $form = $this->get(FormService::class)->getFormFactory()->create($this->getFormType($content), null, array_merge([
             'attr' => [
                 'id' => 'contactForm',
                 'class' => 'publicForm',

@@ -47,9 +47,9 @@ class AdminDataController extends AbstractAdminController
         $canRootComposer = $this->get(AdminService::class)->canRootComposer($parent);
         $canAdminContent = $this->get(AdminService::class)->canAdminContent($parent);
         if ($canAdminContent && $request->isMethod('post')) {
-            $tree = $request->request->get('tree');
-            $treeLevel = $request->request->get('treeLevel');
-            $treeChanged = $request->request->get('treeChanged');
+            $tree = $request->request->all('tree');
+            $treeLevel = $request->request->all('treeLevel');
+            $treeChanged = $request->request->all('treeChanged');
 
             $contents = [];
             foreach ($repo->children($parent) as $c) {
@@ -235,7 +235,7 @@ class AdminDataController extends AbstractAdminController
         if ($row instanceof AbstractUploadable) {
             $row->setService($this->get(NyrodevService::class));
 
-            if ($request->request->get('ogImageDelete')) {
+            if ($request->request->all('ogImageDelete')) {
                 $row->removeFile('ogImage');
             }
         }

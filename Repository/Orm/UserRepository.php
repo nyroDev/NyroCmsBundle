@@ -11,6 +11,11 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
     public function loadUserByUsername($username)
     {
+        return $this->loadUserByIdentifier($username);
+    }
+
+    public function loadUserByIdentifier($username)
+    {
         $q = $this
             ->createQueryBuilder('m')
             ->where('m.email LIKE :username')

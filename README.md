@@ -71,9 +71,10 @@ Type for nyroCms routes could also add elements seperated with _ :
 config/security.yaml
 ```yaml
 security:
-    encoders:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
         App\Entity\User:
-            algorithm: bcrypt
+            algorithm: auto
     providers:
         db_provider:
             entity:
@@ -85,7 +86,6 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         admin:
-            anonymous: ~
             pattern:    ^%adminPrefix%/.*
             http_basic: ~
             provider: db_provider

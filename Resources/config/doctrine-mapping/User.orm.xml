@@ -14,7 +14,6 @@
 		<field name="firstname" type="string" nullable="false" />
 		<field name="lastname" type="string" nullable="false" />
 		<field name="password" type="string" nullable="false" />
-		<field name="salt" type="string" nullable="false" />
 		<field name="userType" type="string" nullable="false" />
 		<field name="developper" type="boolean" nullable="true" />
 		<field name="valid" type="boolean" nullable="true" />
