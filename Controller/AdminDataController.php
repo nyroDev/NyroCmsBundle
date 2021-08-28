@@ -235,7 +235,7 @@ class AdminDataController extends AbstractAdminController
         if ($row instanceof AbstractUploadable) {
             $row->setService($this->get(NyrodevService::class));
 
-            if ($request->request->all('ogImageDelete')) {
+            if ($request->request->get('ogImageDelete')) {
                 $row->removeFile('ogImage');
             }
         }

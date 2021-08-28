@@ -65,7 +65,7 @@ class AdminComposerController extends AbstractAdminController
             } elseif ($request->request->has('video')) {
                 $ret = [];
 
-                $url = $request->request->all('url');
+                $url = $request->request->get('url');
                 $constraints = [
                     new \Symfony\Component\Validator\Constraints\NotBlank(),
                     new \NyroDev\UtilityBundle\Validator\Constraints\EmbedUrl(),
@@ -75,7 +75,7 @@ class AdminComposerController extends AbstractAdminController
                 if (0 == count($errors)) {
                     $dataUrl = $this->get(EmbedService::class)->data($url);
                     $embedUrl = $dataUrl['urlEmbed'];
-                    if ($request->request->all('autoplay')) {
+                    if ($request->request->get('autoplay')) {
                         $embedUrl .= (false === strpos($embedUrl, '?') ? '?' : '&').'autoplay=1';
                     }
                     $ret = [
@@ -94,7 +94,7 @@ class AdminComposerController extends AbstractAdminController
             }
 
             if ($canChangeTheme && $request->request->has('theme')) {
-                $row->setTheme($request->request->all('theme'));
+                $row->setTheme($request->request->get('theme'));
             }
 
             $contentsKey = $request->request->all('contentsKey');
@@ -139,11 +139,11 @@ class AdminComposerController extends AbstractAdminController
 
             return $this->redirect($url);
         } elseif ($request->query->has('block')) {
-            if (!in_array($request->query->all('block'), $availableBlocks)) {
+            if (!in_array($request->query->get('block'), $availableBlocks)) {
                 throw $this->createNotFoundException();
             }
 
-            $html = $composerService->renderNew($row, $request->query->all('block'), true);
+            $html = $composerService->renderNew($row, $request->query->get('block'), true);
 
             return new \Symfony\Component\HttpFoundation\Response($html);
         }

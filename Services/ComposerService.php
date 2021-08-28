@@ -473,7 +473,7 @@ class ComposerService extends AbstractService
 
     public function handleImageUpload(Request $request)
     {
-        $image = $request->files->all('image');
+        $image = $request->files->get('image');
         $file = $this->imageUpload($image);
         $ret = [
             'file' => $file,

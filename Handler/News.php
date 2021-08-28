@@ -51,7 +51,7 @@ class News extends AbstractHandler
             $routePrm['id'] = $handlerContent->getId();
             $routePrm['title'] = $this->get(NyrodevService::class)->urlify($handlerContent->getTitle());
         } else {
-            $page = $this->request->query->all('page', 1);
+            $page = $this->request->query->get('page', 1);
             $nbPerPage = $this->getParameter('handler_news_perpage', 6);
             $total = $this->getTotalContentSpec($content);
             $nbPages = ceil($total / $nbPerPage);
