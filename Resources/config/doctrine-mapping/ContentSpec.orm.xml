@@ -12,9 +12,9 @@
         </id>
 		<field name="title" type="string" nullable="false" />
 		<field name="intro" type="text" nullable="true" />
-		<field name="content" type="json_array" nullable="true" />
+		<field name="content" type="json" nullable="true" />
 		<field name="contentText" type="text" nullable="true" />
-		<field name="data" type="json_array" nullable="true" />
+		<field name="data" type="json" nullable="true" />
 		<field name="firstImage" type="string" nullable="true" />
 		<field name="position" type="smallint" nullable="true">
 			<options>

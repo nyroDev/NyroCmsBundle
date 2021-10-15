@@ -15,7 +15,7 @@
 		<field name="objectClass" type="string" nullable="false" />
 		<field name="objectId" type="string" length="64" nullable="true" />
 		<field name="version" type="integer" nullable="false" />
-		<field name="data" type="json_array" nullable="true" />
+		<field name="data" type="json" nullable="true" />
 		<field name="username" type="string" nullable="true" />
 		
 		<indexes>

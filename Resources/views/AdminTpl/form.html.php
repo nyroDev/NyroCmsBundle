@@ -9,5 +9,9 @@
 		<?php endif; ?>
 		
 		<?php echo $view['form']->form($form); ?>
+
+		<?php if (isset($outro) && $outro): ?>
+			<?php echo $outro; ?>
+		<?php endif; ?>
 	</article>
 <?php $view['slots']->stop(); ?>

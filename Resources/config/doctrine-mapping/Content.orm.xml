@@ -13,7 +13,7 @@
 		<field name="title" type="string" nullable="false" />
 		<field name="url" type="string" nullable="false" />
 		<field name="theme" type="string" nullable="true" />
-		<field name="content" type="json_array" nullable="true" />
+		<field name="content" type="json" nullable="true" />
 		<field name="contentText" type="text" nullable="true" />
 		<field name="firstImage" type="string" nullable="true" />
 		<field name="goUrl" type="string" nullable="true" />

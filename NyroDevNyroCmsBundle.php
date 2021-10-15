@@ -18,7 +18,7 @@ class NyroDevNyroCmsBundle extends Bundle
         $container->addCompilerPass(new ValidationPass());
         $container->addCompilerPass(new DbPass());
 
-        // Kernerl is not build yet
+        // Kernel is not build yet
         //$pathMapping = $container->get(KernelInterface::class)->getProjectDir().'/config/nyrocms-doctrine-mapping';
         $pathMapping = $container->getParameter('kernel.project_dir').'/config/nyrocms-doctrine-mapping';
         if (file_exists($pathMapping)) {
