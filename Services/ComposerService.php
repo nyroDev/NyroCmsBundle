@@ -572,7 +572,7 @@ class ComposerService extends AbstractService
         $blockName = 'div';
 
         $hasHandler = $row instanceof ComposableHandler && $row->getContentHandler();
-        if (0 == count($row->getContent())) {
+        if ($row->getContent() && 0 == count($row->getContent())) {
             // Handle empty content
             if ($admin) {
                 $event = new ComposerDefaultBlockEvent($row, [$this->getBlock($row, 'intro-intro', 'intro')]);
@@ -597,7 +597,7 @@ class ComposerService extends AbstractService
             }
         } elseif ($hasHandler) {
             // Check if the handler is placed, and add it if not here
-            $content = $row->getContent();
+            $content = $row->getContent() ?? [];
             $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $isWrapped = $handler->isWrapped();
             $wrappedAs = $handler->isWrappedAs();

@@ -154,7 +154,7 @@ abstract class AbstractController extends NyroDevAbstractController
             }
         }
 
-        if (0 === count($content->getContent()) || $content->getRedirectToChildren()) {
+        if (!$content->getContent() || 0 === count($content->getContent()) || $content->getRedirectToChildren()) {
             // No text content, search for the first sub content
             $subContents = $this->getContentRepo()->childrenForMenu($content, true);
             if (count($subContents)) {
