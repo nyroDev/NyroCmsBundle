@@ -12,6 +12,7 @@ use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Services\TagRendererService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
@@ -480,6 +481,7 @@ class NyroCmsService extends nyroDevAbstractService
             return null;
         }
 
+        $this->get(TagRendererService::class)->reset();
         $subRequest = $request->duplicate([], null, [
             '_controller' => $controller.'::directContent',
             'content' => $content,
