@@ -118,7 +118,7 @@
 	text-align: center;
 	background: #3e3e3f;
 	padding: 20px;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 }
 .nyroModalConfirmCont .nyroModalCont .nmButtons {
 	margin-bottom: 20px;
@@ -140,12 +140,12 @@
 	color: #fff;
 	font-size: 14px;
 	line-height: 11px;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 	font-weight: 900;
 	text-transform: uppercase;
 	font-weight: bold;
 	padding: 10px 14px;
-	background: #7495c2;
+	background: var(--mainColor);
 	transition: background 300ms;
 	margin-right: 10px;
 	float: none;
@@ -161,7 +161,7 @@
 }
 .nmConfirm input {
 	max-width: 250px;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 	color: #000;
 	margin-bottom: 20px;
 	text-align: left;
@@ -172,7 +172,7 @@
 	padding: 2px 5px;
 }
 .nmConfirm select {
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 	color: #000;
 	width: 150px;
 	margin-bottom: 20px;

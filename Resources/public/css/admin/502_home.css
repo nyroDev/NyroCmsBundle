@@ -1,9 +1,9 @@
 #loginpage {
-	background: #7495c2;
-	background: -moz-linear-gradient(top, #7495c2 0%, #000000 100%);
-	background: -webkit-linear-gradient(top, #7495c2 0%,#000000 100%);
-	background: linear-gradient(to bottom, #7495c2 0%,#000000 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7495c2', endColorstr='#000000',GradientType=0 );
+	background: var(--mainColor);
+	background: -moz-linear-gradient(top, var(--mainColor) 0%, #000000 100%);
+	background: -webkit-linear-gradient(top, var(--mainColor) 0%,#000000 100%);
+	background: linear-gradient(to bottom, var(--mainColor) 0%,#000000 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='var(--mainColor)', endColorstr='#000000',GradientType=0 );
 }
 #loginpage h1 {
 	color: #fff;
@@ -48,16 +48,16 @@
 	color: #fff;
 	background: #000;
 	font-size: 14px;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 	font-weight: 900;
 	text-transform: uppercase;
 	transition: background 300ms;
 }
 #loginpage .formCentered button:hover {
-	background: #7495c2;
+	background: var(--mainColor);
 }
 #loginpage .form_errors {
-	color: #9BC3FF;
+	color: var(--secondColor);
 	margin-bottom: 15px;
 	margin-left: 0;
 }

@@ -7,14 +7,14 @@ body {
 	display: -ms-flexbox;
 	display: -webkit-flex;
 	display: flex;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 }
 .icon {
 	width: 30px;
 	height: 30px;
 	fill: #fff;
 	stroke: #fff;
-	background: #7495c2;
+	background: var(--mainColor);
 	transition: background 300ms, fill 300ms, stroke 300ms;
 }
 .button, .form_button button {
@@ -23,9 +23,9 @@ body {
 	height: 30px;
 	line-height: 30px;
 	color: #fff;
-	background: #7495c2;
+	background: var(--mainColor);
 	font-size: 14px;
-	font-family: 'Roboto', sans-serif;
+	font-family: var(--fontFamily);
 	font-weight: 900;
 	float: none;
 	border-radius: 0;
@@ -60,11 +60,11 @@ aside header {
 	position: relative;
 	padding: 40px 0 25px 45px;
 	overflow: hidden;
-	background: #7495c2;
-	background: -moz-linear-gradient(top, #7495c2 0%, #000000 100%);
-	background: -webkit-linear-gradient(top, #7495c2 0%,#000000 100%);
-	background: linear-gradient(to bottom, #7495c2 0%,#000000 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7495c2', endColorstr='#000000',GradientType=0 );
+	background: var(--mainColor);
+	background: -moz-linear-gradient(top, var(--mainColor) 0%, #000000 100%);
+	background: -webkit-linear-gradient(top, var(--mainColor) 0%,#000000 100%);
+	background: linear-gradient(to bottom, var(--mainColor) 0%,#000000 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='var(--mainColor)', endColorstr='#000000',GradientType=0 );
 }
 aside header:after {
 	right: 0;
@@ -84,7 +84,7 @@ aside header h1 {
 	margin-top: 0;
 }
 aside header strong {
-	color: #9BC3FF;
+	color: var(--secondColor);
 }
 aside header .button {
 	margin-bottom: 10px;
@@ -98,7 +98,7 @@ aside a {
 	text-decoration: none;
 }
 aside a:hover {
-	color: #9BC3FF;
+	color: var(--secondColor);
 }
 aside nav {
 	position: relative;
@@ -119,7 +119,7 @@ aside nav:after {
 	margin-top: -8px;
 }
 aside nav h2 {
-	color: #9BC3FF;
+	color: var(--secondColor);
 	font-size: 14px;
 	text-transform: uppercase;
 	font-weight: 900;
@@ -139,7 +139,7 @@ aside nav a {
 	transition: background 200ms, color 200ms;
 }
 aside nav .active, aside nav a:hover {
-	color: #7495c2;
+	color: var(--mainColor);
 	background: #fff;
 }
 aside nav .selectCont {
@@ -165,7 +165,7 @@ main h1 {
 	text-transform: uppercase;
 }
 main a {
-	color: #7495c2;
+	color: var(--mainColor);
 	text-decoration: none;
 }
 main a:hover {
@@ -236,10 +236,10 @@ main table.data th.actions {
 	margin-left: -12px;
 }
 .listSortAsc.active:after, .listSortAsc:hover:after {
-	border-bottom-color: #7495c2;
+	border-bottom-color: var(--mainColor);
 }
 .listSortDesc.active:after, .listSortDesc:hover:after {
-	border-top-color: #7495c2;
+	border-top-color: var(--mainColor);
 }
 main table.data td {
 	background: #e5e5e5;
@@ -272,7 +272,7 @@ main table.data td.actions .up, main table.data td.actions .down {
 	height: 30px;
 	line-height: 30px;
 	text-align: center;
-	background: #7495c2;
+	background: var(--mainColor);
 	text-indent: -999em;
 	transition: background 300ms;
 }

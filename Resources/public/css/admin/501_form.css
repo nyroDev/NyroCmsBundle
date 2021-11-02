@@ -36,11 +36,11 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 	border-width: 6px;
 }
 .selectCont:before {
-	border-bottom-color: #7495c2;
+	border-bottom-color: var(--mainColor);
 	margin-top: -14px;
 }
 .selectCont:after {
-	border-top-color: #7495c2;
+	border-top-color: var(--mainColor);
 	margin-top: 2px;
 }
 .selectCont select {
@@ -87,14 +87,14 @@ input[type="radio"] + label:before, input[type="checkbox"] + label:before {
 	margin-top: -8px;
 	width: 15px;
 	height: 15px;
-	border: 1px solid #7495c2;
+	border: 1px solid var(--mainColor);
 }
 input[type="radio"] + label:after, input[type="checkbox"] + label:after {
 	left: 4px;
 	margin-top: -4px;
 	width: 9px;
 	height: 9px;
-	background: #7495c2;
+	background: var(--mainColor);
 	opacity: 0;
 	transition: opacity 150ms;
 }
@@ -182,7 +182,7 @@ form.filterForm {
 	pointer-events: none;
 	border-color: rgba(0, 0, 0, 0);
 	border-width: 6px;
-	border-top-color: #7495c2;
+	border-top-color: var(--mainColor);
 	margin-top: -3px;
 	margin-left: 10px;
 }
