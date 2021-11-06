@@ -462,6 +462,8 @@ class NyroCmsService extends nyroDevAbstractService
             $response = $this->forwardTo($request, $event->getKernel(), $errorMenu, $code);
             if ($response) {
                 $event->setResponse($response);
+
+                return;
             }
         }
 
