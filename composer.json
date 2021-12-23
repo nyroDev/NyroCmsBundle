@@ -7,8 +7,8 @@
     "authors": [
         {
             "name": "Cédric Nirousset",
-            "email": "cedric@nyrodev.com",
-            "homepage": "https://nyrodev.com/",
+            "email": "cedric@nyro.dev",
+            "homepage": "https://www.nyro.dev/",
             "role": "Developer"
         }
     ],
@@ -31,8 +31,8 @@
         "symfony/yaml": "^5.0",
 		"stof/doctrine-extensions-bundle": "^1.4",
 		"becklyn/ordered-form-bundle": "^1.2",
-        "nyrodev/php-template-bundle": "dev-master",
-        "nyrodev/utility-bundle": "dev-master"
+        "nyrodev/php-template-bundle": "^5.0",
+        "nyrodev/utility-bundle": "^5.0"
     },
     "suggest": {
         "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly"
