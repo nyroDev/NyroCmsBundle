@@ -618,9 +618,11 @@ class ComposerService extends AbstractService
             }
         }
 
-        foreach ($row->getContent() as $nb => $cont) {
-            if ((!$handlerContent && !$handlerAction) || 'handler' == $cont['type']) {
-                $ret .= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
+        if ($row->getContent() && count($row->getContent())) {
+            foreach ($row->getContent() as $nb => $cont) {
+                if ((!$handlerContent && !$handlerAction) || 'handler' == $cont['type']) {
+                    $ret .= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
+                }
             }
         }
 

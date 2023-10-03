@@ -7,6 +7,10 @@ Cms Bundle for Symfony
 - jquery-ui
 - jquery-mobile (for slideshow swipe feature)
 
+```
+npm i copy-webpack-plugin jquery jquery-ui jquery-mobile --save-dev
+```
+
 # Needed configuration
 config/packages/nyrodev.yaml
 ```yaml
@@ -87,7 +91,6 @@ security:
             security: false
         admin:
             pattern:    ^%adminPrefix%/.*
-            http_basic: ~
             provider: db_provider
             logout:
                 path:   nyrocms_admin_security_logout
@@ -114,10 +117,11 @@ security:
     .addEntry('js/admin/nyroCmsComposer', './vendor/nyrodev/nyrocms-bundle/Resources/public/js/nyroCmsComposer.js')
     .addEntry('css/admin/nyroCmsComposer', './vendor/nyrodev/nyrocms-bundle/Resources/public/css/nyroCmsComposer.scss')
 
-    .addPlugin(new CopyWebpackPlugin([
-        {from: 'vendor/nyrodev/utility-bundle/Resources/public/vendor/tinymce', to: '../tinymce'}
-    ]))
-
+    .addPlugin(new CopyWebpackPlugin({
+        patterns: [
+            {from: 'vendor/nyrodev/utility-bundle/Resources/public/vendor/tinymce', to: '../tinymce'}
+        ]
+    }))
 
     .enableSassLoader()
     .autoProvidejQuery()
@@ -127,7 +131,7 @@ security:
 `./bin/console nyrocms:createDbClasse`
 
 # Others commands
-`./bin/console nyrocms:addUser`
+`./bin/console nyrocms:addUser`  
 `./bin/console nyrocms:addRootContent`
 
 # Edit config/bootstrap.php

@@ -5,18 +5,18 @@ namespace NyroDev\NyroCmsBundle\Repository\Orm;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UserRepository extends EntityRepository implements UserRepositoryInterface
 {
-    public function loadUserByUsername($username)
+    public function loadUserByUsername(string $username): ?UserInterface
     {
         return $this->loadUserByIdentifier($username);
     }
 
-    public function loadUserByIdentifier($username)
+    public function loadUserByIdentifier(string $username): ?UserInterface
     {
-        $q = $this
+        return $this
             ->createQueryBuilder('m')
             ->where('m.email LIKE :username')
                 ->setParameter('username', $username)
@@ -24,21 +24,8 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
             ->andWhere('(m.validStart IS NULL OR m.validStart <= :now)')
             ->andWhere('(m.validEnd IS NULL OR m.validEnd >= :now)')
                 ->setParameter('now', new \DateTime())
-            ->getQuery();
-
-        try {
-            // The Query::getSingleResult() method throws an exception
-            // if there is no record matching the criteria.
-            $user = $q->getSingleResult();
-        } catch (NoResultException $e) {
-            $message = sprintf(
-                'Unable to find an active User NyroDevNyroCmsBundle:User object identified by "%s".',
-                $username
-            );
-            throw new UsernameNotFoundException($message, 0, $e);
-        }
-
-        return $user;
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function getForWelcomeEmails()

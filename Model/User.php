@@ -504,7 +504,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
     {
     }
 
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): bool
     {
         if (!$user instanceof self ||
                 $this->getPassword() !== $user->getPassword() ||
@@ -534,7 +534,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         }
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         $ret = [
             'ROLE_USER',
@@ -557,7 +557,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return in_array($role, $this->getRoles());
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
         return $this->getEmail();
     }
