@@ -2,6 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use DateTime;
+use Exception;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
@@ -30,14 +32,14 @@ class UserService extends nyroDevAbstractService
 
     public function handleAddUser(User $user, $locale = null, $place = 'admin')
     {
-        $now = new \DateTime();
+        $now = new DateTime();
         if (
             $user->getValid()
                 &&
             (!$user->getValidStart() || $user->getValidStart() <= $now)
                 &&
             (!$user->getValidEnd() || $user->getValidEnd() >= $now)
-            ) {
+        ) {
             // user is valid, we can send it an email
             $this->sendWelcomeEmail($user, $locale, $place);
         }
@@ -46,7 +48,7 @@ class UserService extends nyroDevAbstractService
     public function sendWelcomeEmail(User $user, $locale = null, $place = 'admin')
     {
         $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
-        $end = new \DateTime('+1month');
+        $end = new DateTime('+1month');
 
         $user->setPasswordKey($passwordKey);
         $user->setPasswordKeyEnd($end);
@@ -64,8 +66,8 @@ class UserService extends nyroDevAbstractService
     public function sendChangedPasswordEmail(User $user)
     {
         return $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', [
-                '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            ])));
+            '%name%' => $user->getFirstname().' '.$user->getLastName(),
+        ])));
     }
 
     public function handleForgot($place, Request $request, $id, $key, $welcome = false)
@@ -87,7 +89,7 @@ class UserService extends nyroDevAbstractService
                 $user = null;
             }
 
-            $now = new \DateTime();
+            $now = new DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
                 $form = $this->get(FormService::class)->getFormFactory()->createBuilder()
                     ->add('password', RepeatedType::class, [
@@ -153,12 +155,12 @@ class UserService extends nyroDevAbstractService
                 $data = $form->getData();
                 try {
                     $user = $repo->loadUserByIdentifier($data['email']);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $user = null;
                 }
                 if ($user) {
                     $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
-                    $end = new \DateTime('+2day');
+                    $end = new DateTime('+2day');
 
                     $user->setPasswordKey($passwordKey);
                     $user->setPasswordKeyEnd($end);
@@ -212,30 +214,30 @@ class UserService extends nyroDevAbstractService
 
         $formPassword = $this->get(FormService::class)->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
             ->add('curPassword', PasswordType::class, [
-                    'label' => $this->trans('admin.user.curPassword'),
-                    'required' => true,
-                    'mapped' => false,
-                    'constraints' => [
-                        new NotBlank(),
-                        new UserPassword([
-                            'message' => $this->trans('admin.user.wrongPassword'),
-                        ]),
-                    ], ])
+                'label' => $this->trans('admin.user.curPassword'),
+                'required' => true,
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank(),
+                    new UserPassword([
+                        'message' => $this->trans('admin.user.wrongPassword'),
+                    ]),
+                ], ])
             ->add('password', RepeatedType::class, [
-                    'mapped' => false,
-                    'first_name' => 'pwd1',
-                    'second_name' => 'pwd2',
-                    'constraints' => [new NotBlank()],
-                    'required' => true,
-                    'type' => PasswordType::class,
-                    'first_options' => [
-                        'label' => $this->trans('admin.user.newPassword'),
-                    ],
-                    'second_options' => [
-                        'label' => $this->trans('admin.user.passwordConfirm'),
-                    ],
-                    'invalid_message' => $this->trans('admin.user.samePassword'),
-                ])
+                'mapped' => false,
+                'first_name' => 'pwd1',
+                'second_name' => 'pwd2',
+                'constraints' => [new NotBlank()],
+                'required' => true,
+                'type' => PasswordType::class,
+                'first_options' => [
+                    'label' => $this->trans('admin.user.newPassword'),
+                ],
+                'second_options' => [
+                    'label' => $this->trans('admin.user.passwordConfirm'),
+                ],
+                'invalid_message' => $this->trans('admin.user.samePassword'),
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->trans('admin.misc.send'),
             ])

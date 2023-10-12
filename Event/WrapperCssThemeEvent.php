@@ -7,11 +7,11 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class WrapperCssThemeEvent extends Event
 {
-    const WRAPPER_CSS_THEME = 'nyrocms.events.wrapperCssTheme';
+    public const WRAPPER_CSS_THEME = 'nyrocms.events.wrapperCssTheme';
 
-    const POSITION_NORMAL = 'normal';
-    const POSITION_ADMIN_HTML = 'admin.html';
-    const POSITION_ADMIN_BODY = 'admin.body';
+    public const POSITION_NORMAL = 'normal';
+    public const POSITION_ADMIN_HTML = 'admin.html';
+    public const POSITION_ADMIN_BODY = 'admin.body';
 
     protected $row;
     protected $wrapperCssTheme = [];

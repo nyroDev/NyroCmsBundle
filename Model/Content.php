@@ -2,215 +2,131 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Model\Sharable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Gedmo\Tree(type="nested")
- * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- */
+#[Gedmo\Tree(type: 'nested')]
+#[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
 abstract class Content extends AbstractUploadable implements Composable, ComposableHandler, Sharable
 {
-    const STATE_DISABLED = 0;
-    const STATE_ACTIVE = 1;
-    const STATE_INVISIBLE = 2;
+    public const STATE_DISABLED = 0;
+    public const STATE_ACTIVE = 1;
+    public const STATE_INVISIBLE = 2;
 
     protected $id;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $title;
+    #[Assert\NotBlank]
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $title = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $url;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $url = null;
 
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     */
-    protected $theme;
+    #[Gedmo\Versioned]
+    protected ?string $theme = null;
 
-    /**
-     * @var array
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $content;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?array $content = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $contentText;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $contentText = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $firstImage;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $firstImage = null;
 
-    /**
-     * @var string
-     * @Assert\Url()
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $goUrl;
+    #[Assert\Url]
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $goUrl = null;
 
-    /**
-     * @var bool
-     * @Gedmo\Versioned
-     */
-    protected $goBlank;
+    #[Gedmo\Versioned]
+    protected ?bool $goBlank = null;
 
-    /**
-     * @var bool
-     * @Gedmo\Versioned
-     */
-    protected $redirectToChildren;
+    #[Gedmo\Versioned]
+    protected ?bool $redirectToChildren = null;
 
-    /**
-     * @var smallint
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $state = self::STATE_ACTIVE;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?int $state = self::STATE_ACTIVE;
 
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     */
-    protected $handler;
+    #[Gedmo\Versioned]
+    protected ?string $handler = null;
 
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     */
-    protected $host;
+    #[Gedmo\Versioned]
+    protected ?string $host = null;
 
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     */
-    protected $locales;
+    #[Gedmo\Versioned]
+    protected ?string $locales = null;
 
-    /**
-     * @var bool
-     * @Gedmo\Versioned
-     */
-    protected $xmlSitemap;
+    #[Gedmo\Versioned]
+    protected ?bool $xmlSitemap = null;
 
-    /**
-     * @var ContentHandler
-     * @Gedmo\Versioned
-     */
-    protected $contentHandler;
+    #[Gedmo\Versioned]
+    protected ?ContentHandler $contentHandler = null;
 
-    /**
-     * @var string
-     * @Gedmo\Versioned
-     */
-    protected $menuOption;
+    #[Gedmo\Versioned]
+    protected ?string $menuOption = null;
 
-    /**
-     * @var int
-     * @Gedmo\TreeLeft
-     */
-    protected $lft;
+    #[Gedmo\TreeLeft]
+    protected ?int $lft = null;
 
-    /**
-     * @var int
-     * @Gedmo\TreeRight
-     */
-    protected $rgt;
+    #[Gedmo\TreeRight]
+    protected ?int $rgt = null;
 
-    /**
-     * @var int
-     * @Gedmo\TreeLevel
-     */
-    protected $level;
+    #[Gedmo\TreeLevel]
+    protected ?int $level = null;
 
-    /**
-     * @var int
-     * @Gedmo\TreeRoot
-     */
-    protected $root;
+    #[Gedmo\TreeRoot]
+    protected ?int $root = null;
 
-    /**
-     * @var Content
-     * @Gedmo\TreeParent
-     * @Gedmo\Versioned
-     */
-    protected $parent;
+    #[Gedmo\TreeParent]
+    #[Gedmo\Versioned]
+    protected ?Content $parent = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $children;
+    protected Collection $children;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * @var \DateTime
-     */
-    protected $deleted;
+    protected ?DateTimeInterface $deleted = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $relateds;
+    protected Collection $relateds;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $translations;
+    protected Collection $translations;
 
-    /**
-     * @var string
-     * @Gedmo\Locale
-     */
-    protected $locale;
+    #[Gedmo\Locale]
+    protected ?string $locale = null;
 
-    public function setTranslatableLocale($locale)
+    public function setTranslatableLocale(?string $locale): static
     {
         $this->locale = $locale;
+
+        return $this;
     }
 
-    public function getTranslatableLocale()
+    public function getTranslatableLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->relateds = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->children = new ArrayCollection();
+        $this->relateds = new ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
     public function getId()
@@ -218,696 +134,367 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->id;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return Content
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * Set url.
-     *
-     * @param string $url
-     *
-     * @return Content
-     */
-    public function setUrl($url)
+    public function setUrl(?string $url): static
     {
         $this->url = $url;
 
         return $this;
     }
 
-    /**
-     * Get url.
-     *
-     * @return string
-     */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * Set theme.
-     *
-     * @param string $theme
-     *
-     * @return Content
-     */
-    public function setTheme($theme)
+    public function setTheme(?string $theme): static
     {
         $this->theme = $theme;
 
         return $this;
     }
 
-    /**
-     * Get theme.
-     *
-     * @return string
-     */
-    public function getTheme()
+    public function getTheme(): ?string
     {
         return $this->theme;
     }
 
-    /**
-     * Set content.
-     *
-     * @return Content
-     */
-    public function setContent(array $content)
+    public function setContent(?array $content): static
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return array
-     */
-    public function getContent()
+    public function getContent(): ?array
     {
         return $this->content;
     }
 
-    /**
-     * Set contentText.
-     *
-     * @param string $contentText
-     *
-     * @return Content
-     */
-    public function setContentText($contentText)
+    public function setContentText(?string $contentText): static
     {
         $this->contentText = $contentText;
 
         return $this;
     }
 
-    /**
-     * Get contentText.
-     *
-     * @return string
-     */
-    public function getContentText()
+    public function getContentText(): ?string
     {
         return $this->contentText;
     }
 
-    /**
-     * Set firstImage.
-     *
-     * @param string $firstImage
-     *
-     * @return Content
-     */
-    public function setFirstImage($firstImage)
+    public function setFirstImage(?string $firstImage): static
     {
         $this->firstImage = $firstImage;
 
         return $this;
     }
 
-    /**
-     * Get firstImage.
-     *
-     * @return string
-     */
-    public function getFirstImage()
+    public function getFirstImage(): ?string
     {
         return $this->firstImage;
     }
 
-    /**
-     * Set goUrl.
-     *
-     * @param string $goUrl
-     *
-     * @return Content
-     */
-    public function setGoUrl($goUrl)
+    public function setGoUrl(?string $goUrl): static
     {
         $this->goUrl = $goUrl;
 
         return $this;
     }
 
-    /**
-     * Get goUrl.
-     *
-     * @return string
-     */
-    public function getGoUrl()
+    public function getGoUrl(): ?string
     {
         return $this->goUrl;
     }
 
-    /**
-     * Set goBlank.
-     *
-     * @param bool $goBlank
-     *
-     * @return Content
-     */
-    public function setGoBlank($goBlank)
+    public function setGoBlank(?bool $goBlank): static
     {
         $this->goBlank = $goBlank;
 
         return $this;
     }
 
-    /**
-     * Get goBlank.
-     *
-     * @return bool
-     */
-    public function getGoBlank()
+    public function getGoBlank(): ?bool
     {
         return $this->goBlank;
     }
 
-    /**
-     * Set redirectToChildren.
-     *
-     * @param bool $redirectToChildren
-     *
-     * @return Content
-     */
-    public function setRedirectToChildren($redirectToChildren)
+    public function setRedirectToChildren(?bool $redirectToChildren): static
     {
         $this->redirectToChildren = $redirectToChildren;
 
         return $this;
     }
 
-    /**
-     * Get redirectToChildren.
-     *
-     * @return bool
-     */
-    public function getRedirectToChildren()
+    public function getRedirectToChildren(): ?bool
     {
         return $this->redirectToChildren;
     }
 
-    /**
-     * Set state.
-     *
-     * @param smallint $state
-     *
-     * @return Content
-     */
-    public function setState($state)
+    public function setState(?int $state): static
     {
         $this->state = $state;
 
         return $this;
     }
 
-    /**
-     * Get state.
-     *
-     * @return smallint
-     */
-    public function getState()
+    public function getState(): ?int
     {
         return $this->state;
     }
 
-    /**
-     * Set handler.
-     *
-     * @param string $handler
-     *
-     * @return Content
-     */
-    public function setHandler($handler)
+    public function setHandler(?string $handler): static
     {
         $this->handler = $handler;
 
         return $this;
     }
 
-    /**
-     * Get handler.
-     *
-     * @return string
-     */
-    public function getHandler()
+    public function getHandler(): ?string
     {
         return $this->handler;
     }
 
-    /**
-     * Set host.
-     *
-     * @param string $host
-     *
-     * @return Content
-     */
-    public function setHost($host)
+    public function setHost(?string $host): static
     {
         $this->host = $host;
 
         return $this;
     }
 
-    /**
-     * Get host.
-     *
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    /**
-     * Set locales.
-     *
-     * @param string $locales
-     *
-     * @return Content
-     */
-    public function setLocales($locales)
+    public function setLocales(?string $locales): static
     {
         $this->locales = $locales;
 
         return $this;
     }
 
-    /**
-     * Get locales.
-     *
-     * @return string
-     */
-    public function getLocales()
+    public function getLocales(): ?string
     {
         return $this->locales;
     }
 
-    /**
-     * Set xmlSitemap.
-     *
-     * @param bool $xmlSitemap
-     *
-     * @return Content
-     */
-    public function setXmlSitemap($xmlSitemap)
+    public function setXmlSitemap(?bool $xmlSitemap): static
     {
         $this->xmlSitemap = $xmlSitemap;
 
         return $this;
     }
 
-    /**
-     * Get xmlSitemap.
-     *
-     * @return bool
-     */
-    public function getXmlSitemap()
+    public function getXmlSitemap(): ?bool
     {
         return $this->xmlSitemap;
     }
 
-    /**
-     * Set contentHandler.
-     *
-     * @param ContentHandler $contentHandler
-     *
-     * @return Content
-     */
-    public function setContentHandler($contentHandler)
+    public function setContentHandler(?ContentHandler $contentHandler): static
     {
         $this->contentHandler = $contentHandler;
 
         return $this;
     }
 
-    /**
-     * Get contentHandler.
-     *
-     * @return ContentHandler
-     */
-    public function getContentHandler()
+    public function getContentHandler(): ?ContentHandler
     {
         return $this->contentHandler;
     }
 
-    /**
-     * Set menuOption.
-     *
-     * @param string $menuOption
-     *
-     * @return Content
-     */
-    public function setMenuOption($menuOption)
+    public function setMenuOption(?string $menuOption): static
     {
         $this->menuOption = $menuOption;
 
         return $this;
     }
 
-    /**
-     * Get menuOption.
-     *
-     * @return string
-     */
-    public function getMenuOption()
+    public function getMenuOption(): ?string
     {
         return $this->menuOption;
     }
 
-    /**
-     * Set lft.
-     *
-     * @param int $lft
-     *
-     * @return Content
-     */
-    public function setLft($lft)
+    public function setLft(?int $lft): static
     {
         $this->lft = $lft;
 
         return $this;
     }
 
-    /**
-     * Get lft.
-     *
-     * @return int
-     */
-    public function getLft()
+    public function getLft(): ?int
     {
         return $this->lft;
     }
 
-    /**
-     * Set rgt.
-     *
-     * @param int $rgt
-     *
-     * @return Content
-     */
-    public function setRgt($rgt)
+    public function setRgt(?int $rgt): static
     {
         $this->rgt = $rgt;
 
         return $this;
     }
 
-    /**
-     * Get rgt.
-     *
-     * @return int
-     */
-    public function getRgt()
+    public function getRgt(): ?int
     {
         return $this->rgt;
     }
 
-    /**
-     * Set level.
-     *
-     * @param int $level
-     *
-     * @return Content
-     */
-    public function setLevel($level)
+    public function setLevel(?int $level): static
     {
         $this->level = $level;
 
         return $this;
     }
 
-    /**
-     * Get level.
-     *
-     * @return int
-     */
-    public function getLevel()
+    public function getLevel(): ?int
     {
         return $this->level;
     }
 
-    /**
-     * Set root.
-     *
-     * @param int $root
-     *
-     * @return Content
-     */
-    public function setRoot($root)
+    public function setRoot(?int $root): static
     {
         $this->root = $root;
 
         return $this;
     }
 
-    /**
-     * Get root.
-     *
-     * @return int
-     */
-    public function getRoot()
+    public function getRoot(): ?int
     {
         return $this->root;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return Content
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return Content
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    /**
-     * Set deleted.
-     *
-     * @param \DateTime $deleted
-     *
-     * @return Content
-     */
-    public function setDeleted($deleted)
+    public function setDeleted(?DateTimeInterface $deleted): static
     {
         $this->deleted = $deleted;
 
         return $this;
     }
 
-    /**
-     * Get deleted.
-     *
-     * @return \DateTime
-     */
-    public function getDeleted()
+    public function getDeleted(): ?DateTimeInterface
     {
         return $this->deleted;
     }
 
-    /**
-     * Set parent.
-     *
-     * @param Content $parent
-     *
-     * @return Content
-     */
-    public function setParent(Content $parent = null)
+    public function setParent(Content $parent = null): static
     {
         $this->parent = $parent;
 
         return $this;
     }
 
-    /**
-     * Get parent.
-     *
-     * @return Content
-     */
-    public function getParent()
+    public function getParent(): ?Content
     {
         return $this->parent;
     }
 
-    /**
-     * Add children.
-     *
-     * @return Content
-     */
-    public function addChild(Content $children)
+    public function addChild(Content $children): static
     {
         $this->children[] = $children;
 
         return $this;
     }
 
-    /**
-     * Remove children.
-     */
-    public function removeChild(Content $children)
+    public function removeChild(Content $children): static
     {
         $this->children->removeElement($children);
+
+        return $this;
     }
 
-    /**
-     * Get children.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getChildren()
+    public function getChildren(): Collection
     {
         return $this->children;
     }
 
-    /**
-     * Add relateds.
-     *
-     * @return Content
-     */
-    public function addRelated(Content $relateds)
+    public function addRelated(Content $relateds): static
     {
         $this->relateds[] = $relateds;
 
         return $this;
     }
 
-    /**
-     * Remove relateds.
-     */
-    public function removeRelated(Content $relateds)
+    public function removeRelated(Content $relateds): static
     {
         $this->relateds->removeElement($relateds);
+
+        return $this;
     }
 
-    /**
-     * Get relateds.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRelateds()
+    public function getRelateds(): Collection
     {
         return $this->relateds;
     }
 
-    /**
-     * Add translations.
-     *
-     * @param object $translations
-     *
-     * @return Content
-     */
-    public function addTranslation($translations)
+    public function addTranslation(object $translations): static
     {
         $this->translations[] = $translations;
 
         return $this;
     }
 
-    /**
-     * Remove translations.
-     *
-     * @param object $translations
-     */
-    public function removeTranslation($translations)
+    public function removeTranslation(object $translations): static
     {
         $this->translations->removeElement($translations);
+
+        return $this;
     }
 
-    /**
-     * Get translations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return Content
-     */
-    public function getVeryParent()
+    public function getVeryParent(): static
     {
         return $this->getParent() ? $this->getParent()->getVeryParent() : $this;
     }
 
-    /**
-     * @return Content
-     */
-    public function getParentLvl($level)
+    public function getParentLvl(int $level): static
     {
         return $this->getLevel() > $level && $this->getParent() ? $this->getParent()->getParentLvl($level) : $this;
     }
 
-    public function getParentTheme()
+    public function getParentTheme(): ?string
     {
         if (!$this->getParent()) {
             return $this->getTheme();
@@ -916,7 +503,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->getTheme() ? $this->getTheme() : $this->getParent()->getParentTheme();
     }
 
-    public function getSummary($limit = 250)
+    public function getSummary(int $limit = 250): string
     {
         $text = str_replace('&rsquo;', "'", $this->getContentText());
         if (mb_strlen($text) > $limit) {

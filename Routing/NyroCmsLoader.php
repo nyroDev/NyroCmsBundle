@@ -6,6 +6,7 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\Traits\ContainerInterfaceServiceableTrait;
+use RuntimeException;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
@@ -22,7 +23,7 @@ class NyroCmsLoader extends Loader
 
         $res = explode('@', $resource);
         if (isset($this->loaded[$res[0]])) {
-            throw new \RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
+            throw new RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
         }
 
         $rootContent = $this->container->get(DbAbstractService::class)->getContentRepository()->findOneBy([
@@ -30,7 +31,7 @@ class NyroCmsLoader extends Loader
             'handler' => $res[0],
         ]);
         if (!$rootContent) {
-            throw new \RuntimeException('No root content found with handler "'.$res[0].'"');
+            throw new RuntimeException('No root content found with handler "'.$res[0].'"');
         }
         /* @var $rootContent \NyroDev\NyroCmsBundle\Model\Content */
 
@@ -53,92 +54,92 @@ class NyroCmsLoader extends Loader
 
         if (isset($typeCfg['homepage'])) {
             $routes->add('_homepage', new Route(
-                    '/',
-                    ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
-                    [],
-                    [],
-                    $rootContent->getHost()
-                )
-            );
-        }
-
-        $routes->add($res[0].'_homepage_noLocale', new Route(
-                '/'.(isset($typeCfg['forceLang']) ? $locale.'/' : ''),
+                '/',
                 ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
                 [],
                 [],
                 $rootContent->getHost()
             )
+            );
+        }
+
+        $routes->add($res[0].'_homepage_noLocale', new Route(
+            '/'.(isset($typeCfg['forceLang']) ? $locale.'/' : ''),
+            ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
+            [],
+            [],
+            $rootContent->getHost()
+        )
         );
 
         if ($rootContent->getXmlSitemap()) {
             if (!$hasOnly1Locale) {
                 $routes->add($res[0].'_sitemap_xml_index', new Route(
-                        '/sitemap.{_format}',
-                        ['_controller' => $res[1].'::sitemapIndexXml', '_config' => $res[0]],
-                        ['_format' => 'xml'],
-                        [],
-                        $rootContent->getHost()
-                    )
-                );
-            }
-            $routes->add($res[0].'_sitemapXml', new Route(
-                    $prefixUrlLocale.'/sitemap.{_format}',
-                    ['_controller' => $res[1].'::sitemapXml', '_locale' => $locale, '_config' => $res[0]],
-                    ['_locale' => $locales, '_format' => 'xml'],
+                    '/sitemap.{_format}',
+                    ['_controller' => $res[1].'::sitemapIndexXml', '_config' => $res[0]],
+                    ['_format' => 'xml'],
                     [],
                     $rootContent->getHost()
                 )
+                );
+            }
+            $routes->add($res[0].'_sitemapXml', new Route(
+                $prefixUrlLocale.'/sitemap.{_format}',
+                ['_controller' => $res[1].'::sitemapXml', '_locale' => $locale, '_config' => $res[0]],
+                ['_locale' => $locales, '_format' => 'xml'],
+                [],
+                $rootContent->getHost()
+            )
             );
         }
 
         $routes->add($res[0].'_homepage', new Route(
-                $prefixUrlLocale.'/',
-                ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/',
+            ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales],
+            [],
+            $rootContent->getHost()
+        )
         );
         $routes->add($res[0].'_search', new Route(
-                $prefixUrlLocale.'/search',
-                ['_controller' => $res[1].'::search', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/search',
+            ['_controller' => $res[1].'::search', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales],
+            [],
+            $rootContent->getHost()
+        )
         );
         $routes->add($res[0].'_content_spec_handler', new Route(
-                $prefixUrlLocale.'/{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
-                ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+', 'handler' => '.+'],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
+            ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+', 'handler' => '.+'],
+            [],
+            $rootContent->getHost()
+        )
         );
         $routes->add($res[0].'_content_spec', new Route(
-                $prefixUrlLocale.'/{url}/{id}/{title}',
-                ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+'],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/{url}/{id}/{title}',
+            ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+'],
+            [],
+            $rootContent->getHost()
+        )
         );
         $routes->add($res[0].'_content_handler', new Route(
-                $prefixUrlLocale.'/{url}/'.$routeHandlerPath.'{handler}',
-                ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => '[^/]+', 'handler' => '.+'],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/{url}/'.$routeHandlerPath.'{handler}',
+            ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales, 'url' => '[^/]+', 'handler' => '.+'],
+            [],
+            $rootContent->getHost()
+        )
         );
         $routes->add($res[0].'_content', new Route(
-                $prefixUrlLocale.'/{url}',
-                ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
-                ['_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt|_profiler|_error.).+' : '.+'],
-                [],
-                $rootContent->getHost()
-            )
+            $prefixUrlLocale.'/{url}',
+            ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
+            ['_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt|_profiler|_error.).+' : '.+'],
+            [],
+            $rootContent->getHost()
+        )
         );
 
         $this->loaded[$res[0]] = true;

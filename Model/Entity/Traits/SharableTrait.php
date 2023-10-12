@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity\Traits;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -9,102 +10,78 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 trait SharableTrait
 {
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_title", type="string", length=250, nullable=true)
-     */
-    protected $metaTitle;
+    #[ORM\Column(length: 250, nullable: true)]
+    protected ?string $metaTitle = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_description", type="text", nullable=true)
-     */
-    protected $metaDescription;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    protected ?string $metaDescription = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_keywords", type="text", nullable=true)
-     */
-    protected $metaKeywords;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    protected ?string $metaKeywords = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="og_title", type="string", length=250, nullable=true)
-     */
-    protected $ogTitle;
+    #[ORM\Column(length: 250, nullable: true)]
+    protected ?string $ogTitle = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="og_description", type="text", nullable=true)
-     */
-    protected $ogDescription;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    protected ?string $ogDescription = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="og_image_file", type="string", length=250, nullable=true)
-     */
-    protected $ogImageFile;
+    #[ORM\Column(length: 250, nullable: true)]
+    protected ?string $ogImageFile = null;
 
-    public function getMetaTitle()
+    public function getMetaTitle(): ?string
     {
         return $this->metaTitle;
     }
 
-    public function setMetaTitle($metaTitle)
+    public function setMetaTitle(?string $metaTitle): static
     {
         $this->metaTitle = $metaTitle;
 
         return $this;
     }
 
-    public function getMetaDescription()
+    public function getMetaDescription(): ?string
     {
         return $this->metaDescription;
     }
 
-    public function setMetaDescription($metaDescription)
+    public function setMetaDescription(?string $metaDescription): static
     {
         $this->metaDescription = $metaDescription;
 
         return $this;
     }
 
-    public function getMetaKeywords()
+    public function getMetaKeywords(): ?string
     {
         return $this->metaKeywords;
     }
 
-    public function setMetaKeywords($metaKeywords)
+    public function setMetaKeywords(?string $metaKeywords): static
     {
         $this->metaKeywords = $metaKeywords;
 
         return $this;
     }
 
-    public function getOgTitle()
+    public function getOgTitle(): ?string
     {
         return $this->ogTitle;
     }
 
-    public function setOgTitle($ogTitle)
+    public function setOgTitle(?string $ogTitle): static
     {
         $this->ogTitle = $ogTitle;
 
         return $this;
     }
 
-    public function getOgDescription()
+    public function getOgDescription(): ?string
     {
         return $this->ogDescription;
     }
 
-    public function setOgDescription($ogDescription)
+    public function setOgDescription(?string $ogDescription): static
     {
         $this->ogDescription = $ogDescription;
 
@@ -116,39 +93,27 @@ trait SharableTrait
         return null;
     }
 
-    public function getOgImageFile()
+    public function getOgImageFile(): ?string
     {
         return $this->ogImageFile;
     }
 
-    public function setOgImageFile($ogImageFile)
+    public function setOgImageFile(?string $ogImageFile): static
     {
         $this->ogImageFile = $ogImageFile;
 
         return $this;
     }
 
-    /**
-     * @Assert\Image()
-     */
+    #[Assert\Image]
     protected $ogImage;
 
-    /**
-     * Sets Image.
-     *
-     * @param UploadedFile $image
-     */
     public function setOgImage(UploadedFile $ogImage = null)
     {
         $this->setUploadFile('ogImage', $ogImage);
     }
 
-    /**
-     * Get Image.
-     *
-     * @return UploadedFile
-     */
-    public function getOgImage()
+    public function getOgImage(): ?UploadedFile
     {
         return $this->ogImage;
     }

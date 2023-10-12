@@ -2,6 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,43 +12,24 @@ abstract class UserRole
 {
     protected $id;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[Assert\NotBlank]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     */
-    protected $roleName;
+    protected ?string $roleName = null;
 
-    /**
-     * @var bool
-     */
-    protected $internal = false;
+    protected ?bool $internal = false;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $contents;
+    protected Collection $contents;
 
     public function __construct()
     {
-        $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contents = new ArrayCollection();
     }
 
     public function getId()
@@ -53,162 +37,91 @@ abstract class UserRole
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return UserRole
-     */
-    public function setName($name)
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set roleName.
-     *
-     * @param string $roleName
-     *
-     * @return UserRole
-     */
-    public function setRoleName($roleName)
+    public function setRoleName(?string $roleName): static
     {
         $this->roleName = $roleName;
 
         return $this;
     }
 
-    /**
-     * Get roleName.
-     *
-     * @return string
-     */
-    public function getRoleName()
+    public function getRoleName(): ?string
     {
         return $this->roleName;
     }
 
-    /**
-     * Set internal.
-     *
-     * @param bool $internal
-     *
-     * @return UserRole
-     */
-    public function setInternal($internal)
+    public function setInternal(?bool $internal): static
     {
         $this->internal = $internal;
 
         return $this;
     }
 
-    /**
-     * Get internal.
-     *
-     * @return bool
-     */
-    public function getInternal()
+    public function getInternal(): ?bool
     {
         return $this->internal;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return UserRole
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return UserRole
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    /**
-     * Add contents.
-     *
-     * @return UserRole
-     */
-    public function addContent(Content $contents)
+    public function addContent(Content $contents): static
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    /**
-     * Remove contents.
-     */
-    public function removeContent(Content $contents)
+    public function removeContent(Content $contents): static
     {
         $this->contents->removeElement($contents);
+
+        return $this;
     }
 
-    /**
-     * Get contents.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContents()
+    public function getContents(): Collection
     {
         return $this->contents;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
 
-    public function getSecurityRoleName()
+    public function getSecurityRoleName(): string
     {
         $name = $this->getRoleName() ? $this->getRoleName() : $this->getName();
 

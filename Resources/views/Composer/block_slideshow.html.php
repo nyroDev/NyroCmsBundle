@@ -49,12 +49,12 @@
             $first = false;
         }
     }
-    if (!$big && $admin) {
-        $big = '<div class="nyroCmsSlideshow_big"><img src="" alt="" /><span></span></div>';
-    }
-    echo $big;
-    echo '<ul>'.implode(' ', $thumbs).'</ul>';
-    ?>
+if (!$big && $admin) {
+    $big = '<div class="nyroCmsSlideshow_big"><img src="" alt="" /><span></span></div>';
+}
+echo $big;
+echo '<ul>'.implode(' ', $thumbs).'</ul>';
+?>
 <?php endif; ?>
 <?php if ($admin): ?>
 </div>

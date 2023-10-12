@@ -6,8 +6,8 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class UrlGenerationEvent extends Event
 {
-    const LOCALES_URL = 'nyrocms.events.urlGeneration.locales';
-    const OBJECT_URL = 'nyrocms.events.urlGeneration.object';
+    public const LOCALES_URL = 'nyrocms.events.urlGeneration.locales';
+    public const OBJECT_URL = 'nyrocms.events.urlGeneration.object';
 
     protected $routeName;
     protected $routePrm;

@@ -14,11 +14,11 @@
 			<?php if ($error): ?>
 				<p class="form_errors"><?php
                 $errorMsg = $view['nyrodev']->trans('login.errors.'.$error->getMessage());
-                if (0 === strpos($errorMsg, 'login.errors.')) {
-                    $errorMsg = $view['nyrodev']->trans('login.errors.unknown');
-                }
-                echo $errorMsg;
-                ?></p>
+			    if (0 === strpos($errorMsg, 'login.errors.')) {
+			        $errorMsg = $view['nyrodev']->trans('login.errors.unknown');
+			    }
+			    echo $errorMsg;
+			    ?></p>
 			<?php endif; ?>
 
 			<form action="<?php echo $view['router']->path('nyrocms_admin_security_check'); ?>" method="post">

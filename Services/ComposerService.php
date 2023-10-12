@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use Exception;
 use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerDefaultBlockEvent;
@@ -19,6 +20,7 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -334,7 +336,7 @@ class ComposerService extends AbstractService
     {
         $config = $this->getBlockConfig($row, $block);
         if (!isset($config['template'])) {
-            throw new \RuntimeException('Template not configured for '.$block);
+            throw new RuntimeException('Template not configured for '.$block);
         }
 
         return $config['template'];
@@ -712,7 +714,7 @@ class ComposerService extends AbstractService
 
                 $tmp = explode('/public/', $resizedPath);
                 $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
             }
         }
 
@@ -868,7 +870,7 @@ class ComposerService extends AbstractService
                             if ($hasChange) {
                                 $newContents[$translation->getLocale()] = $trContents;
                             }
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             // What to do here?
                         }
                     }

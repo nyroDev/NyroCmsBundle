@@ -2,275 +2,141 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 abstract class ContactMessage
 {
     protected $id;
 
-    /**
-     * @var ContentHandler
-     */
-    protected $contentHandler;
+    protected ?ContentHandler $contentHandler = null;
 
-    /**
-     * @var string
-     */
-    protected $dest;
+    protected ?string $dest = null;
 
-    /**
-     * @var string
-     */
-    protected $lastname;
+    protected ?string $lastname = null;
 
-    /**
-     * @var string
-     */
-    protected $firstname;
+    protected ?string $firstname = null;
 
-    /**
-     * @var string
-     */
-    protected $company;
+    protected ?string $company = null;
 
-    /**
-     * @var string
-     */
-    protected $phone;
+    protected ?string $phone = null;
 
-    /**
-     * @var string
-     */
-    protected $email;
+    protected ?string $email = null;
 
-    /**
-     * @var string
-     */
-    protected $message;
+    protected ?string $message = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set contentHandler.
-     *
-     * @param Content $contentHandler
-     *
-     * @return ContactMessage
-     */
-    public function setContentHandler(ContentHandler $contentHandler)
+    public function setContentHandler(ContentHandler $contentHandler): static
     {
         $this->contentHandler = $contentHandler;
 
         return $this;
     }
 
-    /**
-     * Get contentHandler.
-     *
-     * @return ContentHandler
-     */
-    public function getContentHandler()
+    public function getContentHandler(): ?ContentHandler
     {
         return $this->contentHandler;
     }
 
-    /**
-     * Set dest.
-     *
-     * @param string $dest
-     *
-     * @return ContactMessage
-     */
-    public function setDest($dest)
+    public function setDest(?string $dest): static
     {
         $this->dest = $dest;
 
         return $this;
     }
 
-    /**
-     * Get dest.
-     *
-     * @return string
-     */
-    public function getDest()
+    public function getDest(): ?string
     {
         return $this->dest;
     }
 
-    /**
-     * Set lastname.
-     *
-     * @param string $lastname
-     *
-     * @return ContactMessage
-     */
-    public function setLastname($lastname)
+    public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
 
         return $this;
     }
 
-    /**
-     * Get lastname.
-     *
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * Set firstname.
-     *
-     * @param string $firstname
-     *
-     * @return ContactMessage
-     */
-    public function setFirstname($firstname)
+    public function setFirstname(?string $firstname): static
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    /**
-     * Get firstname.
-     *
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * Set company.
-     *
-     * @param string $company
-     *
-     * @return ContactMessage
-     */
-    public function setCompany($company)
+    public function setCompany(?string $company): static
     {
         $this->company = $company;
 
         return $this;
     }
 
-    /**
-     * Get company.
-     *
-     * @return string
-     */
-    public function getCompany()
+    public function getCompany(): ?string
     {
         return $this->company;
     }
 
-    /**
-     * Set phone.
-     *
-     * @param string $phone
-     *
-     * @return ContactMessage
-     */
-    public function setPhone($phone)
+    public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
 
         return $this;
     }
 
-    /**
-     * Get phone.
-     *
-     * @return string
-     */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
 
-    /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return ContactMessage
-     */
-    public function setEmail($email)
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * Get email.
-     *
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * Set message.
-     *
-     * @param string $message
-     *
-     * @return ContactMessage
-     */
-    public function setMessage($message)
+    public function setMessage(?string $message): static
     {
         $this->message = $message;
 
         return $this;
     }
 
-    /**
-     * Get message.
-     *
-     * @return string
-     */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return ContactMessage
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }

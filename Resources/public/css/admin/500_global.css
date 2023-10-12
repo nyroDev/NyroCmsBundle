@@ -260,10 +260,18 @@ main table.data .actions {
 }
 main table.data td.actions {
 	padding: 0;
+    display: flex;
+    align-items: center;
 }
-main table.data td.actions .icon, main table.data td.actions .up, main table.data td.actions .down {
-	float: left;
+main table.data td.actions a {
 	margin-right: 4px;
+}
+main table.data td.actions a.noIcon {
+	font-size: 14px;
+	font-weight: bold;
+}
+main table.data td.actions a.noIcon:first-child {
+	margin-left: 4px;
 }
 
 main table.data td.actions .up, main table.data td.actions .down {

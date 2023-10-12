@@ -10,8 +10,8 @@
 		<?php endif; ?>
 		<?php if (isset($content['contents']) && count($content['contents'])): ?>
 			<?php echo $view->render('@NyroDevNyroCms/Handler/sitemap.html.php', [
-                'contents' => $content['contents'],
-            ]); ?>
+			    'contents' => $content['contents'],
+			]); ?>
 		<?php endif; ?>
 	</li>
 	<?php endforeach; ?>

@@ -22,7 +22,7 @@ class ContactMessageFilterType extends Type\AbstractFilterType
                 'label' => $this->trans('admin.contactMessage.inserted'),
                 'valueOptions' => ['options' => $this->get(NyroCmsService::class)->getDateFormOptions()],
             ])
-            ;
+        ;
         parent::buildForm($builder, $options);
     }
 }

@@ -5,9 +5,9 @@
     <title><?php $view['slots']->output('title', $view['nyrodev']->trans('admin.misc.title')); ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-	<?php echo $view['nyrodev_tagRender']->renderWebpackLinkTags('css/admin/nyroCms', 'type="text/css" media="screen"'); ?>
+	<?php echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCms', 'type="text/css" media="screen"'); ?>
 	
-	<?php echo $view['nyrodev_tagRender']->renderWebpackScriptTags('js/admin/nyroCms', 'defer'); ?>
+	<?php echo $view['nyrodev_tagRenderer']->renderWebpackScriptTags('js/admin/nyroCms', 'defer'); ?>
 </head>
 <body id="<?php $view['slots']->output('bodyId', 'default'); ?>">
 	<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminTplController::header')); ?>

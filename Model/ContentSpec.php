@@ -2,158 +2,101 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Model\Sharable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- */
+#[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
 abstract class ContentSpec extends AbstractUploadable implements Composable, Sharable
 {
-    const STATE_DISABLED = 0;
-    const STATE_ACTIVE = 1;
-    const STATE_INVISIBLE = 2;
+    public const STATE_DISABLED = 0;
+    public const STATE_ACTIVE = 1;
+    public const STATE_INVISIBLE = 2;
 
     protected $id;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $title;
+    #[Assert\NotBlank]
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $title = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $intro;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $intro = null;
 
-    /**
-     * @var array
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $content;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?array $content = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $contentText;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $contentText = null;
 
-    /**
-     * @var array
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $data;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?array $data = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    protected $firstImage;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $firstImage = null;
 
-    /**
-     * @var int
-     * @Gedmo\SortablePosition
-     * @Gedmo\Versioned
-     */
-    protected $position;
+    #[Gedmo\SortablePosition]
+    #[Gedmo\Versioned]
+    protected ?int $position = null;
 
-    /**
-     * @var \DateTime
-     */
-    protected $dateSpec;
+    protected ?DateTimeInterface $dateSpec = null;
 
-    /**
-     * @var bool
-     * @Gedmo\Versioned
-     */
-    protected $featured = false;
+    #[Gedmo\Versioned]
+    protected ?bool $featured = false;
 
-    /**
-     * @var smallint
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $state = self::STATE_ACTIVE;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?int $state = self::STATE_ACTIVE;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Versioned
-     */
-    protected $validStart;
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface $validStart = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Versioned
-     */
-    protected $validEnd;
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface $validEnd = null;
 
-    /**
-     * @var ContentHandler
-     * @Gedmo\SortableGroup
-     */
-    protected $contentHandler;
+    #[Gedmo\SortableGroup]
+    protected ?ContentHandler $contentHandler = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * @var \DateTime
-     */
-    protected $deleted;
+    protected ?DateTimeInterface $deleted = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $translations;
+    protected Collection $translations;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $contents;
+    protected Collection $contents;
 
-    /**
-     * @var string
-     * @Gedmo\Locale
-     */
-    protected $locale;
+    #[Gedmo\Locale]
+    protected ?string $locale = null;
 
-    public function setTranslatableLocale($locale)
+    public function setTranslatableLocale(?string $locale): static
     {
         $this->locale = $locale;
+
+        return $this;
     }
 
-    public function getTranslatableLocale()
+    public function getTranslatableLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new ArrayCollection();
+        $this->contents = new ArrayCollection();
     }
 
     public function getId()
@@ -161,456 +104,242 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->id;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return ContentSpec
-     */
-    public function setTitle($title)
+    public function setTitle(?string $title): static
     {
         $this->title = $title;
 
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
-    /**
-     * Set intro.
-     *
-     * @param string $intro
-     *
-     * @return ContentSpec
-     */
-    public function setIntro($intro)
+    public function setIntro(?string $intro): static
     {
         $this->intro = $intro;
 
         return $this;
     }
 
-    /**
-     * Get intro.
-     *
-     * @return string
-     */
-    public function getIntro()
+    public function getIntro(): ?string
     {
         return $this->intro;
     }
 
-    /**
-     * Set content.
-     *
-     * @return ContentSpec
-     */
-    public function setContent(array $content)
+    public function setContent(?array $content): static
     {
         $this->content = $content;
 
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return array
-     */
-    public function getContent()
+    public function getContent(): ?array
     {
         return $this->content;
     }
 
-    /**
-     * Set contentText.
-     *
-     * @param string $contentText
-     *
-     * @return ContentSpec
-     */
-    public function setContentText($contentText)
+    public function setContentText(?string $contentText): static
     {
         $this->contentText = $contentText;
 
         return $this;
     }
 
-    /**
-     * Get contentText.
-     *
-     * @return string
-     */
-    public function getContentText()
+    public function getContentText(): ?string
     {
         return $this->contentText;
     }
 
-    /**
-     * Set data.
-     *
-     * @return ContentSpec
-     */
-    public function setData(array $data)
+    public function setData(?array $data): static
     {
         $this->data = $data;
 
         return $this;
     }
 
-    /**
-     * Get data.
-     *
-     * @return array
-     */
-    public function getData()
+    public function getData(): ?array
     {
         return $this->data;
     }
 
-    /**
-     * Set firstImage.
-     *
-     * @param string $firstImage
-     *
-     * @return ContentSpec
-     */
-    public function setFirstImage($firstImage)
+    public function setFirstImage(?string $firstImage): static
     {
         $this->firstImage = $firstImage;
 
         return $this;
     }
 
-    /**
-     * Get firstImage.
-     *
-     * @return string
-     */
-    public function getFirstImage()
+    public function getFirstImage(): ?string
     {
         return $this->firstImage;
     }
 
-    /**
-     * Set position.
-     *
-     * @param int $position
-     *
-     * @return ContentSpec
-     */
-    public function setposition($position)
+    public function setposition(?int $position): static
     {
         $this->position = $position;
 
         return $this;
     }
 
-    /**
-     * Get position.
-     *
-     * @return int
-     */
-    public function getposition()
+    public function getposition(): ?int
     {
         return $this->position;
     }
 
-    /**
-     * Set dateSpec.
-     *
-     * @param \DateTime $dateSpec
-     *
-     * @return ContentSpec
-     */
-    public function setDateSpec($dateSpec)
+    public function setDateSpec(?DateTimeInterface $dateSpec): static
     {
         $this->dateSpec = $dateSpec;
 
         return $this;
     }
 
-    /**
-     * Get dateSpec.
-     *
-     * @return \DateTime
-     */
-    public function getDateSpec()
+    public function getDateSpec(): ?DateTimeInterface
     {
         return $this->dateSpec;
     }
 
-    /**
-     * Set featured.
-     *
-     * @param bool $featured
-     *
-     * @return ContentSpec
-     */
-    public function setFeatured($featured)
+    public function setFeatured(?bool $featured): static
     {
         $this->featured = $featured;
 
         return $this;
     }
 
-    /**
-     * Get featured.
-     *
-     * @return bool
-     */
-    public function getFeatured()
+    public function getFeatured(): ?bool
     {
         return $this->featured;
     }
 
-    /**
-     * Set state.
-     *
-     * @param smallint $state
-     *
-     * @return ContentSpec
-     */
-    public function setState($state)
+    public function setState(?int $state): static
     {
         $this->state = $state;
 
         return $this;
     }
 
-    /**
-     * Get state.
-     *
-     * @return smallint
-     */
-    public function getState()
+    public function getState(): ?int
     {
         return $this->state;
     }
 
-    /**
-     * Set contentHandler.
-     *
-     * @param ContentHandler $contentHandler
-     *
-     * @return ContentSpec
-     */
-    public function setContentHandler($contentHandler)
+    public function setContentHandler(?ContentHandler $contentHandler): static
     {
         $this->contentHandler = $contentHandler;
 
         return $this;
     }
 
-    /**
-     * Get contentHandler.
-     *
-     * @return ContentHandler
-     */
-    public function getContentHandler()
+    public function getContentHandler(): ?ContentHandler
     {
         return $this->contentHandler;
     }
 
-    /**
-     * Set validStart.
-     *
-     * @param \DateTime $validStart
-     *
-     * @return ContentSpec
-     */
-    public function setValidStart($validStart)
+    public function setValidStart(?DateTimeInterface $validStart): static
     {
         $this->validStart = $validStart;
 
         return $this;
     }
 
-    /**
-     * Get validStart.
-     *
-     * @return \DateTime
-     */
-    public function getValidStart()
+    public function getValidStart(): ?DateTimeInterface
     {
         return $this->validStart;
     }
 
-    /**
-     * Set validEnd.
-     *
-     * @param \DateTime $validEnd
-     *
-     * @return ContentSpec
-     */
-    public function setValidEnd($validEnd)
+    public function setValidEnd(?DateTimeInterface $validEnd): static
     {
         $this->validEnd = $validEnd;
 
         return $this;
     }
 
-    /**
-     * Get validEnd.
-     *
-     * @return \DateTime
-     */
-    public function getValidEnd()
+    public function getValidEnd(): ?DateTimeInterface
     {
         return $this->validEnd;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return ContentSpec
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return ContentSpec
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    /**
-     * Set deleted.
-     *
-     * @param \DateTime $deleted
-     *
-     * @return ContentSpec
-     */
-    public function setDeleted($deleted)
+    public function setDeleted(?DateTimeInterface $deleted): static
     {
         $this->deleted = $deleted;
 
         return $this;
     }
 
-    /**
-     * Get deleted.
-     *
-     * @return \DateTime
-     */
-    public function getDeleted()
+    public function getDeleted(): ?DateTimeInterface
     {
         return $this->deleted;
     }
 
-    /**
-     * Add translations.
-     *
-     * @param object $translations
-     *
-     * @return ContentSpec
-     */
-    public function addTranslation($translations)
+    public function addTranslation(object $translations): static
     {
         $this->translations[] = $translations;
 
         return $this;
     }
 
-    /**
-     * Remove translations.
-     *
-     * @param object $translations
-     */
-    public function removeTranslation($translations)
+    public function removeTranslation(object $translations): static
     {
         $this->translations->removeElement($translations);
+
+        return $this;
     }
 
-    /**
-     * Get translations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    /**
-     * Add contents.
-     *
-     * @return ContentSpec
-     */
-    public function addContent(Content $contents)
+    public function addContent(Content $contents): static
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    /**
-     * Remove contents.
-     */
-    public function removeContent(Content $contents)
+    public function removeContent(Content $contents): static
     {
         $this->contents->removeElement($contents);
+
+        return $this;
     }
 
-    /**
-     * Get contents.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContents()
+    public function getContents(): Collection
     {
         return $this->contents;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    public function getSummary($limit = 200)
+    public function getSummary($limit = 200): ?string
     {
         $text = $this->getIntro() ? $this->getIntro() : str_replace('&rsquo;', "'", $this->getContentText());
         if (mb_strlen($text) > $limit) {
@@ -620,14 +349,14 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $text;
     }
 
-    public function getInContent($key)
+    public function getInContent(string $key): mixed
     {
         $content = $this->getContent();
 
         return isset($content[$key]) ? $content[$key] : null;
     }
 
-    public function setInContent($key, $value)
+    public function setInContent(string $key, mixed $value): static
     {
         $content = $this->getContent();
         if (is_null($value)) {
@@ -641,14 +370,14 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->setContent($content);
     }
 
-    public function getInData($key)
+    public function getInData(string $key): mixed
     {
         $content = $this->getData();
 
         return isset($content[$key]) ? $content[$key] : null;
     }
 
-    public function setInData($key, $value)
+    public function setInData(string $key, mixed $value): static
     {
         $content = $this->getData();
         if (is_null($value)) {
@@ -662,15 +391,12 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->setData($content);
     }
 
-    /**
-     * @return Content
-     */
-    public function getParent()
+    public function getParent(): Content
     {
         return $this->getContentHandler()->getContents()->get(0);
     }
 
-    public function getTheme()
+    public function getTheme(): ?string
     {
         return $this->getParent()->getTheme();
     }

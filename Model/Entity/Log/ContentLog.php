@@ -1,17 +1,13 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Model\Entity\Log;
+namespace App\Entity\Log;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use NyroDev\NyroCmsBundle\Model\ContentLog as ContentLogModel;
 
-/**
- * Content.
- *
- * @ORM\Table(name="content_log")
- * @ORM\Entity(repositoryClass="Gedmo\Loggable\Entity\Repository\LogEntryRepository")
- */
+#[ORM\Entity(repositoryClass: LogEntryRepository::class)]
+#[ORM\Table(name: 'content_log')]
 class ContentLog extends ContentLogModel
 {
 }

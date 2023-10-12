@@ -23,7 +23,7 @@ class UserFilterType extends Type\AbstractFilterType
                 ],
             ])
             ->add('valid', Type\FilterBoolType::class, ['label' => $this->trans('admin.user.valid')])
-            ;
+        ;
         parent::buildForm($builder, $options);
     }
 }

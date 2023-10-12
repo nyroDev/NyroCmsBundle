@@ -7,7 +7,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ComposerDefaultBlockEvent extends Event
 {
-    const COMPOSER_DEFAULT_ADMIN_CONTENT = 'nyrocms.events.composerDefaultAdminContent';
+    public const COMPOSER_DEFAULT_ADMIN_CONTENT = 'nyrocms.events.composerDefaultAdminContent';
 
     protected $row;
 

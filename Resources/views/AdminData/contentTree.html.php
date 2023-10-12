@@ -9,14 +9,14 @@
             'admin.content.intro_'.$parent->getHandler(),
             'admin.content.intro',
         ];
-        foreach ($introKeys as $introKey) {
-            $intro = $view['translator']->trans($introKey);
-            if ($intro && $intro != $introKey) {
-                echo '<p class="intro">'.nl2br($intro).'</p>';
-                break;
-            }
-        }
-        ?>
+foreach ($introKeys as $introKey) {
+    $intro = $view['translator']->trans($introKey);
+    if ($intro && $intro != $introKey) {
+        echo '<p class="intro">'.nl2br($intro).'</p>';
+        break;
+    }
+}
+?>
 
 		<?php if ($canRootComposer && $view['nyrocms_admin']->canAdminContent($parent)): ?>
 			<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" id="composerHomeEdit" target="_blank" title="<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>">
@@ -38,8 +38,8 @@
 				<button type="submit" class="button"><?php echo $view['nyrodev']->trans('admin.misc.send'); ?></button>
 			</div>
 			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', [
-                'parent' => $parent,
-            ])); ?>
+			    'parent' => $parent,
+			])); ?>
 			<div class="listButtons">
 				<?php if ($candDirectAdd): ?>
 				<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', ['pid' => $parent->getId()]); ?>" class="button add">

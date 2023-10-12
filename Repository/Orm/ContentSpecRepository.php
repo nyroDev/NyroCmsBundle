@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
+use DateTime;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -33,7 +34,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         $qb
             ->andWhere('(cs.validStart IS NULL OR cs.validStart <= :now)')
             ->andWhere('(cs.validEnd IS NULL OR cs.validEnd >= :now)')
-                ->setParameter('now', new \DateTime());
+                ->setParameter('now', new DateTime());
 
         if ($state) {
             $qb->andWhere('cs.state = :state')

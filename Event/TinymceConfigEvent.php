@@ -7,7 +7,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class TinymceConfigEvent extends Event
 {
-    const TINYMCE_CONFIG = 'nyrocms.events.tinymceConfig';
+    public const TINYMCE_CONFIG = 'nyrocms.events.tinymceConfig';
 
     protected $row;
     protected $simple;

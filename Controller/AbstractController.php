@@ -12,6 +12,7 @@ use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,7 +40,7 @@ abstract class AbstractController extends NyroDevAbstractController
         if (is_null($this->rootContent)) {
             $this->rootContent = $this->getContentRepo()->findOneBy(['level' => 0, 'handler' => $this->getRootHandler()]);
             if (!$this->rootContent) {
-                throw new \RuntimeException('Cannot find rootContent "'.$this->getRootHandler().'"');
+                throw new RuntimeException('Cannot find rootContent "'.$this->getRootHandler().'"');
             }
         }
 

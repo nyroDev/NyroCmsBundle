@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use DateTime;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
@@ -53,43 +54,43 @@ class AdminHandlerContentsController extends AbstractAdminController
         $orderField = $handler->orderField();
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
-                array_merge(
-                    [
-                        'title' => $ch->getName(),
-                        'routePrmAdd' => $routePrm,
-                        'routePrmEdit' => $routePrm,
-                        'routePrmDelete' => $routePrm,
-                        'name' => 'contentSpec',
-                        'route' => $route,
-                        'fields' => array_unique(array_filter([
-                            'id',
-                            'title',
-                            $orderField,
-                            'updated',
-                        ])),
-                        'moreActions' => array_filter([
-                            'up' => $handler->hasMoveActions() ? [
-                                'name' => '↑',
-                                'route' => 'nyrocms_admin_handler_contents_up',
-                                'routePrm' => $routePrm,
-                            ] : false,
-                            'down' => $handler->hasMoveActions() ? [
-                                'name' => '↓',
-                                'route' => 'nyrocms_admin_handler_contents_down',
-                                'routePrm' => $routePrm,
-                            ] : false,
-                            'composer' => $handler->hasComposer() ? [
-                                'name' => $this->get(AdminService::class)->getIcon('pencil'),
-                                '_blank' => true,
-                                'route' => 'nyrocms_admin_composer',
-                                'routePrm' => [
-                                    'type' => 'ContentSpec',
-                                ],
-                            ] : false,
-                        ]),
-                    ],
-                    $this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
-                ));
+            array_merge(
+                [
+                    'title' => $ch->getName(),
+                    'routePrmAdd' => $routePrm,
+                    'routePrmEdit' => $routePrm,
+                    'routePrmDelete' => $routePrm,
+                    'name' => 'contentSpec',
+                    'route' => $route,
+                    'fields' => array_unique(array_filter([
+                        'id',
+                        'title',
+                        $orderField,
+                        'updated',
+                    ])),
+                    'moreActions' => array_filter([
+                        'up' => $handler->hasMoveActions() ? [
+                            'name' => '↑',
+                            'route' => 'nyrocms_admin_handler_contents_up',
+                            'routePrm' => $routePrm,
+                        ] : false,
+                        'down' => $handler->hasMoveActions() ? [
+                            'name' => '↓',
+                            'route' => 'nyrocms_admin_handler_contents_down',
+                            'routePrm' => $routePrm,
+                        ] : false,
+                        'composer' => $handler->hasComposer() ? [
+                            'name' => $this->get(AdminService::class)->getIcon('pencil'),
+                            '_blank' => true,
+                            'route' => 'nyrocms_admin_composer',
+                            'routePrm' => [
+                                'type' => 'ContentSpec',
+                            ],
+                        ] : false,
+                    ]),
+                ],
+                $this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
+            ));
     }
 
     public function deleteAction(Request $request, $chid, $id)
@@ -106,9 +107,9 @@ class AdminHandlerContentsController extends AbstractAdminController
 
             $afters = $repo->getAfters($row);
 
-            //$this->get(DbAbstractService::class)->remove($row);
+            // $this->get(DbAbstractService::class)->remove($row);
 
-            $row->setDeleted(new \DateTime());
+            $row->setDeleted(new DateTime());
 
             foreach ($afters as $after) {
                 $after->setPosition(max(0, $after->getPosition() - 1));
@@ -206,7 +207,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         if ($handler->useDateSpec()) {
             $moreOptions['dateSpec'] = $this->get(NyroCmsService::class)->getDateFormOptions();
             if (self::ADD == $action) {
-                $row->setDateSpec(new \DateTime());
+                $row->setDateSpec(new DateTime());
             }
         }
 
@@ -282,7 +283,7 @@ class AdminHandlerContentsController extends AbstractAdminController
      */
     protected $contentForm;
 
-    protected function contentFormClb($action, \NyroDev\NyroCmsBundle\Model\ContentSpec $row, \Symfony\Component\Form\FormBuilder $form)
+    protected function contentFormClb($action, ContentSpec $row, \Symfony\Component\Form\FormBuilder $form)
     {
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);

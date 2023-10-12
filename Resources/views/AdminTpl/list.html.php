@@ -7,11 +7,11 @@
 		
 		<?php
         $introKey = $prefix.'.'.$name.'.introList';
-        $intro = $view['translator']->trans($introKey);
-        if ($intro && $intro != $introKey) {
-            echo '<p class="intro">'.$intro.'</p>';
-        }
-        ?>
+$intro = $view['translator']->trans($introKey);
+if ($intro && $intro != $introKey) {
+    echo '<p class="intro">'.$intro.'</p>';
+}
+?>
 		
 		<?php if ($filter): ?>
 			<a href="#filter" class="switcher filterSwitcher"><?php echo $view['translator']->trans('admin.misc.filter'); ?></a>
@@ -25,7 +25,7 @@
 			<div class="listButtons">
 				<?php if (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions)): ?>
 					<?php foreach ($moreGlobalActions as $k => $action): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], (isset($action['routePrm']) ? $action['routePrm'] : [])); ?>" class="button <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
+						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], isset($action['routePrm']) ? $action['routePrm'] : []); ?>" class="button <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
 							<?php if (isset($action['icon']) && $action['icon']): ?>
 								<?php echo $view['nyrocms_admin']->getIcon($action['icon']); ?>
 							<?php endif; ?>
@@ -48,19 +48,19 @@
 					<tr>
 					<?php foreach ($fields as $field): ?>
 						<?php
-                        $label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
-                        $prm = $routePrm;
-                        $prm['page'] = 1;
-                        $prm['sort'] = $field;
-                        $linkAsc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'asc']));
-                        $linkDesc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'desc']));
-                        $current = isset($routePrm['sort']) && $routePrm['sort'] == $field ? $routePrm['order'] : false;
-                        ?>
+                $label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
+					    $prm = $routePrm;
+					    $prm['page'] = 1;
+					    $prm['sort'] = $field;
+					    $linkAsc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'asc']));
+					    $linkDesc = $view['nyrodev']->generateUrl($routeName, array_merge($prm, ['order' => 'desc']));
+					    $current = isset($routePrm['sort']) && $routePrm['sort'] == $field ? $routePrm['order'] : false;
+					    ?>
 						<th><?php
-                        echo $label;
-                        echo '<a href="'.$linkAsc.'" class="listSort listSortAsc'.('asc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortAsc').'">↓</a>';
-                        echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.('desc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDesc').'">↑</a>';
-                        ?></th>
+					    echo $label;
+					    echo '<a href="'.$linkAsc.'" class="listSort listSortAsc'.('asc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortAsc').'">↓</a>';
+					    echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.('desc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDesc').'">↑</a>';
+					    ?></th>
 					<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>
 						<th class="actions"><?php echo $view['translator']->trans('admin.misc.actions'); ?></th>
@@ -72,21 +72,21 @@
 					<tr>
 						<?php foreach ($fields as $f): ?>
 							<td><?php
-                                $fct = 'get'.ucfirst($f);
-                                $val = $r->{$fct}();
-                                if (is_object($val)) {
-                                    if ($val instanceof \DateTime) {
-                                        $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
-                                    }
-                                }
-                                echo nl2br($val);
-                                ?></td>
+					            $fct = 'get'.ucfirst($f);
+						    $val = $r->{$fct}();
+						    if (is_object($val)) {
+						        if ($val instanceof \DateTime) {
+						            $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
+						        }
+						    }
+						    echo nl2br($val);
+						    ?></td>
 						<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>
 						<td class="actions">
 							<?php if (isset($moreActions) && is_array($moreActions)): ?>
 								<?php foreach ($moreActions as $k => $action): ?>
-									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge((isset($action['routePrm']) ? $action['routePrm'] : []), ['id' => $r->getId()])); ?>" class="<?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?>>
+									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()])); ?>" class="noIcon <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?>>
 										<?php echo $action['name']; ?>
 									</a>
 								<?php endforeach; ?>

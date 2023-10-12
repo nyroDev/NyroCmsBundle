@@ -4,5 +4,5 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 interface ComposableHandler
 {
-    public function getContentHandler();
+    public function getContentHandler(): ?ContentHandler;
 }

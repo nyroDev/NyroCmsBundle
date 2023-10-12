@@ -2,124 +2,72 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
+use Serializable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * User.
- *
- * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- */
-abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface, \Serializable
+#[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
+abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface, Serializable
 {
     protected $id;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     * @Gedmo\Versioned
-     */
-    protected $email;
+    #[Assert\NotBlank]
+    #[Assert\Email]
+    #[Gedmo\Versioned]
+    protected ?string $email = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $firstname;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?string $firstname = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $lastname;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?string $lastname = null;
 
-    /**
-     * @var string
-     */
-    protected $password = 'dummy';
+    protected ?string $password = 'dummy';
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $userType;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?string $userType = null;
 
-    /**
-     * @var bool
-     *
-     * @Gedmo\Versioned
-     */
-    protected $developper = false;
+    #[Gedmo\Versioned]
+    protected ?bool $developper = false;
 
-    /**
-     * @var bool
-     *
-     * @Gedmo\Versioned
-     */
-    protected $valid = true;
+    #[Gedmo\Versioned]
+    protected ?bool $valid = true;
 
-    /**
-     * @Gedmo\Versioned
-     */
-    protected $validStart;
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface $validStart = null;
 
-    /**
-     * @Gedmo\Versioned
-     */
-    protected $validEnd;
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface $validEnd = null;
 
-    /**
-     * @var string
-     *
-     * @Gedmo\Versioned
-     */
-    protected $passwordKey;
+    #[Gedmo\Versioned]
+    protected ?string $passwordKey = null;
 
-    /**
-     * @Gedmo\Versioned
-     */
-    protected $passwordKeyEnd;
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface $passwordKeyEnd = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * @var \DateTime
-     */
-    protected $deleted;
+    protected ?DateTimeInterface $deleted = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $userRoles;
+    protected Collection $userRoles;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->userRoles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->userRoles = new ArrayCollection();
     }
 
     public function getId()
@@ -127,368 +75,189 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->id;
     }
 
-    /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * Get email.
-     *
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * Set firstname.
-     *
-     * @param string $firstname
-     *
-     * @return User
-     */
-    public function setFirstname($firstname)
+    public function setFirstname(?string $firstname): static
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    /**
-     * Get firstname.
-     *
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
 
-    /**
-     * Set lastname.
-     *
-     * @param string $lastname
-     *
-     * @return User
-     */
-    public function setLastname($lastname)
+    public function setLastname(?string $lastname): static
     {
         $this->lastname = $lastname;
 
         return $this;
     }
 
-    /**
-     * Get lastname.
-     *
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
 
-    /**
-     * Set password.
-     *
-     * @param string $password
-     *
-     * @return User
-     */
-    public function setPassword($password)
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 
         return $this;
     }
 
-    /**
-     * Get password.
-     *
-     * @return string
-     */
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    /**
-     * Set userType.
-     *
-     * @param string $userType
-     *
-     * @return User
-     */
-    public function setUserType($userType)
+    public function setUserType(?string $userType): static
     {
         $this->userType = $userType;
 
         return $this;
     }
 
-    /**
-     * Get userType.
-     *
-     * @return string
-     */
-    public function getUserType()
+    public function getUserType(): ?string
     {
         return $this->userType;
     }
 
-    /**
-     * Set developper.
-     *
-     * @param bool $developper
-     *
-     * @return User
-     */
-    public function setDevelopper($developper)
+    public function setDevelopper(?bool $developper): static
     {
         $this->developper = $developper;
 
         return $this;
     }
 
-    /**
-     * Get developper.
-     *
-     * @return bool
-     */
-    public function getDevelopper()
+    public function getDevelopper(): ?bool
     {
         return $this->developper;
     }
 
-    /**
-     * Set valid.
-     *
-     * @param bool $valid
-     *
-     * @return User
-     */
-    public function setValid($valid)
+    public function setValid(?bool $valid): static
     {
         $this->valid = $valid;
 
         return $this;
     }
 
-    /**
-     * Get valid.
-     *
-     * @return bool
-     */
-    public function getValid()
+    public function getValid(): ?bool
     {
         return $this->valid;
     }
 
-    /**
-     * Set validStart.
-     *
-     * @param \DateTime $validStart
-     *
-     * @return User
-     */
-    public function setValidStart($validStart)
+    public function setValidStart(?DateTimeInterface $validStart): static
     {
         $this->validStart = $validStart;
 
         return $this;
     }
 
-    /**
-     * Get validStart.
-     *
-     * @return \DateTime
-     */
-    public function getValidStart()
+    public function getValidStart(): ?DateTimeInterface
     {
         return $this->validStart;
     }
 
-    /**
-     * Set validEnd.
-     *
-     * @param \DateTime $validEnd
-     *
-     * @return User
-     */
-    public function setValidEnd($validEnd)
+    public function setValidEnd(?DateTimeInterface $validEnd): static
     {
         $this->validEnd = $validEnd;
 
         return $this;
     }
 
-    /**
-     * Get validEnd.
-     *
-     * @return \DateTime
-     */
-    public function getValidEnd()
+    public function getValidEnd(): ?DateTimeInterface
     {
         return $this->validEnd;
     }
 
-    /**
-     * Set passwordKey.
-     *
-     * @param string $passwordKey
-     *
-     * @return User
-     */
-    public function setPasswordKey($passwordKey)
+    public function setPasswordKey(?string $passwordKey): static
     {
         $this->passwordKey = $passwordKey;
 
         return $this;
     }
 
-    /**
-     * Get passwordKey.
-     *
-     * @return string
-     */
-    public function getPasswordKey()
+    public function getPasswordKey(): ?string
     {
         return $this->passwordKey;
     }
 
-    /**
-     * Set passwordKeyEnd.
-     *
-     * @param \DateTime $passwordKeyEnd
-     *
-     * @return User
-     */
-    public function setPasswordKeyEnd($passwordKeyEnd)
+    public function setPasswordKeyEnd(?DateTimeInterface $passwordKeyEnd): static
     {
         $this->passwordKeyEnd = $passwordKeyEnd;
 
         return $this;
     }
 
-    /**
-     * Get passwordKeyEnd.
-     *
-     * @return \DateTime
-     */
-    public function getPasswordKeyEnd()
+    public function getPasswordKeyEnd(): ?DateTimeInterface
     {
         return $this->passwordKeyEnd;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return User
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return User
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    /**
-     * Set deleted.
-     *
-     * @param \DateTime $deleted
-     *
-     * @return User
-     */
-    public function setDeleted($deleted)
+    public function setDeleted(?DateTimeInterface $deleted): static
     {
         $this->deleted = $deleted;
 
         return $this;
     }
 
-    /**
-     * Get deleted.
-     *
-     * @return \DateTime
-     */
-    public function getDeleted()
+    public function getDeleted(): ?DateTimeInterface
     {
         return $this->deleted;
     }
 
-    /**
-     * Add userRoles.
-     *
-     * @return User
-     */
-    public function addUserRole(UserRole $userRoles)
+    public function addUserRole(UserRole $userRoles): static
     {
         $this->userRoles[] = $userRoles;
 
         return $this;
     }
 
-    /**
-     * Remove userRoles.
-     */
-    public function removeUserRole(UserRole $userRoles)
+    public function removeUserRole(UserRole $userRoles): static
     {
         $this->userRoles->removeElement($userRoles);
+
+        return $this;
     }
 
-    /**
-     * Get userRoles.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getUserRoles()
+    public function getUserRoles(): Collection
     {
         return $this->userRoles;
     }
@@ -500,7 +269,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         'userType',
     ];
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
@@ -552,7 +321,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $ret;
     }
 
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
         return in_array($role, $this->getRoles());
     }
@@ -562,7 +331,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->getEmail();
     }
 
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->getUserIdentifier();
     }
@@ -572,7 +341,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return null;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getFirstname().' '.$this->getLastname().' ('.$this->getEmail().')';
     }

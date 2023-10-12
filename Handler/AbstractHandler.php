@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Handler;
 
+use DateTime;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -28,7 +29,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractHandler
 {
-    const TEMPLATE_INDICATOR = 'HANDLER_INDICATOR';
+    public const TEMPLATE_INDICATOR = 'HANDLER_INDICATOR';
 
     /**
      * @var ContentHandler
@@ -289,7 +290,7 @@ abstract class AbstractHandler
             if (isset($content[$k])) {
                 $cfg['data'] = $content[$k];
                 if (DateType::class == $type || DateTimeType::class == $type) {
-                    $cfg['data'] = new \DateTime($cfg['data']['date']);
+                    $cfg['data'] = new DateTime($cfg['data']['date']);
                 }
             }
             if (FileType::class == $type && isset($cfg['data'])) {
@@ -309,7 +310,7 @@ abstract class AbstractHandler
                     $curCfg['position']['after'] = $after;
                     $data = isset($translationsContent[$lg]) && isset($translationsContent[$lg][$k]) ? $translationsContent[$lg][$k] : null;
                     if ($data && 'date' == $type && !is_object($data)) {
-                        $data = new \DateTime($data['date']);
+                        $data = new DateTime($data['date']);
                     }
                     if (FileType::class == $type) {
                         $data = null;

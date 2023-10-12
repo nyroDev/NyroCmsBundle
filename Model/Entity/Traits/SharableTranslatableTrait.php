@@ -2,49 +2,29 @@
 
 namespace NyroDev\NyroCmsBundle\Model\Entity\Traits;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 trait SharableTranslatableTrait
 {
+    #[ORM\Column(length: 250, nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $metaTitle = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_title", type="string", length=250, nullable=true)
-     * @Gedmo\Translatable
-     */
-    protected $metaTitle;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $metaDescription = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_description", type="text", nullable=true)
-     * @Gedmo\Translatable
-     */
-    protected $metaDescription;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $metaKeywords = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="meta_keywords", type="text", nullable=true)
-     * @Gedmo\Translatable
-     */
-    protected $metaKeywords;
+    #[ORM\Column(length: 250, nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $ogTitle = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="og_title", type="string", length=250, nullable=true)
-     * @Gedmo\Translatable
-     */
-    protected $ogTitle;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="og_description", type="text", nullable=true)
-     * @Gedmo\Translatable
-     */
-    protected $ogDescription;
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
+    protected ?string $ogDescription = null;
 }

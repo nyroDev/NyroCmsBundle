@@ -2,129 +2,71 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 abstract class UserLogin
 {
     protected $id;
 
-    /**
-     * @var User
-     */
-    protected $user;
+    protected ?User $user = null;
 
-    /**
-     * @var string
-     */
-    protected $ipAddress;
+    protected ?string $ipAddress = null;
 
-    /**
-     * @var string
-     */
-    protected $place;
+    protected ?string $place = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set user.
-     *
-     * @return UserLogin
-     */
-    public function setUser(User $user)
+    public function setUser(User $user): static
     {
         $this->user = $user;
 
         return $this;
     }
 
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * Set ipAddress.
-     *
-     * @param string $ipAddress
-     *
-     * @return UserLogin
-     */
-    public function setIpAddress($ipAddress)
+    public function setIpAddress(?string $ipAddress): static
     {
         $this->ipAddress = $ipAddress;
 
         return $this;
     }
 
-    /**
-     * Get ipAddress.
-     *
-     * @return string
-     */
-    public function getIpAddress()
+    public function getIpAddress(): ?string
     {
         return $this->ipAddress;
     }
 
-    /**
-     * Set place.
-     *
-     * @param string $place
-     *
-     * @return UserLogin
-     */
-    public function setPlace($place)
+    public function setPlace(?string $place): static
     {
         $this->place = $place;
 
         return $this;
     }
 
-    /**
-     * Get place.
-     *
-     * @return string
-     */
-    public function getPlace()
+    public function getPlace(): ?string
     {
         return $this->place;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return UserLogin
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }

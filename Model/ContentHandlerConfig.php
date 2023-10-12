@@ -2,6 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -9,97 +12,61 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 abstract class ContentHandlerConfig extends AbstractUploadable
 {
-    const TYPE_STRING = 'string';
-    const TYPE_TEXT = 'text';
-    const TYPE_DATE = 'date';
-    const TYPE_DATETIME = 'datetime';
-    const TYPE_NUMBER = 'number';
-    const TYPE_BOOL = 'number';
+    public const TYPE_STRING = 'string';
+    public const TYPE_TEXT = 'text';
+    public const TYPE_DATE = 'date';
+    public const TYPE_DATETIME = 'datetime';
+    public const TYPE_NUMBER = 'number';
+    public const TYPE_BOOL = 'number';
 
     protected $id;
 
-    /**
-     * @var ContentHandler
-     */
-    protected $contentHandler;
+    protected ?ContentHandler $contentHandler = null;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     * @Gedmo\Versioned
-     */
-    protected $name;
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
-    protected $configIdent;
+    #[Assert\NotBlank]
+    protected ?string $configIdent = null;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
-    protected $configType;
+    #[Assert\NotBlank]
+    protected ?string $configType = null;
 
-    /**
-     * @var string
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    private $valueText;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?string $valueText;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    private $valueDate;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?DateTimeInterface  $valueDate = null;
 
-    /**
-     * @var float
-     * @Gedmo\Translatable
-     * @Gedmo\Versioned
-     */
-    private $valueNumber;
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
+    protected ?float $valueNumber = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $translations;
+    protected Collection $translations;
 
-    /**
-     * @var string
-     * @Gedmo\Locale
-     */
-    protected $locale;
+    #[Gedmo\Locale]
+    protected ?string $locale = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->translations = new ArrayCollection();
     }
 
-    public function setTranslatableLocale($locale)
+    public function setTranslatableLocale(?string $locale): static
     {
         $this->locale = $locale;
     }
 
-    public function getTranslatableLocale()
+    public function getTranslatableLocale(): ?string
     {
         return $this->locale;
     }
@@ -109,230 +76,115 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->id;
     }
 
-    /**
-     * Set contentHandler.
-     *
-     * @param ContentHandler $contentHandler
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setContentHandler($contentHandler)
+    public function setContentHandler(?ContentHandler $contentHandler): static
     {
         $this->contentHandler = $contentHandler;
 
         return $this;
     }
 
-    /**
-     * Get contentHandler.
-     *
-     * @return ContentHandler
-     */
-    public function getContentHandler()
+    public function getContentHandler(): ?ContentHandler
     {
         return $this->contentHandler;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setName($name)
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set configIdent.
-     *
-     * @param string $configIdent
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setConfigIdent($configIdent)
+    public function setConfigIdent(?string $configIdent): static
     {
         $this->configIdent = $configIdent;
 
         return $this;
     }
 
-    /**
-     * Get configIdent.
-     *
-     * @return string
-     */
-    public function getConfigIdent()
+    public function getConfigIdent(): ?string
     {
         return $this->configIdent;
     }
 
-    /**
-     * Set configType.
-     *
-     * @param string $configType
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setConfigType($configType)
+    public function setConfigType(?string $configType): static
     {
         $this->configType = $configType;
 
         return $this;
     }
 
-    /**
-     * Get configType.
-     *
-     * @return string
-     */
-    public function getConfigType()
+    public function getConfigType(): ?string
     {
         return $this->configType;
     }
 
-    /**
-     * Set valueText.
-     *
-     * @param string $valueText
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setValueText($valueText)
+    public function setValueText(?string $valueText): static
     {
         $this->valueText = $valueText;
 
         return $this;
     }
 
-    /**
-     * Get valueText.
-     *
-     * @return string
-     */
-    public function getValueText()
+    public function getValueText(): ?string
     {
         return $this->valueText;
     }
 
-    /**
-     * Set valueDate.
-     *
-     * @param \DateTime $valueDate
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setValueDate($valueDate)
+    public function setValueDate(?DateTimeInterface $valueDate): static
     {
         $this->valueDate = $valueDate;
 
         return $this;
     }
 
-    /**
-     * Get valueDate.
-     *
-     * @return \DateTime
-     */
-    public function getValueDate()
+    public function getValueDate(): ?DateTimeInterface
     {
         return $this->valueDate;
     }
 
-    /**
-     * Set valueNumber.
-     *
-     * @param int $valueNumber
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setValueNumber($valueNumber)
+    public function setValueNumber(?float $valueNumber): static
     {
         $this->valueNumber = $valueNumber;
 
         return $this;
     }
 
-    /**
-     * Get valueNumber.
-     *
-     * @return int
-     */
-    public function getValueNumber()
+    public function getValueNumber(): ?float
     {
         return $this->valueNumber;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return ContentHandlerConfig
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    /**
-     * Add translations.
-     *
-     * @param object $translation
-     *
-     * @return ContentHandlerConfig
-     */
-    public function addTranslation($translation)
+    public function addTranslation(object $translation): static
     {
         if (!$this->translations->contains($translation)) {
             $this->translations[] = $translation;
@@ -342,36 +194,24 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this;
     }
 
-    /**
-     * Remove translations.
-     *
-     * @param object $translations
-     *
-     * @return ContentHandlerConfig
-     */
-    public function removeTranslation($translations)
+    public function removeTranslation(object $translations): static
     {
         $this->translations->removeElement($translations);
 
         return $this;
     }
 
-    /**
-     * Get translations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTranslations()
+    public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
 
-    public function getField()
+    public function getField(): string
     {
         $field = 'valueText';
         switch ($this->getConfigType()) {
@@ -388,7 +228,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $field;
     }
 
-    public function getValue()
+    public function getValue(): mixed
     {
         $accessor = PropertyAccess::createPropertyAccessor();
 
@@ -404,7 +244,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $value;
     }
 
-    public function setValue($value)
+    public function setValue(mixed $value): static
     {
         $field = $this->getField();
 
@@ -420,9 +260,10 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this;
     }
 
-    public function getTranslationsByLocale()
+    public function getTranslationsByLocale(): array
     {
         $ret = [];
+
         foreach ($this->getTranslations() as $tr) {
             $ret[$tr->getLocale()] = $tr;
         }

@@ -2,33 +2,35 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
+
 interface Composable extends ContentRootable
 {
     public function getId();
 
-    public function getTitle();
+    public function getTitle(): ?string;
 
-    public function setTranslatableLocale($locale);
+    public function setTranslatableLocale(?string $locale): static;
 
-    public function getTranslatableLocale();
+    public function getTranslatableLocale(): ?string;
 
-    public function getTranslations();
+    public function getTranslations(): Collection;
 
-    public function getContent();
+    public function getContent(): ?array;
 
-    public function setContent(array $content);
+    public function setContent(?array $content);
 
-    public function getContentText();
+    public function getContentText(): ?string;
 
-    public function setContentText($contentText);
+    public function setContentText(?string $contentText): static;
 
-    public function getFirstImage();
+    public function getFirstImage(): ?string;
 
-    public function setFirstImage($firstImage);
+    public function setFirstImage(?string $firstImage): static;
 
     public function getParent();
 
-    public function getTheme();
+    public function getTheme(): ?string;
 
-    public function __toString();
+    public function __toString(): string;
 }

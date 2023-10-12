@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 
 use Composer\Autoload\ClassLoader;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
+use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Handler\Sitemap;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
@@ -15,6 +16,7 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\TagRendererService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
+use RuntimeException;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -43,7 +45,7 @@ class NyroCmsService extends nyroDevAbstractService
         if (!isset($this->handlers[$contentHandler->getId()])) {
             $class = $contentHandler->getClass();
             if (!class_exists($class)) {
-                throw new \RuntimeException($class.' not found when trying to create handler.');
+                throw new RuntimeException($class.' not found when trying to create handler.');
             }
 
             if (0 === strpos(get_class($contentHandler), 'Proxies')) {
@@ -393,7 +395,7 @@ class NyroCmsService extends nyroDevAbstractService
             $this->foundHandlers = [];
 
             foreach ($this->getClassesInComposerClassMaps() as $class) {
-                if (strpos($class, '\\Handler\\') && is_subclass_of($class, \NyroDev\NyroCmsBundle\Handler\AbstractHandler::class, true)) {
+                if (strpos($class, '\\Handler\\') && is_subclass_of($class, AbstractHandler::class, true)) {
                     $this->foundHandlers[] = '\\'.$class;
                 }
             }

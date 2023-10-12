@@ -64,7 +64,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 
     public function findByLog($field, $value)
     {
-        //$search = 's:'.strlen($field).':"'.$field.'";s:'.strlen($value).':"'.$value.'";';
+        // $search = 's:'.strlen($field).':"'.$field.'";s:'.strlen($value).':"'.$value.'";';
         $search = '"'.$field.'":'.json_encode($value);
 
         $sql = 'SELECT * FROM content_log cl

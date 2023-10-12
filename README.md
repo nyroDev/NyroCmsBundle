@@ -100,8 +100,8 @@ security:
                 check_path: nyrocms_admin_security_check
                 default_target_path: nyrocms_admin_homepage
     access_control:
-        - { path: ^%adminPrefix%/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^%adminPrefix%/forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^%adminPrefix%/login, roles: PUBLIC_ACCESS }
+        - { path: ^%adminPrefix%/forgot, roles: PUBLIC_ACCESS }
         - { path: ^%adminPrefix%/contentHandler, roles: ROLE_DEVELOPPER }
         - { path: ^%adminPrefix%/userRole, roles: ROLE_SUPERADMIN }
         - { path: ^%adminPrefix%/user, roles: ROLE_SUPERADMIN }

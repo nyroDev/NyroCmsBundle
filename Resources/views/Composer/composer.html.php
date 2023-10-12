@@ -6,12 +6,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<?php echo $view->render($view['nyrocms_composer']->cssTemplate($row), [
-        'row' => $row,
-    ]); ?>
+	    'row' => $row,
+	]); ?>
 
-	<?php echo $view['nyrodev_tagRender']->renderWebpackLinkTags('css/admin/nyroCmsComposer', 'type="text/css" media="screen"'); ?>
+	<?php echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCmsComposer', 'type="text/css" media="screen"'); ?>
 
-	<?php echo $view['nyrodev_tagRender']->renderWebpackScriptTags('js/admin/nyroCmsComposer', 'defer'); ?>
+	<?php echo $view['nyrodev_tagRenderer']->renderWebpackScriptTags('js/admin/nyroCmsComposer', 'defer'); ?>
 </head>
 <body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?><?php echo $canChangeStructure ? '' : ' noChangeStructure'; ?><?php echo $canChangeMedia ? '' : ' noChangeMedia'; ?>">
 <?php
@@ -56,12 +56,12 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 <form id="composer" <?php echo $attrsHtml; ?> method="post" enctype="multipart/form-data">
 
 	<?php if (
-        ($canChangeLang && count($langs) > 0)
-        ||
-        $canChangeStructure
-        ||
-        ($canChangeTheme && count($themes) > 1)
-    ): ?>
+	    ($canChangeLang && count($langs) > 0)
+	    ||
+	    $canChangeStructure
+	    ||
+	    ($canChangeTheme && count($themes) > 1)
+	): ?>
 	<nav id="composerNavTool">
 		<?php if ($canChangeStructure): ?>
 			<nav id="composerAvlBlocks" class="composerNav">
@@ -105,8 +105,8 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 	<?php endif; ?>
 
 	<?php echo $view->render($view['nyrocms_composer']->composerTemplate($row), [
-        'row' => $row,
-    ]); ?>
+	    'row' => $row,
+	]); ?>
 	
 	<nav id="composerNavButtons">
 		<button type="submit" class="composerSubmit"><?php echo $view['nyrodev']->trans('admin.composer.action.save'); ?></button>

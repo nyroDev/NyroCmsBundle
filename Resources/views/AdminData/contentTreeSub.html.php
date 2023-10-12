@@ -7,9 +7,9 @@
 		
 		<?php
         $canEdit = $view['nyrocms_admin']->canAdminContent($content);
-        $maxLevel = $view['nyrocms_admin']->getContentMaxLevel($content);
-        $curCanHavSub = $view['nyrocms_admin']->canHaveSub($content);
-        ?>
+	    $maxLevel = $view['nyrocms_admin']->getContentMaxLevel($content);
+	    $curCanHavSub = $view['nyrocms_admin']->canHaveSub($content);
+	    ?>
 		
 		<span class="nodeCont">
 			<span>

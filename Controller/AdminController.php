@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use Exception;
 use NyroDev\NyroCmsBundle\Services\UserService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -56,7 +57,7 @@ class AdminController extends NyroDevAbstractController
                 $fs->remove($cacheDir);
                 $ret = 'removed';
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $ret = $e->getMessage();
         }
 

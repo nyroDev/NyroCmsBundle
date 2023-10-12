@@ -1,31 +1,26 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Model\Entity;
+namespace App\Entity;
 
+use App\Entity\Log\UserLog;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\NyroCmsBundle\Model\User as UserModel;
+use NyroDev\NyroCmsBundle\Repository\Orm\UserRepository;
 
-/**
- * User.
- *
- * @ORM\Table(name="user")
- * @ORM\Entity(repositoryClass="NyroDev\NyroCmsBundle\Repository\Orm\UserRepository")
- * @Gedmo\Loggable(logEntryClass="NyroDev\NyroCmsBundle\Model\Entity\Log\UserLog")
- * @Gedmo\SoftDeleteable(fieldName="deleted", timeAware=false)
- * @ORM\HasLifecycleCallbacks
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'user')]
+#[Gedmo\Loggable(logEntryClass: UserLog::class)]
+#[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
+#[ORM\HasLifecycleCallbacks]
 class User extends UserModel
 {
-    /**
-     * @ORM\ManyToMany(targetEntity="UserRole", cascade={"persist"})
-     * @ORM\JoinTable(name="user_user_role")
-     */
-    protected $userRoles;
+    #[ORM\ManyToMany(targetEntity: UserRole::class, cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'user_user_role')]
+    protected Collection $userRoles;
 
-    /**
-     * @ORM\PreRemove()
-     */
+    #[ORM\PreRemove]
     public function preRemove()
     {
         $this->setEmail('_deleted_'.time().$this->getEmail());

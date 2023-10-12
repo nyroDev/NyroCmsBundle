@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use InvalidArgumentException;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
@@ -25,7 +26,7 @@ use Symfony\Component\Validator\Constraints;
 
 class AdminDataController extends AbstractAdminController
 {
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Contents
 
     public function contentAction()
@@ -63,7 +64,7 @@ class AdminDataController extends AbstractAdminController
             if (count($tree)) {
                 foreach ($tree as $t) {
                     if (!isset($contents[$t]) || !isset($treeLevel[$t]) || !isset($treeChanged[$t])) {
-                        throw new \InvalidArgumentException('Unknown content Id: '.$t);
+                        throw new InvalidArgumentException('Unknown content Id: '.$t);
                     }
 
                     $curLevel = $treeLevel[$t];
@@ -369,7 +370,7 @@ class AdminDataController extends AbstractAdminController
         }
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Users Roles
 
     public function userRoleAction(Request $request)
@@ -384,20 +385,20 @@ class AdminDataController extends AbstractAdminController
         $route = 'nyrocms_admin_data_userRole';
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
-                array_merge(
-                    [
-                        'name' => 'userRole',
-                        'route' => $route,
-                        'fields' => array_filter([
-                            'id',
-                            'name',
-                            $isDev ? 'roleName' : null,
-                            $isDev ? 'internal' : null,
-                            'updated',
-                        ]),
-                    ],
-                    $this->createList($request, $repo, $route, [], 'id', 'desc', null, $qb)
-                ));
+            array_merge(
+                [
+                    'name' => 'userRole',
+                    'route' => $route,
+                    'fields' => array_filter([
+                        'id',
+                        'name',
+                        $isDev ? 'roleName' : null,
+                        $isDev ? 'internal' : null,
+                        'updated',
+                    ]),
+                ],
+                $this->createList($request, $repo, $route, [], 'id', 'desc', null, $qb)
+            ));
     }
 
     public function userRoleDeleteAction($id)
@@ -434,7 +435,6 @@ class AdminDataController extends AbstractAdminController
             'contents' => $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content')),
             'submit' => [
                 'attr' => [
-                    'more' => 'hello',
                     'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
                 ],
             ],
@@ -442,11 +442,11 @@ class AdminDataController extends AbstractAdminController
 
         $isDev = $this->get(AdminService::class)->isDeveloper();
         $adminForm = $this->createAdminForm($request, 'userRole', $action, $row, array_filter([
-                    'name',
-                    $isDev ? 'roleName' : null,
-                    $isDev ? 'internal' : null,
-                    'contents',
-                ]), 'nyrocms_admin_data_userRole', [], null, null, null, $moreOptions);
+            'name',
+            $isDev ? 'roleName' : null,
+            $isDev ? 'internal' : null,
+            'contents',
+        ]), 'nyrocms_admin_data_userRole', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }
@@ -454,7 +454,7 @@ class AdminDataController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // contentHandlers
 
     public function contentHandlerAction(Request $request)
@@ -464,20 +464,20 @@ class AdminDataController extends AbstractAdminController
         $route = 'nyrocms_admin_data_contentHandler';
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
-                array_merge(
-                    [
-                        'name' => 'contentHandler',
-                        'route' => $route,
-                        'fields' => [
-                            'id',
-                            'name',
-                            'class',
-                            'hasAdmin',
-                            'updated',
-                        ],
+            array_merge(
+                [
+                    'name' => 'contentHandler',
+                    'route' => $route,
+                    'fields' => [
+                        'id',
+                        'name',
+                        'class',
+                        'hasAdmin',
+                        'updated',
                     ],
-                    $this->createList($request, $repo, $route, [], 'name', 'asc', ContentHandlerFilterType::class)
-                ));
+                ],
+                $this->createList($request, $repo, $route, [], 'name', 'asc', ContentHandlerFilterType::class)
+            ));
     }
 
     public function contentHandlerDeleteAction($id)
@@ -543,10 +543,10 @@ class AdminDataController extends AbstractAdminController
         }
 
         $adminForm = $this->createAdminForm($request, 'contentHandler', $action, $row, [
-                    'name',
-                    'class',
-                    'hasAdmin',
-                ], 'nyrocms_admin_data_contentHandler', [], null, null, null, $moreOptions);
+            'name',
+            'class',
+            'hasAdmin',
+        ], 'nyrocms_admin_data_contentHandler', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }
@@ -554,7 +554,7 @@ class AdminDataController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Contact Messages
 
     public function contactMessageAction(Request $request, $chid)
@@ -583,27 +583,27 @@ class AdminDataController extends AbstractAdminController
         $routePrm = ['chid' => $chid];
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
-                array_merge(
-                    [
-                        'name' => 'contactMessage',
-                        'route' => $route,
-                        'fields' => $handler->getAdminMessageListFields(),
-                        'moreGlobalActions' => [
-                            'export' => [
-                                'route' => $route,
-                                'routePrm' => array_merge($routePrm, ['export' => 1]),
-                                'name' => $this->trans('admin.contactMessage.export'),
-                                'attrs' => 'target="_blank"',
-                            ],
+            array_merge(
+                [
+                    'name' => 'contactMessage',
+                    'route' => $route,
+                    'fields' => $handler->getAdminMessageListFields(),
+                    'moreGlobalActions' => [
+                        'export' => [
+                            'route' => $route,
+                            'routePrm' => array_merge($routePrm, ['export' => 1]),
+                            'name' => $this->trans('admin.contactMessage.export'),
+                            'attrs' => 'target="_blank"',
                         ],
-                        'noAdd' => true,
-                        'noActions' => true,
                     ],
-                    $this->createList($request, $repo, $route, $routePrm, 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
-                ));
+                    'noAdd' => true,
+                    'noActions' => true,
+                ],
+                $this->createList($request, $repo, $route, $routePrm, 'id', 'desc', $handler->getAdminMessageFilterType(), $qb, $exportConfig)
+            ));
     }
 
-    ///////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////
     // Users
 
     public function userAction(Request $request)
@@ -614,22 +614,22 @@ class AdminDataController extends AbstractAdminController
         $filter = UserFilterType::class;
 
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
-                array_merge(
-                    [
-                        'name' => 'user',
-                        'route' => $route,
-                        'fields' => [
-                            'id',
-                            'email',
-                            'firstname',
-                            'lastname',
-                            'userType',
-                            'valid',
-                            'updated',
-                        ],
+            array_merge(
+                [
+                    'name' => 'user',
+                    'route' => $route,
+                    'fields' => [
+                        'id',
+                        'email',
+                        'firstname',
+                        'lastname',
+                        'userType',
+                        'valid',
+                        'updated',
                     ],
-                    $this->createList($request, $repo, $route, [], 'id', 'desc', $filter)
-                ));
+                ],
+                $this->createList($request, $repo, $route, [], 'id', 'desc', $filter)
+            ));
     }
 
     public function userDeleteAction($id)
@@ -688,17 +688,17 @@ class AdminDataController extends AbstractAdminController
         ];
 
         $adminForm = $this->createAdminForm($request, 'user', $action, $row, array_filter([
-                    'email',
-                    'firstname',
-                    'lastname',
-                    //'password',
-                    'userType',
-                    'valid',
-                    'validStart',
-                    'validEnd',
-                    $this->get(AdminService::class)->isDeveloper() ? 'developper' : null,
-                    'userRoles',
-                ]), 'nyrocms_admin_data_user', [], 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
+            'email',
+            'firstname',
+            'lastname',
+            // 'password',
+            'userType',
+            'valid',
+            'validStart',
+            'validEnd',
+            $this->get(AdminService::class)->isDeveloper() ? 'developper' : null,
+            'userRoles',
+        ]), 'nyrocms_admin_data_user', [], 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');
         if (!is_array($adminForm)) {
             return $adminForm;
         }

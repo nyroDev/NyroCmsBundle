@@ -6,13 +6,13 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class AdminFormEvent extends Event
 {
-    const UPDATE_CONTENT = 'nyrocms.events.admin.form.update.content';
-    const BEFOREFLUSH_CONTENT = 'nyrocms.events.admin.form.beforeFlush.content';
-    const AFTERFLUSH_CONTENT = 'nyrocms.events.admin.form.afterFlush.content';
+    public const UPDATE_CONTENT = 'nyrocms.events.admin.form.update.content';
+    public const BEFOREFLUSH_CONTENT = 'nyrocms.events.admin.form.beforeFlush.content';
+    public const AFTERFLUSH_CONTENT = 'nyrocms.events.admin.form.afterFlush.content';
 
-    const UPDATE_USER = 'nyrocms.events.admin.form.update.user';
-    const BEFOREFLUSH_USER = 'nyrocms.events.admin.form.beforeFlush.user';
-    const AFTERFLUSH_USER = 'nyrocms.events.admin.form.afterFlush.user';
+    public const UPDATE_USER = 'nyrocms.events.admin.form.update.user';
+    public const BEFOREFLUSH_USER = 'nyrocms.events.admin.form.beforeFlush.user';
+    public const AFTERFLUSH_USER = 'nyrocms.events.admin.form.afterFlush.user';
 
     protected $action;
     protected $row;

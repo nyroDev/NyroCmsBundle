@@ -1,16 +1,12 @@
 <?php
 
-namespace NyroDev\NyroCmsBundle\Model\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use NyroDev\NyroCmsBundle\Model\UserLogin as UserLoginModel;
 
-/**
- * UserLogin.
- *
- * @ORM\Table(name="user_login")
- * @ORM\Entity()
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'user_login')]
 class UserLogin extends UserLoginModel
 {
 }

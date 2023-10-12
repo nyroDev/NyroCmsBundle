@@ -2,234 +2,118 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Translation.
- */
 abstract class Translation
 {
     protected $id;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
-    protected $domain;
+    #[Assert\NotBlank]
+    protected ?string $domain = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $locale;
+    #[Assert\NotBlank]
+    protected ?string $locale = null;
 
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
-     */
-    protected $ident;
+    #[Assert\NotBlank]
+    protected ?string $ident = null;
 
-    /**
-     * @var string
-     */
-    protected $translation;
+    protected ?string $translation = null;
 
-    /**
-     * @var bool
-     */
-    protected $html = false;
+    protected ?bool $html = false;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set domain.
-     *
-     * @param string $domain
-     *
-     * @return Translation
-     */
-    public function setDomain($domain)
+    public function setDomain(?string $domain): static
     {
         $this->domain = $domain;
 
         return $this;
     }
 
-    /**
-     * Get domain.
-     *
-     * @return string
-     */
-    public function getDomain()
+    public function getDomain(): ?string
     {
         return $this->domain;
     }
 
-    /**
-     * Set locale.
-     *
-     * @param string $locale
-     *
-     * @return Translation
-     */
-    public function setLocale($locale)
+    public function setLocale(?string $locale): static
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    /**
-     * Get locale.
-     *
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * Set ident.
-     *
-     * @param string $ident
-     *
-     * @return Translation
-     */
-    public function setIdent($ident)
+    public function setIdent(?string $ident): static
     {
         $this->ident = $ident;
 
         return $this;
     }
 
-    /**
-     * Get ident.
-     *
-     * @return string
-     */
-    public function getIdent()
+    public function getIdent(): ?string
     {
         return $this->ident;
     }
 
-    /**
-     * Set translation.
-     *
-     * @param string $translation
-     *
-     * @return Translation
-     */
-    public function setTranslation($translation)
+    public function setTranslation(?string $translation): static
     {
         $this->translation = $translation;
 
         return $this;
     }
 
-    /**
-     * Get translation.
-     *
-     * @return string
-     */
-    public function getTranslation()
+    public function getTranslation(): ?string
     {
         return $this->translation;
     }
 
-    /**
-     * Set html.
-     *
-     * @param bool $html
-     *
-     * @return Translation
-     */
-    public function setHtml($html)
+    public function setHtml(?bool $html): static
     {
         $this->html = $html;
 
         return $this;
     }
 
-    /**
-     * Get html.
-     *
-     * @return bool
-     */
-    public function getHtml()
+    public function getHtml(): ?bool
     {
         return $this->html;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return Translation
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return Translation
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }

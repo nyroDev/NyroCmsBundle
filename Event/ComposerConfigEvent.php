@@ -7,7 +7,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ComposerConfigEvent extends Event
 {
-    const COMPOSER_CONFIG = 'nyrocms.events.composerConfig';
+    public const COMPOSER_CONFIG = 'nyrocms.events.composerConfig';
 
     protected $row;
     protected $config;

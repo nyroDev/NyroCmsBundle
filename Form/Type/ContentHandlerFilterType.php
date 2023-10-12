@@ -15,7 +15,7 @@ class ContentHandlerFilterType extends Type\AbstractFilterType
             ->add('name', Type\FilterType::class, ['label' => $this->trans('admin.contentHandler.name')])
             ->add('class', Type\FilterType::class, ['label' => $this->trans('admin.contentHandler.class')])
             ->add('hasAdmin', Type\FilterBoolType::class, ['label' => $this->trans('admin.contentHandler.hasAdmin')])
-            ;
+        ;
         parent::buildForm($builder, $options);
     }
 }

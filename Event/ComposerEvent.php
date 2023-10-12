@@ -7,9 +7,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ComposerEvent extends Event
 {
-    const COMPOSER_DEFAULT = 'nyrocms.events.composerDefault';
-    const COMPOSER_LANG_SAME = 'nyrocms.events.composerLangSame';
-    const COMPOSER_LANG = 'nyrocms.events.composerLang';
+    public const COMPOSER_DEFAULT = 'nyrocms.events.composerDefault';
+    public const COMPOSER_LANG_SAME = 'nyrocms.events.composerLangSame';
+    public const COMPOSER_LANG = 'nyrocms.events.composerLang';
 
     protected $row;
 

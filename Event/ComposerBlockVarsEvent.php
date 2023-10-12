@@ -7,7 +7,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ComposerBlockVarsEvent extends Event
 {
-    const COMPOSER_BLOCK_VARS = 'nyrocms.events.composerBlockVars';
+    public const COMPOSER_BLOCK_VARS = 'nyrocms.events.composerBlockVars';
 
     protected $row;
     protected $template;

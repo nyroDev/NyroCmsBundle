@@ -2,8 +2,8 @@
 
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
+use DateTime;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NoResultException;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -23,7 +23,7 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
             ->andWhere('m.valid = 1')
             ->andWhere('(m.validStart IS NULL OR m.validStart <= :now)')
             ->andWhere('(m.validEnd IS NULL OR m.validEnd >= :now)')
-                ->setParameter('now', new \DateTime())
+                ->setParameter('now', new DateTime())
             ->getQuery()
             ->getOneOrNullResult();
     }

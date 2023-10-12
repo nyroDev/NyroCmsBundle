@@ -2,239 +2,124 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTime;
+use DateTimeInterface;
+
 abstract class ContentHandlerConfigLog
 {
     protected $id;
 
-    /**
-     * @var string
-     */
-    protected $action;
+    protected ?string $action = null;
 
-    /**
-     * @var \DateTime
-     */
-    protected $loggedAt;
+    protected ?DateTimeInterface $loggedAt = null;
 
-    /**
-     * @var string
-     */
-    protected $objectClass;
+    protected ?string $objectClass = null;
 
-    /**
-     * @var string
-     */
-    protected $objectId;
+    protected ?string $objectId = null;
 
-    /**
-     * @var int
-     */
-    protected $version;
+    protected ?int $version = null;
 
-    /**
-     * @var array
-     */
-    protected $data;
+    protected ?array $data = null;
 
-    /**
-     * @var string
-     */
-    protected $username;
+    protected ?string $username = null;
 
-    /**
-     * @var string
-     */
-    protected $locale;
+    protected ?string $locale = null;
 
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Get action.
-     *
-     * @return string
-     */
-    public function getAction()
+    public function getAction(): ?string
     {
         return $this->action;
     }
 
-    /**
-     * Set action.
-     *
-     * @param string $action
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setAction($action)
+    public function setAction(?string $action): static
     {
         $this->action = $action;
 
         return $this;
     }
 
-    /**
-     * Get object class.
-     *
-     * @return string
-     */
-    public function getObjectClass()
+    public function getObjectClass(): ?string
     {
         return $this->objectClass;
     }
 
-    /**
-     * Set object class.
-     *
-     * @param string $objectClass
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setObjectClass($objectClass)
+    public function setObjectClass(?string $objectClass): static
     {
         $this->objectClass = $objectClass;
 
         return $this;
     }
 
-    /**
-     * Get object id.
-     *
-     * @return string
-     */
-    public function getObjectId()
+    public function getObjectId(): ?string
     {
         return $this->objectId;
     }
 
-    /**
-     * Set object id.
-     *
-     * @param string $objectId
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setObjectId($objectId)
+    public function setObjectId(?string $objectId): static
     {
         $this->objectId = $objectId;
 
         return $this;
     }
 
-    /**
-     * Get username.
-     *
-     * @return string
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    /**
-     * Set username.
-     *
-     * @param string $username
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setUsername($username)
+    public function setUsername(?string $username): static
     {
         $this->username = $username;
 
         return $this;
     }
 
-    /**
-     * Get loggedAt.
-     *
-     * @return \DateTime
-     */
-    public function getLoggedAt()
+    public function getLoggedAt(): ?DateTimeInterface
     {
         return $this->loggedAt;
     }
 
-    /**
-     * Set loggedAt to "now".
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setLoggedAt()
+    public function setLoggedAt(): static
     {
-        $this->loggedAt = new \DateTime();
+        $this->loggedAt = new DateTime();
 
         return $this;
     }
 
-    /**
-     * Get data.
-     *
-     * @return array
-     */
-    public function getData()
+    public function getData(): ?array
     {
         return $this->data;
     }
 
-    /**
-     * Set data.
-     *
-     * @param array $data
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setData($data)
+    public function setData(?array $data): static
     {
         $this->data = $data;
 
         return $this;
     }
 
-    /**
-     * Get current version.
-     *
-     * @return int
-     */
-    public function getVersion()
+    public function getVersion(): ?int
     {
         return $this->version;
     }
 
-    /**
-     * Set current version.
-     *
-     * @param int $version
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setVersion($version)
+    public function setVersion(?int $version): static
     {
         $this->version = $version;
 
         return $this;
     }
 
-    /**
-     * Get locale.
-     *
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * Set locale.
-     *
-     * @param string $locale
-     *
-     * @return ContentHandlerConfigLog
-     */
-    public function setLocale($locale)
+    public function setLocale(?string $locale): static
     {
         $this->locale = $locale;
 

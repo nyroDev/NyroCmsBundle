@@ -2,6 +2,9 @@
 
 namespace NyroDev\NyroCmsBundle\Model;
 
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -9,52 +12,28 @@ abstract class ContentHandler
 {
     protected $id;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[Assert\NotBlank]
+    protected ?string $name = null;
 
-    /**
-     * @var string
-     * @Assert\NotBlank()
-     */
-    protected $class;
+    #[Assert\NotBlank]
+    protected ?string $class = null;
 
-    /**
-     * @var bool
-     */
-    protected $hasAdmin;
+    protected ?bool $hasAdmin = null;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $contents;
+    protected Collection $contents;
 
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     */
-    protected $contentHandlerConfigs;
+    protected Collection $contentHandlerConfigs;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $inserted;
+    #[Gedmo\Timestampable(on: 'create')]
+    protected ?DateTimeInterface $inserted = null;
 
-    /**
-     * @var \DateTime
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updated;
+    #[Gedmo\Timestampable(on: 'update')]
+    protected ?DateTimeInterface $updated = null;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
-        $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->contentHandlerConfigs = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contents = new ArrayCollection();
+        $this->contentHandlerConfigs = new ArrayCollection();
     }
 
     public function getId()
@@ -62,172 +41,98 @@ abstract class ContentHandler
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return ContentHandler
-     */
-    public function setName($name)
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    /**
-     * Set class.
-     *
-     * @param string $class
-     *
-     * @return ContentHandler
-     */
-    public function setClass($class)
+    public function setClass(?string $class): static
     {
         $this->class = $class;
 
         return $this;
     }
 
-    /**
-     * Get class.
-     *
-     * @return string
-     */
-    public function getClass()
+    public function getClass(): ?string
     {
         return $this->class;
     }
 
-    /**
-     * Set hasAdmin.
-     *
-     * @param bool $hasAdmin
-     *
-     * @return ContentHandler
-     */
-    public function setHasAdmin($hasAdmin)
+    public function setHasAdmin(?bool $hasAdmin): static
     {
         $this->hasAdmin = $hasAdmin;
 
         return $this;
     }
 
-    /**
-     * Get hasAdmin.
-     *
-     * @return bool
-     */
-    public function getHasAdmin()
+    public function getHasAdmin(): ?bool
     {
         return $this->hasAdmin;
     }
 
-    /**
-     * Add contents.
-     *
-     * @return Content
-     */
-    public function addContent(Content $contents)
+    public function addContent(Content $contents): static
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    /**
-     * Remove contents.
-     */
-    public function removeContent(Content $contents)
+    public function removeContent(Content $contents): static
     {
         $this->contents->removeElement($contents);
+
+        return $this;
     }
 
-    /**
-     * Set contents.
-     *
-     * @return ContentHandler
-     */
-    public function setContents(\Doctrine\Common\Collections\Collection $contents)
+    public function setContents(Collection $contents): static
     {
         $this->contents = $contents;
 
         return $this;
     }
 
-    /**
-     * Get contents.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContents()
+    public function getContents(): Collection
     {
         return $this->contents;
     }
 
-    /**
-     * Add contentHandlerConfigs.
-     *
-     * @return ContentHandlerConfig
-     */
-    public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
+    public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): static
     {
         $this->contentHandlerConfigs[] = $contentHandlerConfigs;
 
         return $this;
     }
 
-    /**
-     * Remove contentHandlerConfigs.
-     */
-    public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs)
+    public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): static
     {
         $this->contentHandlerConfigs->removeElement($contentHandlerConfigs);
 
         return $this;
     }
 
-    /**
-     * Set contentHandlerConfigs.
-     *
-     * @return ContentHandlerConfigHandler
-     */
-    public function setContentHandlerConfigs(\Doctrine\Common\Collections\Collection $contentHandlerConfigs)
+    public function setContentHandlerConfigs(Collection $contentHandlerConfigs): static
     {
         $this->contentHandlerConfigs = $contentHandlerConfigs;
 
         return $this;
     }
 
-    /**
-     * Get contentHandlerConfigs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContentHandlerConfigs()
+    public function getContentHandlerConfigs(): Collection
     {
         return $this->contentHandlerConfigs;
     }
 
-    /**
-     * Get contentHandlerConfigs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getContentHandlerConfigsByIdent()
+    public function getContentHandlerConfigsByIdent(): array
     {
         $ret = [];
+
         foreach ($this->getContentHandlerConfigs() as $cfg) {
             $ret[$cfg->getconfigIdent()] = $cfg;
         }
@@ -235,55 +140,31 @@ abstract class ContentHandler
         return $ret;
     }
 
-    /**
-     * Set inserted.
-     *
-     * @param \DateTime $inserted
-     *
-     * @return ContentHandler
-     */
-    public function setInserted($inserted)
+    public function setInserted(DateTimeInterface $inserted): static
     {
         $this->inserted = $inserted;
 
         return $this;
     }
 
-    /**
-     * Get inserted.
-     *
-     * @return \DateTime
-     */
-    public function getInserted()
+    public function getInserted(): ?DateTimeInterface
     {
         return $this->inserted;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return ContentHandler
-     */
-    public function setUpdated($updated)
+    public function setUpdated(DateTimeInterface $updated): static
     {
         $this->updated = $updated;
 
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
-    public function getUpdated()
+    public function getUpdated(): ?DateTimeInterface
     {
         return $this->updated;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
