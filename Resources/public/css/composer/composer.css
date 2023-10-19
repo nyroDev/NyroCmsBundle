@@ -334,7 +334,8 @@ body {
 }
 
 .composableVideo {
-	position: relative;
+	position: absolute;
+	inset: 0;
 }
 
 .composableVideo a {
