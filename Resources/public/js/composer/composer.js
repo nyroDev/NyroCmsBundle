@@ -43,8 +43,8 @@ jQuery(function ($) {
 					FileUploaded: function (up, file, data) {
 						var $data = $.parseJSON(data.response),
 							compImg = $(up.settings.drop_element).closest('.composableImgCont'),
-							textarea = compImg.find('textarea#'+compImg.data('name')),
-							block = compImg.closest('.composerBlock');
+							textarea = compImg.find('textarea#' + compImg.data('name')),
+							block = compImg.closest('.composerBlock, .composableImgBig');
 						if (compImg.is('.composableImgBig')) {
 							block.css('background-image', 'url(' + $data.resized + ')');
 						} else if (!compImg.is('.composableImgMobile')) {
@@ -113,6 +113,13 @@ jQuery(function ($) {
 						var me = $(this),
 							compImg = me.prev('.composableImgCont'),
 							textarea = compImg.find('textarea');
+
+						if (compImg.length === 0) {
+							compImg = me.closest('.composableImgCont');
+							textarea = compImg.find('textarea#' + me.data('name'));
+						}
+						console.log(me, compImg, textarea, 'textarea#' + me.data('name'));
+
 						me.on('click', function (e) {
 							e.preventDefault();
 							$.nmConfirm({
@@ -123,7 +130,7 @@ jQuery(function ($) {
 									compImg.removeClass('composableImgExists');
 									textarea.val(textarea.val() + "\nDELETE");
 									if (compImg.is('.composableImgBig')) {
-										compImg.closest('.composerBlock').css('background-image', 'none');
+										compImg.css('background-image', 'none').closest('.composerBlock').css('background-image', 'none');
 									} else if (!compImg.is('.composableImgMobile') && me.data('placeholder')) {
 										compImg.find('img').attr('src', me.data('placeholder'));
 									}
@@ -133,17 +140,17 @@ jQuery(function ($) {
 						});
 					}).end()
 					.find('.composableFile')
-						.each(function() {
-							var me = $(this),
-								compFile = me.closest('.composableFileCont'),
-								opts = $.extend({}, pluploadFileOptions);
+					.each(function () {
+						var me = $(this),
+							compFile = me.closest('.composableFileCont'),
+							opts = $.extend({}, pluploadFileOptions);
 
-							if (compFile.data('cfgUpload')) {
-								opts = $.extend(opts, compFile.data('cfgUpload'));
-							}
+						if (compFile.data('cfgUpload')) {
+							opts = $.extend(opts, compFile.data('cfgUpload'));
+						}
 
-							me.nyroPlupload(opts);
-						}).end()
+						me.nyroPlupload(opts);
+					}).end()
 					.find('.composableFileDelete').each(function () {
 						var me = $(this),
 							compFile = me.prev('.composableFileCont'),
@@ -191,7 +198,7 @@ jQuery(function ($) {
 							classPrefix = me.data('classprefix'),
 							name = me.data('name'),
 							spans = me.children('span'),
-							composerBlock = me.closest('.composerBlock'),
+							composerBlock = me.closest('.composerBlock, .composableImgBig'),
 							applyTo = composerBlock,
 							inputVal = composerBlock.find('#' + name);
 						if (me.data('applyto')) {
