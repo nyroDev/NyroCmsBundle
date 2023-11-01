@@ -23,20 +23,24 @@
 	<textarea name="contents[<?php echo $nb; ?>][text]" id="contents_<?php echo $nb; ?>_text"><?php echo $contents['text']; ?></textarea>
 <?php else: ?>
 	<div class="image1">
-		<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-		    'image' => $contents['image1'],
-		    'title' => $row->getTitle(),
-		    'class' => null,
-		    'config' => $config['image1'],
-		]); ?>
+		<?php if ($contents['image1']): ?>
+			<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
+				'image' => $contents['image1'],
+				'title' => $row->getTitle(),
+				'class' => null,
+				'config' => $config['image1'],
+			]); ?>
+		<?php endif; ?>
 	</div>
 	<div class="image2">
-		<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-		    'image' => $contents['image2'],
-		    'title' => $row->getTitle(),
-		    'class' => null,
-		    'config' => $config['image2'],
-		]); ?>
+		<?php if ($contents['image2']): ?>
+			<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
+				'image' => $contents['image2'],
+				'title' => $row->getTitle(),
+				'class' => null,
+				'config' => $config['image2'],
+			]); ?>
+		<?php endif; ?>
 	</div>
 	<?php if (isset($contents['text']) && $contents['text'] && trim(strip_tags($contents['text']))): ?>
 		<div class="text"><?php echo $view['nyrodev_image']->resizeImagesInHtml($contents['text'], false, true); ?></div>

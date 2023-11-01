@@ -8,7 +8,7 @@
 		]); ?>
 		<textarea name="contents[<?php echo $nb; ?>][image]" id="contents_<?php echo $nb; ?>_image"><?php echo $contents['image']; ?></textarea>
 	</div>
-<?php else: ?>
+<?php elseif ($contents['image']): ?>
 	<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
 	    'image' => $contents['image'],
 	    'title' => $row->getTitle(),

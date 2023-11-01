@@ -23,10 +23,12 @@
 	<?php elseif (isset($contents['text']) && $contents['text'] && trim(strip_tags($contents['text']))): ?>
 		<div class="text"><?php echo $view['nyrodev_image']->resizeImagesInHtml($contents['text'], false, true); ?></div>
 	<?php endif; ?>
-	<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-	    'image' => $contents['image'],
-	    'title' => $row->getTitle(),
-	    'class' => 'image1',
-	    'config' => $config['image'],
-	]); ?>
+	<?php if ($contents['image']): ?>
+		<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
+			'image' => $contents['image'],
+			'title' => $row->getTitle(),
+			'class' => 'image1',
+			'config' => $config['image'],
+		]); ?>
+	<?php endif; ?>
 <?php endif; ?>
