@@ -200,6 +200,7 @@ admin:
     accountPassword: Mot de passe
     accountPasswordSaved: |
       Le nouveau mot de passe a bien été enregistré.
+    resendWelcome: Renvoyer l'email de bienvenue
   userRole:
     viewTitle: Rôles Utilisateurs
     id: ID
@@ -263,8 +264,10 @@ nyrocms:
         <strong>Bonjour %name%,</strong>
         
         Vous venez de demander la récupération de votre mot passe.
+
         Pour en choisir un nouveau, cliquez sur le lien suivant :
         <a href="%url%">%url%</a>
+
         Ce lien sera valide pendant 24 heures.
         
         Si vous n'avez rien demandé, vous pouvez ignorer ce message.
@@ -284,8 +287,10 @@ nyrocms:
         <strong>Bonjour %name%,</strong>
         
         Votre compte vient d'être activé.
+
         Pour choisir un mot de passe et vous connecter, cliquez sur le lien suivant :
         <a href="%url%">%url%</a>
+        
         Ce lien sera valide pendant 1 semaine.
   handler:
     news:

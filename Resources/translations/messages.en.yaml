@@ -188,6 +188,7 @@ admin:
     accountFieldsSaved: Your account information have been registered
     accountPassword: Password
     accountPasswordSaved: The new password has been registered
+    resendWelcome: Resend welcome email
   userRole:
     viewTitle: User roles
     id: ID
@@ -250,8 +251,10 @@ nyrocms:
         <strong>Hello %name%,</strong
         
         You have requested the recovery of your password.
+
         To activate a new password, click on the following link:
         <a href="%url%">%url%</a>
+
         This link will be valid for 24 hours.
         
         If you didn't request anything, you can ignore this message.
@@ -271,8 +274,10 @@ nyrocms:
         <strong>Hello %name%,</strong>
         
         Your account has been activated.
+        
         To choose a password and be connected, click on the following link:
         <a href="%url%">%url%</a>
+
         This link will be valid for 1 week.
   handler:
     news:

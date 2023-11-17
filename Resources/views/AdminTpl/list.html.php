@@ -86,7 +86,7 @@ if ($intro && $intro != $introKey) {
 						<td class="actions">
 							<?php if (isset($moreActions) && is_array($moreActions)): ?>
 								<?php foreach ($moreActions as $k => $action): ?>
-									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()])); ?>" class="noIcon <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?>>
+									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()])); ?>" class="noIcon <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?><?php echo isset($action['attrs']) && $action['attrs'] ? ' '.$action['attrs'] : ''; ?>>
 										<?php echo $action['name']; ?>
 									</a>
 								<?php endforeach; ?>
