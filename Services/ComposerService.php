@@ -666,7 +666,7 @@ class ComposerService extends AbstractService
 
     protected $rootImageDir;
 
-    protected function getRootImageDir()
+    public function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {
             $this->rootImageDir = $this->get(NyrodevService::class)->getKernel()->getProjectDir().'/public/'.$this->getImageDir();
