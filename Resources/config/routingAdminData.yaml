@@ -149,6 +149,11 @@ nyrocms_admin_data_user_edit:
     defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::userEditAction }
     requirements:
         id: \d+
+nyrocms_admin_data_user_welcome:
+    path:  /user/welcome/{id}
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::userWelcomeAction }
+    requirements:
+        id: \d+
 nyrocms_admin_data_user_delete:
     path:  /user/delete/{id}
     defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::userDeleteAction }

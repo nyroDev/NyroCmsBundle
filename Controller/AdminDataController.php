@@ -627,6 +627,12 @@ class AdminDataController extends AbstractAdminController
                         'valid',
                         'updated',
                     ],
+                    'moreActions' => [
+                        'welcome' => [
+                            'name' => $this->get(AdminService::class)->getIcon('arrow'),
+                            'route' => 'nyrocms_admin_data_user_welcome',
+                        ],
+                    ],
                 ],
                 $this->createList($request, $repo, $route, [], 'id', 'desc', $filter)
             ));
@@ -662,6 +668,16 @@ class AdminDataController extends AbstractAdminController
         }
 
         return $this->userForm($request, self::EDIT, $row);
+    }
+
+    public function userWelcomeAction(Request $request, $id)
+    {
+        $row = $this->get(DbAbstractService::class)->getUserRepository()->find($id);
+        if ($row) {
+            $this->get(UserService::class)->sendWelcomeEmail($row);
+        }
+
+        return $this->redirect($this->generateUrl('nyrocms_admin_data_user'));
     }
 
     public function userForm(Request $request, $action, $row)
