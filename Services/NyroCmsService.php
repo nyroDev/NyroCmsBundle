@@ -11,15 +11,16 @@ use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\PhpTemplateBundle\Helper\TagRendererHelper;
 use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
-use NyroDev\UtilityBundle\Services\TagRendererService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use RuntimeException;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Mime\Email;
 
@@ -28,7 +29,7 @@ class NyroCmsService extends nyroDevAbstractService
     use TwigServiceableTrait;
     use MailerInterfaceServiceableTrait;
 
-    protected $routeLoader;
+    protected NyroCmsLoader $routeLoader;
 
     /**
      * @Required
@@ -36,6 +37,16 @@ class NyroCmsService extends nyroDevAbstractService
     public function setRouteLoader(NyroCmsLoader $routeLoader)
     {
         $this->routeLoader = $routeLoader;
+    }
+
+    protected TagRendererHelper $tagRendereHelper;
+
+    /**
+     * @Required
+     */
+    public function setTagRendereHelper(TagRendererHelper $tagRendereHelper)
+    {
+        $this->tagRendereHelper = $tagRendereHelper;
     }
 
     protected $handlers = [];
@@ -485,7 +496,7 @@ class NyroCmsService extends nyroDevAbstractService
             return null;
         }
 
-        $this->get(TagRendererService::class)->reset();
+        $this->tagRendereHelper->reset();
         $subRequest = $request->duplicate([], null, [
             '_controller' => $controller.'::directContent',
             'content' => $content,
