@@ -15,7 +15,7 @@
 		<field name="configType" type="string" nullable="false" />
 		<field name="valueText" type="text" nullable="true" />
 		<field name="valueDate" type="datetime" nullable="true" />
-		<field name="valueNumber" type="integer" nullable="true" />
+		<field name="valueNumber" type="float" nullable="true" />
 		<field name="inserted" type="datetime" nullable="false" />
 		<field name="updated" type="datetime" nullable="false" />
 
