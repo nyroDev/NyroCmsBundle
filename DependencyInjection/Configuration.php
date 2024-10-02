@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('nyro_dev_nyro_cms');
         $rootNode = $builder->getRootNode($builder, 'nyro_dev_nyro_cms');

@@ -21,6 +21,7 @@ use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
 use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,6 +32,15 @@ class ComposerService extends AbstractService
     use AssetsPackagesServiceableTrait;
     use TwigServiceableTrait;
 
+    public function __construct(
+        private readonly NyrodevService $nyrodevService,
+        private readonly ImageService $imageService,
+        private readonly NyroCmsService $nyroCmsService,
+        private readonly DbAbstractService $dbService,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
+    }
+
     public function getContainer()
     {
         return $this->container;
@@ -38,7 +48,7 @@ class ComposerService extends AbstractService
 
     protected $configs = [];
 
-    public function getConfig(Composable $row)
+    public function getConfig(Composable $row): array
     {
         $class = get_class($row);
         if (!isset($this->configs[$class])) {
@@ -63,45 +73,45 @@ class ComposerService extends AbstractService
         return $this->configs[$class];
     }
 
-    public function getQuickConfig(Composable $row, $key)
+    public function getQuickConfig(Composable $row, string $key): mixed
     {
         $cfg = $this->getConfig($row);
         $event = new ComposerConfigEvent($row, $key, isset($cfg[$key]) ? $cfg[$key] : null);
-        $this->get('event_dispatcher')->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
+        $this->eventDispatcher->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
 
         return $event->getConfig();
     }
 
-    public function canChangeLang(Composable $row)
+    public function canChangeLang(Composable $row): bool
     {
         return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'change_lang');
     }
 
-    public function isSameLangStructure(Composable $row)
+    public function isSameLangStructure(Composable $row): bool
     {
         return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_structure');
     }
 
-    public function canChangeStructure(Composable $row)
+    public function canChangeStructure(Composable $row): bool
     {
-        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+        $isDefaultLocale = $this->nyroCmsService->getDefaultLocale($row) === $row->getTranslatableLocale();
 
         return $isDefaultLocale || !$this->isSameLangStructure($row);
     }
 
-    public function isSameLangMedia(Composable $row)
+    public function isSameLangMedia(Composable $row): bool
     {
         return is_callable([$row, 'setTranslatableLocale']) && $this->getQuickConfig($row, 'same_lang_media');
     }
 
-    public function canChangeMedia(Composable $row)
+    public function canChangeMedia(Composable $row): bool
     {
-        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+        $isDefaultLocale = $this->nyroCmsService->getDefaultLocale($row) === $row->getTranslatableLocale();
 
         return $isDefaultLocale || !$this->isSameLangMedia($row);
     }
 
-    public function canChangeTheme(Composable $row)
+    public function canChangeTheme(Composable $row): bool
     {
         return is_callable([$row, 'setTheme']) && $this->getQuickConfig($row, 'change_theme');
     }
@@ -126,7 +136,7 @@ class ComposerService extends AbstractService
         return $this->getQuickConfig($row, 'global_composer_template');
     }
 
-    public function getTinymceConfig(Composable $row, $simple = false)
+    public function getTinymceConfig(Composable $row, bool $simple = false)
     {
         $cfg = $this->getQuickConfig($row, 'tinymce'.($simple ? '_simple' : ''));
 
@@ -147,17 +157,17 @@ class ComposerService extends AbstractService
         }
 
         $tinymceConfigEvent = new TinymceConfigEvent($row, $simple, $cfg);
-        $this->get('event_dispatcher')->dispatch($tinymceConfigEvent, TinymceConfigEvent::TINYMCE_CONFIG);
+        $this->eventDispatcher->dispatch($tinymceConfigEvent, TinymceConfigEvent::TINYMCE_CONFIG);
 
         return $this->tinymceAttrsTrRec($tinymceConfigEvent->getConfig());
     }
 
-    public function cancelUrl(Composable $row)
+    public function cancelUrl(Composable $row): string
     {
         $ret = '#';
         if ($row instanceof ContentSpec) {
-            $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
-            $ret = $this->get(NyrodevService::class)->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+            $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
+            $ret = $this->nyrodevService->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
             $cfg = $this->getConfig($row);
             $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : [];
@@ -166,13 +176,13 @@ class ComposerService extends AbstractService
             } elseif ($cfg['cancel_url']['need_veryParent_id']) {
                 $routePrm['id'] = $row->getVeryParent()->getId();
             }
-            $ret = $this->get(NyrodevService::class)->generateUrl($cfg['cancel_url']['route'], $routePrm);
+            $ret = $this->nyrodevService->generateUrl($cfg['cancel_url']['route'], $routePrm);
         }
 
         return $ret;
     }
 
-    public function getThemes(Composable $row)
+    public function getThemes(Composable $row): array
     {
         $cfg = $this->getConfig($row);
         $ret = [];
@@ -209,13 +219,13 @@ class ComposerService extends AbstractService
         return $row->getTheme() ? $row->getTheme() : $this->getCssTheme($row->getParent());
     }
 
-    protected $wrapperCssthemeEvents = [];
+    protected array $wrapperCssthemeEvents = [];
 
     public function getWrapperCssTheme(Composable $row, $position = WrapperCssThemeEvent::POSITION_NORMAL)
     {
         if (!isset($this->wrapperCssthemeEvents[$row->getId()])) {
             $this->wrapperCssthemeEvents[$row->getId()] = new WrapperCssThemeEvent($row);
-            $this->get('event_dispatcher')->dispatch($this->wrapperCssthemeEvents[$row->getId()], WrapperCssThemeEvent::WRAPPER_CSS_THEME);
+            $this->eventDispatcher->dispatch($this->wrapperCssthemeEvents[$row->getId()], WrapperCssThemeEvent::WRAPPER_CSS_THEME);
         }
 
         return $this->wrapperCssthemeEvents[$row->getId()]->getWrapperCssTheme($position);
@@ -247,15 +257,15 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    protected $existingImages = [];
-    protected $existingFiles = [];
+    protected array $existingImages = [];
+    protected array $existingFiles = [];
 
     public function initComposerFor(Composable $row, $lang, $contentFieldName = 'content')
     {
         $this->existingImages = [];
         $this->existingFiles = [];
 
-        if ($lang != $this->get(NyroCmsService::class)->getDefaultLocale($row)) {
+        if ($lang != $this->nyroCmsService->getDefaultLocale($row)) {
             $tmp = $this->getImagesAndFiles($row, $row->getContent());
             $this->existingImages = $tmp[0];
             $this->existingFiles = $tmp[1];
@@ -275,7 +285,7 @@ class ComposerService extends AbstractService
         $this->existingImages = $images;
     }
 
-    public function getExistingImages()
+    public function getExistingImages(): array
     {
         return $this->existingImages;
     }
@@ -285,12 +295,12 @@ class ComposerService extends AbstractService
         $this->existingFiles = $files;
     }
 
-    public function getExistingFiles()
+    public function getExistingFiles(): array
     {
         return $this->existingFiles;
     }
 
-    protected function getImagesAndFiles(Composable $row, array $blocks)
+    protected function getImagesAndFiles(Composable $row, array $blocks): array
     {
         $configs = [];
 
@@ -342,7 +352,7 @@ class ComposerService extends AbstractService
         return $config['template'];
     }
 
-    public function getBlock(Composable $row, $id, $block, array $defaults = [], $addExtract = false)
+    public function getBlock(Composable $row, $id, $block, array $defaults = [], bool $addExtract = false)
     {
         $ret = [
             'id' => $id,
@@ -517,7 +527,7 @@ class ComposerService extends AbstractService
                 $file = $this->getRootImageDir().'/'.trim($image);
                 if ($fs->exists($file)) {
                     $fs->remove($file);
-                    $this->get(ImageService::class)->removeCache($file);
+                    $this->imageService->removeCache($file);
                 }
             }
         }
@@ -578,12 +588,12 @@ class ComposerService extends AbstractService
             // Handle empty content
             if ($admin) {
                 $event = new ComposerDefaultBlockEvent($row, [$this->getBlock($row, 'intro-intro', 'intro')]);
-                $this->get('event_dispatcher')->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
+                $this->eventDispatcher->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
 
                 $content = $event->getContent();
 
                 if ($hasHandler) {
-                    $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
+                    $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
                     if ($handler->isWrapped() && $handler->isWrappedAs()) {
                         $tmp = [$handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR];
                         $content[] = $this->getBlock($row, 'wrapper-'.$handler->isWrapped(), $handler->isWrapped(), $tmp);
@@ -600,7 +610,7 @@ class ComposerService extends AbstractService
         } elseif ($hasHandler) {
             // Check if the handler is placed, and add it if not here
             $content = $row->getContent() ?? [];
-            $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
+            $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
             $isWrapped = $handler->isWrapped();
             $wrappedAs = $handler->isWrappedAs();
             $hasHandlerPlaced = false;
@@ -654,7 +664,7 @@ class ComposerService extends AbstractService
             'customAttrs' => null,
         ], $this->getBlockConfig($row, $block['type']));
 
-        $this->get('event_dispatcher')->dispatch($event, ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS);
+        $this->eventDispatcher->dispatch($event, ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS);
 
         return $this->getTwig()->render($event->getTemplate(), $event->getVars())."\n\n";
     }
@@ -669,7 +679,7 @@ class ComposerService extends AbstractService
     public function getRootImageDir()
     {
         if (is_null($this->rootImageDir)) {
-            $this->rootImageDir = $this->get(NyrodevService::class)->getKernel()->getProjectDir().'/public/'.$this->getImageDir();
+            $this->rootImageDir = $this->nyrodevService->getKernel()->getProjectDir().'/public/'.$this->getImageDir();
             $fs = new Filesystem();
             if (!$fs->exists($this->rootImageDir)) {
                 $fs->mkdir($this->rootImageDir);
@@ -682,7 +692,7 @@ class ComposerService extends AbstractService
     public function imageUpload(UploadedFile $image)
     {
         $dir = $this->getRootImageDir();
-        $filename = $this->get(NyrodevService::class)->getUniqFileName($dir, $image->getClientOriginalName());
+        $filename = $this->nyrodevService->getUniqFileName($dir, $image->getClientOriginalName());
         $image->move($dir, $filename);
 
         return $filename;
@@ -710,7 +720,7 @@ class ComposerService extends AbstractService
                     $config['name'] = md5(json_encode($config));
                 }
 
-                $resizedPath = $this->get(ImageService::class)->_resize($absoluteFile, $config);
+                $resizedPath = $this->imageService->_resize($absoluteFile, $config);
 
                 $tmp = explode('/public/', $resizedPath);
                 $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
@@ -733,7 +743,7 @@ class ComposerService extends AbstractService
     public function fileUpload(UploadedFile $file)
     {
         $dir = $this->getRootImageDir();
-        $filename = $this->get(NyrodevService::class)->getUniqFileName($dir, $file->getClientOriginalName());
+        $filename = $this->nyrodevService->getUniqFileName($dir, $file->getClientOriginalName());
         $file->move($dir, $filename);
 
         return $filename;
@@ -743,9 +753,9 @@ class ComposerService extends AbstractService
     {
         $isDefaultLocale = true;
         $canChangeLang = $this->canChangeLang($row);
-        $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
+        $langs = $this->nyroCmsService->getLocaleNames($row);
 
-        $isDefaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row) === $row->getTranslatableLocale();
+        $isDefaultLocale = $this->nyroCmsService->getDefaultLocale($row) === $row->getTranslatableLocale();
 
         $event = new ComposerEvent($row);
         $eventName = null;
@@ -878,7 +888,7 @@ class ComposerService extends AbstractService
 
                 if (count($newContents)) {
                     // We have some lang changes to apply, let's do it
-                    $om = $this->get(DbAbstractService::class)->getObjectManager();
+                    $om = $this->dbService->getObjectManager();
                     $curLocale = $row->getTranslatableLocale();
 
                     foreach ($newContents as $lg => $content) {
@@ -910,7 +920,7 @@ class ComposerService extends AbstractService
 
                         $om->flush();
 
-                        $this->get('event_dispatcher')->dispatch($event, ComposerEvent::COMPOSER_LANG_SAME);
+                        $this->eventDispatcher->dispatch($event, ComposerEvent::COMPOSER_LANG_SAME);
                     }
 
                     $row->setTranslatableLocale($curLocale);
@@ -925,7 +935,7 @@ class ComposerService extends AbstractService
         }
 
         if ($eventName) {
-            $this->get('event_dispatcher')->dispatch($event, $eventName);
+            $this->eventDispatcher->dispatch($event, $eventName);
         }
     }
 

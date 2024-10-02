@@ -1,6 +1,10 @@
 services:
     NyroDev\NyroCmsBundle\Services\NyroCmsService:
         public: true
+        arguments:
+            - '@NyroDev\UtilityBundle\Services\NyrodevService'
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+            - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setTwig, ['@twig']]
@@ -17,6 +21,11 @@ services:
     NyroDev\NyroCmsBundle\Services\UserService:
         public: true
         arguments:
+            - '@NyroDev\UtilityBundle\Services\NyrodevService'
+            - '@NyroDev\UtilityBundle\Services\MemberService'
+            - '@NyroDev\UtilityBundle\Services\FormService'
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+            - '@NyroDev\NyroCmsBundle\Services\NyroCmsService'
             - '@Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface'
         calls:
             - [setContainerInterface, ['@service_container']]
@@ -28,6 +37,12 @@ services:
 
     NyroDev\NyroCmsBundle\Services\AdminService:
         public: true
+        arguments:
+            - '@NyroDev\UtilityBundle\Services\NyrodevService'
+            - '@NyroDev\UtilityBundle\Services\Db\DbAbstractService'
+            - '@NyroDev\UtilityBundle\Services\MemberService'
+            - '@NyroDev\NyroCmsBundle\Services\NyroCmsService'
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]
@@ -39,6 +54,12 @@ services:
 
     NyroDev\NyroCmsBundle\Services\ComposerService:
         public: true
+        arguments:
+            - '@NyroDev\UtilityBundle\Services\NyrodevService'
+            - '@NyroDev\UtilityBundle\Services\ImageService'
+            - '@NyroDev\NyroCmsBundle\Services\NyroCmsService'
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+            - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]

@@ -13,28 +13,24 @@ class WrapperCssThemeEvent extends Event
     public const POSITION_ADMIN_HTML = 'admin.html';
     public const POSITION_ADMIN_BODY = 'admin.body';
 
-    protected $row;
-    protected $wrapperCssTheme = [];
+    protected array $wrapperCssTheme = [];
 
-    public function __construct(Composable $row)
-    {
-        $this->row = $row;
+    public function __construct(
+        protected readonly Composable $row,
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }
 
-    public function setWrapperCssTheme($wrapperCssTheme, $position = self::POSITION_NORMAL)
+    public function setWrapperCssTheme(string $wrapperCssTheme, string $position = self::POSITION_NORMAL): void
     {
         $this->wrapperCssTheme[$position] = $wrapperCssTheme;
     }
 
-    public function getWrapperCssTheme($position = self::POSITION_NORMAL)
+    public function getWrapperCssTheme(string $position = self::POSITION_NORMAL): ?string
     {
         return isset($this->wrapperCssTheme[$position]) ? $this->wrapperCssTheme[$position] : null;
     }

@@ -513,7 +513,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $text;
     }
 
-    protected function getFileFields()
+    protected function getFileFields(): array
     {
         return $this->sharableGetFileFields();
     }

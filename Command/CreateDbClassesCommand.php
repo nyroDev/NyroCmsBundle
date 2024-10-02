@@ -42,7 +42,7 @@ class CreateDbClassesCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force = $input->getOption('force');
 
@@ -134,11 +134,11 @@ class CreateDbClassesCommand extends Command
                 }
             }
 
-            return 0;
+            return Command::SUCCESS;
         } else {
             $output->writeln($db_driver.' is not supported.');
 
-            return 1;
+            return Command::INVALID;
         }
     }
 }

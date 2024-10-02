@@ -10,52 +10,52 @@ use Symfony\Component\Validator\Constraints;
 
 class Files extends AbstractHandler
 {
-    public function useDateSpec()
+    public function useDateSpec(): bool
     {
         return true;
     }
 
-    public function orderField()
+    public function orderField(): string
     {
         return 'dateSpec';
     }
 
-    public function hasIntro()
+    public function hasIntro(): bool
     {
         return true;
     }
 
-    public function isIntroRequired()
+    public function isIntroRequired(): bool
     {
         return true;
     }
 
-    public function hasMoveActions()
+    public function hasMoveActions(): bool
     {
         return false;
     }
 
-    public function hasComposer()
+    public function hasComposer(): bool
     {
         return false;
     }
 
-    public function hasContentSpecUrl()
+    public function hasContentSpecUrl(): bool
     {
         return false;
     }
 
-    public function hasValidDates()
+    public function hasValidDates(): bool
     {
         return false;
     }
 
-    public function hasStateInvisible()
+    public function hasStateInvisible(): bool
     {
         return false;
     }
 
-    protected function getFormFields($action)
+    protected function getFormFields(string $action): array
     {
         $isAdd = AbstractAdminController::ADD == $action;
 
@@ -73,7 +73,7 @@ class Files extends AbstractHandler
         ];
     }
 
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
+    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $view = '@NyroDevNyroCms/Handler/files';
         $vars = [

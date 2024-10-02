@@ -11,17 +11,12 @@ class ComposerEvent extends Event
     public const COMPOSER_LANG_SAME = 'nyrocms.events.composerLangSame';
     public const COMPOSER_LANG = 'nyrocms.events.composerLang';
 
-    protected $row;
-
-    public function __construct(Composable $row)
-    {
-        $this->row = $row;
+    public function __construct(
+        protected readonly Composable $row,
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }

@@ -9,57 +9,51 @@ class UrlGenerationEvent extends Event
     public const LOCALES_URL = 'nyrocms.events.urlGeneration.locales';
     public const OBJECT_URL = 'nyrocms.events.urlGeneration.object';
 
-    protected $routeName;
-    protected $routePrm;
-    protected $absolute;
-    protected $object;
-    protected $parent;
-
-    public function __construct($routeName, array $routePrm = [], $absolute = false, $object = null, $parent = null)
-    {
-        $this->routeName = $routeName;
-        $this->routePrm = $routePrm;
-        $this->absolute = $absolute;
-        $this->object = $object;
-        $this->parent = $parent;
+    public function __construct(
+        protected string $routeName,
+        protected array $routePrm = [],
+        protected bool $absolute = false,
+        protected readonly mixed $object = null,
+        protected readonly mixed $parent = null,
+    ) {
     }
 
-    public function getRouteName()
+    public function getRouteName(): string
     {
         return $this->routeName;
     }
 
-    public function setRouteName($routeName)
+    public function setRouteName(string $routeName): void
     {
         $this->routeName = $routeName;
     }
 
-    public function getRoutePrm()
+    public function getRoutePrm(): array
     {
         return $this->routePrm;
     }
 
-    public function setRoutePrm(array $routePrm)
+    public function setRoutePrm(array $routePrm): void
     {
         $this->routePrm = $routePrm;
     }
 
-    public function getAbsolute()
+    public function getAbsolute(): bool
     {
         return $this->absolute;
     }
 
-    public function setAbsolute($absolute)
+    public function setAbsolute($absolute): void
     {
         $this->absolute = $absolute;
     }
 
-    public function getObject()
+    public function getObject(): mixed
     {
         return $this->object;
     }
 
-    public function getParent()
+    public function getParent(): mixed
     {
         return $this->parent;
     }

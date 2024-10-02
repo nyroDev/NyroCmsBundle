@@ -12,44 +12,48 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\PhpTemplateBundle\Helper\TagRendererHelper;
-use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use RuntimeException;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Mime\Email;
+use Symfony\Contracts\Service\Attribute\Required;
 
-class NyroCmsService extends nyroDevAbstractService
+class NyroCmsService extends NyroDevAbstractService
 {
     use TwigServiceableTrait;
     use MailerInterfaceServiceableTrait;
 
-    protected NyroCmsLoader $routeLoader;
+    protected ?NyroCmsLoader $routeLoader = null;
+    protected ?TagRendererHelper $tagRendereHelper = null;
 
-    /**
-     * @Required
-     */
-    public function setRouteLoader(NyroCmsLoader $routeLoader)
+    protected array $handlers = [];
+    
+    public function __construct(
+        private readonly NyrodevService $nyrodevService,
+        private readonly DbAbstractService $dbService,
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
+    }
+
+    #[Required]
+    public function setRouteLoader(NyroCmsLoader $routeLoader): void
     {
         $this->routeLoader = $routeLoader;
     }
 
-    protected TagRendererHelper $tagRendereHelper;
-
-    /**
-     * @Required
-     */
-    public function setTagRendereHelper(TagRendererHelper $tagRendereHelper)
+    #[Required]
+    public function setTagRendereHelper(TagRendererHelper $tagRendereHelper): void
     {
         $this->tagRendereHelper = $tagRendereHelper;
     }
-
-    protected $handlers = [];
 
     public function getHandler(ContentHandler $contentHandler)
     {
@@ -60,7 +64,7 @@ class NyroCmsService extends nyroDevAbstractService
             }
 
             if (0 === strpos(get_class($contentHandler), 'Proxies')) {
-                $contentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($contentHandler->getId());
+                $contentHandler = $this->dbService->getContentHandlerRepository()->find($contentHandler->getId());
             }
 
             $this->handlers[$contentHandler->getId()] = new $class($contentHandler, $this->container);
@@ -69,43 +73,43 @@ class NyroCmsService extends nyroDevAbstractService
         return $this->handlers[$contentHandler->getId()];
     }
 
-    protected $routeConfig;
+    protected string|array $routeConfig = [];
 
-    public function setRouteConfig($routeConfig)
+    public function setRouteConfig(string|array $routeConfig)
     {
         $this->routeConfig = $routeConfig;
     }
 
-    public function getRouteConfig()
+    public function getRouteConfig(): string|array
     {
         return $this->routeConfig;
     }
 
-    protected $activeIds = [];
+    protected array $activeIds = [];
 
-    public function setActiveIds($activeIds)
+    public function setActiveIds(array $activeIds)
     {
         $this->activeIds = $activeIds;
     }
 
-    public function getActiveIds()
+    public function getActiveIds(): array
     {
         return $this->activeIds;
     }
 
-    protected $rootContent;
+    protected ?Content $rootContent;
 
     public function setRootContent(Content $content)
     {
         $this->rootContent = $content;
     }
 
-    public function getRootContent()
+    public function getRootContent(): Content
     {
         return $this->rootContent;
     }
 
-    protected $contentRoots = [];
+    protected array $contentRoots = [];
 
     /**
      * @param type $id
@@ -115,20 +119,20 @@ class NyroCmsService extends nyroDevAbstractService
     public function getContentRoot($id)
     {
         if (!isset($this->contentRoots[$id])) {
-            $this->contentRoots[$id] = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
+            $this->contentRoots[$id] = $this->dbService->getContentRepository()->find($id);
         }
 
         return $this->contentRoots[$id];
     }
 
-    public function getUrlFor($object, $absolute = false, array $prm = [], $parent = null)
+    public function getUrlFor($object, bool $absolute = false, array $prm = [], $parent = null): string
     {
         $routeCfg = $this->getRouteFor($object, $prm, $parent);
 
         return $routeCfg['route'] ? $this->generateUrl($routeCfg['route'], $routeCfg['prm'], $absolute || $routeCfg['absolute']) : '#';
     }
 
-    public function getRouteFor($object, array $prm = [], $parent = null)
+    public function getRouteFor($object, array $prm = [], $parent = null): array
     {
         $routeName = null;
         $absolute = false;
@@ -163,23 +167,23 @@ class NyroCmsService extends nyroDevAbstractService
                 $curLoc = $object->getTranslatableLocale();
 
                 $object->setTranslatableLocale($this->getDefaultLocale($object));
-                $this->get(DbAbstractService::class)->refresh($object);
+                $this->dbService->refresh($object);
                 $title = $object->getTitle();
 
                 $object->setTranslatableLocale($curLoc);
-                $this->get(DbAbstractService::class)->refresh($object);
+                $this->dbService->refresh($object);
             }
 
             $prm = array_merge($prm, [
                 'url' => trim($parent->getUrl(), '/'),
                 'id' => $object->getId(),
-                'title' => $this->get(NyrodevService::class)->urlify($title),
+                'title' => $this->nyrodevService->urlify($title),
             ]);
         }
 
         if ($routeName) {
             $event = new UrlGenerationEvent($routeName, $prm, $absolute, $object, $parent);
-            $this->get('event_dispatcher')->dispatch($event, UrlGenerationEvent::OBJECT_URL);
+            $this->eventDispatcher->dispatch($event, UrlGenerationEvent::OBJECT_URL);
             $routeName = $event->getRouteName();
             $prm = $event->getRoutePrm();
             $absolute = $event->getAbsolute();
@@ -192,7 +196,7 @@ class NyroCmsService extends nyroDevAbstractService
         ];
     }
 
-    public function getDateFormOptions()
+    public function getDateFormOptions(): array
     {
         return [
             'widget' => 'single_text',
@@ -204,7 +208,7 @@ class NyroCmsService extends nyroDevAbstractService
         ];
     }
 
-    public function getDateTimeFormOptions($stepMinutes = 5)
+    public function getDateTimeFormOptions(int $stepMinutes = 5): array
     {
         return [
             'widget' => 'single_text',
@@ -216,7 +220,7 @@ class NyroCmsService extends nyroDevAbstractService
         ];
     }
 
-    public function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
+    public function sendEmail(string|array $to, string $subject, string $content, ?string $from = null, ?string $locale = null, ?Content $dbContent = null)
     {
         $html = $this->getTwig()->render($this->getParameter('nyrocms.email.global_template'), [
             'stylesTemplate' => $this->getParameter('nyrocms.email.styles_template'),
@@ -226,7 +230,7 @@ class NyroCmsService extends nyroDevAbstractService
             'content' => $content,
             'dbContent' => $dbContent,
         ]);
-        $text = $this->get(NyrodevService::class)->html2text($html);
+        $text = $this->nyrodevService->html2text($html);
 
         if (!$from) {
             $from = $this->getParameter('noreply_email');
@@ -252,12 +256,12 @@ class NyroCmsService extends nyroDevAbstractService
         return $this->getMailerInterface()->send($email);
     }
 
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->getRequest()->getLocale();
     }
 
-    public function getDefaultLocale($rootContent = null)
+    public function getDefaultLocale(?Content $rootContent = null): string
     {
         $isContentRootable = false;
         if ($rootContent) {
@@ -275,7 +279,7 @@ class NyroCmsService extends nyroDevAbstractService
         }
     }
 
-    public function getLocales($rootContent = null, $asString = false)
+    public function getLocales(?Content $rootContent = null, bool $asString = false): string|array
     {
         $isContentRootable = false;
         if ($rootContent) {
@@ -289,7 +293,7 @@ class NyroCmsService extends nyroDevAbstractService
         return $asString ? $locales : explode('|', $locales);
     }
 
-    public function getLocaleNames($rootContent = null, $prefixTranslation = null)
+    public function getLocaleNames(?Content $rootContent = null, ?string $prefixTranslation = null): array
     {
         $names = $this->container->getParameter('localeNames');
         $ret = [];
@@ -316,7 +320,7 @@ class NyroCmsService extends nyroDevAbstractService
         $this->pathInfoSearch = $search;
     }
 
-    public function getPathInfo()
+    public function getPathInfo(): array
     {
         $request = $this->getRequest();
 
@@ -327,7 +331,7 @@ class NyroCmsService extends nyroDevAbstractService
         ];
     }
 
-    public function getLocalesUrl($pathInfo, $absolute = false, $onlyLangs = null)
+    public function getLocalesUrl(array $pathInfo, bool $absolute = false, ?array $onlyLangs = null): array
     {
         $ret = [];
         $isObjectPage = isset($pathInfo['object']) && $pathInfo['object'];
@@ -363,7 +367,7 @@ class NyroCmsService extends nyroDevAbstractService
                     $routePrm = array_merge($pathInfo['routePrm'], $prm, ['q' => $this->pathInfoSearch]);
                 } elseif ($isObjectPage) {
                     $pathInfo['object']->setTranslatableLocale($locale);
-                    $this->get(DbAbstractService::class)->refresh($pathInfo['object']);
+                    $this->dbService->refresh($pathInfo['object']);
                     $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $prm));
                 } else {
                     $routeName = $pathInfo['route'];
@@ -371,7 +375,7 @@ class NyroCmsService extends nyroDevAbstractService
                 }
                 if (!is_null($routeName)) {
                     $event = new UrlGenerationEvent($routeName, $routePrm, $absolute);
-                    $this->get('event_dispatcher')->dispatch($event, UrlGenerationEvent::LOCALES_URL);
+                    $this->eventDispatcher->dispatch($event, UrlGenerationEvent::LOCALES_URL);
                     $ret[$locale] = $this->generateUrl($event->getRouteName(), $event->getRoutePrm(), $event->getAbsolute());
                 }
             }
@@ -379,13 +383,13 @@ class NyroCmsService extends nyroDevAbstractService
 
         if ($isObjectPage) {
             $pathInfo['object']->setTranslatableLocale($curLocale);
-            $this->get(DbAbstractService::class)->refresh($pathInfo['object']);
+            $this->dbService->refresh($pathInfo['object']);
         }
 
         return $ret;
     }
 
-    public function disabledLocaleUrls($locale)
+    public function disabledLocaleUrls(string $locale): bool
     {
         $ret = false;
         $disabled = $this->getParameter('nyrocms.disabled_locale_urls');
@@ -400,7 +404,7 @@ class NyroCmsService extends nyroDevAbstractService
 
     protected $foundHandlers;
 
-    public function getFoundHandlers()
+    public function getFoundHandlers(): array
     {
         if (is_null($this->foundHandlers)) {
             $this->foundHandlers = [];
@@ -465,7 +469,7 @@ class NyroCmsService extends nyroDevAbstractService
         if (!$code) {
             $code = 404;
         }
-        $repo = $this->get(DbAbstractService::class)->getContentRepository();
+        $repo = $this->dbService->getContentRepository();
 
         // @todo define rootContent regarding URL
         $rootContent = null;

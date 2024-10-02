@@ -14,16 +14,13 @@ class AdminFormEvent extends Event
     public const BEFOREFLUSH_USER = 'nyrocms.events.admin.form.beforeFlush.user';
     public const AFTERFLUSH_USER = 'nyrocms.events.admin.form.afterFlush.user';
 
-    protected $action;
-    protected $row;
-    protected $form;
-    protected $translations;
+    protected ?array $translations;
 
-    public function __construct($action, $row, $form = null)
-    {
-        $this->action = $action;
-        $this->row = $row;
-        $this->form = $form;
+    public function __construct(
+        protected readonly string $action,
+        protected readonly mixed $row,
+        protected readonly mixed $form = null,
+    ) {
     }
 
     public function getAction()
@@ -46,7 +43,7 @@ class AdminFormEvent extends Event
         $this->translations = $translations;
     }
 
-    public function getTranslations()
+    public function getTranslations(): ?array
     {
         return $this->translations;
     }

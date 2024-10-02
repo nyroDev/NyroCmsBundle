@@ -45,7 +45,7 @@ class SendDeferredWelcomeCommand extends Command
             ->setDescription('Send welcome email for user validated today');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $lock = $this->getLockFactory()->createLock('sendDeferredWelcome.lock');
 
@@ -72,11 +72,11 @@ class SendDeferredWelcomeCommand extends Command
             $output->writeln('End of welcome email sending.');
             $lock->release();
 
-            return 0;
+            return Command::SUCCESS;
         } else {
             $output->writeln('sendDeferredWelcome command is locked.');
 
-            return 1;
+            return Command::INVALID;
         }
     }
 }

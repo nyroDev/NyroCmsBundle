@@ -17,7 +17,7 @@ class NyroCmsLoader extends Loader
 
     private $loaded = [];
 
-    public function load($resource, $type = null)
+    public function load(mixed $resource, ?string $type = null): mixed
     {
         $typeCfg = array_flip(explode('_', $type));
 
@@ -162,7 +162,7 @@ class NyroCmsLoader extends Loader
         return null;
     }
 
-    public function supports($resource, $type = null)
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         return 'nyrocms' === substr($type, 0, 7);
     }

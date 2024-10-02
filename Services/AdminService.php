@@ -6,15 +6,24 @@ use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
-use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
+use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService as NyroDevDbService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 
-class AdminService extends nyroDevAbstractService
+class AdminService extends NyroDevAbstractService
 {
     use AssetsPackagesServiceableTrait;
+
+    public function __construct(
+        private readonly NyrodevService $nyrodevService,
+        private readonly NyroDevDbService $nyrodevDbService,
+        private readonly MemberService $memberService,
+        private readonly NyroCmsService $nyroCmsService,
+        private readonly DbAbstractService $dbService,
+    ) {
+    }
 
     protected $userTypes;
 
@@ -35,13 +44,13 @@ class AdminService extends nyroDevAbstractService
         return $this->userTypes;
     }
 
-    protected $userRoles;
+    protected ?array $userRoles = null;
 
-    public function getUserRoles()
+    public function getUserRoles(): array
     {
         if (is_null($this->userRoles)) {
             $this->userRoles = [];
-            foreach ($this->get(DbAbstractService::class)->getRepository('user_role')->findAll() as $tmp) {
+            foreach ($this->dbService->getRepository('user_role')->findAll() as $tmp) {
                 $this->userRoles[$tmp->getId()] = $tmp;
             }
         }
@@ -67,11 +76,11 @@ class AdminService extends nyroDevAbstractService
     {
         if (is_null($this->administrableContentIds)) {
             $this->administrableContentIds = [];
-            if ($this->get(MemberService::class)->isLogged()) {
-                $user = $this->get(MemberService::class)->getUser();
+            if ($this->memberService->isLogged()) {
+                $user = $this->memberService->getUser();
                 /* @var $user \NyroDev\NyroCmsBundle\Model\User */
 
-                $repoContent = $this->get(DbAbstractService::class)->getContentRepository();
+                $repoContent = $this->dbService->getContentRepository();
                 foreach ($user->getUserRoles() as $userRole) {
                     /* @var $userRole \NyroDev\NyroCmsBundle\Model\UserRole */
                     if (!$userRole->getInternal()) {
@@ -93,7 +102,7 @@ class AdminService extends nyroDevAbstractService
 
     protected $administrableRootContentIds = [];
 
-    public function getAdministrableRootContentIds($rolePrefix = 'complete')
+    public function getAdministrableRootContentIds(string $rolePrefix = 'complete')
     {
         if (!isset($this->administrableRootContentIds[$rolePrefix])) {
             $this->administrableRootContentIds[$rolePrefix] = [];
@@ -101,7 +110,7 @@ class AdminService extends nyroDevAbstractService
 
             if (!$fullRootIds) {
                 $rolePrefixLn = strlen($rolePrefix);
-                foreach ($this->get(MemberService::class)->getUser()->getUserRoles() as $role) {
+                foreach ($this->memberService->getUser()->getUserRoles() as $role) {
                     if (
                         (('complete' == $rolePrefix || 'root' == $rolePrefix) && !$role->getInternal()) ||
                         ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
@@ -122,7 +131,7 @@ class AdminService extends nyroDevAbstractService
 
             if ($fullRootIds) {
                 $this->administrableRootContentIds[$rolePrefix] = [];
-                foreach ($this->get(DbAbstractService::class)->getContentRepository()->children(null, true) as $content) {
+                foreach ($this->dbService->getContentRepository()->children(null, true) as $content) {
                     $this->administrableRootContentIds[$rolePrefix][$content->getId()] = true;
                 }
             }
@@ -131,32 +140,32 @@ class AdminService extends nyroDevAbstractService
         return $this->administrableRootContentIds[$rolePrefix];
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->hasRole('ROLE_ADMIN');
     }
 
-    public function isSuperAdmin()
+    public function isSuperAdmin(): bool
     {
         return $this->hasRole('ROLE_SUPERADMIN');
     }
 
-    public function hasRole($role)
+    public function hasRole(string $role): bool
     {
-        return $this->get(MemberService::class)->isGranted($role);
+        return $this->memberService->isGranted($role);
     }
 
-    public function isDeveloper()
+    public function isDeveloper(): bool
     {
-        return $this->get(MemberService::class)->getUser()->getDevelopper();
+        return $this->memberService->getUser()->getDevelopper();
     }
 
-    public function canAdmin(Composable $row)
+    public function canAdmin(Composable $row): bool
     {
         $canAdmin = false;
-        if ($this->get(DbAbstractService::class)->isA($row, 'content')) {
+        if ($this->dbService->isA($row, 'content')) {
             $canAdmin = $this->canAdminContent($row);
-        } elseif ($this->get(DbAbstractService::class)->isA($row, 'content_spec')) {
+        } elseif ($this->dbService->isA($row, 'content_spec')) {
             /* @var $row \Luxepack\DbBundle\Entity\ContentSpec */
             foreach ($row->getContentHandler()->getContents() as $content) {
                 $canAdmin = $canAdmin || $this->canAdmin($content);
@@ -168,7 +177,7 @@ class AdminService extends nyroDevAbstractService
         return $canAdmin;
     }
 
-    public function canAdminContent(Content $content)
+    public function canAdminContent(Content $content): bool
     {
         if ($this->isSuperAdmin()) {
             return true;
@@ -178,7 +187,7 @@ class AdminService extends nyroDevAbstractService
         return isset($contentIds[$content->getId()]) ? $contentIds[$content->getId()] : false;
     }
 
-    public function canRootComposer(Content $content)
+    public function canRootComposer(Content $content): bool
     {
         return $this->getParameter('nyrocms.content.root_composer');
     }
@@ -188,25 +197,25 @@ class AdminService extends nyroDevAbstractService
         return $this->getParameter('nyrocms.content.maxlevel');
     }
 
-    public function canHaveSub(Content $content)
+    public function canHaveSub(Content $content): bool
     {
         return $content ? $content->getLevel() < $this->getContentMaxLevel($content) : true;
     }
 
-    public function updateContentUrl(Content $row, $isEdit = false, $child = true, $forceUpdate = false)
+    public function updateContentUrl(Content $row, bool $isEdit = false, bool $child = true, bool $forceUpdate = false)
     {
-        if (!$isEdit || $this->get(NyroCmsService::class)->getDefaultLocale($row) == $row->getTranslatableLocale() || !$this->get(NyroCmsService::class)->disabledLocaleUrls($row->getTranslatableLocale())) {
+        if (!$isEdit || $this->nyroCmsService->getDefaultLocale($row) == $row->getTranslatableLocale() || !$this->nyroCmsService->disabledLocaleUrls($row->getTranslatableLocale())) {
             $oldUrl = $row->getUrl();
 
             $prefix = null;
             if ($row->getParent()) {
-                $parent = $this->get(DbAbstractService::class)->getContentRepository()->find($row->getParent()->getId());
+                $parent = $this->dbService->getContentRepository()->find($row->getParent()->getId());
                 $parent->setTranslatableLocale($row->getTranslatableLocale());
-                $this->get(nyroDevDbService::class)->refresh($parent);
+                $this->nyrodevDbService->refresh($parent);
                 $prefix = $parent->getUrl();
             }
 
-            $url = $prefix.'/'.$this->get(NyrodevService::class)->urlify(str_replace(['+', '&'], ['plus', 'et'], $row->getTitle()));
+            $url = $prefix.'/'.$this->nyrodevService->urlify(str_replace(['+', '&'], ['plus', 'et'], $row->getTitle()));
             $url = str_replace('//', '/', $url);
 
             $row->setUrl($url);
@@ -219,12 +228,12 @@ class AdminService extends nyroDevAbstractService
         }
     }
 
-    protected function updateContentUrlRec($parentId, $oldUrl, $newUrl, $locale, $forceUpdate = false)
+    protected function updateContentUrlRec($parentId, $oldUrl, $newUrl, string $locale, bool $forceUpdate = false)
     {
-        $rows = $this->get(DbAbstractService::class)->getContentRepository()->findBy(['parent' => $parentId]);
+        $rows = $this->dbService->getContentRepository()->findBy(['parent' => $parentId]);
         foreach ($rows as $row) {
             $row->setTranslatableLocale($locale);
-            $this->get(DbAbstractService::class)->refresh($row);
+            $this->dbService->refresh($row);
             $old = $row->getUrl();
             $new = str_replace([$oldUrl, '//'], [$newUrl, '/'], $row->getUrl());
             if ($forceUpdate || $old != $new) {
@@ -234,7 +243,7 @@ class AdminService extends nyroDevAbstractService
         }
     }
 
-    public function getContentStateChoices()
+    public function getContentStateChoices(): array
     {
         return [
             Content::STATE_ACTIVE => $this->trans('admin.state.state_'.Content::STATE_ACTIVE),
@@ -243,7 +252,7 @@ class AdminService extends nyroDevAbstractService
         ];
     }
 
-    public function getContentSpecStateChoices()
+    public function getContentSpecStateChoices(): array
     {
         return [
             ContentSpec::STATE_ACTIVE => $this->trans('admin.state.state_'.ContentSpec::STATE_ACTIVE),
@@ -277,7 +286,7 @@ class AdminService extends nyroDevAbstractService
 
     protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0, array $limitRootIds = [])
     {
-        foreach ($this->get(DbAbstractService::class)->getContentRepository()->children($parent, true) as $child) {
+        foreach ($this->dbService->getContentRepository()->children($parent, true) as $child) {
             $canUse = count($limitRootIds) > 0 ? isset($limitRootIds[$child->getId()]) && $limitRootIds[$child->getId()] : true;
             if ($canUse) {
                 $contents[$child->getId()] = $child;
@@ -289,7 +298,7 @@ class AdminService extends nyroDevAbstractService
         }
     }
 
-    public function getIcon($name)
+    public function getIcon(string $name): string
     {
         return '<svg class="icon icon-'.$name.'">'.
                     '<use xlink:href="'.$this->getAssetsPackages()->getUrl('bundles/nyrodevnyrocms/images/icons.svg').'#'.$name.'"></use>'.

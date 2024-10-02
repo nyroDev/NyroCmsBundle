@@ -31,157 +31,143 @@ abstract class AbstractHandler
 {
     public const TEMPLATE_INDICATOR = 'HANDLER_INDICATOR';
 
-    /**
-     * @var ContentHandler
-     */
-    protected $contentHandler;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    public function __construct(ContentHandler $contentHandler, ContainerInterface $container)
-    {
-        $this->contentHandler = $contentHandler;
-        $this->container = $container;
+    public function __construct(
+        protected readonly ContentHandler $contentHandler,
+        protected readonly ContainerInterface $container
+    ) {
     }
 
-    public function getAdminRouteName()
+    public function getAdminRouteName(): string
     {
         return 'nyrocms_admin_handler_contents';
     }
 
-    public function getAdminRoutePrm()
+    public function getAdminRoutePrm(): array
     {
         return [
             'chid' => $this->contentHandler->getId(),
         ];
     }
 
-    public function getOtherAdminRoutes()
+    public function getOtherAdminRoutes(): ?array
     {
-        return;
+        return null;
     }
 
-    public function hasAdminMenuLink()
-    {
-        return true;
-    }
-
-    public function hasAdminTreeLink()
+    public function hasAdminMenuLink(): bool
     {
         return true;
     }
 
-    public function useDateSpec()
+    public function hasAdminTreeLink(): bool
+    {
+        return true;
+    }
+
+    public function useDateSpec(): bool
     {
         return false;
     }
 
-    public function orderField()
+    public function orderField(): string
     {
         return 'position';
     }
 
-    public function isReversePositionOrder()
+    public function isReversePositionOrder(): bool
     {
         return true;
     }
 
-    public function hasIntro()
+    public function hasIntro(): bool
     {
         return false;
     }
 
-    public function isIntroRequired()
+    public function isIntroRequired(): bool
     {
         return false;
     }
 
-    public function hasFeatured()
+    public function hasFeatured(): bool
     {
         return true;
     }
 
-    public function hasStateInvisible()
+    public function hasStateInvisible(): bool
     {
         return true;
     }
 
-    public function hasValidDates()
+    public function hasValidDates(): bool
     {
         return true;
     }
 
-    public function hasMetas()
+    public function hasMetas(): bool
     {
         return false;
     }
 
-    public function hasOgs()
+    public function hasOgs(): bool
     {
         return false;
     }
 
-    public function needTranslations()
+    public function needTranslations(): bool
     {
         return true;
     }
 
-    public function hasMoveActions()
+    public function hasMoveActions(): bool
     {
         return true;
     }
 
-    public function hasComposer()
+    public function hasComposer(): bool
     {
         return true;
     }
 
-    public function hasContentSpecUrl()
+    public function hasContentSpecUrl(): bool
     {
         return true;
     }
 
-    public function hasHome()
+    public function hasHome(): bool
     {
         return false;
     }
 
-    protected function getFormFields($action)
+    protected function getFormFields(string $action): array
     {
         return [];
     }
 
-    protected function hasContentSpecificContent()
+    protected function hasContentSpecificContent(): bool
     {
         return false;
     }
 
-    public function getAllowedParams()
+    public function getAllowedParams(): array
     {
         return [];
     }
 
-    public function getSitemapXmlUrls(Content $content)
+    public function getSitemapXmlUrls(Content $content): array
     {
         return [];
     }
 
-    public function getSitemapUrls(Content $content)
+    public function getSitemapUrls(Content $content): array
     {
         return [];
     }
 
     /**
      * Get an application parameter.
-     *
-     * @param string $parameter
-     *
-     * @return mixed
      */
-    public function getParameter($parameter, $default = null)
+    public function getParameter(string $parameter, mixed $default = null): mixed
     {
         $value = $this->container->hasParameter($parameter) ? $this->container->getParameter($parameter) : null;
 
@@ -190,12 +176,8 @@ abstract class AbstractHandler
 
     /**
      * Gets a service by id.
-     *
-     * @param string $id The service id
-     *
-     * @return object The service
      */
-    public function get($id)
+    public function get(string $id): mixed
     {
         return $this->container->get($id);
     }
@@ -207,10 +189,8 @@ abstract class AbstractHandler
      * @param array  $parameters Parameters to replace
      * @param string $domain     Translation domain
      * @param string $locale     Local to use
-     *
-     * @return string The translation
      */
-    public function trans($key, array $parameters = [], $domain = 'messages', $locale = null)
+    public function trans(string $key, array $parameters = [], string $domain = 'messages', ?string $locale = null): string
     {
         return $this->get('translator')->trans($key, $parameters, $domain, $locale);
     }
@@ -224,37 +204,29 @@ abstract class AbstractHandler
      *
      * @return string The generated URL
      */
-    public function generateUrl($route, $parameters = [], $absolute = false)
+    public function generateUrl(string $route, array $parameters = [], bool $absolute = false): string
     {
         return $this->container->get(NyrodevService::class)->generateUrl($route, $parameters, $absolute);
     }
 
-    /**
-     * @return ContentRepositoryInterface
-     */
-    public function getContentRepo()
+    public function getContentRepo(): ContentRepositoryInterface
     {
         return $this->get(DbAbstractService::class)->getContentRepository();
     }
 
-    /**
-     * @return ContentSpecRepositoryInterface
-     */
-    public function getContentSpecRespository()
+    public function getContentSpecRespository(): ContentSpecRepositoryInterface
     {
         return $this->get(DbAbstractService::class)->getContentSpecRepository();
     }
 
-    protected $contents = [];
+    protected array $contents = [];
 
     /**
      * Get content by id.
      *
      * @param int $id
-     *
-     * @return Content
      */
-    public function getContentById($id)
+    public function getContentById($id): ?Content
     {
         if (!isset($this->contents[$id])) {
             $this->contents[$id] = $this->getContentRepo()->find($id);
@@ -263,7 +235,7 @@ abstract class AbstractHandler
         return $this->contents[$id];
     }
 
-    public function formClb($action, ContentSpec $row, FormBuilder $form, array $langs = [], array $translations = [])
+    public function formClb(string $action, ContentSpec $row, FormBuilder $form, array $langs = [], array $translations = []): void
     {
         $after = $this->hasValidDates() ? 'validEnd' : 'state';
         $content = $this->hasComposer() ? $row->getData() : $row->getContent();
@@ -330,25 +302,21 @@ abstract class AbstractHandler
 
     /**
      * Get the upload directory.
-     *
-     * @return string
      */
-    public function getUploadRootDir()
+    public function getUploadRootDir(): string
     {
         return $this->get(NyrodevService::class)->getKernel()->getProjectDir().'/public/'.$this->getUploadDir();
     }
 
     /**
      * Get the upload directory web name.
-     *
-     * @return string
      */
-    public function getUploadDir()
+    public function getUploadDir(): string
     {
         return 'uploads/contentHandler/'.$this->contentHandler->getId();
     }
 
-    public function flushClb($action, ContentSpec $row, Form $form)
+    public function flushClb(string $action, ContentSpec $row, Form $form): void
     {
         $newContents = $newContentTexts = [];
         foreach ($this->getFormFields($action) as $k => $cfg) {
@@ -431,7 +399,7 @@ abstract class AbstractHandler
         }
     }
 
-    protected $fileUploaded = [];
+    protected array $fileUploaded = [];
 
     protected function handleFileUpload($field, $data, $action, ContentSpec $row, $fieldForm = null)
     {
@@ -485,17 +453,11 @@ abstract class AbstractHandler
         }
     }
 
-    /**
-     * @var Request
-     */
-    protected $request;
+    protected ?Request $request = null;
 
-    /**
-     * @var bool
-     */
-    protected $isAdmin = false;
+    protected bool $isAdmin = false;
 
-    public function init(Request $request = null, $isAdmin = false)
+    public function init(Request $request = null, bool $isAdmin = false)
     {
         $this->request = $request;
         $this->isAdmin = $isAdmin;
@@ -507,10 +469,8 @@ abstract class AbstractHandler
      * @param int     $id
      * @param Content $content
      * @param int     $state
-     *
-     * @return ContentSpec
      */
-    public function getContentSpec($id, $locale = null, Content $content = null, $state = ContentSpec::STATE_ACTIVE)
+    public function getContentSpec($id, $locale = null, Content $content = null, $state = ContentSpec::STATE_ACTIVE): ?ContentSpec
     {
         if (!isset($this->contentSpec[$id])) {
             $this->contentSpec[$id] = $this->getContentSpecRespository()
@@ -539,31 +499,31 @@ abstract class AbstractHandler
                         ->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where);
     }
 
-    public function isWrapped()
+    public function isWrapped(): bool|string
     {
         return false;
     }
 
-    public function isWrappedAs()
+    public function isWrappedAs(): bool|string
     {
         return false;
     }
 
-    protected $sharable;
+    protected ?Sharable $sharable = null;
 
-    protected function setSharable(Sharable $sharable)
+    protected function setSharable(Sharable $sharable): void
     {
         $this->sharable = $sharable;
     }
 
-    public function getSharable()
+    public function getSharable(): ?Sharable
     {
         return $this->sharable;
     }
 
     protected $preparedView;
 
-    public function prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
+    public function prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         if (is_null($this->preparedView)) {
             $this->preparedView = $this->_prepareView($content, $handlerContent, $handlerAction);
@@ -572,11 +532,11 @@ abstract class AbstractHandler
         return $this->preparedView;
     }
 
-    abstract protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null);
+    abstract protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array;
 
     protected $preparedHomeView;
 
-    public function prepareHomeView(Content $content)
+    public function prepareHomeView(Content $content): array
     {
         if (is_null($this->preparedHomeView)) {
             $this->preparedHomeView = $this->_prepareHomeView($content);
@@ -585,7 +545,7 @@ abstract class AbstractHandler
         return $this->preparedHomeView;
     }
 
-    protected function _prepareHomeView(Content $content)
+    protected function _prepareHomeView(Content $content): array
     {
         return [];
     }

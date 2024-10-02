@@ -9,63 +9,55 @@ class ComposerBlockVarsEvent extends Event
 {
     public const COMPOSER_BLOCK_VARS = 'nyrocms.events.composerBlockVars';
 
-    protected $row;
-    protected $template;
-    protected $vars;
-    protected $blockConfig;
-
-    public function __construct(Composable $row, $template, array $vars, array $blockConfig)
-    {
-        $this->row = $row;
-        $this->template = $template;
-        $this->vars = $vars;
-        $this->blockConfig = $blockConfig;
+    public function __construct(
+        protected readonly Composable $row,
+        protected string $template,
+        protected array $vars,
+        protected array $blockConfig,
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }
 
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return $this->template;
     }
 
-    public function setTemplate($template)
+    public function setTemplate(string $template): void
     {
         $this->template = $template;
     }
 
-    public function setVars($vars)
+    public function setVars(array $vars): void
     {
         $this->vars = $vars;
     }
 
-    public function getVars()
+    public function getVars(): array
     {
         return $this->vars;
     }
 
-    public function setInVars($key, $value)
+    public function setInVars(string $key, mixed $value): void
     {
         $this->vars[$key] = $value;
     }
 
-    public function getInVars($key)
+    public function getInVars(string $key): mixed
     {
         return isset($this->vars[$key]) ? $this->vars[$key] : null;
     }
 
-    public function getInBlockVars($key)
+    public function getInBlockVars(string $key): mixed
     {
         return isset($this->vars['block'][$key]) ? $this->vars['block'][$key] : null;
     }
 
-    public function setInBlockVars($key, $value)
+    public function setInBlockVars(string $key, mixed $value): void
     {
         $blocks = $this->vars['block'];
         $blocks[$key] = $value;
@@ -73,7 +65,7 @@ class ComposerBlockVarsEvent extends Event
         $this->vars['block'] = $blocks;
     }
 
-    public function getInBlockContentVars($key)
+    public function getInBlockContentVars(string $key): mixed
     {
         $contents = $this->getInBlockVars('contents');
         if (!is_array($contents)) {
@@ -83,7 +75,7 @@ class ComposerBlockVarsEvent extends Event
         return isset($contents[$key]) ? $contents[$key] : null;
     }
 
-    public function setInBlockContentVars($key, $value)
+    public function setInBlockContentVars(string $key, mixed $value): void
     {
         $contents = $this->getInBlockVars('contents');
         if (!is_array($contents)) {
@@ -95,17 +87,17 @@ class ComposerBlockVarsEvent extends Event
         $this->setInBlockVars('contents', $contents);
     }
 
-    public function getBlockType()
+    public function getBlockType(): mixed
     {
         return $this->getInBlockVars('type');
     }
 
-    public function getBlockConfig()
+    public function getBlockConfig(): array
     {
         return $this->blockConfig;
     }
 
-    public function getInBlockConfig($key)
+    public function getInBlockConfig(string $key): mixed
     {
         return isset($this->blockConfig[$key]) ? $this->blockConfig[$key] : null;
     }

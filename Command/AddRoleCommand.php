@@ -37,7 +37,7 @@ class AddRoleCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');
         $roleName = $input->getArgument('roleName');
@@ -72,6 +72,6 @@ class AddRoleCommand extends Command
 
         $output->writeln('New role "'.$name.'" added with ID: '.$newRole->getId());
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

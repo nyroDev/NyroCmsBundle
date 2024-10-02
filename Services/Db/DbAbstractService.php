@@ -3,17 +3,29 @@
 namespace NyroDev\NyroCmsBundle\Services\Db;
 
 use Doctrine\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectRepository;
+use NyroDev\NyroCmsBundle\Repository\ContentHandlerRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
-use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
+use NyroDev\UtilityBundle\Services\Db\DbAbstractService as NyroDevDbService;
 
 abstract class DbAbstractService extends AbstractServiceSrc
 {
-    public function getNamespace()
+
+    public function __construct(
+        protected readonly NyroDevDbService $nyrodevDbService,
+    ) {
+    }
+
+    public function getNamespace(): string
     {
         return $this->getParameter('nyrocms.model.namespace');
     }
 
-    public function getClass($name, $namespaced = true)
+    public function getClass(string $name, bool $namespaced = true): string
     {
         $tmp = explode('\\', $name);
         $converter = new \Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter();
@@ -22,7 +34,7 @@ abstract class DbAbstractService extends AbstractServiceSrc
         return ($namespaced ? $this->getNamespace().'\\' : '').$this->getParameter('nyrocms.model.classes.'.$paramKey, $name);
     }
 
-    public function isA($object, $name)
+    public function isA(object $object, string $name): bool
     {
         return is_a($object, $this->getClass($name));
     }
@@ -32,81 +44,61 @@ abstract class DbAbstractService extends AbstractServiceSrc
      */
     public function getObjectManager()
     {
-        return $this->get(nyroDevDbService::class)->getObjectManager();
+        return $this->nyrodevDbService->getObjectManager();
     }
 
-    /**
-     * @return \NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface
-     */
-    public function getUserRepository()
+    public function getUserRepository(): UserRepositoryInterface
     {
         return $this->getRepository('user');
     }
 
-    /**
-     * @return \NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface
-     */
-    public function getUserRoleRepository()
+    public function getUserRoleRepository(): UserRoleRepositoryInterface
     {
         return $this->getRepository('user_role');
     }
 
-    /**
-     * @return \NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface
-     */
-    public function getContentRepository()
+    public function getContentRepository(): ContentRepositoryInterface
     {
         return $this->getRepository('content');
     }
 
-    /**
-     * @return \NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface
-     */
-    public function getContentSpecRepository()
+    public function getContentSpecRepository(): ContentSpecRepositoryInterface
     {
         return $this->getRepository('content_spec');
     }
 
-    /**
-     * @return \NyroDev\NyroCmsBundle\Repository\ContentHandlerRepositoryInterface
-     */
-    public function getContentHandlerRepository()
+    public function getContentHandlerRepository(): ContentHandlerRepositoryInterface
     {
         return $this->getRepository('content_handler');
     }
 
-    /**
-     * @param string $name class name
-     *
-     * @return \Doctrine\Persistence\ObjectRepository
-     */
-    public function getRepository($name)
+    public function getRepository(object|string $name): ObjectRepository
     {
-        return $this->get(nyroDevDbService::class)->getRepository($this->getClass($name));
+        return $this->nyrodevDbService->getRepository($this->getClass($name));
     }
 
-    public function getNew($name, $persist = true)
+    public function getNew(object|string $name, bool $persist = true)
     {
-        return $this->get(nyroDevDbService::class)->getNew($this->getRepository($name), $persist);
+        return $this->nyrodevDbService->getNew($this->getRepository($name), $persist);
     }
 
-    public function persist($object)
+    public function persist($object): void
     {
-        $this->get(nyroDevDbService::class)->persist($object);
+        $this->nyrodevDbService->persist($object);
     }
 
-    public function remove($object)
+    public function remove($object): void
     {
-        $this->get(nyroDevDbService::class)->remove($object);
+        $this->nyrodevDbService->remove($object);
     }
 
-    public function refresh($object)
+    public function refresh($object): void
     {
-        $this->get(nyroDevDbService::class)->refresh($object);
+        $this->nyrodevDbService->refresh($object);
     }
 
-    public function flush()
+    public function flush(): void
     {
-        $this->get(nyroDevDbService::class)->flush();
+        $this->nyrodevDbService->flush();
     }
 }

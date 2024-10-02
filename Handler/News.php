@@ -9,29 +9,29 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 
 class News extends AbstractHandler
 {
-    public function hasIntro()
+    public function hasIntro(): bool
     {
         return true;
     }
 
-    public function hasMetas()
+    public function hasMetas(): bool
     {
         return true;
     }
 
-    public function hasOgs()
+    public function hasOgs(): bool
     {
         return true;
     }
 
-    public function getAllowedParams()
+    public function getAllowedParams(): array
     {
         return [
             'page',
         ];
     }
 
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
+    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $view = '@NyroDevNyroCms/Handler/news';
         $vars = [
@@ -77,7 +77,7 @@ class News extends AbstractHandler
         ];
     }
 
-    public function getFeatured(Content $content, $nb = 2, $forceNb = true)
+    public function getFeatured(Content $content, int $nb = 2, bool $forceNb = true)
     {
         $results = $this->getContentSpecs($content, 0, $nb, ['featured' => 1]);
 
@@ -89,12 +89,12 @@ class News extends AbstractHandler
         return $results;
     }
 
-    public function hasHome()
+    public function hasHome(): bool
     {
         return true;
     }
 
-    protected function _prepareHomeView(Content $content)
+    protected function _prepareHomeView(Content $content): array
     {
         return [
             'view' => '@NyroDevNyroCms/Handler/newsHome.html.php',

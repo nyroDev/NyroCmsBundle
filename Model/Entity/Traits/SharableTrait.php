@@ -88,7 +88,7 @@ trait SharableTrait
         return $this;
     }
 
-    public function getShareOthers()
+    public function getShareOthers(): ?array
     {
         return null;
     }
@@ -118,7 +118,7 @@ trait SharableTrait
         return $this->ogImage;
     }
 
-    protected function getFileFields()
+    protected function getFileFields(): array
     {
         return [
             'ogImage' => [
@@ -128,7 +128,7 @@ trait SharableTrait
         ];
     }
 
-    public function getShareOgImage()
+    public function getShareOgImage(): ?string
     {
         return $this->getAbsolutePath('ogImage');
     }

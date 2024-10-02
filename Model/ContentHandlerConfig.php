@@ -271,7 +271,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $ret;
     }
 
-    protected function getFileFields()
+    protected function getFileFields(): array
     {
         return [];
     }

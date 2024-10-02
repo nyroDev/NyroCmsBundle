@@ -9,35 +9,29 @@ class ComposerConfigEvent extends Event
 {
     public const COMPOSER_CONFIG = 'nyrocms.events.composerConfig';
 
-    protected $row;
-    protected $config;
-
-    public function __construct(Composable $row, $configName, $config)
-    {
-        $this->row = $row;
-        $this->configName = $configName;
-        $this->config = $config;
+    public function __construct(
+        protected readonly Composable $row,
+        protected readonly string $configName,
+        protected mixed $config,
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }
 
-    public function getConfigName()
+    public function getConfigName(): string
     {
         return $this->configName;
     }
 
-    public function setConfig($config)
+    public function setConfig(mixed $config): void
     {
         $this->config = $config;
     }
 
-    public function getConfig()
+    public function getConfig(): mixed
     {
         return $this->config;
     }

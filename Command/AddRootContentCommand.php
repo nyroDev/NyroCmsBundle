@@ -42,7 +42,7 @@ class AddRootContentCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $title = $input->getArgument('title');
         $handler = $input->getArgument('handler');
@@ -113,6 +113,6 @@ class AddRootContentCommand extends Command
             $output->writeln('New user role "'.$title.'" added with ID: '.$userRole->getId());
         }
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

@@ -9,38 +9,23 @@ class ComposerDefaultBlockEvent extends Event
 {
     public const COMPOSER_DEFAULT_ADMIN_CONTENT = 'nyrocms.events.composerDefaultAdminContent';
 
-    protected $row;
-
-    protected $content;
-
-    public function __construct(Composable $row, array $content)
-    {
-        $this->row = $row;
-        $this->content = $content;
+    public function __construct(
+        protected readonly Composable $row,
+        protected array $content
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }
 
-    /**
-     * Get the value of content.
-     */
-    public function getContent()
+    public function getContent(): array
     {
         return $this->content;
     }
 
-    /**
-     * Set the value of content.
-     *
-     * @return self
-     */
-    public function setContent($content)
+    public function setContent(array $content): self
     {
         $this->content = $content;
 

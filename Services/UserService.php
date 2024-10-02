@@ -6,7 +6,7 @@ use DateTime;
 use Exception;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
-use NyroDev\UtilityBundle\Services\AbstractService as nyroDevAbstractService;
+use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\FormService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
@@ -21,16 +21,19 @@ use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserService extends nyroDevAbstractService
+class UserService extends NyroDevAbstractService
 {
-    protected $passwordHasher;
-
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
-    {
-        $this->passwordHasher = $passwordHasher;
+    public function __construct(
+        private readonly NyrodevService $nyrodevService,
+        private readonly MemberService $memberService,
+        private readonly FormService $formService,
+        private readonly DbAbstractService $dbService,
+        private readonly NyroCmsService $nyroCmsService,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
     }
 
-    public function handleAddUser(User $user, $locale = null, $place = 'admin')
+    public function handleAddUser(User $user, ?string $locale = null, string $place = 'admin'): void
     {
         $now = new DateTime();
         if (
@@ -45,16 +48,16 @@ class UserService extends nyroDevAbstractService
         }
     }
 
-    public function sendWelcomeEmail(User $user, $locale = null, $place = 'admin')
+    public function sendWelcomeEmail(User $user, ?string $locale = null, string $place = 'admin'): void
     {
-        $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
+        $passwordKey = $this->nyrodevService->randomStr(32);
         $end = new DateTime('+1month');
 
         $user->setPasswordKey($passwordKey);
         $user->setPasswordKeyEnd($end);
-        $this->get(DbAbstractService::class)->flush();
+        $this->dbService->flush();
 
-        $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
+        $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
             '%url%' => $this->generateUrl('nyrocms_'.$place.'_welcome', [
                 'id' => $user->getId(),
@@ -63,14 +66,14 @@ class UserService extends nyroDevAbstractService
         ])), null, $locale);
     }
 
-    public function sendChangedPasswordEmail(User $user)
+    public function sendChangedPasswordEmail(User $user): void
     {
-        return $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', [
+        $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', [
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
         ])));
     }
 
-    public function handleForgot($place, Request $request, $id, $key, $welcome = false)
+    public function handleForgot(string $place, Request $request, string $id, string $key, bool $welcome = false): array
     {
         $ret = [
             'step' => 1,
@@ -79,7 +82,7 @@ class UserService extends nyroDevAbstractService
             'form' => null,
             'welcome' => $welcome,
         ];
-        $repo = $this->get(DbAbstractService::class)->getUserRepository();
+        $repo = $this->dbService->getUserRepository();
 
         if ($id || $welcome) {
             $ret['step'] = 2;
@@ -91,7 +94,7 @@ class UserService extends nyroDevAbstractService
 
             $now = new DateTime();
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
-                $form = $this->get(FormService::class)->getFormFactory()->createBuilder()
+                $form = $this->formService->getFormFactory()->createBuilder()
                     ->add('password', RepeatedType::class, [
                         'type' => PasswordType::class,
                         'first_options' => [
@@ -124,7 +127,7 @@ class UserService extends nyroDevAbstractService
                     $user->setPassword($password);
                     $user->setPasswordKey(null);
                     $user->setPasswordKeyEnd(null);
-                    $this->get(DbAbstractService::class)->flush();
+                    $this->dbService->flush();
 
                     $this->sendChangedPasswordEmail($user);
 
@@ -136,7 +139,7 @@ class UserService extends nyroDevAbstractService
                 $ret['notFound'] = true;
             }
         } else {
-            $form = $this->get(FormService::class)->getFormFactory()->createBuilder()
+            $form = $this->formService->getFormFactory()->createBuilder()
                 ->add('email', EmailType::class, [
                     'label' => $this->trans('admin.user.email'),
                     'constraints' => [
@@ -159,14 +162,14 @@ class UserService extends nyroDevAbstractService
                     $user = null;
                 }
                 if ($user) {
-                    $passwordKey = $this->get(NyrodevService::class)->randomStr(32);
+                    $passwordKey = $this->nyrodevService->randomStr(32);
                     $end = new DateTime('+2day');
 
                     $user->setPasswordKey($passwordKey);
                     $user->setPasswordKeyEnd($end);
-                    $this->get(DbAbstractService::class)->flush();
+                    $this->dbService->flush();
 
-                    $this->get(NyroCmsService::class)->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', [
+                    $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', [
                         '%name%' => $user->getFirstname().' '.$user->getLastName(),
                         '%url%' => $this->generateUrl('nyrocms_'.$place.'_forgot', [
                             'id' => $user->getId(),
@@ -185,22 +188,22 @@ class UserService extends nyroDevAbstractService
         return $ret;
     }
 
-    public function handleAccount($place, Request $request)
+    public function handleAccount(string $place, Request $request): array
     {
-        $this->get(NyroCmsService::class)->setActiveIds(['account' => 'account']);
+        $this->nyroCmsService->setActiveIds(['account' => 'account']);
         $ret = [
             'fields' => false,
             'password' => false,
         ];
 
-        $user = $this->get(MemberService::class)->getUser();
+        $user = $this->memberService->getUser();
         $fields = [
             'email',
             'firstname',
             'lastname',
         ];
 
-        $form = $this->get(FormService::class)->getFormFactory()->createNamedBuilder('fields', FormType::class, $user);
+        $form = $this->formService->getFormFactory()->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
             $form->add($f, null, [
                 'label' => $this->trans('admin.user.'.$f),
@@ -212,7 +215,7 @@ class UserService extends nyroDevAbstractService
 
         $formFields = $form->getForm();
 
-        $formPassword = $this->get(FormService::class)->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
+        $formPassword = $this->formService->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
             ->add('curPassword', PasswordType::class, [
                 'label' => $this->trans('admin.user.curPassword'),
                 'required' => true,
@@ -246,7 +249,7 @@ class UserService extends nyroDevAbstractService
         $formFields->handleRequest($request);
         $formPassword->handleRequest($request);
         if ($formFields->isSubmitted() && $formFields->isValid()) {
-            $this->get(DbAbstractService::class)->flush();
+            $this->dbService->flush();
             $ret['fields'] = true;
         } elseif ($formPassword->isSubmitted() && $formPassword->isValid()) {
             $newPassword = $formPassword->get('password')->getData();
@@ -254,7 +257,7 @@ class UserService extends nyroDevAbstractService
             $user->setPassword($password);
             $user->setPasswordKey(null);
             $user->setPasswordKeyEnd(null);
-            $this->get(DbAbstractService::class)->flush();
+            $this->dbService->flush();
 
             $this->sendChangedPasswordEmail($user);
             $ret['password'] = true;

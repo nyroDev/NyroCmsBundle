@@ -8,7 +8,7 @@ use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 
 class Sitemap extends AbstractHandler
 {
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
+    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $root = $this->getContentById($content->getRoot());
 
@@ -22,7 +22,7 @@ class Sitemap extends AbstractHandler
         ];
     }
 
-    protected function getHierarchy(Content $content)
+    protected function getHierarchy(Content $content): array
     {
         $ret = [];
 

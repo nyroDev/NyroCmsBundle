@@ -18,44 +18,44 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class Contact extends AbstractHandler
 {
-    public function hasComposer()
+    public function hasComposer(): bool
     {
         return false;
     }
 
-    public function hasValidDates()
+    public function hasValidDates(): bool
     {
         return false;
     }
 
-    public function hasFeatured()
+    public function hasFeatured(): bool
     {
         return false;
     }
 
-    public function hasStateInvisible()
+    public function hasStateInvisible(): bool
     {
         return false;
     }
 
-    public function isReversePositionOrder()
+    public function isReversePositionOrder(): bool
     {
         return false;
     }
 
-    public function saveInDb()
+    public function saveInDb(): bool
     {
         return false;
     }
 
-    public function getAllowedParams()
+    public function getAllowedParams(): array
     {
         return [
             'sent',
         ];
     }
 
-    public function getOtherAdminRoutes()
+    public function getOtherAdminRoutes(): array
     {
         $ret = null;
         if ($this->saveInDb()) {
@@ -73,7 +73,7 @@ class Contact extends AbstractHandler
         return $ret;
     }
 
-    public function getAdminMessageListFields()
+    public function getAdminMessageListFields(): array
     {
         return [
             'id',
@@ -85,12 +85,12 @@ class Contact extends AbstractHandler
         ];
     }
 
-    public function getAdminMessageFilterType()
+    public function getAdminMessageFilterType(): string
     {
         return ContactMessageFilterType::class;
     }
 
-    public function getAdminMessageExportFields()
+    public function getAdminMessageExportFields(): array
     {
         return [
             'id',
@@ -107,7 +107,7 @@ class Contact extends AbstractHandler
 
     protected $validatedEmails;
 
-    protected function getFormFields($action)
+    protected function getFormFields(string $action): array
     {
         $ret = [];
         if ($this->contentHandler->getHasAdmin()) {
@@ -147,7 +147,7 @@ class Contact extends AbstractHandler
         return $ret;
     }
 
-    public function flushClb($action, ContentSpec $row, Form $form)
+    public function flushClb(string $action, ContentSpec $row, Form $form): void
     {
         parent::flushClb($action, $row, $form);
         $content = $row->getContent();
@@ -155,7 +155,7 @@ class Contact extends AbstractHandler
         $row->setContent($content);
     }
 
-    protected function getEmails(Content $content)
+    protected function getEmails(Content $content): array
     {
         $ret = [];
 
@@ -180,17 +180,17 @@ class Contact extends AbstractHandler
         return $ret;
     }
 
-    protected function getFormType(Content $content)
+    protected function getFormType(Content $content): string
     {
         return ContactType::class;
     }
 
-    protected function getFormOptions(Content $content)
+    protected function getFormOptions(Content $content): array
     {
         return [];
     }
 
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, $handlerAction = null)
+    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $contactEmails = $this->getEmails($content);
 

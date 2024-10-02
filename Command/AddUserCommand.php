@@ -46,7 +46,7 @@ class AddUserCommand extends Command
     /**
      * Executes the command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $email = $input->getArgument('email');
         $firstname = $input->getArgument('firstname');
@@ -161,6 +161,6 @@ class AddUserCommand extends Command
 
         $output->writeln('New user "'.$email.'" added with ID: '.$newUser->getId());
 
-        return 0;
+        return Command::SUCCESS;
     }
 }

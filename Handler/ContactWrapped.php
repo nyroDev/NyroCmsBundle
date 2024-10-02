@@ -4,12 +4,12 @@ namespace NyroDev\NyroCmsBundle\Handler;
 
 class ContactWrapped extends Contact
 {
-    public function isWrappedAs()
+    public function isWrappedAs(): string
     {
         return 'text2';
     }
 
-    public function isWrapped()
+    public function isWrapped(): string
     {
         return 'column2';
     }

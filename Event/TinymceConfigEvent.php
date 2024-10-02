@@ -9,36 +9,29 @@ class TinymceConfigEvent extends Event
 {
     public const TINYMCE_CONFIG = 'nyrocms.events.tinymceConfig';
 
-    protected $row;
-    protected $simple;
-    protected $config;
-
-    public function __construct(Composable $row, $simple, array $config)
-    {
-        $this->row = $row;
-        $this->simple = $simple;
-        $this->config = $config;
+    public function __construct(
+        protected readonly Composable $row,
+        protected bool $simple,
+        protected array $config,
+    ) {
     }
 
-    /**
-     * @return Composable
-     */
-    public function getRow()
+    public function getRow(): Composable
     {
         return $this->row;
     }
 
-    public function getSimple()
+    public function getSimple(): bool
     {
         return $this->simple;
     }
 
-    public function setConfig($config)
+    public function setConfig(array $config): void
     {
         $this->config = $config;
     }
 
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }

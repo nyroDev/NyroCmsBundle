@@ -5,6 +5,8 @@ services:
 
     NyroDev\NyroCmsBundle\Services\Db\OrmService:
         public: true
+        arguments:
+            - '@NyroDev\UtilityBundle\Services\Db\DbAbstractService'
         calls:
             - [setContainerInterface, ['@service_container']]
     nyrocms_db:
