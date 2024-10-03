@@ -32,8 +32,8 @@
         "symfony/yaml": "^6",
 		"stof/doctrine-extensions-bundle": "^1.8",
 		"becklyn/ordered-form-bundle": "^1.3",
-        "nyrodev/php-template-bundle": "dev-master",
-        "nyrodev/utility-bundle": "dev-master"
+        "nyrodev/php-template-bundle": "^6",
+        "nyrodev/utility-bundle": "^6"
     },
     "suggest": {
         "doctrine/doctrine-migrations-bundle": "To handle doctrine migration correctly"
