@@ -7,11 +7,11 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 
 interface ContentSpecRepositoryInterface
 {
-    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = []);
+    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = []);
 
-    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [], $start = null, $limit = null);
+    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [], array $order = [], $start = null, $limit = null);
 
-    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = []);
+    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [], array $order = []);
 
     public function getAfters(ContentSpec $contentSpec);
 

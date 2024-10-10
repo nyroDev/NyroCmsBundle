@@ -37,7 +37,7 @@ foreach ($introKeys as $introKey) {
 				<?php endif; ?>
 				<button type="submit" class="button"><?php echo $view['nyrodev']->trans('admin.misc.send'); ?></button>
 			</div>
-			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', [
+			<?php echo $view['actions']->render(new Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', [
 			    'parent' => $parent,
 			])); ?>
 			<div class="listButtons">

@@ -410,7 +410,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->deleted;
     }
 
-    public function setParent(Content $parent = null): static
+    public function setParent(?Content $parent = null): static
     {
         $this->parent = $parent;
 

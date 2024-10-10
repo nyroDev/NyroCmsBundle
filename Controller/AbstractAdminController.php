@@ -2,10 +2,14 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController as SrcAbstractAdminController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
 
@@ -13,7 +17,7 @@ class AbstractAdminController extends SrcAbstractAdminController
 {
     use Traits\SubscribedServiceTrait;
 
-    protected function canAdminContentHandler(\NyroDev\NyroCmsBundle\Model\ContentHandler $contentHandler)
+    protected function canAdminContentHandler(ContentHandler $contentHandler): void
     {
         $canAdmin = false;
         $nyrocmsAdmin = $this->get(AdminService::class);
@@ -26,15 +30,12 @@ class AbstractAdminController extends SrcAbstractAdminController
         }
     }
 
-    /**
-     * @var \Symfony\Component\Form\Form
-     */
-    protected $translationForm;
-    protected $translationPrefix;
-    protected $translationFields = [];
-    protected $translations;
+    protected ?Form $translationForm;
+    protected ?string $translationPrefix;
+    protected array $translationFields = [];
+    protected ?array $translations;
 
-    protected function translationFormClb($action, $row, \Symfony\Component\Form\FormBuilder $form)
+    protected function translationFormClb(string $action, object $row, FormBuilder $form): void
     {
         if (count($this->translationFields)) {
             $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
@@ -73,12 +74,12 @@ class AbstractAdminController extends SrcAbstractAdminController
         }
     }
 
-    protected function translationFlushClb($action, $row, $form)
+    protected function translationFlushClb(string $action, object $row, Form $form): void
     {
         $this->translationForm = $form;
     }
 
-    protected function translationAfterFlushClb($response, $action, $row)
+    protected function translationAfterFlushClb(Response $response, string $action, object $row): void
     {
         if (count($this->translationFields)) {
             $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);

@@ -20,10 +20,10 @@
 <?php else: ?>
 	<?php if ($contents['image']): ?>
 		<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-			'image' => $contents['image'],
-			'title' => $row->getTitle(),
-			'class' => 'image1',
-			'config' => $config['image'],
+		    'image' => $contents['image'],
+		    'title' => $row->getTitle(),
+		    'class' => 'image1',
+		    'config' => $config['image'],
 		]); ?>
 	<?php endif; ?>
 	<?php if ('text' === $handlerInContentsKey): ?> 

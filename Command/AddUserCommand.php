@@ -14,22 +14,15 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AddUserCommand extends Command
 {
-    protected $db;
-    protected $admin;
-    protected $passwordHasher;
-
-    public function __construct(DbAbstractService $db, AdminService $admin, UserPasswordHasherInterface $passwordHasher)
-    {
-        $this->db = $db;
-        $this->admin = $admin;
-        $this->passwordHasher = $passwordHasher;
+    public function __construct(
+        private readonly DbAbstractService $db,
+        private readonly AdminService $admin,
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrocms:addUser')
@@ -43,9 +36,6 @@ class AddUserCommand extends Command
             ->addArgument('userroles', InputArgument::OPTIONAL, 'User roles', null);
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $email = $input->getArgument('email');

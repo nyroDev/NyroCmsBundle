@@ -15,7 +15,7 @@ class AdminController extends NyroDevAbstractController
 {
     use Traits\SubscribedServiceTrait;
 
-    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils)
+    public function loginAction(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
@@ -30,22 +30,22 @@ class AdminController extends NyroDevAbstractController
         ]);
     }
 
-    public function indexAction()
+    public function indexAction(): Response
     {
         return $this->redirectToRoute('nyrocms_admin_data_content_tree');
     }
 
-    public function forgotAction(Request $request, $id = null, $key = null, $welcome = false)
+    public function forgotAction(Request $request, ?string $id = null, ?string $key = null, bool $welcome = false): Response
     {
         return $this->render('@NyroDevNyroCms/Admin/forgot.html.php', $this->get(UserService::class)->handleForgot('admin', $request, $id, $key, $welcome));
     }
 
-    public function accountAction(Request $request)
+    public function accountAction(Request $request): Response
     {
         return $this->render('@NyroDevNyroCms/Admin/account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
     }
 
-    public function ccAction()
+    public function ccAction(): Response
     {
         $fs = new Filesystem();
 

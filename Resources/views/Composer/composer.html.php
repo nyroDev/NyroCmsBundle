@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_HTML); ?>">
+<html class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_HTML); ?>">
 <head>
     <meta charset="utf-8"/>
     <title>Composer for <?php echo $row; ?></title>
@@ -13,7 +13,7 @@
 
 	<?php echo $view['nyrodev_tagRenderer']->renderWebpackScriptTags('js/admin/nyroCmsComposer', 'defer'); ?>
 </head>
-<body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, \NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?><?php echo $canChangeStructure ? '' : ' noChangeStructure'; ?><?php echo $canChangeMedia ? '' : ' noChangeMedia'; ?>">
+<body class="<?php echo $view['nyrocms_composer']->getWrapperCssTheme($row, NyroDev\NyroCmsBundle\Event\WrapperCssThemeEvent::POSITION_ADMIN_BODY); ?><?php echo $canChangeStructure ? '' : ' noChangeStructure'; ?><?php echo $canChangeMedia ? '' : ' noChangeMedia'; ?>">
 <?php
 $prefixTinymce = 'data-tinymce_';
 $prefixTinymceSimple = 'data-tinymcesimple_';
@@ -57,10 +57,8 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 
 	<?php if (
 	    ($canChangeLang && count($langs) > 0)
-	    ||
-	    $canChangeStructure
-	    ||
-	    ($canChangeTheme && count($themes) > 1)
+	    || $canChangeStructure
+	    || ($canChangeTheme && count($themes) > 1)
 	): ?>
 	<nav id="composerNavTool">
 		<?php if ($canChangeStructure): ?>

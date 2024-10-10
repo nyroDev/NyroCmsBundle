@@ -15,7 +15,7 @@ class NyroCmsLoader extends Loader
 {
     use ContainerInterfaceServiceableTrait;
 
-    private $loaded = [];
+    private array $loaded = [];
 
     public function load(mixed $resource, ?string $type = null): mixed
     {
@@ -147,7 +147,7 @@ class NyroCmsLoader extends Loader
         return $routes;
     }
 
-    public function findMatchingController(Content $content)
+    public function findMatchingController(Content $content): ?string
     {
         $handler = $content->getVeryParent()->getHandler();
 

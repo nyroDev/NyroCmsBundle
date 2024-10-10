@@ -12,19 +12,13 @@ use Symfony\Component\Console\Question\Question;
 
 class AddRoleCommand extends Command
 {
-    protected $db;
-
-    public function __construct(DbAbstractService $db)
-    {
-        $this->db = $db;
-
+    public function __construct(
+        private readonly DbAbstractService $db,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrocms:addRole')
@@ -34,9 +28,6 @@ class AddRoleCommand extends Command
             ->addArgument('internal', InputArgument::OPTIONAL, 'Internal', null);
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $name = $input->getArgument('name');

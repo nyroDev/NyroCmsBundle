@@ -8,7 +8,7 @@ use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 
 class Sitemap extends AbstractHandler
 {
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
+    protected function _prepareView(Content $content, ?ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $root = $this->getContentById($content->getRoot());
 

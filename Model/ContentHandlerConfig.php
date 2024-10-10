@@ -39,7 +39,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
 
     #[Gedmo\Translatable]
     #[Gedmo\Versioned]
-    protected ?DateTimeInterface  $valueDate = null;
+    protected ?DateTimeInterface $valueDate = null;
 
     #[Gedmo\Translatable]
     #[Gedmo\Versioned]

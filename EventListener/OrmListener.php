@@ -9,14 +9,14 @@ use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 
 class OrmListener extends NyroDevAbstractService implements EventSubscriber
 {
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): array
     {
         return [
             'postLoad',
         ];
     }
 
-    public function postLoad(LifecycleEventArgs $args = null)
+    public function postLoad(?LifecycleEventArgs $args = null): void
     {
         $object = $args->getObject();
         if ($this->get(DbAbstractService::class)->isA($object, 'content_spec')) {

@@ -17,21 +17,14 @@ class CreateDbClassesCommand extends Command
 {
     use KernelInterfaceServiceableTrait;
 
-    protected $db;
-    protected $params;
-
-    public function __construct(DbAbstractService $db, ParameterBagInterface $params)
-    {
-        $this->db = $db;
-        $this->params = $params;
-
+    public function __construct(
+        private readonly DbAbstractService $db,
+        private readonly ParameterBagInterface $params,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrocms:createDbClasses')
@@ -39,9 +32,6 @@ class CreateDbClassesCommand extends Command
             ->addOption('force', null, InputOption::VALUE_NONE, 'Overwrite classes of existing');
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $force = $input->getOption('force');

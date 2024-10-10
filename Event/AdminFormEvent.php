@@ -23,22 +23,22 @@ class AdminFormEvent extends Event
     ) {
     }
 
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
 
-    public function getRow()
+    public function getRow(): mixed
     {
         return $this->row;
     }
 
-    public function getForm()
+    public function getForm(): mixed
     {
         return $this->form;
     }
 
-    public function setTranslations(array $translations)
+    public function setTranslations(array $translations): void
     {
         $this->translations = $translations;
     }

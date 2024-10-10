@@ -20,6 +20,7 @@ use RuntimeException;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -35,7 +36,7 @@ class NyroCmsService extends NyroDevAbstractService
     protected ?TagRendererHelper $tagRendereHelper = null;
 
     protected array $handlers = [];
-    
+
     public function __construct(
         private readonly NyrodevService $nyrodevService,
         private readonly DbAbstractService $dbService,
@@ -55,7 +56,7 @@ class NyroCmsService extends NyroDevAbstractService
         $this->tagRendereHelper = $tagRendereHelper;
     }
 
-    public function getHandler(ContentHandler $contentHandler)
+    public function getHandler(ContentHandler $contentHandler): AbstractHandler
     {
         if (!isset($this->handlers[$contentHandler->getId()])) {
             $class = $contentHandler->getClass();
@@ -75,7 +76,7 @@ class NyroCmsService extends NyroDevAbstractService
 
     protected string|array $routeConfig = [];
 
-    public function setRouteConfig(string|array $routeConfig)
+    public function setRouteConfig(string|array $routeConfig): void
     {
         $this->routeConfig = $routeConfig;
     }
@@ -97,26 +98,21 @@ class NyroCmsService extends NyroDevAbstractService
         return $this->activeIds;
     }
 
-    protected ?Content $rootContent;
+    protected ?Content $rootContent = null;
 
     public function setRootContent(Content $content)
     {
         $this->rootContent = $content;
     }
 
-    public function getRootContent(): Content
+    public function getRootContent(): ?Content
     {
         return $this->rootContent;
     }
 
     protected array $contentRoots = [];
 
-    /**
-     * @param type $id
-     *
-     * @return \NyroDev\NyroCmsBundle\Entity\Content
-     */
-    public function getContentRoot($id)
+    public function getContentRoot($id): ?Content
     {
         if (!isset($this->contentRoots[$id])) {
             $this->contentRoots[$id] = $this->dbService->getContentRepository()->find($id);
@@ -306,16 +302,16 @@ class NyroCmsService extends NyroDevAbstractService
         return $ret;
     }
 
-    protected $pathInfoObject;
+    protected mixed $pathInfoObject = null;
 
-    public function setPathInfoObject($object)
+    public function setPathInfoObject(mixed $object): void
     {
         $this->pathInfoObject = $object;
     }
 
-    protected $pathInfoSearch;
+    protected ?string $pathInfoSearch = null;
 
-    public function setPathInfoSearch($search)
+    public function setPathInfoSearch(string $search): void
     {
         $this->pathInfoSearch = $search;
     }
@@ -402,7 +398,7 @@ class NyroCmsService extends NyroDevAbstractService
         return $ret;
     }
 
-    protected $foundHandlers;
+    protected ?array $foundHandlers = null;
 
     public function getFoundHandlers(): array
     {
@@ -420,7 +416,7 @@ class NyroCmsService extends NyroDevAbstractService
         return $this->foundHandlers;
     }
 
-    private $classesInComposerClassMaps;
+    private ?array $classesInComposerClassMaps = null;
 
     // From Symfony\Component\HttpKernel\DependencyInjection\AddAnnotatedClassesToCachePass::getClassesInComposerClassMaps
     private function getClassesInComposerClassMaps(): array
@@ -450,13 +446,12 @@ class NyroCmsService extends NyroDevAbstractService
         return $this->classesInComposerClassMaps;
     }
 
-    public function onKernelException(ExceptionEvent $event)
+    public function onKernelException(ExceptionEvent $event): void
     {
         $request = $event->getRequest();
         if (
             $request->server->get('APP_DEBUG')
-            ||
-            'html' !== $request->getRequestFormat()
+            || 'html' !== $request->getRequestFormat()
         ) {
             return;
         }
@@ -493,7 +488,7 @@ class NyroCmsService extends NyroDevAbstractService
         }
     }
 
-    protected function forwardTo(Request $request, HttpKernelInterface $kernel, Content $content, $code)
+    protected function forwardTo(Request $request, HttpKernelInterface $kernel, Content $content, int $code): Response
     {
         $controller = $this->routeLoader->findMatchingController($content);
         if (!$controller) {

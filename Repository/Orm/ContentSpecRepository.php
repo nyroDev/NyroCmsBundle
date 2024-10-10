@@ -20,7 +20,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getQbForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [])
+    public function getQbForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [], array $order = [])
     {
         $qb = $this->createQueryBuilder('cs')
                 ->andWhere('cs.contentHandler = :chid')
@@ -67,7 +67,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         return $qb;
     }
 
-    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [])
+    public function countForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [])
     {
         $qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where);
 
@@ -78,7 +78,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
                 ->getQuery()->getSingleScalarResult();
     }
 
-    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [], $start = null, $limit = null)
+    public function getForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [], array $order = [], $start = null, $limit = null)
     {
         $qb = $this->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order);
 
@@ -95,7 +95,7 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         return $q->getResult();
     }
 
-    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, Content $specificContent = null, array $where = [], array $order = [])
+    public function getOneOrNullForHandler($contentHandlerId, $state = ContentSpec::STATE_ACTIVE, ?Content $specificContent = null, array $where = [], array $order = [])
     {
         $q = $this
             ->getQbForHandler($contentHandlerId, $state, $specificContent, $where, $order)

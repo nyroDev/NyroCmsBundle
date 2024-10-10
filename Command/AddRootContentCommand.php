@@ -12,19 +12,13 @@ use Symfony\Component\Console\Question\Question;
 
 class AddRootContentCommand extends Command
 {
-    protected $db;
-
-    public function __construct(DbAbstractService $db)
-    {
-        $this->db = $db;
-
+    public function __construct(
+        private readonly DbAbstractService $db,
+    ) {
         parent::__construct();
     }
 
-    /**
-     * Configure the command.
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrocms:addRootContent')
@@ -39,9 +33,6 @@ class AddRootContentCommand extends Command
         ;
     }
 
-    /**
-     * Executes the command.
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $title = $input->getArgument('title');

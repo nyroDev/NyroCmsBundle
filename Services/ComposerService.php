@@ -20,6 +20,7 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
+use Psr\Container\ContainerInterface;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,12 +42,12 @@ class ComposerService extends AbstractService
     ) {
     }
 
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->container;
     }
 
-    protected $configs = [];
+    protected array $configs = [];
 
     public function getConfig(Composable $row): array
     {

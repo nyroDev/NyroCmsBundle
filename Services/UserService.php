@@ -38,10 +38,8 @@ class UserService extends NyroDevAbstractService
         $now = new DateTime();
         if (
             $user->getValid()
-                &&
-            (!$user->getValidStart() || $user->getValidStart() <= $now)
-                &&
-            (!$user->getValidEnd() || $user->getValidEnd() >= $now)
+            && (!$user->getValidStart() || $user->getValidStart() <= $now)
+            && (!$user->getValidEnd() || $user->getValidEnd() >= $now)
         ) {
             // user is valid, we can send it an email
             $this->sendWelcomeEmail($user, $locale, $place);

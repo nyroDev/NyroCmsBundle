@@ -10,11 +10,11 @@
 	<?php echo $view['nyrodev_tagRenderer']->renderWebpackScriptTags('js/admin/nyroCms', 'defer'); ?>
 </head>
 <body id="<?php $view['slots']->output('bodyId', 'default'); ?>">
-	<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminTplController::header')); ?>
+	<?php echo $view['actions']->render(new Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminTplController::header')); ?>
 	
 	<main>
 		<?php $view['slots']->output('content'); ?>
-		<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminTplController::footer')); ?>
+		<?php echo $view['actions']->render(new Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminTplController::footer')); ?>
 	</main>
 		
 	<?php if ($view['session']->hasFlash('confirm')): ?>

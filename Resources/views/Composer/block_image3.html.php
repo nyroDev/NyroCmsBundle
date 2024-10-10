@@ -34,30 +34,30 @@
 	<div class="image1">
 		<?php if ($contents['image1']): ?>
 			<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-				'image' => $contents['image1'],
-				'title' => $row->getTitle(),
-				'class' => null,
-				'config' => $config['image1'],
+			    'image' => $contents['image1'],
+			    'title' => $row->getTitle(),
+			    'class' => null,
+			    'config' => $config['image1'],
 			]); ?>
 		<?php endif; ?>
 	</div>
 	<div class="image2">
 		<?php if ($contents['image2']): ?>
 			<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-				'image' => $contents['image2'],
-				'title' => $row->getTitle(),
-				'class' => null,
-				'config' => $config['image2'],
+			    'image' => $contents['image2'],
+			    'title' => $row->getTitle(),
+			    'class' => null,
+			    'config' => $config['image2'],
 			]); ?>
 			<?php endif; ?>
 	</div>
 	<div class="image3">
 		<?php if ($contents['image3']): ?>
 			<?php echo $view->render('@NyroDevNyroCms/Composer/_image.html.php', [
-				'image' => $contents['image3'],
-				'title' => $row->getTitle(),
-				'class' => null,
-				'config' => $config['image3'],
+			    'image' => $contents['image3'],
+			    'title' => $row->getTitle(),
+			    'class' => null,
+			    'config' => $config['image3'],
 			]); ?>
 		<?php endif; ?>
 	</div>

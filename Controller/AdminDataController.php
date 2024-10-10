@@ -6,6 +6,10 @@ use InvalidArgumentException;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
+use NyroDev\NyroCmsBundle\Model\Content;
+use NyroDev\NyroCmsBundle\Model\ContentHandler;
+use NyroDev\NyroCmsBundle\Model\User;
+use NyroDev\NyroCmsBundle\Model\UserRole;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use NyroDev\NyroCmsBundle\Services\AdminService;
@@ -20,7 +24,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
 
@@ -29,12 +36,12 @@ class AdminDataController extends AbstractAdminController
     // /////////////////////////////////////////////////////////////
     // Contents
 
-    public function contentAction()
+    public function contentAction(): Response
     {
         return $this->redirectToRoute('nyrocms_admin_data_content_tree');
     }
 
-    public function contentTreeAction(Request $request, $id = null)
+    public function contentTreeAction(Request $request, ?string $id = null): Response
     {
         $repo = $this->get(DbAbstractService::class)->getContentRepository();
 
@@ -95,7 +102,7 @@ class AdminDataController extends AbstractAdminController
         ]);
     }
 
-    public function contentFixAction($id = null)
+    public function contentFixAction(?string $id = null): Response
     {
         $repo = $this->get(DbAbstractService::class)->getContentRepository();
 
@@ -117,7 +124,7 @@ class AdminDataController extends AbstractAdminController
         return $this->redirectToRoute('nyrocms_admin_data_content_tree', array_filter(['id' => $id]));
     }
 
-    public function contentTreeSub(\NyroDev\NyroCmsBundle\Model\Content $parent = null)
+    public function contentTreeSub(?Content $parent = null): Response
     {
         $route = 'nyrocms_admin_data_content';
 
@@ -130,7 +137,7 @@ class AdminDataController extends AbstractAdminController
         ]);
     }
 
-    public function contentDeleteAction($id)
+    public function contentDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
         if ($row && !$row->getHandler() && true === $this->get(AdminService::class)->canAdminContent($row)) {
@@ -141,7 +148,7 @@ class AdminDataController extends AbstractAdminController
         return $this->redirectToRoute('nyrocms_admin_data_content_fix', array_filter(['id' => $row->getRoot()]));
     }
 
-    public function contentAddAction(Request $request, $pid = null)
+    public function contentAddAction(Request $request, ?string $pid = null): Response
     {
         $row = $this->get(DbAbstractService::class)->getNew('content', false);
 
@@ -157,7 +164,7 @@ class AdminDataController extends AbstractAdminController
         return $this->contentForm($request, self::ADD, $row);
     }
 
-    public function contentEditAction(Request $request, $id)
+    public function contentEditAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
         if (!$row || true === !$this->get(AdminService::class)->canAdminContent($row)) {
@@ -168,7 +175,7 @@ class AdminDataController extends AbstractAdminController
         return $this->contentForm($request, self::EDIT, $row);
     }
 
-    public function contentForm($request, $action, $row)
+    public function contentForm(Request $request, string $action, object $row): Response
     {
         $routePrm = [
             'id' => $row->getVeryParent()->getId(),
@@ -249,7 +256,7 @@ class AdminDataController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    protected $contentTranslationFields = [
+    protected array $contentTranslationFields = [
         'title' => [
             'type' => TextType::class,
             'required' => true,
@@ -280,15 +287,11 @@ class AdminDataController extends AbstractAdminController
         ],
     ];
 
-    protected $translations;
-    protected $langs;
+    protected array $langs;
 
-    /**
-     * @var \Symfony\Component\Form\Form
-     */
-    protected $contentForm;
+    protected ?Form $contentForm;
 
-    protected function contentFormClb($action, \NyroDev\NyroCmsBundle\Model\Content $row, \Symfony\Component\Form\FormBuilder $form)
+    protected function contentFormClb(string $action, Content $row, FormBuilder $form): void
     {
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
@@ -331,7 +334,7 @@ class AdminDataController extends AbstractAdminController
         $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::UPDATE_CONTENT);
     }
 
-    protected function contentFlush($action, $row, $form)
+    protected function contentFlush(string $action, object $row, Form $form): void
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
         $adminFormEvent->setTranslations($this->translations);
@@ -341,7 +344,7 @@ class AdminDataController extends AbstractAdminController
         $this->get(AdminService::class)->updateContentUrl($row, self::EDIT == $action);
     }
 
-    protected function contentAfterFlush($response, $action, $row)
+    protected function contentAfterFlush(Response $response, string $action, Content $row): void
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $this->contentForm);
         $adminFormEvent->setTranslations($this->translations);
@@ -373,7 +376,7 @@ class AdminDataController extends AbstractAdminController
     // /////////////////////////////////////////////////////////////
     // Users Roles
 
-    public function userRoleAction(Request $request)
+    public function userRoleAction(Request $request): Response
     {
         $isDev = $this->get(AdminService::class)->isDeveloper();
 
@@ -401,7 +404,7 @@ class AdminDataController extends AbstractAdminController
             ));
     }
 
-    public function userRoleDeleteAction($id)
+    public function userRoleDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getUserRoleRepository()->find($id);
         if ($row) {
@@ -412,14 +415,14 @@ class AdminDataController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_data_userRole'));
     }
 
-    public function userRoleAddAction(Request $request)
+    public function userRoleAddAction(Request $request): Response
     {
         $row = $this->get(DbAbstractService::class)->getNew('user_role', false);
 
         return $this->userRoleForm($request, self::ADD, $row);
     }
 
-    public function userRoleEditAction(Request $request, $id)
+    public function userRoleEditAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getUserRoleRepository()->find($id);
         if (!$row) {
@@ -429,7 +432,7 @@ class AdminDataController extends AbstractAdminController
         return $this->userRoleForm($request, self::EDIT, $row);
     }
 
-    public function userRoleForm(Request $request, $action, $row)
+    public function userRoleForm(Request $request, string $action, UserRole $row): Response
     {
         $moreOptions = [
             'contents' => $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content')),
@@ -457,7 +460,7 @@ class AdminDataController extends AbstractAdminController
     // /////////////////////////////////////////////////////////////
     // contentHandlers
 
-    public function contentHandlerAction(Request $request)
+    public function contentHandlerAction(Request $request): Response
     {
         $repo = $this->get(DbAbstractService::class)->getContentHandlerRepository();
 
@@ -480,7 +483,7 @@ class AdminDataController extends AbstractAdminController
             ));
     }
 
-    public function contentHandlerDeleteAction($id)
+    public function contentHandlerDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($id);
         if ($row) {
@@ -491,14 +494,14 @@ class AdminDataController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_data_contentHandler'));
     }
 
-    public function contentHandlerAddAction(Request $request)
+    public function contentHandlerAddAction(Request $request): Response
     {
         $row = $this->get(DbAbstractService::class)->getNew('content_handler', false);
 
         return $this->contentHandlerForm($request, self::ADD, $row);
     }
 
-    public function contentHandlerEditAction(Request $request, $id)
+    public function contentHandlerEditAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($id);
         if (!$row) {
@@ -508,7 +511,7 @@ class AdminDataController extends AbstractAdminController
         return $this->contentHandlerForm($request, self::EDIT, $row);
     }
 
-    public function contentHandlerForm(Request $request, $action, $row)
+    public function contentHandlerForm(Request $request, string $action, ContentHandler $row): Response
     {
         $classes = $this->get(NyroCmsService::class)->getFoundHandlers();
 
@@ -557,7 +560,7 @@ class AdminDataController extends AbstractAdminController
     // /////////////////////////////////////////////////////////////
     // Contact Messages
 
-    public function contactMessageAction(Request $request, $chid)
+    public function contactMessageAction(Request $request, string $chid): Response
     {
         $contentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($chid);
         if (!$contentHandler) {
@@ -606,7 +609,7 @@ class AdminDataController extends AbstractAdminController
     // /////////////////////////////////////////////////////////////
     // Users
 
-    public function userAction(Request $request)
+    public function userAction(Request $request): Response
     {
         $route = 'nyrocms_admin_data_user';
 
@@ -639,7 +642,7 @@ class AdminDataController extends AbstractAdminController
             ));
     }
 
-    public function userDeleteAction($id)
+    public function userDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getUserRepository()->find($id);
         if ($row) {
@@ -654,14 +657,14 @@ class AdminDataController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_data_user'));
     }
 
-    public function userAddAction(Request $request)
+    public function userAddAction(Request $request): Response
     {
         $row = $this->get(DbAbstractService::class)->getNew('user', false);
 
         return $this->userForm($request, self::ADD, $row);
     }
 
-    public function userEditAction(Request $request, $id)
+    public function userEditAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getUserRepository()->find($id);
         if (!$row) {
@@ -671,7 +674,7 @@ class AdminDataController extends AbstractAdminController
         return $this->userForm($request, self::EDIT, $row);
     }
 
-    public function userWelcomeAction(Request $request, $id)
+    public function userWelcomeAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getUserRepository()->find($id);
         if ($row) {
@@ -681,7 +684,7 @@ class AdminDataController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_data_user'));
     }
 
-    public function userForm(Request $request, $action, $row)
+    public function userForm(Request $request, string $action, User $row): Response
     {
         $moreOptions = [
             'userType' => [
@@ -723,9 +726,9 @@ class AdminDataController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    protected $origUserPassword;
+    protected ?string $origUserPassword;
 
-    protected function userFormUpdate($action, $row, \Symfony\Component\Form\FormBuilder $form)
+    protected function userFormUpdate(string $action, User $row, FormBuilder $form): void
     {
         $this->origUserPassword = $row->getPassword();
         $form->get('valid')->setRequired(false);
@@ -734,13 +737,13 @@ class AdminDataController extends AbstractAdminController
         $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::UPDATE_USER);
     }
 
-    protected function userFormFlush($action, $row, \Symfony\Component\Form\Form $form)
+    protected function userFormFlush(string $action, User $row, Form $form): void
     {
         $adminFormEvent = new AdminFormEvent($action, $row, $form);
         $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::BEFOREFLUSH_USER);
     }
 
-    protected function userFormAfterFlush($response, $action, $row)
+    protected function userFormAfterFlush(Response $response, string $action, User $row): void
     {
         $adminFormEvent = new AdminFormEvent($action, $row);
         $this->get('event_dispatcher')->dispatch($adminFormEvent, AdminFormEvent::AFTERFLUSH_USER);

@@ -26,6 +26,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractHandler
 {
@@ -33,7 +34,7 @@ abstract class AbstractHandler
 
     public function __construct(
         protected readonly ContentHandler $contentHandler,
-        protected readonly ContainerInterface $container
+        protected readonly ContainerInterface $container,
     ) {
     }
 
@@ -328,9 +329,9 @@ abstract class AbstractHandler
                 $newContents[$k] = $this->handleFileUpload($k, $data, $action, $row);
             } else {
                 $newContents[$k] = $data;
-                if (TextType::class == $cfg['type'] ||
-                    TextareaType::class == $cfg['type'] ||
-                    ChoiceType::class == $cfg['type']) {
+                if (TextType::class == $cfg['type']
+                    || TextareaType::class == $cfg['type']
+                    || ChoiceType::class == $cfg['type']) {
                     $newContentTexts[] = $data;
                 } elseif (TinymceType::class === $cfg['type']) {
                     $newContentTexts[] = html_entity_decode(strip_tags($data));
@@ -381,9 +382,9 @@ abstract class AbstractHandler
                 $newContents[$k] = $this->handleFileUpload($k, $dataLg, $action, $row, $fieldName);
             } else {
                 $newContents[$k] = $data;
-                if (TextType::class == $cfg['type'] ||
-                    TextareaType::class == $cfg['type'] ||
-                    ChoiceType::class == $cfg['type']) {
+                if (TextType::class == $cfg['type']
+                    || TextareaType::class == $cfg['type']
+                    || ChoiceType::class == $cfg['type']) {
                     $newContentTexts[] = $data;
                 } elseif (TinymceType::class === $cfg['type']) {
                     $newContentTexts[] = html_entity_decode(strip_tags($data));
@@ -457,7 +458,7 @@ abstract class AbstractHandler
 
     protected bool $isAdmin = false;
 
-    public function init(Request $request = null, bool $isAdmin = false)
+    public function init(?Request $request = null, bool $isAdmin = false)
     {
         $this->request = $request;
         $this->isAdmin = $isAdmin;
@@ -466,11 +467,10 @@ abstract class AbstractHandler
     protected $contentSpec = [];
 
     /**
-     * @param int     $id
-     * @param Content $content
-     * @param int     $state
+     * @param int $id
+     * @param int $state
      */
-    public function getContentSpec($id, $locale = null, Content $content = null, $state = ContentSpec::STATE_ACTIVE): ?ContentSpec
+    public function getContentSpec($id, $locale = null, ?Content $content = null, $state = ContentSpec::STATE_ACTIVE): ?ContentSpec
     {
         if (!isset($this->contentSpec[$id])) {
             $this->contentSpec[$id] = $this->getContentSpecRespository()
@@ -487,13 +487,13 @@ abstract class AbstractHandler
         return $this->contentSpec[$id];
     }
 
-    public function getContentSpecs(Content $content = null, $start = null, $limit = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
+    public function getContentSpecs(?Content $content = null, $start = null, $limit = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
     {
         return $this->getContentSpecRespository()
                         ->getForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where, [$this->orderField() => $this->isReversePositionOrder() ? 'DESC' : 'ASC'], $start, $limit);
     }
 
-    public function getTotalContentSpec(Content $content = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
+    public function getTotalContentSpec(?Content $content = null, array $where = [], $state = ContentSpec::STATE_ACTIVE)
     {
         return $this->getContentSpecRespository()
                         ->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where);
@@ -523,7 +523,7 @@ abstract class AbstractHandler
 
     protected $preparedView;
 
-    public function prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
+    public function prepareView(Content $content, ?ContentSpec $handlerContent = null, ?string $handlerAction = null): Response|array
     {
         if (is_null($this->preparedView)) {
             $this->preparedView = $this->_prepareView($content, $handlerContent, $handlerAction);
@@ -532,7 +532,7 @@ abstract class AbstractHandler
         return $this->preparedView;
     }
 
-    abstract protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array;
+    abstract protected function _prepareView(Content $content, ?ContentSpec $handlerContent = null, ?string $handlerAction = null): Response|array;
 
     protected $preparedHomeView;
 

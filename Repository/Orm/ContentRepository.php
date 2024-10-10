@@ -12,7 +12,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 {
     use TranslatableHintTrait;
 
-    public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false)
+    public function children($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false): array
     {
         $q = $this->childrenQuery($node, $direct, $sortByField, $direction, $includeNode);
         $this->setHint($q);
@@ -23,7 +23,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
     public function childrenForMenu($node = null, $direct = true)
     {
         $qb = $this->childrenQueryBuilder($node, $direct);
-        $qb->andWhere('node.state = :state')->setParameter('state', \NyroDev\NyroCmsBundle\Model\Content::STATE_ACTIVE);
+        $qb->andWhere('node.state = :state')->setParameter('state', Content::STATE_ACTIVE);
         $q = $qb->getQuery();
         $this->setHint($q);
 
@@ -140,7 +140,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $qb->getQuery()->getResult();
     }
 
-    protected function getQueryContentHandlerClass($class, Content $root = null, Content $parent = null)
+    protected function getQueryContentHandlerClass($class, ?Content $root = null, ?Content $parent = null)
     {
         if ('\\' !== substr($class, 0, 1)) {
             $class = '\\'.$class;
@@ -164,17 +164,17 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         return $q;
     }
 
-    public function findContentHandlerClass($class, Content $root = null)
+    public function findContentHandlerClass($class, ?Content $root = null)
     {
         return $this->getQueryContentHandlerClass($class, $root)->getResult();
     }
 
-    public function findOneByContentHandlerClass($class, Content $root = null, Content $parent = null)
+    public function findOneByContentHandlerClass($class, ?Content $root = null, ?Content $parent = null)
     {
         return $this->getQueryContentHandlerClass($class, $root, $parent)->getOneOrNullResult();
     }
 
-    protected function getQueryMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC')
+    protected function getQueryMenuOption($menuOption, ?Content $root = null, ?Content $parent = null, $sortByField = null, $direction = 'ASC')
     {
         $qb = $this->createQueryBuilder('c')
                 ->andWhere('c.menuOption LIKE :menuOption')
@@ -213,12 +213,12 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         }
     }
 
-    public function findOneByMenuOption($menuOption, Content $root = null, Content $parent = null)
+    public function findOneByMenuOption($menuOption, ?Content $root = null, ?Content $parent = null)
     {
         return $this->getQueryMenuOption($menuOption, $root, $parent)->getOneOrNullResult();
     }
 
-    public function findByMenuOption($menuOption, Content $root = null, Content $parent = null, $sortByField = null, $direction = 'ASC')
+    public function findByMenuOption($menuOption, ?Content $root = null, ?Content $parent = null, $sortByField = null, $direction = 'ASC')
     {
         return $this->getQueryMenuOption($menuOption, $root, $parent, $sortByField, $direction)->getResult();
     }

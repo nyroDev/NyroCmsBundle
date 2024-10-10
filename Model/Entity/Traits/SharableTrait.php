@@ -108,7 +108,7 @@ trait SharableTrait
     #[Assert\Image]
     protected $ogImage;
 
-    public function setOgImage(UploadedFile $ogImage = null)
+    public function setOgImage(?UploadedFile $ogImage = null)
     {
         $this->setUploadFile('ogImage', $ogImage);
     }

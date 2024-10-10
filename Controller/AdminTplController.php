@@ -9,21 +9,22 @@ use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
 use NyroDev\UtilityBundle\Services\MemberService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminTplController extends NyroDevAbstractController
 {
     use Traits\SubscribedServiceTrait;
 
-    protected $sessionRootName = 'rootContent';
+    protected string $sessionRootName = 'rootContent';
 
-    public function switchRootContentAction(Request $request, $id)
+    public function switchRootContentAction(Request $request, string $id): Response
     {
         $request->getSession()->set($this->sessionRootName, $id);
 
         return $this->redirectToRoute('nyrocms_admin_data_content_tree', ['id' => $id]);
     }
 
-    public function header(Request $request)
+    public function header(Request $request): Response
     {
         $vars = [
             'logged' => $this->get(MemberService::class)->isLogged(),
@@ -157,7 +158,7 @@ class AdminTplController extends NyroDevAbstractController
         return $this->render('@NyroDevNyroCms/AdminTpl/header.html.php', $vars);
     }
 
-    public function footer()
+    public function footer(): Response
     {
         return $this->render('@NyroDevNyroCms/AdminTpl/footer.html.php');
     }

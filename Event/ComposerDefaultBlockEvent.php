@@ -11,7 +11,7 @@ class ComposerDefaultBlockEvent extends Event
 
     public function __construct(
         protected readonly Composable $row,
-        protected array $content
+        protected array $content,
     ) {
     }
 

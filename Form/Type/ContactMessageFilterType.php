@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ContactMessageFilterType extends Type\AbstractFilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $pathInfo = $this->get(NyroCmsService::class)->getPathInfo();
         $builder

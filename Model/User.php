@@ -7,14 +7,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
-use Serializable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface, Serializable
+abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
 {
     protected $id;
 
@@ -275,29 +274,28 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
 
     public function isEqualTo(UserInterface $user): bool
     {
-        if (!$user instanceof self ||
-                $this->getPassword() !== $user->getPassword() ||
-                $this->getUsername() !== $user->getUsername() ||
-                $this->getId() !== $user->getId()) {
+        if (!$user instanceof self
+                || $this->getPassword() !== $user->getPassword()
+                || $this->getUsername() !== $user->getUsername()
+                || $this->getId() !== $user->getId()) {
             return false;
         }
 
         return true;
     }
 
-    public function serialize()
+    public function __serialize(): array
     {
         $vars = [];
         foreach ($this->serializeVars as $field) {
             $vars[$field] = $this->{$field};
         }
 
-        return serialize($vars);
+        return $vars;
     }
 
-    public function unserialize($serialized)
+    public function __unserialize(array $vars): void
     {
-        $vars = unserialize($serialized);
         foreach ($vars as $k => $v) {
             $this->{$k} = $v;
         }

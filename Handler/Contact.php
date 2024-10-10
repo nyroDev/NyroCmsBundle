@@ -12,6 +12,7 @@ use NyroDev\UtilityBundle\Services\FormService;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -190,7 +191,7 @@ class Contact extends AbstractHandler
         return [];
     }
 
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
+    protected function _prepareView(Content $content, ?ContentSpec $handlerContent = null, ?string $handlerAction = null): Response|array
     {
         $contactEmails = $this->getEmails($content);
 
@@ -268,7 +269,7 @@ class Contact extends AbstractHandler
         ];
     }
 
-    protected function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
+    protected function sendEmail($to, $subject, $content, $from = null, $locale = null, ?Content $dbContent = null)
     {
         return $this->get(NyroCmsService::class)->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
     }

@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use DateTime;
+use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
@@ -12,20 +13,16 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints;
 
 class AdminHandlerContentsController extends AbstractAdminController
 {
-    /**
-     * @param type $chid
-     *
-     * @return \NyroDev\NyroCmsBundle\Model\ContentHandler
-     *
-     * @throws type
-     */
-    protected function getContentHandler($chid)
+    protected function getContentHandler(string $chid): ContentHandler
     {
         $contentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository()->find($chid);
         if (!$contentHandler) {
@@ -37,7 +34,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $contentHandler;
     }
 
-    public function indexAction(Request $request, $chid)
+    public function indexAction(Request $request, string $chid): Response
     {
         $ch = $this->getContentHandler($chid);
         $handler = $this->get(NyroCmsService::class)->getHandler($ch);
@@ -93,7 +90,7 @@ class AdminHandlerContentsController extends AbstractAdminController
             ));
     }
 
-    public function deleteAction(Request $request, $chid, $id)
+    public function deleteAction(Request $request, string $chid, string $id): Response
     {
         $ch = $this->getContentHandler($chid);
 
@@ -121,7 +118,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', ['chid' => $ch->getId()]));
     }
 
-    public function addAction(Request $request, $chid)
+    public function addAction(Request $request, string $chid): Response
     {
         $ch = $this->getContentHandler($chid);
         $row = $this->get(DbAbstractService::class)->getNew('content_spec', false);
@@ -130,7 +127,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->form($request, self::ADD, $row);
     }
 
-    public function editAction(Request $request, $chid, $id)
+    public function editAction(Request $request, string $chid, string $id): Response
     {
         $this->getContentHandler($chid);
 
@@ -142,7 +139,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->form($request, self::EDIT, $row);
     }
 
-    public function moveAction($chid, $id, $dir)
+    public function moveAction(string $chid, string $id, string $dir): Response
     {
         $ch = $this->getContentHandler($chid);
 
@@ -169,7 +166,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->redirect($this->generateUrl('nyrocms_admin_handler_contents', ['chid' => $ch->getId()]));
     }
 
-    public function form(Request $request, $action, $row)
+    public function form(Request $request, string $action, ContentSpec $row): Response
     {
         $row->setService($this->get(NyrodevService::class));
         $routePrm = ['chid' => $row->getContentHandler()->getId()];
@@ -267,7 +264,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
-    protected $translationFields = [
+    protected array $translationFields = [
         'title' => [
             'type' => TextType::class,
             'required' => true,
@@ -277,13 +274,10 @@ class AdminHandlerContentsController extends AbstractAdminController
             'required' => false,
         ],
     ];
-    protected $translations;
-    /**
-     * @var \Symfony\Component\Form\Form
-     */
-    protected $contentForm;
 
-    protected function contentFormClb($action, ContentSpec $row, \Symfony\Component\Form\FormBuilder $form)
+    protected ?Form $contentForm;
+
+    protected function contentFormClb(string $action, ContentSpec $row, FormBuilder $form): void
     {
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
         $defaultLocale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
@@ -326,13 +320,13 @@ class AdminHandlerContentsController extends AbstractAdminController
         $handler->formClb($action, $row, $form, $langs, $this->translations);
     }
 
-    protected function contentFlush($action, $row, $form)
+    protected function contentFlush(string $action, ContentSpec $row, Form $form): void
     {
         $this->contentForm = $form;
         $this->get(NyroCmsService::class)->getHandler($row->getContentHandler())->flushClb($action, $row, $form);
     }
 
-    protected function contentAfterFlush($response, $action, $row)
+    protected function contentAfterFlush(Response $response, string $action, ContentSpec $row): void
     {
         $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
         $handler->afterFlushClb($response, $action, $row);

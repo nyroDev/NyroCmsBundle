@@ -73,7 +73,7 @@
 		</span>
 		
 		<?php if ($curCanHavSub): ?>
-			<?php echo $view['actions']->render(new \Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', ['parent' => $content])); ?>
+			<?php echo $view['actions']->render(new Symfony\Component\HttpKernel\Controller\ControllerReference('NyroDev\NyroCmsBundle\Controller\AdminDataController::contentTreeSub', ['parent' => $content])); ?>
 		<?php endif; ?>
 	</li>
 	<?php endforeach; ?>

@@ -9,10 +9,11 @@ use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\EmbedService;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminComposerController extends AbstractAdminController
 {
-    public function composerAction(Request $request, $type, $id, $lang = null)
+    public function composerAction(Request $request, string $type, string $id, ?string $lang = null): Response
     {
         $row = $this->get(DbAbstractService::class)->getRepository($type)->find($id);
         if (!$row || !($row instanceof \NyroDev\NyroCmsBundle\Model\Composable)) {
@@ -145,14 +146,14 @@ class AdminComposerController extends AbstractAdminController
 
             $html = $composerService->renderNew($row, $request->query->get('block'), true);
 
-            return new \Symfony\Component\HttpFoundation\Response($html);
+            return new Response($html);
         }
 
         if ($row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler()) {
             $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $handler->init($request, true);
             $contentHandler = $handler->prepareView($row);
-            if ($contentHandler instanceof \Symfony\Component\HttpFoundation\Response) {
+            if ($contentHandler instanceof Response) {
                 return $contentHandler;
             }
 

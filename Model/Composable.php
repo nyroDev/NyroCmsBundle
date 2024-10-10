@@ -28,7 +28,7 @@ interface Composable extends ContentRootable
 
     public function setFirstImage(?string $firstImage): static;
 
-    public function getParent();
+    public function getParent(): mixed;
 
     public function getTheme(): ?string;
 

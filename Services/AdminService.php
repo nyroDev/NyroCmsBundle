@@ -25,7 +25,7 @@ class AdminService extends NyroDevAbstractService
     ) {
     }
 
-    protected $userTypes;
+    protected ?array $userTypes = null;
 
     public function getUserTypeChoices()
     {
@@ -112,8 +112,8 @@ class AdminService extends NyroDevAbstractService
                 $rolePrefixLn = strlen($rolePrefix);
                 foreach ($this->memberService->getUser()->getUserRoles() as $role) {
                     if (
-                        (('complete' == $rolePrefix || 'root' == $rolePrefix) && !$role->getInternal()) ||
-                        ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
+                        (('complete' == $rolePrefix || 'root' == $rolePrefix) && !$role->getInternal())
+                        || ($role->getSecurityRoleName() === 'ROLE_'.$rolePrefix || substr($role->getSecurityRoleName(), 0, 6 + $rolePrefixLn) === 'ROLE_'.$rolePrefix.'_')
                     ) {
                         // This is an corresponding role, check it against
                         if ($role->getContents()->count() > 0) {

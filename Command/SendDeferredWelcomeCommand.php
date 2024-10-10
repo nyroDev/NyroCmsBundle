@@ -16,29 +16,17 @@ class SendDeferredWelcomeCommand extends Command
 {
     use LockFactoryServiceableTrait;
 
-    protected $nyrodev;
-    protected $db;
-    protected $user;
-    protected $router;
-    protected $params;
-
     public function __construct(
-        NyrodevService $nyrodev,
-        DbAbstractService $db,
-        UserService $user,
-        RouterInterface $router,
-        ParameterBagInterface $params
+        private readonly NyrodevService $nyrodev,
+        private readonly DbAbstractService $db,
+        private readonly UserService $user,
+        private readonly RouterInterface $router,
+        private readonly ParameterBagInterface $params,
     ) {
-        $this->nyrodev = $nyrodev;
-        $this->db = $db;
-        $this->user = $user;
-        $this->router = $router;
-        $this->params = $params;
-
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('nyrocms:sendDeferredWelcome')

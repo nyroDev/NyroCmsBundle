@@ -31,7 +31,7 @@ class News extends AbstractHandler
         ];
     }
 
-    protected function _prepareView(Content $content, ContentSpec $handlerContent = null, ?string $handlerAction = null): array
+    protected function _prepareView(Content $content, ?ContentSpec $handlerContent = null, ?string $handlerAction = null): array
     {
         $view = '@NyroDevNyroCms/Handler/news';
         $vars = [

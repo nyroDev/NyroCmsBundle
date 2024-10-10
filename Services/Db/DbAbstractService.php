@@ -14,7 +14,6 @@ use NyroDev\UtilityBundle\Services\Db\DbAbstractService as NyroDevDbService;
 
 abstract class DbAbstractService extends AbstractServiceSrc
 {
-
     public function __construct(
         protected readonly NyroDevDbService $nyrodevDbService,
     ) {

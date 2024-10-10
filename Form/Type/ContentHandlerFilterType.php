@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ContentHandlerFilterType extends Type\AbstractFilterType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->setAction($this->generateUrl('nyrocms_admin_data_contentHandler'))

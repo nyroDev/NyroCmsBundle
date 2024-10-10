@@ -8,7 +8,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class SecurityLoginListener extends NyroDevAbstractService
 {
-    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event)
+    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $user = $event->getAuthenticationToken()->getUser();
 
