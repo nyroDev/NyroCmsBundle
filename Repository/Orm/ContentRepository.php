@@ -199,7 +199,7 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
     protected function addQbSort($qb, $sortByField = null, $direction = 'ASC')
     {
         if (!$sortByField) {
-            $config = $this->listener->getConfiguration($this->_em, $this->getClassMetadata()->name);
+            $config = $this->listener->getConfiguration($this->getEntityManager(), $this->getClassMetadata()->name);
             $qb->orderBy('c.'.$config['left'], 'ASC');
         } elseif (is_array($sortByField)) {
             $fields = '';
