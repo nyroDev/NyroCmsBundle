@@ -21,10 +21,13 @@ $prefixTinymceSimple = 'data-tinymcesimple_';
 $attrs = array_merge(
     $view['nyrodev_form']->getPluploadAttrs(),
     [
-        'data-tinymceurl' => $view['assets']->getUrl('bundles/nyrodevutility/vendor/tinymce/tinymce.min.js'),
+        'data-tinymceurl' => $view['assets']->getUrl('tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),
-        $prefixTinymce.'theme' => 'silver',
+        $prefixTinymce.'skin' => 'tinymce-5',
+        $prefixTinymce.'promotion' => 'false',
+        $prefixTinymce.'branding' => 'false',
+        $prefixTinymce.'license_key' => 'gpl',
         $prefixTinymce.'relative_urls' => 'false',
         $prefixTinymce.'browser_spellcheck' => 'true',
 

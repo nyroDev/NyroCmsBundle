@@ -33,16 +33,17 @@ nyrocms_admin_security_logout:
     path: /logout
 
 nyrocms_admin_tinymce_browser_dirname:
-    path:  /tinymceBrowser_{dirName}/{file}
-    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction, file: null }
+    path:  /tinymceBrowser_{dirName}/{type}
+    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction }
     requirements:
-        file: .+
+        type: .+
+        dirName: .+
 
 nyrocms_admin_tinymce_browser:
-    path:  /tinymceBrowser/{file}
-    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction, file: null }
+    path:  /tinymceBrowser/{type}
+    defaults: { _controller: NyroDev\UtilityBundle\Controller\TinymceController::browserAction }
     requirements:
-        file: .+
+        type: .+
 
 nyrocms_admin_data:
     resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdminData.yaml"

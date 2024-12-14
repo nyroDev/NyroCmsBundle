@@ -149,9 +149,9 @@ class Configuration implements ConfigurationInterface
         ];
 
         $defaultTinymce = [
-            'plugins' => 'lists,advlist,anchor,autolink,link,image,charmap,preview,hr,searchreplace,visualblocks,visualchars,code,fullscreen,insertdatetime,media,nonbreaking,table,paste,contextmenu,tabfocus,wordcount',
+            'plugins' => 'anchor,autolink,charmap,code,fullscreen,image,insertdatetime,link,lists,advlist,media,nonbreaking,preview,searchreplace,table,visualblocks,visualchars,wordcount',
             'menubar' => 'insert edit view table tools',
-            'toolbar' => 'undo redo | styleselect fontsizeselect removeformat | bold italic | removeformat | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink | image media fullpage',
+            'toolbar' => 'undo redo | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | link unlink | image media | fullscreen | bullist numlist outdent indent',
             'style_formats' => [
                 ['title' => 'admin.composer.tinymce.styleFormats.blocks', 'items' => [
                     ['title' => 'admin.composer.tinymce.styleFormats.block.title1', 'block' => 'h1'],
