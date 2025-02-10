@@ -8,7 +8,7 @@
 	data-sizethumb="<?php echo(isset($config['images']['thumb']['placeholdW']) ? $config['images']['thumb']['placeholdW'] : $config['images']['thumb']['w']).'x'.(isset($config['images']['thumb']['placeholdH']) ? $config['images']['thumb']['placeholdH'] : $config['images']['thumb']['h']); ?>"
 	data-sizethumbcfg="<?php echo $view->escape(json_encode($config['images']['thumb'])); ?>"
     data-multiplefields="<?php echo $view->escape(implode(',', $config['images']['multipleFields'])); ?>"
-	data-placehold="https://via.placeholder.com/">
+	data-placehold="https://placehold.co/">
 <?php endif; ?>
 <?php if ($nbImages || $admin): ?>
 	<?php
