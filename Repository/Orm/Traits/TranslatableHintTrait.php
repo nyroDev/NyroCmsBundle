@@ -18,6 +18,6 @@ trait TranslatableHintTrait
             );
         }
 
-        // $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, TranslationWalker::class);
+        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, TranslationWalker::class);
     }
 }
