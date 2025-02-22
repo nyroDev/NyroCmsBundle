@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\Tree(type: 'nested')]
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class Content extends AbstractUploadable implements Composable, ComposableHandler, Sharable
+abstract class Content extends AbstractUploadable implements ContentRootable, ComposableTranslatable, ComposableContentSummary, ComposableHandler, Sharable
 {
     public const STATE_DISABLED = 0;
     public const STATE_ACTIVE = 1;
@@ -110,7 +110,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
     #[Gedmo\Locale]
     protected ?string $locale = null;
 
-    public function setTranslatableLocale(?string $locale): static
+    public function setTranslatableLocale(?string $locale): self
     {
         $this->locale = $locale;
 
@@ -134,7 +134,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->id;
     }
 
-    public function setTitle(?string $title): static
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -146,7 +146,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->title;
     }
 
-    public function setUrl(?string $url): static
+    public function setUrl(?string $url): self
     {
         $this->url = $url;
 
@@ -158,7 +158,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->url;
     }
 
-    public function setTheme(?string $theme): static
+    public function setTheme(?string $theme): self
     {
         $this->theme = $theme;
 
@@ -170,7 +170,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->theme;
     }
 
-    public function setContent(?array $content): static
+    public function setContent(?array $content): self
     {
         $this->content = $content;
 
@@ -182,7 +182,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->content;
     }
 
-    public function setContentText(?string $contentText): static
+    public function setContentText(?string $contentText): self
     {
         $this->contentText = $contentText;
 
@@ -194,7 +194,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->contentText;
     }
 
-    public function setFirstImage(?string $firstImage): static
+    public function setFirstImage(?string $firstImage): self
     {
         $this->firstImage = $firstImage;
 
@@ -206,7 +206,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->firstImage;
     }
 
-    public function setGoUrl(?string $goUrl): static
+    public function setGoUrl(?string $goUrl): self
     {
         $this->goUrl = $goUrl;
 
@@ -218,7 +218,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->goUrl;
     }
 
-    public function setGoBlank(?bool $goBlank): static
+    public function setGoBlank(?bool $goBlank): self
     {
         $this->goBlank = $goBlank;
 
@@ -230,7 +230,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->goBlank;
     }
 
-    public function setRedirectToChildren(?bool $redirectToChildren): static
+    public function setRedirectToChildren(?bool $redirectToChildren): self
     {
         $this->redirectToChildren = $redirectToChildren;
 
@@ -242,7 +242,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->redirectToChildren;
     }
 
-    public function setState(?int $state): static
+    public function setState(?int $state): self
     {
         $this->state = $state;
 
@@ -254,7 +254,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->state;
     }
 
-    public function setHandler(?string $handler): static
+    public function setHandler(?string $handler): self
     {
         $this->handler = $handler;
 
@@ -266,7 +266,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->handler;
     }
 
-    public function setHost(?string $host): static
+    public function setHost(?string $host): self
     {
         $this->host = $host;
 
@@ -278,7 +278,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->host;
     }
 
-    public function setLocales(?string $locales): static
+    public function setLocales(?string $locales): self
     {
         $this->locales = $locales;
 
@@ -290,7 +290,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->locales;
     }
 
-    public function setXmlSitemap(?bool $xmlSitemap): static
+    public function setXmlSitemap(?bool $xmlSitemap): self
     {
         $this->xmlSitemap = $xmlSitemap;
 
@@ -302,7 +302,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->xmlSitemap;
     }
 
-    public function setContentHandler(?ContentHandler $contentHandler): static
+    public function setContentHandler(?ContentHandler $contentHandler): self
     {
         $this->contentHandler = $contentHandler;
 
@@ -314,7 +314,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->contentHandler;
     }
 
-    public function setMenuOption(?string $menuOption): static
+    public function setMenuOption(?string $menuOption): self
     {
         $this->menuOption = $menuOption;
 
@@ -326,7 +326,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->menuOption;
     }
 
-    public function setLft(?int $lft): static
+    public function setLft(?int $lft): self
     {
         $this->lft = $lft;
 
@@ -338,7 +338,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->lft;
     }
 
-    public function setRgt(?int $rgt): static
+    public function setRgt(?int $rgt): self
     {
         $this->rgt = $rgt;
 
@@ -350,7 +350,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->rgt;
     }
 
-    public function setLevel(?int $level): static
+    public function setLevel(?int $level): self
     {
         $this->level = $level;
 
@@ -362,7 +362,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->level;
     }
 
-    public function setRoot(?int $root): static
+    public function setRoot(?int $root): self
     {
         $this->root = $root;
 
@@ -374,7 +374,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->root;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -386,7 +386,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 
@@ -398,7 +398,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->updated;
     }
 
-    public function setDeleted(?DateTimeInterface $deleted): static
+    public function setDeleted(?DateTimeInterface $deleted): self
     {
         $this->deleted = $deleted;
 
@@ -410,7 +410,7 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->deleted;
     }
 
-    public function setParent(?Content $parent = null): static
+    public function setParent(?Content $parent = null): self
     {
         $this->parent = $parent;
 
@@ -422,14 +422,14 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->parent;
     }
 
-    public function addChild(Content $children): static
+    public function addChild(Content $children): self
     {
         $this->children[] = $children;
 
         return $this;
     }
 
-    public function removeChild(Content $children): static
+    public function removeChild(Content $children): self
     {
         $this->children->removeElement($children);
 
@@ -441,14 +441,14 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->children;
     }
 
-    public function addRelated(Content $relateds): static
+    public function addRelated(Content $relateds): self
     {
         $this->relateds[] = $relateds;
 
         return $this;
     }
 
-    public function removeRelated(Content $relateds): static
+    public function removeRelated(Content $relateds): self
     {
         $this->relateds->removeElement($relateds);
 
@@ -460,14 +460,14 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->relateds;
     }
 
-    public function addTranslation(object $translations): static
+    public function addTranslation(object $translations): self
     {
         $this->translations[] = $translations;
 
         return $this;
     }
 
-    public function removeTranslation(object $translations): static
+    public function removeTranslation(object $translations): self
     {
         $this->translations->removeElement($translations);
 
@@ -484,12 +484,12 @@ abstract class Content extends AbstractUploadable implements Composable, Composa
         return $this->getTitle();
     }
 
-    public function getVeryParent(): static
+    public function getVeryParent(): self
     {
         return $this->getParent() ? $this->getParent()->getVeryParent() : $this;
     }
 
-    public function getParentLvl(int $level): static
+    public function getParentLvl(int $level): self
     {
         return $this->getLevel() > $level && $this->getParent() ? $this->getParent()->getParentLvl($level) : $this;
     }

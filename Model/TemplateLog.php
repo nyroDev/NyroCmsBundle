@@ -5,7 +5,7 @@ namespace NyroDev\NyroCmsBundle\Model;
 use DateTime;
 use DateTimeInterface;
 
-abstract class ContentHandlerConfigLog
+abstract class TemplateLog
 {
     protected $id;
 

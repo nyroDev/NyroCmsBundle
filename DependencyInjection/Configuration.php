@@ -207,6 +207,8 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('content_handler_config')->defaultValue('ContentHandlerConfig')->end()
                                 ->scalarNode('content_handler_config_log')->defaultValue('Log\\ContentHandlerConfigLog')->end()
                                 ->scalarNode('content_handler_config_translation')->defaultValue('Translation\\ContentHandlerConfigTranslation')->end()
+                                ->scalarNode('template')->defaultValue('Template')->end()
+                                ->scalarNode('template_log')->defaultValue('Log\\TemplateLog')->end()
                                 ->scalarNode('translation')->defaultValue('Translation')->end()
                                 ->scalarNode('contact_message')->defaultValue('ContactMessage')->end()
                             ->end()

@@ -74,7 +74,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->id;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -86,7 +86,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->email;
     }
 
-    public function setFirstname(?string $firstname): static
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -98,7 +98,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->firstname;
     }
 
-    public function setLastname(?string $lastname): static
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -110,7 +110,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->lastname;
     }
 
-    public function setPassword(?string $password): static
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -122,7 +122,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->password;
     }
 
-    public function setUserType(?string $userType): static
+    public function setUserType(?string $userType): self
     {
         $this->userType = $userType;
 
@@ -134,7 +134,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->userType;
     }
 
-    public function setDevelopper(?bool $developper): static
+    public function setDevelopper(?bool $developper): self
     {
         $this->developper = $developper;
 
@@ -146,7 +146,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->developper;
     }
 
-    public function setValid(?bool $valid): static
+    public function setValid(?bool $valid): self
     {
         $this->valid = $valid;
 
@@ -158,7 +158,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->valid;
     }
 
-    public function setValidStart(?DateTimeInterface $validStart): static
+    public function setValidStart(?DateTimeInterface $validStart): self
     {
         $this->validStart = $validStart;
 
@@ -170,7 +170,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->validStart;
     }
 
-    public function setValidEnd(?DateTimeInterface $validEnd): static
+    public function setValidEnd(?DateTimeInterface $validEnd): self
     {
         $this->validEnd = $validEnd;
 
@@ -182,7 +182,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->validEnd;
     }
 
-    public function setPasswordKey(?string $passwordKey): static
+    public function setPasswordKey(?string $passwordKey): self
     {
         $this->passwordKey = $passwordKey;
 
@@ -194,7 +194,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->passwordKey;
     }
 
-    public function setPasswordKeyEnd(?DateTimeInterface $passwordKeyEnd): static
+    public function setPasswordKeyEnd(?DateTimeInterface $passwordKeyEnd): self
     {
         $this->passwordKeyEnd = $passwordKeyEnd;
 
@@ -206,7 +206,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->passwordKeyEnd;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -218,7 +218,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 
@@ -230,7 +230,7 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->updated;
     }
 
-    public function setDeleted(?DateTimeInterface $deleted): static
+    public function setDeleted(?DateTimeInterface $deleted): self
     {
         $this->deleted = $deleted;
 
@@ -242,14 +242,14 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->deleted;
     }
 
-    public function addUserRole(UserRole $userRoles): static
+    public function addUserRole(UserRole $userRoles): self
     {
         $this->userRoles[] = $userRoles;
 
         return $this;
     }
 
-    public function removeUserRole(UserRole $userRoles): static
+    public function removeUserRole(UserRole $userRoles): self
     {
         $this->userRoles->removeElement($userRoles);
 

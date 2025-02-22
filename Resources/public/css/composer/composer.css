@@ -154,7 +154,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	padding-top: 10px;
-	z-index: 10;
+	z-index: 1000;
 }
 
 #composerNavTool {

@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Services;
 
+use App\Entity\Template;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -27,7 +28,7 @@ class AdminService extends NyroDevAbstractService
 
     protected ?array $userTypes = null;
 
-    public function getUserTypeChoices()
+    public function getUserTypeChoices(): array
     {
         if (is_null($this->userTypes)) {
             $this->userTypes = [];
@@ -58,21 +59,21 @@ class AdminService extends NyroDevAbstractService
         return $this->userRoles;
     }
 
-    protected $contentParentId;
+    protected mixed $contentParentId;
 
-    public function setContentParentId($id)
+    public function setContentParentId(mixed $id): void
     {
         $this->contentParentId = $id;
     }
 
-    public function getContentParentId()
+    public function getContentParentId(): mixed
     {
         return $this->contentParentId;
     }
 
-    protected $administrableContentIds;
+    protected ?array $administrableContentIds = null;
 
-    public function getAdministrableContentIds()
+    public function getAdministrableContentIds(): array
     {
         if (is_null($this->administrableContentIds)) {
             $this->administrableContentIds = [];
@@ -100,9 +101,9 @@ class AdminService extends NyroDevAbstractService
         return $this->administrableContentIds;
     }
 
-    protected $administrableRootContentIds = [];
+    protected array $administrableRootContentIds = [];
 
-    public function getAdministrableRootContentIds(string $rolePrefix = 'complete')
+    public function getAdministrableRootContentIds(string $rolePrefix = 'complete'): array
     {
         if (!isset($this->administrableRootContentIds[$rolePrefix])) {
             $this->administrableRootContentIds[$rolePrefix] = [];
@@ -170,6 +171,8 @@ class AdminService extends NyroDevAbstractService
             foreach ($row->getContentHandler()->getContents() as $content) {
                 $canAdmin = $canAdmin || $this->canAdmin($content);
             }
+        } elseif ($this->dbService->isA($row, 'template')) {
+            $canAdmin = $this->canAdminTemplate($row);
         } else {
             $canAdmin = $this->canAdminContent($row->getParent());
         }
@@ -187,12 +190,21 @@ class AdminService extends NyroDevAbstractService
         return isset($contentIds[$content->getId()]) ? $contentIds[$content->getId()] : false;
     }
 
+    public function canAdminTemplate(Template $template): bool
+    {
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function canRootComposer(Content $content): bool
     {
         return $this->getParameter('nyrocms.content.root_composer');
     }
 
-    public function getContentMaxLevel(Content $content)
+    public function getContentMaxLevel(Content $content): int
     {
         return $this->getParameter('nyrocms.content.maxlevel');
     }
@@ -202,7 +214,7 @@ class AdminService extends NyroDevAbstractService
         return $content ? $content->getLevel() < $this->getContentMaxLevel($content) : true;
     }
 
-    public function updateContentUrl(Content $row, bool $isEdit = false, bool $child = true, bool $forceUpdate = false)
+    public function updateContentUrl(Content $row, bool $isEdit = false, bool $child = true, bool $forceUpdate = false): void
     {
         if (!$isEdit || $this->nyroCmsService->getDefaultLocale($row) == $row->getTranslatableLocale() || !$this->nyroCmsService->disabledLocaleUrls($row->getTranslatableLocale())) {
             $oldUrl = $row->getUrl();
@@ -228,7 +240,7 @@ class AdminService extends NyroDevAbstractService
         }
     }
 
-    protected function updateContentUrlRec($parentId, $oldUrl, $newUrl, string $locale, bool $forceUpdate = false)
+    protected function updateContentUrlRec(mixed $parentId, string $oldUrl, string $newUrl, string $locale, bool $forceUpdate = false): void
     {
         $rows = $this->dbService->getContentRepository()->findBy(['parent' => $parentId]);
         foreach ($rows as $row) {
@@ -241,6 +253,14 @@ class AdminService extends NyroDevAbstractService
                 $this->updateContentUrlRec($row->getId(), $oldUrl, $newUrl, $locale, $forceUpdate);
             }
         }
+    }
+
+    public function getTemplateStateChoices(): array
+    {
+        return [
+            Template::STATE_ACTIVE => $this->trans('admin.state.state_'.Template::STATE_ACTIVE),
+            Template::STATE_DISABLED => $this->trans('admin.state.state_'.Template::STATE_DISABLED),
+        ];
     }
 
     public function getContentStateChoices(): array
@@ -261,7 +281,7 @@ class AdminService extends NyroDevAbstractService
         ];
     }
 
-    public function getContentsChoiceTypeOptions($maxLevel = null, array $limitRootIds = [])
+    public function getContentsChoiceTypeOptions(?int $maxLevel = null, array $limitRootIds = []): array
     {
         if (is_null($maxLevel)) {
             $maxLevel = $this->getParameter('nyrocms.content.maxlevel');
@@ -284,7 +304,7 @@ class AdminService extends NyroDevAbstractService
         ];
     }
 
-    protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, $parent, $maxLevel, $curLevel = 0, array $limitRootIds = [])
+    protected function getContentsOptionsChoices(array &$contents, array &$contentsLevel, mixed $parent, int $maxLevel, int $curLevel = 0, array $limitRootIds = []): void
     {
         foreach ($this->dbService->getContentRepository()->children($parent, true) as $child) {
             $canUse = count($limitRootIds) > 0 ? isset($limitRootIds[$child->getId()]) && $limitRootIds[$child->getId()] : true;

@@ -33,7 +33,7 @@ abstract class UserLog
         return $this->action;
     }
 
-    public function setAction(?string $action): static
+    public function setAction(?string $action): self
     {
         $this->action = $action;
 
@@ -45,7 +45,7 @@ abstract class UserLog
         return $this->objectClass;
     }
 
-    public function setObjectClass(?string $objectClass): static
+    public function setObjectClass(?string $objectClass): self
     {
         $this->objectClass = $objectClass;
 
@@ -57,7 +57,7 @@ abstract class UserLog
         return $this->objectId;
     }
 
-    public function setObjectId(?string $objectId): static
+    public function setObjectId(?string $objectId): self
     {
         $this->objectId = $objectId;
 
@@ -69,7 +69,7 @@ abstract class UserLog
         return $this->username;
     }
 
-    public function setUsername(?string $username): static
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -81,7 +81,7 @@ abstract class UserLog
         return $this->loggedAt;
     }
 
-    public function setLoggedAt(): static
+    public function setLoggedAt(): self
     {
         $this->loggedAt = new DateTime();
 
@@ -93,7 +93,7 @@ abstract class UserLog
         return $this->data;
     }
 
-    public function setData(?array $data): static
+    public function setData(?array $data): self
     {
         $this->data = $data;
 
@@ -105,7 +105,7 @@ abstract class UserLog
         return $this->version;
     }
 
-    public function setVersion(?int $version): static
+    public function setVersion(?int $version): self
     {
         $this->version = $version;
 

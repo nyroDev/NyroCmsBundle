@@ -57,6 +57,8 @@ admin:
           subscript: Indice
           code: Code
     action:
+      addBlock: Ajouter
+      template: Template
       confirm: Confirmer
       cancel: Annuler
       save: Enregistrer
@@ -151,6 +153,14 @@ admin:
     name: Nom
     class: Class
     hasAdmin: Administration ?
+    inserted: Ajouté le
+    updated: Mis à jour le
+  template:
+    viewTitle: Templates
+    id: ID
+    title: Titre
+    theme: Thème
+    state: État
     inserted: Ajouté le
     updated: Mis à jour le
   contentSpec:

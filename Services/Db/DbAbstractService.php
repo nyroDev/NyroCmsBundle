@@ -7,6 +7,7 @@ use Doctrine\Persistence\ObjectRepository;
 use NyroDev\NyroCmsBundle\Repository\ContentHandlerRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\TemplateRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
@@ -69,6 +70,11 @@ abstract class DbAbstractService extends AbstractServiceSrc
     public function getContentHandlerRepository(): ContentHandlerRepositoryInterface
     {
         return $this->getRepository('content_handler');
+    }
+
+    public function getTemplateRepository(): TemplateRepositoryInterface
+    {
+        return $this->getRepository('template');
     }
 
     public function getRepository(object|string $name): ObjectRepository

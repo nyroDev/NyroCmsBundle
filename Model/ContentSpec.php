@@ -11,7 +11,7 @@ use NyroDev\UtilityBundle\Model\Sharable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class ContentSpec extends AbstractUploadable implements Composable, Sharable
+abstract class ContentSpec extends AbstractUploadable implements ContentRootable, ComposableTranslatable, ComposableContentSummary, Sharable
 {
     public const STATE_DISABLED = 0;
     public const STATE_ACTIVE = 1;
@@ -81,7 +81,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
     #[Gedmo\Locale]
     protected ?string $locale = null;
 
-    public function setTranslatableLocale(?string $locale): static
+    public function setTranslatableLocale(?string $locale): self
     {
         $this->locale = $locale;
 
@@ -104,7 +104,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->id;
     }
 
-    public function setTitle(?string $title): static
+    public function setTitle(?string $title): self
     {
         $this->title = $title;
 
@@ -116,7 +116,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->title;
     }
 
-    public function setIntro(?string $intro): static
+    public function setIntro(?string $intro): self
     {
         $this->intro = $intro;
 
@@ -128,7 +128,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->intro;
     }
 
-    public function setContent(?array $content): static
+    public function setContent(?array $content): self
     {
         $this->content = $content;
 
@@ -140,7 +140,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->content;
     }
 
-    public function setContentText(?string $contentText): static
+    public function setContentText(?string $contentText): self
     {
         $this->contentText = $contentText;
 
@@ -152,7 +152,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->contentText;
     }
 
-    public function setData(?array $data): static
+    public function setData(?array $data): self
     {
         $this->data = $data;
 
@@ -164,7 +164,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->data;
     }
 
-    public function setFirstImage(?string $firstImage): static
+    public function setFirstImage(?string $firstImage): self
     {
         $this->firstImage = $firstImage;
 
@@ -176,7 +176,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->firstImage;
     }
 
-    public function setposition(?int $position): static
+    public function setposition(?int $position): self
     {
         $this->position = $position;
 
@@ -188,7 +188,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->position;
     }
 
-    public function setDateSpec(?DateTimeInterface $dateSpec): static
+    public function setDateSpec(?DateTimeInterface $dateSpec): self
     {
         $this->dateSpec = $dateSpec;
 
@@ -200,7 +200,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->dateSpec;
     }
 
-    public function setFeatured(?bool $featured): static
+    public function setFeatured(?bool $featured): self
     {
         $this->featured = $featured;
 
@@ -212,7 +212,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->featured;
     }
 
-    public function setState(?int $state): static
+    public function setState(?int $state): self
     {
         $this->state = $state;
 
@@ -224,7 +224,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->state;
     }
 
-    public function setContentHandler(?ContentHandler $contentHandler): static
+    public function setContentHandler(?ContentHandler $contentHandler): self
     {
         $this->contentHandler = $contentHandler;
 
@@ -236,7 +236,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->contentHandler;
     }
 
-    public function setValidStart(?DateTimeInterface $validStart): static
+    public function setValidStart(?DateTimeInterface $validStart): self
     {
         $this->validStart = $validStart;
 
@@ -248,7 +248,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->validStart;
     }
 
-    public function setValidEnd(?DateTimeInterface $validEnd): static
+    public function setValidEnd(?DateTimeInterface $validEnd): self
     {
         $this->validEnd = $validEnd;
 
@@ -260,7 +260,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->validEnd;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -272,7 +272,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 
@@ -284,7 +284,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->updated;
     }
 
-    public function setDeleted(?DateTimeInterface $deleted): static
+    public function setDeleted(?DateTimeInterface $deleted): self
     {
         $this->deleted = $deleted;
 
@@ -296,14 +296,14 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->deleted;
     }
 
-    public function addTranslation(object $translations): static
+    public function addTranslation(object $translations): self
     {
         $this->translations[] = $translations;
 
         return $this;
     }
 
-    public function removeTranslation(object $translations): static
+    public function removeTranslation(object $translations): self
     {
         $this->translations->removeElement($translations);
 
@@ -315,14 +315,14 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return $this->translations;
     }
 
-    public function addContent(Content $contents): static
+    public function addContent(Content $contents): self
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    public function removeContent(Content $contents): static
+    public function removeContent(Content $contents): self
     {
         $this->contents->removeElement($contents);
 
@@ -356,7 +356,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return isset($content[$key]) ? $content[$key] : null;
     }
 
-    public function setInContent(string $key, mixed $value): static
+    public function setInContent(string $key, mixed $value): self
     {
         $content = $this->getContent();
         if (is_null($value)) {
@@ -377,7 +377,7 @@ abstract class ContentSpec extends AbstractUploadable implements Composable, Sha
         return isset($content[$key]) ? $content[$key] : null;
     }
 
-    public function setInData(string $key, mixed $value): static
+    public function setInData(string $key, mixed $value): self
     {
         $content = $this->getData();
         if (is_null($value)) {

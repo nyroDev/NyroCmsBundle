@@ -33,7 +33,7 @@ abstract class ContactMessage
         return $this->id;
     }
 
-    public function setContentHandler(ContentHandler $contentHandler): static
+    public function setContentHandler(ContentHandler $contentHandler): self
     {
         $this->contentHandler = $contentHandler;
 
@@ -45,7 +45,7 @@ abstract class ContactMessage
         return $this->contentHandler;
     }
 
-    public function setDest(?string $dest): static
+    public function setDest(?string $dest): self
     {
         $this->dest = $dest;
 
@@ -57,7 +57,7 @@ abstract class ContactMessage
         return $this->dest;
     }
 
-    public function setLastname(?string $lastname): static
+    public function setLastname(?string $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -69,7 +69,7 @@ abstract class ContactMessage
         return $this->lastname;
     }
 
-    public function setFirstname(?string $firstname): static
+    public function setFirstname(?string $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -81,7 +81,7 @@ abstract class ContactMessage
         return $this->firstname;
     }
 
-    public function setCompany(?string $company): static
+    public function setCompany(?string $company): self
     {
         $this->company = $company;
 
@@ -93,7 +93,7 @@ abstract class ContactMessage
         return $this->company;
     }
 
-    public function setPhone(?string $phone): static
+    public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
 
@@ -105,7 +105,7 @@ abstract class ContactMessage
         return $this->phone;
     }
 
-    public function setEmail(?string $email): static
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
@@ -117,7 +117,7 @@ abstract class ContactMessage
         return $this->email;
     }
 
-    public function setMessage(?string $message): static
+    public function setMessage(?string $message): self
     {
         $this->message = $message;
 
@@ -129,7 +129,7 @@ abstract class ContactMessage
         return $this->message;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 

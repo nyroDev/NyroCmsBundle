@@ -8,6 +8,7 @@ use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
+use NyroDev\NyroCmsBundle\Model\Template;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Model\UserRole;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
@@ -550,6 +551,101 @@ class AdminDataController extends AbstractAdminController
             'class',
             'hasAdmin',
         ], 'nyrocms_admin_data_contentHandler', [], null, null, null, $moreOptions);
+        if (!is_array($adminForm)) {
+            return $adminForm;
+        }
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
+    }
+
+    // /////////////////////////////////////////////////////////////
+    // templates
+
+    public function templateAction(Request $request): Response
+    {
+        $repo = $this->get(DbAbstractService::class)->getTemplateRepository();
+
+        $route = 'nyrocms_admin_data_template';
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
+            array_merge(
+                [
+                    'name' => 'template',
+                    'route' => $route,
+                    'fields' => [
+                        'id',
+                        'title',
+                        'updated',
+                    ],
+                    'moreActions' => [
+                        'composer' => [
+                            'name' => $this->get(AdminService::class)->getIcon('pencil'),
+                            '_blank' => true,
+                            'route' => 'nyrocms_admin_composer',
+                            'routePrm' => [
+                                'type' => 'Template',
+                            ],
+                        ],
+                    ],
+                ],
+                $this->createList($request, $repo, $route, [], 'title', 'asc')
+            ));
+    }
+
+    public function templateDeleteAction(string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTemplateRepository()->find($id);
+        if ($row) {
+            $this->get(DbAbstractService::class)->remove($row);
+            $this->get(DbAbstractService::class)->flush();
+        }
+
+        return $this->redirect($this->generateUrl('nyrocms_admin_data_template'));
+    }
+
+    public function templateAddAction(Request $request): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getNew('template', false);
+
+        return $this->templateForm($request, self::ADD, $row);
+    }
+
+    public function templateEditAction(Request $request, string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTemplateRepository()->find($id);
+        if (!$row) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->templateForm($request, self::EDIT, $row);
+    }
+
+    public function templateForm(Request $request, string $action, Template $row): Response
+    {
+        $themes = $this->get(ComposerService::class)->getDefaultThemes();
+        $moreOptions = [
+            'theme' => [
+                'type' => ChoiceType::class,
+                'choices' => array_flip($themes),
+            ],
+            'state' => [
+                'type' => ChoiceType::class,
+                'choices' => array_flip($this->get(AdminService::class)->getTemplateStateChoices()),
+            ],
+            'submit' => [
+                'attr' => [
+                    'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_template'),
+                ],
+            ],
+        ];
+
+        $fields = array_filter([
+            'title',
+            count($themes) > 1 ? 'theme' : null,
+            'state',
+        ]);
+
+        $adminForm = $this->createAdminForm($request, 'content', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }

@@ -130,6 +130,12 @@ class AdminTplController extends NyroDevAbstractController
                     ];
                 }
 
+                $menu['contents']['template'] = [
+                    'uri' => $this->generateUrl('nyrocms_admin_data_template'),
+                    'name' => $this->trans('admin.template.viewTitle'),
+                    'active' => 'template' == $tmpUri[0],
+                ];
+
                 if (!isset($menu['modules'])) {
                     $menu['modules'] = [];
                 }

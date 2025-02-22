@@ -2,21 +2,29 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use Exception;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
+use NyroDev\NyroCmsBundle\Model\Composable;
+use NyroDev\NyroCmsBundle\Model\ComposableContentSummary;
+use NyroDev\NyroCmsBundle\Model\ComposableHandler;
+use NyroDev\NyroCmsBundle\Model\ComposableTranslatable;
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\ComposerService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\EmbedService;
+use NyroDev\UtilityBundle\Validator\Constraints\EmbedUrl;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AdminComposerController extends AbstractAdminController
 {
     public function composerAction(Request $request, string $type, string $id, ?string $lang = null): Response
     {
         $row = $this->get(DbAbstractService::class)->getRepository($type)->find($id);
-        if (!$row || !($row instanceof \NyroDev\NyroCmsBundle\Model\Composable)) {
+        if (!$row || !($row instanceof Composable)) {
             throw $this->createNotFoundException();
         }
 
@@ -24,7 +32,7 @@ class AdminComposerController extends AbstractAdminController
             throw $this->createAccessDeniedException();
         }
 
-        /* @var $row \NyroDev\NyroCmsBundle\Model\Composable */
+        /* @var $row Composable */
         $locale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
         if (!$lang) {
             $lang = $locale;
@@ -36,6 +44,7 @@ class AdminComposerController extends AbstractAdminController
         $sameLangStructure = $composerService->isSameLangStructure($row);
         $sameLangMedia = $composerService->isSameLangMedia($row);
         $canChangeTheme = $composerService->canChangeTheme($row);
+        $availableTemplates = $composerService->getAvailableTemplates($row);
 
         $isDefaultLocale = true;
         $langs = $this->get(NyroCmsService::class)->getLocaleNames($row);
@@ -54,7 +63,7 @@ class AdminComposerController extends AbstractAdminController
         $canChangeMedia = $isDefaultLocale || !$sameLangMedia;
 
         $url = $this->generateUrl('nyrocms_admin_composer', array_filter(['type' => $type, 'id' => $id, 'lang' => $lang]));
-        /* @var $composerService \NyroDev\NyroCmsBundle\Services\ComposerService */
+        /* @var $composerService ComposerService */
         $availableBlocks = $composerService->getAvailableBlocks($row);
         $themes = $canChangeTheme ? $composerService->getThemes($row->getParent() ? $row->getParent() : $row) : [];
 
@@ -68,8 +77,8 @@ class AdminComposerController extends AbstractAdminController
 
                 $url = $request->request->get('url');
                 $constraints = [
-                    new \Symfony\Component\Validator\Constraints\NotBlank(),
-                    new \NyroDev\UtilityBundle\Validator\Constraints\EmbedUrl(),
+                    new NotBlank(),
+                    new EmbedUrl(),
                 ];
                 $errors = $this->get('nyrodev_form')->getValidator()->validate($url, $constraints);
 
@@ -91,7 +100,7 @@ class AdminComposerController extends AbstractAdminController
                     $ret['err'] = implode(', ', $tmp);
                 }
 
-                return new \Symfony\Component\HttpFoundation\JsonResponse($ret);
+                return new JsonResponse($ret);
             }
 
             if ($canChangeTheme && $request->request->has('theme')) {
@@ -131,8 +140,18 @@ class AdminComposerController extends AbstractAdminController
             }
 
             $row->setContent($newContents);
-            $row->setContentText(implode("\n", $newTexts));
-            $row->setFirstImage($firstImage);
+            if ($row instanceof ComposableContentSummary) {
+                $row->setContentText(implode("\n", $newTexts));
+                $row->setFirstImage($firstImage);
+            }
+
+            if ($templateId = $request->query->get('template')) {
+                if (!isset($availableTemplates[$templateId])) {
+                    throw new Exception('Template not found');
+                }
+
+                $composerService->applyTemplate($availableTemplates[$templateId], $row);
+            }
 
             $this->get(DbAbstractService::class)->flush();
 
@@ -149,7 +168,7 @@ class AdminComposerController extends AbstractAdminController
             return new Response($html);
         }
 
-        if ($row instanceof \NyroDev\NyroCmsBundle\Model\ComposableHandler && $row->getContentHandler()) {
+        if ($row instanceof ComposableHandler && $row->getContentHandler()) {
             $handler = $this->get(NyroCmsService::class)->getHandler($row->getContentHandler());
             $handler->init($request, true);
             $contentHandler = $handler->prepareView($row);
@@ -158,7 +177,7 @@ class AdminComposerController extends AbstractAdminController
             }
 
             // Fix bug when there is some fetch in prepareView
-            if ($lang && $row->getTranslatableLocale() != $lang) {
+            if ($lang && $row instanceof ComposableTranslatable && $row->getTranslatableLocale() != $lang) {
                 $row->setTranslatableLocale($lang);
                 $this->get(DbAbstractService::class)->refresh($row);
             }
@@ -171,6 +190,7 @@ class AdminComposerController extends AbstractAdminController
             'row' => $row,
             'lang' => $lang,
             'langs' => $langs,
+            'availableTemplates' => $availableTemplates,
             'availableBlocks' => $availableBlocks,
             'canChangeTheme' => $canChangeTheme,
             'canChangeLang' => $canChangeLang,

@@ -41,7 +41,7 @@ abstract class ContentHandler
         return $this->id;
     }
 
-    public function setName(?string $name): static
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -53,7 +53,7 @@ abstract class ContentHandler
         return $this->name;
     }
 
-    public function setClass(?string $class): static
+    public function setClass(?string $class): self
     {
         $this->class = $class;
 
@@ -65,7 +65,7 @@ abstract class ContentHandler
         return $this->class;
     }
 
-    public function setHasAdmin(?bool $hasAdmin): static
+    public function setHasAdmin(?bool $hasAdmin): self
     {
         $this->hasAdmin = $hasAdmin;
 
@@ -77,21 +77,21 @@ abstract class ContentHandler
         return $this->hasAdmin;
     }
 
-    public function addContent(Content $contents): static
+    public function addContent(Content $contents): self
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    public function removeContent(Content $contents): static
+    public function removeContent(Content $contents): self
     {
         $this->contents->removeElement($contents);
 
         return $this;
     }
 
-    public function setContents(Collection $contents): static
+    public function setContents(Collection $contents): self
     {
         $this->contents = $contents;
 
@@ -103,21 +103,21 @@ abstract class ContentHandler
         return $this->contents;
     }
 
-    public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): static
+    public function addContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): self
     {
         $this->contentHandlerConfigs[] = $contentHandlerConfigs;
 
         return $this;
     }
 
-    public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): static
+    public function removeContentHandlerConfig(ContentHandlerConfig $contentHandlerConfigs): self
     {
         $this->contentHandlerConfigs->removeElement($contentHandlerConfigs);
 
         return $this;
     }
 
-    public function setContentHandlerConfigs(Collection $contentHandlerConfigs): static
+    public function setContentHandlerConfigs(Collection $contentHandlerConfigs): self
     {
         $this->contentHandlerConfigs = $contentHandlerConfigs;
 
@@ -140,7 +140,7 @@ abstract class ContentHandler
         return $ret;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -152,7 +152,7 @@ abstract class ContentHandler
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 

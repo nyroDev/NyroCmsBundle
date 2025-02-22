@@ -13,11 +13,11 @@ trait TranslatableHintTrait
         if (defined('NYRO_LOCALE')) {
             $query->setHint(TranslatableListener::HINT_TRANSLATABLE_LOCALE, NYRO_LOCALE);
             $query->setHint(
-                \Gedmo\Translatable\TranslatableListener::HINT_FALLBACK,
+                TranslatableListener::HINT_FALLBACK,
                 1 // fallback to default values in case if record is not translated
             );
         }
 
-        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, TranslationWalker::class);
+        // $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, TranslationWalker::class);
     }
 }

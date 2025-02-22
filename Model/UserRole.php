@@ -37,7 +37,7 @@ abstract class UserRole
         return $this->id;
     }
 
-    public function setName(?string $name): static
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -49,7 +49,7 @@ abstract class UserRole
         return $this->name;
     }
 
-    public function setRoleName(?string $roleName): static
+    public function setRoleName(?string $roleName): self
     {
         $this->roleName = $roleName;
 
@@ -61,7 +61,7 @@ abstract class UserRole
         return $this->roleName;
     }
 
-    public function setInternal(?bool $internal): static
+    public function setInternal(?bool $internal): self
     {
         $this->internal = $internal;
 
@@ -73,7 +73,7 @@ abstract class UserRole
         return $this->internal;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -85,7 +85,7 @@ abstract class UserRole
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 
@@ -97,14 +97,14 @@ abstract class UserRole
         return $this->updated;
     }
 
-    public function addContent(Content $contents): static
+    public function addContent(Content $contents): self
     {
         $this->contents[] = $contents;
 
         return $this;
     }
 
-    public function removeContent(Content $contents): static
+    public function removeContent(Content $contents): self
     {
         $this->contents->removeElement($contents);
 

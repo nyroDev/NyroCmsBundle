@@ -6,8 +6,10 @@ use Composer\Autoload\ClassLoader;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Handler\Sitemap;
+use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
+use NyroDev\NyroCmsBundle\Model\ContentRootable;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Routing\NyroCmsLoader;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
@@ -88,7 +90,7 @@ class NyroCmsService extends NyroDevAbstractService
 
     protected array $activeIds = [];
 
-    public function setActiveIds(array $activeIds)
+    public function setActiveIds(array $activeIds): void
     {
         $this->activeIds = $activeIds;
     }
@@ -100,7 +102,7 @@ class NyroCmsService extends NyroDevAbstractService
 
     protected ?Content $rootContent = null;
 
-    public function setRootContent(Content $content)
+    public function setRootContent(Content $content): void
     {
         $this->rootContent = $content;
     }
@@ -216,7 +218,7 @@ class NyroCmsService extends NyroDevAbstractService
         ];
     }
 
-    public function sendEmail(string|array $to, string $subject, string $content, ?string $from = null, ?string $locale = null, ?Content $dbContent = null)
+    public function sendEmail(string|array $to, string $subject, string $content, ?string $from = null, ?string $locale = null, ?Content $dbContent = null): void
     {
         $html = $this->getTwig()->render($this->getParameter('nyrocms.email.global_template'), [
             'stylesTemplate' => $this->getParameter('nyrocms.email.styles_template'),
@@ -249,7 +251,7 @@ class NyroCmsService extends NyroDevAbstractService
             ->html($html)
         ;
 
-        return $this->getMailerInterface()->send($email);
+        $this->getMailerInterface()->send($email);
     }
 
     public function getLocale(): string
@@ -257,11 +259,11 @@ class NyroCmsService extends NyroDevAbstractService
         return $this->getRequest()->getLocale();
     }
 
-    public function getDefaultLocale(?Content $rootContent = null): string
+    public function getDefaultLocale(?Composable $rootContent = null): string
     {
         $isContentRootable = false;
         if ($rootContent) {
-            $isContentRootable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\ContentRootable;
+            $isContentRootable = $rootContent instanceof ContentRootable;
             if ($isContentRootable) {
                 $rootContent = $rootContent->getVeryParent();
             }
@@ -275,11 +277,11 @@ class NyroCmsService extends NyroDevAbstractService
         }
     }
 
-    public function getLocales(?Content $rootContent = null, bool $asString = false): string|array
+    public function getLocales(?Composable $rootContent = null, bool $asString = false): string|array
     {
         $isContentRootable = false;
         if ($rootContent) {
-            $isContentRootable = $rootContent instanceof \NyroDev\NyroCmsBundle\Model\ContentRootable;
+            $isContentRootable = $rootContent instanceof ContentRootable;
             if ($isContentRootable) {
                 $rootContent = $rootContent->getVeryParent();
             }
@@ -289,7 +291,7 @@ class NyroCmsService extends NyroDevAbstractService
         return $asString ? $locales : explode('|', $locales);
     }
 
-    public function getLocaleNames(?Content $rootContent = null, ?string $prefixTranslation = null): array
+    public function getLocaleNames(?Composable $rootContent = null, ?string $prefixTranslation = null): array
     {
         $names = $this->container->getParameter('localeNames');
         $ret = [];

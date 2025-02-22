@@ -23,7 +23,7 @@ abstract class UserLogin
         return $this->id;
     }
 
-    public function setUser(User $user): static
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -35,7 +35,7 @@ abstract class UserLogin
         return $this->user;
     }
 
-    public function setIpAddress(?string $ipAddress): static
+    public function setIpAddress(?string $ipAddress): self
     {
         $this->ipAddress = $ipAddress;
 
@@ -47,7 +47,7 @@ abstract class UserLogin
         return $this->ipAddress;
     }
 
-    public function setPlace(?string $place): static
+    public function setPlace(?string $place): self
     {
         $this->place = $place;
 
@@ -59,7 +59,7 @@ abstract class UserLogin
         return $this->place;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 

@@ -67,7 +67,7 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 		<?php if ($canChangeStructure): ?>
 			<nav id="composerAvlBlocks" class="composerNav">
 				<input type="checkbox" name="" id="avlBlocksInput" />
-				<label for="avlBlocksInput">Ajouter</label>
+				<label for="avlBlocksInput"><?php echo $view['nyrodev']->trans('admin.composer.action.addBlock'); ?></label>
 				<nav id="availableBlocks">
 					<?php foreach ($availableBlocks as $b): ?>
 						<a href="<?php echo $composerUrl.'?block='.$b; ?>"
@@ -78,29 +78,42 @@ $maxButtons = $view['nyrocms_composer']->getMaxComposerButtons($row);
 					<?php endforeach; ?>
 				</nav>
 			</nav>
-		<?php endif; ?>
-		<?php if ($canChangeStructure && $canChangeTheme && count($themes) > 1): ?>
-			<nav id="themeSelect" class="composerNav">
-				<input type="checkbox" name="" id="themeSelectInput" />
-				<label for="themeSelectInput">
-					<?php echo $view['nyrodev']->trans('admin.content.themeSelectInput'); ?>
-					<span id="themeDemo" class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
-				</label>
-				<nav id="themeSelectChoices">
-					<?php if ($row->getParent()): ?>
-						<input id="theme_parent" type="radio" name="theme" value="" <?php echo !$row->getTheme() ? 'checked="checked"' : ''; ?> data-parent="<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"/>
-						<label class="composerNavElt" for="theme_parent" title="<?php echo $view['nyrodev']->trans('admin.content.themeEmpty'); ?>">
-							<span class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
-						</label>
-					<?php endif; ?>
-					<?php foreach ($themes as $k => $v): ?>
-						<input id="theme_<?php echo $k; ?>" type="radio" name="theme" value="<?php echo $k; ?>"<?php echo $k == $row->getTheme() ? ' checked="checked" ' : ''; ?>/>
-						<label class="composerNavElt" for="theme_<?php echo $k; ?>" title="<?php echo $v; ?>">
-							<span class="bg_theme bg_<?php echo $k; ?>"></span>
-						</label>
-					<?php endforeach; ?>
+			<?php if ($canChangeTheme && count($themes) > 1): ?>
+				<nav id="themeSelect" class="composerNav">
+					<input type="checkbox" name="" id="themeSelectInput" />
+					<label for="themeSelectInput">
+						<?php echo $view['nyrodev']->trans('admin.content.themeSelectInput'); ?>
+						<span id="themeDemo" class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
+					</label>
+					<nav id="themeSelectChoices">
+						<?php if ($row->getParent()): ?>
+							<input id="theme_parent" type="radio" name="theme" value="" <?php echo !$row->getTheme() ? 'checked="checked"' : ''; ?> data-parent="<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"/>
+							<label class="composerNavElt" for="theme_parent" title="<?php echo $view['nyrodev']->trans('admin.content.themeEmpty'); ?>">
+								<span class="bg_theme bg_<?php echo $view['nyrocms_composer']->getCssTheme($row); ?>"></span>
+							</label>
+						<?php endif; ?>
+						<?php foreach ($themes as $k => $v): ?>
+							<input id="theme_<?php echo $k; ?>" type="radio" name="theme" value="<?php echo $k; ?>"<?php echo $k == $row->getTheme() ? ' checked="checked" ' : ''; ?>/>
+							<label class="composerNavElt" for="theme_<?php echo $k; ?>" title="<?php echo $v; ?>">
+								<span class="bg_theme bg_<?php echo $k; ?>"></span>
+							</label>
+						<?php endforeach; ?>
+					</nav>
 				</nav>
-			</nav>
+			<?php endif; ?>
+			<?php if (count($availableTemplates)): ?>
+				<nav id="composerAvlTemplates" class="composerNav">
+					<input type="checkbox" name="" id="avlTemplatesInput" />
+					<label for="avlTemplatesInput"><?php echo $view['nyrodev']->trans('admin.composer.action.template'); ?></label>
+					<nav id="availableTemplates">
+						<?php foreach ($availableTemplates as $tpl): ?>
+							<a href="<?php echo $composerUrl.'?template='.$tpl->getId(); ?>" class="composerNavElt availableTemplate">
+								<span><?php echo $tpl; ?></span>
+							</a>
+						<?php endforeach; ?>
+					</nav>
+				</nav>
+			<?php endif; ?>
 		<?php endif; ?>
 	</nav>
 	<?php endif; ?>

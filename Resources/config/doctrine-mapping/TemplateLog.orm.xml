@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	<mapped-superclass name="NyroDev\NyroCmsBundle\Model\TemplateLog">
+		<id name="id" type="integer" column="id">
+            <generator strategy="AUTO"/>
+			<options>
+				<option name="unsigned">true</option>
+			</options>
+        </id>
+		<field name="action" type="string" length="8" nullable="false" />
+		<field name="loggedAt" type="datetime" nullable="false" />
+		<field name="objectClass" type="string" nullable="false" />
+		<field name="objectId" type="string" length="64" nullable="true" />
+		<field name="version" type="integer" nullable="false" />
+		<field name="data" type="json" nullable="true" />
+		<field name="username" type="string" nullable="true" />
+		<field name="locale" type="string" length="12" nullable="true" />
+
+		<indexes>
+			<index name="template_log_class_lookup_idx" columns="object_class" />
+			<index name="template_log_date_lookup_idx" columns="logged_at" />
+			<index name="template_log_user_lookup_idx" columns="username" />
+			<index name="template_log_version_lookup_idx" columns="object_id,object_class,version" />
+		</indexes>
+	</mapped-superclass>
+</doctrine-mapping>

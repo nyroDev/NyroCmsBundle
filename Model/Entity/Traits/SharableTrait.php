@@ -33,7 +33,7 @@ trait SharableTrait
         return $this->metaTitle;
     }
 
-    public function setMetaTitle(?string $metaTitle): static
+    public function setMetaTitle(?string $metaTitle): self
     {
         $this->metaTitle = $metaTitle;
 
@@ -45,7 +45,7 @@ trait SharableTrait
         return $this->metaDescription;
     }
 
-    public function setMetaDescription(?string $metaDescription): static
+    public function setMetaDescription(?string $metaDescription): self
     {
         $this->metaDescription = $metaDescription;
 
@@ -57,7 +57,7 @@ trait SharableTrait
         return $this->metaKeywords;
     }
 
-    public function setMetaKeywords(?string $metaKeywords): static
+    public function setMetaKeywords(?string $metaKeywords): self
     {
         $this->metaKeywords = $metaKeywords;
 
@@ -69,7 +69,7 @@ trait SharableTrait
         return $this->ogTitle;
     }
 
-    public function setOgTitle(?string $ogTitle): static
+    public function setOgTitle(?string $ogTitle): self
     {
         $this->ogTitle = $ogTitle;
 
@@ -81,7 +81,7 @@ trait SharableTrait
         return $this->ogDescription;
     }
 
-    public function setOgDescription(?string $ogDescription): static
+    public function setOgDescription(?string $ogDescription): self
     {
         $this->ogDescription = $ogDescription;
 
@@ -98,7 +98,7 @@ trait SharableTrait
         return $this->ogImageFile;
     }
 
-    public function setOgImageFile(?string $ogImageFile): static
+    public function setOgImageFile(?string $ogImageFile): self
     {
         $this->ogImageFile = $ogImageFile;
 

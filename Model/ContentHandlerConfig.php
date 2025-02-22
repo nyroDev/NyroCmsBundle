@@ -61,7 +61,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         $this->translations = new ArrayCollection();
     }
 
-    public function setTranslatableLocale(?string $locale): static
+    public function setTranslatableLocale(?string $locale): self
     {
         $this->locale = $locale;
     }
@@ -76,7 +76,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->id;
     }
 
-    public function setContentHandler(?ContentHandler $contentHandler): static
+    public function setContentHandler(?ContentHandler $contentHandler): self
     {
         $this->contentHandler = $contentHandler;
 
@@ -88,7 +88,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->contentHandler;
     }
 
-    public function setName(?string $name): static
+    public function setName(?string $name): self
     {
         $this->name = $name;
 
@@ -100,7 +100,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->name;
     }
 
-    public function setConfigIdent(?string $configIdent): static
+    public function setConfigIdent(?string $configIdent): self
     {
         $this->configIdent = $configIdent;
 
@@ -112,7 +112,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->configIdent;
     }
 
-    public function setConfigType(?string $configType): static
+    public function setConfigType(?string $configType): self
     {
         $this->configType = $configType;
 
@@ -124,7 +124,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->configType;
     }
 
-    public function setValueText(?string $valueText): static
+    public function setValueText(?string $valueText): self
     {
         $this->valueText = $valueText;
 
@@ -136,7 +136,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->valueText;
     }
 
-    public function setValueDate(?DateTimeInterface $valueDate): static
+    public function setValueDate(?DateTimeInterface $valueDate): self
     {
         $this->valueDate = $valueDate;
 
@@ -148,7 +148,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->valueDate;
     }
 
-    public function setValueNumber(?float $valueNumber): static
+    public function setValueNumber(?float $valueNumber): self
     {
         $this->valueNumber = $valueNumber;
 
@@ -160,7 +160,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->valueNumber;
     }
 
-    public function setInserted(DateTimeInterface $inserted): static
+    public function setInserted(DateTimeInterface $inserted): self
     {
         $this->inserted = $inserted;
 
@@ -172,7 +172,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->inserted;
     }
 
-    public function setUpdated(DateTimeInterface $updated): static
+    public function setUpdated(DateTimeInterface $updated): self
     {
         $this->updated = $updated;
 
@@ -184,7 +184,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this->updated;
     }
 
-    public function addTranslation(object $translation): static
+    public function addTranslation(object $translation): self
     {
         if (!$this->translations->contains($translation)) {
             $this->translations[] = $translation;
@@ -194,7 +194,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $this;
     }
 
-    public function removeTranslation(object $translations): static
+    public function removeTranslation(object $translations): self
     {
         $this->translations->removeElement($translations);
 
@@ -244,7 +244,7 @@ abstract class ContentHandlerConfig extends AbstractUploadable
         return $value;
     }
 
-    public function setValue(mixed $value): static
+    public function setValue(mixed $value): self
     {
         $field = $this->getField();
 
