@@ -33,7 +33,7 @@ class UserService extends NyroDevAbstractService
     ) {
     }
 
-    public function handleAddUser(User $user, ?string $locale = null, string $place = 'admin'): void
+    public function handleAddUser(User $user, ?string $locale = null, string $place = 'nyrocms_admin'): void
     {
         $now = new DateTime();
         if (
@@ -46,7 +46,7 @@ class UserService extends NyroDevAbstractService
         }
     }
 
-    public function sendWelcomeEmail(User $user, ?string $locale = null, string $place = 'admin'): void
+    public function sendWelcomeEmail(User $user, ?string $locale = null, string $place = 'nyrocms_admin'): void
     {
         $passwordKey = $this->nyrodevService->randomStr(32);
         $end = new DateTime('+1month');
@@ -57,7 +57,7 @@ class UserService extends NyroDevAbstractService
 
         $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
             '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            '%url%' => $this->generateUrl('nyrocms_'.$place.'_welcome', [
+            '%url%' => $this->generateUrl($place.'_welcome', [
                 'id' => $user->getId(),
                 'key' => $user->getPasswordKey(),
             ], true),
@@ -169,7 +169,7 @@ class UserService extends NyroDevAbstractService
 
                     $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', [
                         '%name%' => $user->getFirstname().' '.$user->getLastName(),
-                        '%url%' => $this->generateUrl('nyrocms_'.$place.'_forgot', [
+                        '%url%' => $this->generateUrl($place.'_forgot', [
                             'id' => $user->getId(),
                             'key' => $user->getPasswordKey(),
                         ], true),
