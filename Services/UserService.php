@@ -71,7 +71,7 @@ class UserService extends NyroDevAbstractService
         ])));
     }
 
-    public function handleForgot(string $place, Request $request, string $id, string $key, bool $welcome = false): array
+    public function handleForgot(string $place, Request $request, ?string $id = null, ?string $key = null, bool $welcome = false): array
     {
         $ret = [
             'step' => 1,
