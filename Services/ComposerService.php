@@ -747,7 +747,7 @@ class ComposerService extends AbstractService
         return $this->renderBlock($row, '--NEW--', null, $cont, $admin);
     }
 
-    protected function renderBlock(Composable $row, int $nb, ?string $handlerContent, array $block, bool $admin): string
+    protected function renderBlock(Composable $row, int|string $nb, ?string $handlerContent, array $block, bool $admin): string
     {
         $event = new ComposerBlockVarsEvent($row, $this->getQuickConfig($row, 'block_template'), [
             'nb' => $nb,

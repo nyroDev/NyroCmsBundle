@@ -518,7 +518,7 @@ jQuery(function ($) {
 					me.closest('.select').toggleClass('opened');
 				}
 			}).end()
-			.on('#availableTemplates a.availableTemplate').on('click', function(e) {
+			.find('#availableTemplates a.availableTemplate').on('click', function(e) {
 				e.preventDefault();
 				composer.get(0).action = this.href;
 				composer.trigger('submit');
