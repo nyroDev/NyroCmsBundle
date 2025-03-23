@@ -75,7 +75,7 @@ if ($intro && $intro != $introKey) {
 					            $fct = 'get'.ucfirst($f);
 						    $val = $r->{$fct}();
 						    if (is_object($val)) {
-						        if ($val instanceof DateTime) {
+						        if ($val instanceof DateTimeInterface) {
 						            $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
 						        }
 						    }
