@@ -48,7 +48,10 @@ if ($intro && $intro != $introKey) {
 					<tr>
 					<?php foreach ($fields as $field): ?>
 						<?php
-                $label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
+                		$label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
+						if ($label === $prefix.'.'.$name.'.'.$field) {
+							$label = $view['translator']->trans('admin._global.'.$field);
+						}
 					    $prm = $routePrm;
 					    $prm['page'] = 1;
 					    $prm['sort'] = $field;
