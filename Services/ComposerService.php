@@ -116,7 +116,7 @@ class ComposerService extends AbstractService
     public function canChangeMedia(Composable $row): bool
     {
         if (!($row instanceof ComposableTranslatable)) {
-            return false;
+            return true;
         }
 
         $isDefaultLocale = $this->nyroCmsService->getDefaultLocale($row) === $row->getTranslatableLocale();
