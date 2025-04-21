@@ -60,7 +60,7 @@ class ComposerService extends AbstractService
             $composableConfig = $this->getParameter('nyrocms.composable');
 
             $ret = isset($composableConfig[$class]) ? $composableConfig[$class] : [];
-            $cfgArrays = ['themes', 'available_blocks'];
+            $cfgArrays = ['themes', 'available_blocks', 'tinymce', 'tinymce_simple'];
             $cfgArraysMerge = ['default_blocks', 'config_blocks'];
 
             foreach ($cfgArrays as $cfg) {
