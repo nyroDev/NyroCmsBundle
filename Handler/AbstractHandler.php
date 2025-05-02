@@ -8,6 +8,7 @@ use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
+use NyroDev\NyroCmsBundle\Services\ComposerService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\UtilityBundle\Controller\AbstractAdminController;
 use NyroDev\UtilityBundle\Form\Type\TinymceType;
@@ -47,6 +48,22 @@ abstract class AbstractHandler
     {
         return [
             'chid' => $this->contentHandler->getId(),
+        ];
+    }
+
+    public function getDefaultComposerBlock(): array
+    {
+        return [
+            '_type' => ComposerService::BLOCK_FULL,
+            ComposerService::READONLY => true,
+            'conts' => [
+                [
+                    [
+                        '_type' => ComposerService::ITEM_HANDLER,
+                        ComposerService::READONLY => true,
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -497,16 +514,6 @@ abstract class AbstractHandler
     {
         return $this->getContentSpecRespository()
                         ->countForHandler($this->contentHandler->getId(), $state, $this->hasContentSpecificContent() ? $content : null, $where);
-    }
-
-    public function isWrapped(): bool|string
-    {
-        return false;
-    }
-
-    public function isWrappedAs(): bool|string
-    {
-        return false;
     }
 
     protected ?Sharable $sharable = null;

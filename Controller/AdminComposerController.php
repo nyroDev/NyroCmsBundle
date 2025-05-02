@@ -3,9 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use Exception;
-use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Composable;
-use NyroDev\NyroCmsBundle\Model\ComposableContentSummary;
 use NyroDev\NyroCmsBundle\Model\ComposableHandler;
 use NyroDev\NyroCmsBundle\Model\ComposableTranslatable;
 use NyroDev\NyroCmsBundle\Services\AdminService;
@@ -39,7 +37,6 @@ class AdminComposerController extends AbstractAdminController
         }
 
         $composerService = $this->get(ComposerService::class);
-        $composerService->initComposerFor($row, $lang);
         $canChangeLang = $composerService->canChangeLang($row);
         $sameLangStructure = $composerService->isSameLangStructure($row);
         $sameLangMedia = $composerService->isSameLangMedia($row);
@@ -65,17 +62,14 @@ class AdminComposerController extends AbstractAdminController
         $url = $this->generateUrl('nyrocms_admin_composer', array_filter(['type' => $type, 'id' => $id, 'lang' => $lang]));
         /* @var $composerService ComposerService */
         $availableBlocks = $composerService->getAvailableBlocks($row);
+        $availableItems = $composerService->getAvailableItems($row);
         $themes = $canChangeTheme ? $composerService->getThemes($row->getParent() ? $row->getParent() : $row) : [];
 
         if ($request->isMethod('post')) {
-            if ($request->request->has('imageUpload') && $request->files->has('image')) {
-                return $composerService->handleImageUpload($request);
-            } elseif ($request->request->has('fileUpload') && $request->files->has('file')) {
-                return $composerService->handleFileUpload($request);
-            } elseif ($request->request->has('video')) {
+            if ($request->request->has('videoUrl')) {
                 $ret = [];
 
-                $url = $request->request->get('url');
+                $url = $request->request->get('videoUrl');
                 $constraints = [
                     new NotBlank(),
                     new EmbedUrl(),
@@ -85,12 +79,14 @@ class AdminComposerController extends AbstractAdminController
                 if (0 == count($errors)) {
                     $dataUrl = $this->get(EmbedService::class)->data($url);
                     $embedUrl = $dataUrl['urlEmbed'];
-                    if ($request->request->get('autoplay')) {
+                    $autoplay = $request->request->getBoolean('autoplay');
+                    if ($autoplay) {
                         $embedUrl .= (false === strpos($embedUrl, '?') ? '?' : '&').'autoplay=1';
                     }
                     $ret = [
                         'url' => $url,
-                        'embed' => $embedUrl,
+                        'src' => $embedUrl,
+                        'autoplay' => $autoplay,
                     ];
                 } else {
                     $tmp = [];
@@ -107,45 +103,13 @@ class AdminComposerController extends AbstractAdminController
                 $row->setTheme($request->request->get('theme'));
             }
 
-            $contentsKey = $request->request->all('contentsKey');
-            $contentsType = $request->request->all('contentsType');
-            $contentsId = $request->request->all('contentsId');
-            $contentsDel = $request->request->all('contentsDel');
-            $contents = $request->request->all('contents');
+            $newContents = array_map(function ($val) {
+                return json_decode($val, true);
+            }, $request->request->all('content'));
 
-            $newContents = [];
-            $newTexts = [$row->getTitle()];
-            $firstImage = null;
-            foreach ($contentsKey as $key) {
-                if (isset($contentsType[$key]) && isset($contents[$key])) {
-                    if (isset($contentsDel[$key]) && $contentsDel[$key]) {
-                        // Delete this block
-                        $composerService->deleteBlock($row, $contentsId[$key], $contentsType[$key], $contents[$key]);
-                    } else {
-                        $block = $composerService->getBlock($row, $contentsId[$key], $contentsType[$key], $contents[$key], true);
-                        foreach ($block['texts'] as $t) {
-                            if (AbstractHandler::TEMPLATE_INDICATOR != $t) {
-                                $newTexts[] = html_entity_decode(strip_tags($t));
-                            }
-                        }
-                        if (is_null($firstImage) && count($block['images']) && isset($block['images'][0])) {
-                            $firstImage = $block['images'][0];
-                        }
-                        unset($block['texts']);
-                        unset($block['images']);
-                        unset($block['files']);
-                        $newContents[] = $block;
-                    }
-                }
-            }
+            $composerService->applyContent($row, $newContents);
 
-            $row->setContent($newContents);
-            if ($row instanceof ComposableContentSummary) {
-                $row->setContentText(implode("\n", $newTexts));
-                $row->setFirstImage($firstImage);
-            }
-
-            if ($templateId = $request->query->get('template')) {
+            if ($templateId = $request->request->get('template')) {
                 if (!isset($availableTemplates[$templateId])) {
                     throw new Exception('Template not found');
                 }
@@ -158,14 +122,6 @@ class AdminComposerController extends AbstractAdminController
             $composerService->afterComposerEdition($row);
 
             return $this->redirect($url);
-        } elseif ($request->query->has('block')) {
-            if (!in_array($request->query->get('block'), $availableBlocks)) {
-                throw $this->createNotFoundException();
-            }
-
-            $html = $composerService->renderNew($row, $request->query->get('block'), true);
-
-            return new Response($html);
         }
 
         if ($row instanceof ComposableHandler && $row->getContentHandler()) {
@@ -183,7 +139,7 @@ class AdminComposerController extends AbstractAdminController
             }
         }
 
-        return $this->render($this->get(ComposerService::class)->globalComposerTemplate($row), [
+        return $this->render($this->get(ComposerService::class)->composerTemplate($row), [
             'type' => $type,
             'id' => $id,
             'composerUrl' => $url,
@@ -192,11 +148,13 @@ class AdminComposerController extends AbstractAdminController
             'langs' => $langs,
             'availableTemplates' => $availableTemplates,
             'availableBlocks' => $availableBlocks,
+            'availableItems' => $availableItems,
             'canChangeTheme' => $canChangeTheme,
             'canChangeLang' => $canChangeLang,
             'canChangeStructure' => $canChangeStructure,
             'canChangeMedia' => $canChangeMedia,
             'themes' => $themes,
+            'uiTranslations' => $this->get('translator')->getCatalogue()->all('nyroComposer'),
         ]);
     }
 }

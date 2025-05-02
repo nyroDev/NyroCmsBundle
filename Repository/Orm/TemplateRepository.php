@@ -11,10 +11,6 @@ class TemplateRepository extends EntityRepository implements TemplateRepositoryI
 {
     public function getAvailableTemplatesFor(Composable $row): array
     {
-        if ($row instanceof Template) {
-            return [];
-        }
-
         return $this->createQueryBuilder('t')
                         ->andWhere('t.state = :state')
                             ->setParameter('state', Template::STATE_ACTIVE)

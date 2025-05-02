@@ -1,5 +1,9 @@
 :root {
-    --fontFamily: 'Roboto', sans-serif;
+    --fontFamily: "Roboto", sans-serif;
     --mainColor: #7495c2;
-    --secondColor: #9BC3FF;
+    --secondColor: #9bc3ff;
+    --mainColorText: #fff;
+
+    --mainColorHover: #000;
+    --mainColorHoverText: var(--mainColorText);
 }

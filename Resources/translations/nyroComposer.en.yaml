@@ -1,0 +1,20 @@
+noSelection: No selection.
+noOptions: No options to edit.
+confirmQuestion: Are you sure?
+confirm: Confirm
+cancel: Cancel
+chooseImage: Choose image...
+autoplay: Autoplay
+apply: Apply
+
+cannotDeleteBlockWithHandler: You cannot remove a block containing an handler.
+
+item.image.src: Image
+item.image.alt: Alternative text
+item.slideshow.images: Images
+item.videoEmbed.url: Video URL
+item.separator.transparent: Transparent
+item.separator.space: Space
+item.separator.space_options.small: Small
+item.separator.space_options.medium: Medium
+item.separator.space_options.big: Big

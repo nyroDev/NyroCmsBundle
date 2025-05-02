@@ -1,80 +1,37 @@
-.block_intro {
-	text-align: center;
+:root {
+    --composer-block-gap: 1rem;
+    --composer_block-vertical-space: 4rem;
 }
 
-.block_column2,
-.block_column3,
-.block_image_text,
-.block_text_image,
-.block_image2,
-.block_image3 {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-start;
+.composerBlockFlex {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+.composerBlock_two > div {
+    width: calc(50% - var(--composer-block-gap) / 2);
+}
+.composerBlock_two_2_1 > div:first-child,
+.composerBlock_two_1_2 > div:last-child {
+    width: calc(66.66% - var(--composer-block-gap) / 2);
+}
+.composerBlock_two_2_1 > div:last-child,
+.composerBlock_two_1_2 > div:first-child,
+.composerBlock_three > div {
+    width: calc(33.33% - var(--composer-block-gap) / 2);
 }
 
-.block_column2 .text {
-	width: calc(50% - var(--desktopSpaceSize) / 2);
+.nyroComposerVideo {
+    position: relative;
+    padding-top: 56.25%;
 }
 
-.block_column3 .text {
-	width: calc(33.33% - (var(--desktopSpaceSize) * 2) / 3);
-}
-
-.block_image_text .image1,
-.block_text_image .image1 {
-	width: calc(33.33% - (var(--desktopSpaceSize) * 2) / 3);
-}
-
-.block_image_text .text,
-.block_text_image .text {
-	width: calc(66.66% - var(--desktopSpaceSize) / 3);
-}
-
-.block_image2 .image1,
-.block_image3 .image1,
-.block_image3 .image2,
-.block_image3 .image3 {
-	width: 33.33%;
-}
-
-.block_image2 .image2 {
-	width: 66.66%;
-}
-
-.block_image2 .text,
-.block_image3 .text {
-	width: 100%;
-}
-
-.block_column2 .text1,
-.block_column3 .text1,
-.block_column3 .text2 {
-	margin-bottom: 0;
-}
-
-.block_column2 .text1,
-.block_column3 .text1,
-.block_column3 .text2,
-.block_text_image .text {
-	margin-right: var(--desktopSpaceSize);
-}
-
-.block_image_text .text {
-	margin-left: var(--desktopSpaceSize);
-}
-
-.block_video {
-	position: relative;
-	padding-top: 56.25%;
-}
-
-.block_video iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	width: 100%;
-	height: 100%;
+.nyroComposerVideo iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
 }

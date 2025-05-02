@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\DependencyInjection;
 
+use NyroDev\NyroCmsBundle\Services\ComposerService;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -21,137 +22,163 @@ class Configuration implements ConfigurationInterface
         $rootNode = $builder->getRootNode($builder, 'nyro_dev_nyro_cms');
 
         $defaultBlocks = [
-            'intro' => [
-                'title' => 'OBJECT::getTitle',
-                'subtitle' => 'admin.composer.default.subtitle',
-                'text' => 'admin.composer.default.text',
+            ComposerService::BLOCK_FULL => [
+                'template' => '@NyroDevNyroCms/Composer/block/full.html.php',
+                'nb_containers' => 1,
             ],
-            'text' => [
-                'text' => 'admin.composer.default.text',
+            'two' => [
+                'template' => '@NyroDevNyroCms/Composer/block/two.html.php',
+                'nb_containers' => 2,
             ],
-            'column2' => [
-                'text1' => 'admin.composer.default.mediumText',
-                'text2' => 'admin.composer.default.mediumText',
+            'two_2_1' => [
+                'template' => '@NyroDevNyroCms/Composer/block/two_2_1.html.php',
+                'nb_containers' => 2,
             ],
-            'column3' => [
-                'text1' => 'admin.composer.default.mediumText',
-                'text2' => 'admin.composer.default.mediumText',
-                'text3' => 'admin.composer.default.mediumText',
+            'two_1_2' => [
+                'template' => '@NyroDevNyroCms/Composer/block/two_1_2.html.php',
+                'nb_containers' => 2,
             ],
-            'image_text' => [
-                'text' => 'admin.composer.default.mediumText',
-                'image' => null,
-            ],
-            'text_image' => [
-                'text' => 'admin.composer.default.mediumText',
-                'image' => null,
-            ],
-            'image' => [
-                'image' => null,
-            ],
-            'image2' => [
-                'image1' => null,
-                'image2' => null,
-                'text' => 'admin.composer.default.shortText',
-            ],
-            'image3' => [
-                'image1' => null,
-                'image2' => null,
-                'image3' => null,
-                'text' => 'admin.composer.default.shortText',
-            ],
-            'slideshow' => [
-                'images' => null,
-            ],
-            'video' => [
-                'url' => null,
-                'embed' => null,
-                'autoplay' => null,
-            ],
-            'separator' => [
+            'three' => [
+                'template' => '@NyroDevNyroCms/Composer/block/three.html.php',
+                'nb_containers' => 3,
             ],
         ];
 
-        $defaultConfigs = [
-            'intro' => [
-                'template' => '@NyroDevNyroCms/Composer/block_intro.html.php',
+        $defaultItems = [
+            'title' => [
+                'template' => '@NyroDevNyroCms/Composer/item/title.html.php',
+                'editables' => [
+                    'title' => [
+                        'selector' => 'h1',
+                        'type' => ComposerService::EDITABLE_TYPE_SIMPLE_TEXT,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_TEXT,
+                        'default' => null,
+                        'auto' => false,
+                    ],
+                ],
             ],
             'text' => [
-                'template' => '@NyroDevNyroCms/Composer/block_text.html.php',
-            ],
-            'column2' => [
-                'template' => '@NyroDevNyroCms/Composer/block_column2.html.php',
-            ],
-            'column3' => [
-                'template' => '@NyroDevNyroCms/Composer/block_column3.html.php',
+                'template' => '@NyroDevNyroCms/Composer/item/text.html.php',
+                'editables' => [
+                    'text' => [
+                        'selector' => 'div',
+                        'type' => ComposerService::EDITABLE_TYPE_TEXT,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_TEXT,
+                        'default' => null,
+                        'auto' => false,
+                    ],
+                ],
             ],
             'image' => [
-                'template' => '@NyroDevNyroCms/Composer/block_image.html.php',
-                'image' => ['image' => true, 'w' => 1500, 'h' => 600, 'name' => 'image', 'fit' => true, 'quality' => 80],
-            ],
-            'image_text' => [
-                'template' => '@NyroDevNyroCms/Composer/block_image_text.html.php',
-                'image' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80],
-            ],
-            'text_image' => [
-                'template' => '@NyroDevNyroCms/Composer/block_text_image.html.php',
-                'image' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image', 'fit' => true, 'quality' => 80],
-            ],
-            'image2' => [
-                'template' => '@NyroDevNyroCms/Composer/block_image2.html.php',
-                'image1' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80],
-                'image2' => ['image' => true, 'w' => 1000, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80],
-            ],
-            'image3' => [
-                'template' => '@NyroDevNyroCms/Composer/block_image3.html.php',
-                'image1' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image1', 'fit' => true, 'quality' => 80],
-                'image2' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image2', 'fit' => true, 'quality' => 80],
-                'image3' => ['image' => true, 'w' => 500, 'h' => 500, 'name' => 'image3', 'fit' => true, 'quality' => 80],
+                'template' => '@NyroDevNyroCms/Composer/item/image.html.php',
+                'editables' => [
+                    'src' => [
+                        'selector' => 'img',
+                        'type' => ComposerService::EDITABLE_TYPE_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_IMAGE,
+                        'default' => null,
+                        'auto' => false,
+                    ],
+                    'alt' => [
+                        'selector' => 'img',
+                        'type' => ComposerService::EDITABLE_TYPE_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_TEXT,
+                        'default' => 'image',
+                        'auto' => false,
+                    ],
+                    'width' => [
+                        'selector' => 'img',
+                        'type' => ComposerService::EDITABLE_TYPE_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_NUMBER,
+                        'default' => 100,
+                        'auto' => true,
+                    ],
+                    'height' => [
+                        'selector' => 'img',
+                        'type' => ComposerService::EDITABLE_TYPE_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_NUMBER,
+                        'default' => 100,
+                        'auto' => true,
+                    ],
+                ],
             ],
             'slideshow' => [
-                'template' => '@NyroDevNyroCms/Composer/block_slideshow.html.php',
-                'images' => [
-                    'image' => true,
-                    'multiple' => true,
-                    'multipleFields' => [],
-                    'big' => [
-                        'w' => 1500,
-                        'h' => 1000,
-                        'name' => 'big',
-                        'fit' => true,
-                        'quality' => 80,
-                    ],
-                    'thumb' => [
-                        'w' => 100,
-                        'h' => 100,
-                        'name' => 'thumb',
-                        'fit' => true,
-                        'quality' => 80,
+                'template' => '@NyroDevNyroCms/Composer/item/slideshow.html.php',
+                'editables' => [
+                    'images' => [
+                        'selector' => 'nyro-swiper',
+                        'type' => ComposerService::EDITABLE_TYPE_DOM,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_IMAGES,
+                        'default' => null,
+                        'auto' => false,
                     ],
                 ],
             ],
-            'video' => [
-                'template' => '@NyroDevNyroCms/Composer/block_video.html.php',
-                'url' => [
-                    'treatAsMedia' => true,
-                    'linkedFields' => [
-                        'embed',
-                        'autoplay',
+            'videoEmbed' => [
+                'template' => '@NyroDevNyroCms/Composer/item/videoEmbed.html.php',
+                'editables' => [
+                    'url' => [
+                        'selector' => 'iframe',
+                        'type' => ComposerService::EDITABLE_TYPE_DATA_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_VIDEO_URL,
+                        'default' => null,
+                        'auto' => false,
+                    ],
+                    'src' => [
+                        'selector' => 'iframe',
+                        'type' => ComposerService::EDITABLE_TYPE_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_VIDEO_EMBED,
+                        'default' => null,
+                        'auto' => true,
+                    ],
+                    'autoplay' => [
+                        'selector' => 'iframe',
+                        'type' => ComposerService::EDITABLE_TYPE_DATA_ATTR,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_BOOLEAN,
+                        'default' => true,
+                        'auto' => true,
                     ],
                 ],
-            ],
-            'handler' => [
-                'template' => '@NyroDevNyroCms/Composer/block_handler.html.php',
             ],
             'separator' => [
-                'template' => '@NyroDevNyroCms/Composer/block_separator.html.php',
+                'template' => '@NyroDevNyroCms/Composer/item/separator.html.php',
+                'editables' => [
+                    'transparent' => [
+                        'selector' => 'hr',
+                        'type' => ComposerService::EDITABLE_TYPE_CLASS,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_BOOLEAN,
+                        'default' => false,
+                        'auto' => false,
+                    ],
+                    'space' => [
+                        'selector' => 'hr',
+                        'type' => ComposerService::EDITABLE_TYPE_CLASS,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataOptions' => [
+                            'small',
+                            'medium',
+                            'big',
+                        ],
+                        'default' => 'small',
+                        'auto' => false,
+                    ],
+                ],
+            ],
+            ComposerService::ITEM_HANDLER => [
+                'template' => '@NyroDevNyroCms/Composer/item/handler.html.php',
+                'editables' => [],
             ],
         ];
+
+        $availableItems = array_filter(array_keys($defaultItems), function ($item) {
+            return ComposerService::ITEM_HANDLER !== $item;
+        });
 
         $defaultTinymce = [
             'plugins' => 'anchor,autolink,charmap,code,fullscreen,image,insertdatetime,link,lists,advlist,media,nonbreaking,preview,searchreplace,table,visualblocks,visualchars,wordcount',
             'menubar' => 'insert edit view table tools',
             'toolbar' => 'undo redo | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | link unlink | image media | fullscreen | bullist numlist outdent indent',
+            'paste_block_drop' => 'true',
             'style_formats' => [
                 ['title' => 'admin.composer.tinymce.styleFormats.blocks', 'items' => [
                     ['title' => 'admin.composer.tinymce.styleFormats.block.title1', 'block' => 'h1'],
@@ -174,67 +201,137 @@ class Configuration implements ConfigurationInterface
 
         $defaultTinymceSimple = [
             'toolbar' => 'undo redo',
+            'paste_block_drop' => 'true',
         ];
 
         $rootNode
             ->children()
                 ->arrayNode('user_types')
                     ->defaultValue(['admin', 'superadmin'])
-                    ->prototype('scalar')->end()
+                    ->prototype('string')->end()
                 ->end()
                 ->arrayNode('route_resources')
-                    ->prototype('scalar')->end()
+                    ->prototype('string')->end()
                 ->end()
-                ->scalarNode('route_handler_path')->defaultValue('handler')->end()
+                ->stringNode('route_handler_path')->defaultValue('handler')->end()
                 ->variableNode('disabled_locale_urls')->defaultValue(false)->end()
                 ->arrayNode('model')->isRequired()
                     ->children()
-                        ->scalarNode('namespace')->isRequired()->cannotBeEmpty()->end()
+                        ->stringNode('namespace')->isRequired()->cannotBeEmpty()->end()
                         ->arrayNode('classes')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('user')->defaultValue('User')->end()
-                                ->scalarNode('user_log')->defaultValue('Log\\UserLog')->end()
-                                ->scalarNode('user_role')->defaultValue('UserRole')->end()
-                                ->scalarNode('user_login')->defaultValue('UserLogin')->end()
-                                ->scalarNode('content')->defaultValue('Content')->end()
-                                ->scalarNode('content_log')->defaultValue('Log\\ContentLog')->end()
-                                ->scalarNode('content_translation')->defaultValue('Translation\\ContentTranslation')->end()
-                                ->scalarNode('content_spec')->defaultValue('ContentSpec')->end()
-                                ->scalarNode('content_spec_log')->defaultValue('Log\\ContentSpecLog')->end()
-                                ->scalarNode('content_spec_translation')->defaultValue('Translation\\ContentSpecTranslation')->end()
-                                ->scalarNode('content_handler')->defaultValue('ContentHandler')->end()
-                                ->scalarNode('content_handler_config')->defaultValue('ContentHandlerConfig')->end()
-                                ->scalarNode('content_handler_config_log')->defaultValue('Log\\ContentHandlerConfigLog')->end()
-                                ->scalarNode('content_handler_config_translation')->defaultValue('Translation\\ContentHandlerConfigTranslation')->end()
-                                ->scalarNode('template')->defaultValue('Template')->end()
-                                ->scalarNode('template_log')->defaultValue('Log\\TemplateLog')->end()
-                                ->scalarNode('translation')->defaultValue('Translation')->end()
-                                ->scalarNode('contact_message')->defaultValue('ContactMessage')->end()
+                                ->stringNode('user')->defaultValue('User')->end()
+                                ->stringNode('user_log')->defaultValue('Log\\UserLog')->end()
+                                ->stringNode('user_role')->defaultValue('UserRole')->end()
+                                ->stringNode('user_login')->defaultValue('UserLogin')->end()
+                                ->stringNode('content')->defaultValue('Content')->end()
+                                ->stringNode('content_log')->defaultValue('Log\\ContentLog')->end()
+                                ->stringNode('content_translation')->defaultValue('Translation\\ContentTranslation')->end()
+                                ->stringNode('content_spec')->defaultValue('ContentSpec')->end()
+                                ->stringNode('content_spec_log')->defaultValue('Log\\ContentSpecLog')->end()
+                                ->stringNode('content_spec_translation')->defaultValue('Translation\\ContentSpecTranslation')->end()
+                                ->stringNode('content_handler')->defaultValue('ContentHandler')->end()
+                                ->stringNode('content_handler_config')->defaultValue('ContentHandlerConfig')->end()
+                                ->stringNode('content_handler_config_log')->defaultValue('Log\\ContentHandlerConfigLog')->end()
+                                ->stringNode('content_handler_config_translation')->defaultValue('Translation\\ContentHandlerConfigTranslation')->end()
+                                ->stringNode('template')->defaultValue('Template')->end()
+                                ->stringNode('template_log')->defaultValue('Log\\TemplateLog')->end()
+                                ->stringNode('translation')->defaultValue('Translation')->end()
+                                ->stringNode('contact_message')->defaultValue('ContactMessage')->end()
                             ->end()
                         ->end()
                     ->end()
                 ->end()
                 ->arrayNode('content')->addDefaultsIfNotSet()
                     ->children()
-                        ->integerNode('maxlevel')->defaultValue(4)->end()
+                        ->integerNode('maxlevel')->min(0)->defaultValue(4)->end()
                         ->booleanNode('admin_per_root')->defaultFalse()->end()
                         ->booleanNode('root_composer')->defaultFalse()->end()
                     ->end()
                 ->end()
                 ->arrayNode('user_roles')->addDefaultsIfNotSet()
                     ->children()
-                        ->integerNode('maxlevel_content')->defaultValue(3)->end()
+                        ->integerNode('maxlevel_content')->min(0)->defaultValue(3)->end()
                     ->end()
                 ->end()
                 ->arrayNode('email')->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('global_template')->defaultValue('@NyroDevNyroCms/Tpl/email.html.php')->end()
-                        ->scalarNode('styles_template')->defaultValue('@NyroDevNyroCms/Tpl/emailStyles.html.php')->end()
-                        ->scalarNode('body_template')->defaultValue('@NyroDevNyroCms/Tpl/emailBody.html.php')->end()
-                        ->scalarNode('router_scheme')->defaultValue('http')->end()
-                        ->scalarNode('router_host')->defaultValue('localhost')->end()
-                        ->scalarNode('router_base_url')->defaultValue('')->end()
+                        ->stringNode('global_template')->defaultValue('@NyroDevNyroCms/Tpl/email.html.php')->end()
+                        ->stringNode('styles_template')->defaultValue('@NyroDevNyroCms/Tpl/emailStyles.html.php')->end()
+                        ->stringNode('body_template')->defaultValue('@NyroDevNyroCms/Tpl/emailBody.html.php')->end()
+                        ->stringNode('router_scheme')->defaultValue('http')->end()
+                        ->stringNode('router_host')->defaultValue('localhost')->end()
+                        ->stringNode('router_base_url')->defaultValue('')->end()
+                    ->end()
+                ->end()
+                ->arrayNode('composable_blocks')
+                    ->defaultValue($defaultBlocks)
+                    ->beforeNormalization()
+                        ->always(function ($config) use ($defaultBlocks) {
+                            $ret = $defaultBlocks;
+                            foreach ($config as $k => $v) {
+                                if (!isset($ret[$k])) {
+                                    $ret[$k] = $v;
+                                    continue;
+                                }
+                                $ret[$k] = array_merge($ret[$k], $v);
+                            }
+
+                            return $ret;
+                        })
+                    ->end()
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->addDefaultsIfNotSet()
+                        ->performNoDeepMerging()
+                        ->children()
+                            ->stringNode('name')->cannotBeEmpty()->end()
+                            ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->integerNode('nb_containers')->defaultValue(0)->min(0)->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('composable_items')
+                    ->defaultValue($defaultItems)
+                    ->beforeNormalization()
+                        ->always(function ($config) use ($defaultItems) {
+                            $ret = $defaultItems;
+                            foreach ($config as $k => $v) {
+                                if (!isset($ret[$k])) {
+                                    $ret[$k] = $v;
+                                    continue;
+                                }
+                                $ret[$k] = array_merge($ret[$k], $v);
+                            }
+
+                            return $ret;
+                        })
+                    ->end()
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->addDefaultsIfNotSet()
+                        ->children()
+                            ->stringNode('name')->cannotBeEmpty()->end()
+                            ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->arrayNode('editables')
+                            ->performNoDeepMerging()
+                                ->useAttributeAsKey('name')
+                                ->arrayPrototype()
+                                    ->addDefaultsIfNotSet()
+                                    ->performNoDeepMerging()
+                                    ->children()
+                                        ->stringNode('name')->cannotBeEmpty()->end()
+                                        ->stringNode('selector')->isRequired()->cannotBeEmpty()->end()
+                                        ->enumNode('type')->values(ComposerService::EDITABLE_TYPES)->isRequired()->cannotBeEmpty()->end()
+                                        ->enumNode('dataType')->values(ComposerService::EDITABLE_DATATYPES)->defaultValue(ComposerService::EDITABLE_DATATYPE_TEXT)->cannotBeEmpty()->end()
+                                        ->arrayNode('dataOptions')->end()
+                                        ->scalarNode('default')->defaultNull()->end()
+                                        ->booleanNode('auto')->defaultFalse()->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode('composable')
@@ -247,31 +344,33 @@ class Configuration implements ConfigurationInterface
                                 ->booleanNode('same_lang_structure')->defaultFalse()->end()
                                 ->booleanNode('same_lang_media')->defaultFalse()->end()
                                 ->booleanNode('change_theme')->defaultTrue()->end()
-                                ->scalarNode('global_composer_template')->defaultValue('@NyroDevNyroCms/Composer/composer.html.php')->end()
-                                ->scalarNode('composer_template')->defaultValue('@NyroDevNyroCms/Composer/composerTemplate.html.php')->end()
-                                ->scalarNode('block_template')->defaultValue('@NyroDevNyroCms/Composer/block.html.php')->end()
-                                ->scalarNode('css_template')->defaultValue('Front/NyroCms/cssTemplate.html.php')->end()
-                                ->integerNode('max_composer_buttons')->defaultValue(10)->end()
+                                ->stringNode('composer_template')->defaultValue('@NyroDevNyroCms/Composer/composer.html.php')->end()
+                                ->stringNode('block_template')->defaultValue('@NyroDevNyroCms/Composer/block.html.php')->end()
+                                ->stringNode('css_template')->defaultValue('Front/NyroCms/cssTemplate.html.php')->end()
                                 ->arrayNode('cancel_url')
                                     ->addDefaultsIfNotSet()
                                     ->children()
-                                        ->scalarNode('route')->defaultValue('nyrocms_admin_data_content_tree')->end()
+                                        ->stringNode('route')->defaultValue('nyrocms_admin_data_content_tree')->end()
                                         ->booleanNode('need_id')->defaultFalse()->end()
                                         ->booleanNode('need_veryParent_id')->defaultTrue()->end()
                                         ->variableNode('route_prm')->defaultValue([])->end()
                                     ->end()
                                 ->end()
                                 ->arrayNode('themes')
-                                    ->prototype('scalar')->end()
+                                    ->prototype('string')->end()
                                 ->end()
                                 ->arrayNode('available_blocks')
-                                    ->defaultValue(['intro', 'text', 'column2', 'column3', 'image_text', 'text_image', 'image', 'image2', 'image3', 'slideshow', 'video', 'separator'])
-                                    ->prototype('scalar')->end()
+                                    ->defaultValue(array_keys($defaultBlocks))
+                                    ->prototype('string')->end()
+                                ->end()
+                                ->arrayNode('available_items')
+                                    ->defaultValue($availableItems)
+                                    ->prototype('string')->end()
                                 ->end()
                                 ->booleanNode('tinymce_browser')->defaultTrue()->end()
                                 ->booleanNode('tinymce_browser_per_root')->defaultTrue()->end()
-                                ->scalarNode('tinymce_browser_route')->defaultValue('nyrocms_admin_tinymce_browser')->end()
-                                ->scalarNode('tinymce_browser_route_per_root')->defaultValue('nyrocms_admin_tinymce_browser_dirname')->end()
+                                ->stringNode('tinymce_browser_route')->defaultValue('nyrocms_admin_tinymce_browser')->end()
+                                ->stringNode('tinymce_browser_route_per_root')->defaultValue('nyrocms_admin_tinymce_browser_dirname')->end()
                                 ->arrayNode('tinymce')
                                     ->defaultValue($defaultTinymce)
                                     ->beforeNormalization()
@@ -316,88 +415,34 @@ class Configuration implements ConfigurationInterface
                                     ->end()
                                     ->prototype('variable')->end()
                                 ->end()
-                                ->arrayNode('default_blocks')
-                                    ->defaultValue($defaultBlocks)
-                                    ->useAttributeAsKey('name')
-                                    ->beforeNormalization()
-                                        ->always(function ($config) use ($defaultBlocks) {
-                                            $ret = $defaultBlocks;
-                                            foreach ($config as $k => $v) {
-                                                if (is_array($v)) {
-                                                    $hasReplace = array_search('REPLACE', $v);
-                                                    if (false !== $hasReplace) {
-                                                        unset($v[$hasReplace]);
-                                                    }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
-                                                } else {
-                                                    $ret[$k] = $v;
-                                                }
-                                            }
-
-                                            return $ret;
-                                        })
-                                    ->end()
-                                    ->prototype('variable')->end()
-                                ->end()
-                                ->arrayNode('config_blocks')
-                                    ->defaultValue($defaultConfigs)
-                                    ->useAttributeAsKey('name')
-                                    ->beforeNormalization()
-                                        ->always(function ($config) use ($defaultConfigs) {
-                                            $ret = $defaultConfigs;
-                                            foreach ($config as $k => $v) {
-                                                if (is_array($v)) {
-                                                    $hasReplace = array_search('REPLACE', $v);
-                                                    if (false !== $hasReplace) {
-                                                        unset($v[$hasReplace]);
-                                                    }
-                                                    $ret[$k] = !isset($ret[$k]) || false !== $hasReplace ? $v : array_replace_recursive($ret[$k], $v);
-                                                } else {
-                                                    $ret[$k] = $v;
-                                                }
-                                            }
-
-                                            return $ret;
-                                        })
-                                    ->end()
-                                    ->prototype('variable')->end()
-                                ->end()
                             ->end()
                         ->end()
                         ->arrayNode('classes')
                             ->useAttributeAsKey('class')
-                            ->prototype('array')
+                            ->arrayPrototype()
                                 ->children()
                                     ->booleanNode('change_lang')->end()
                                     ->booleanNode('same_lang_structure')->end()
                                     ->booleanNode('same_lang_media')->end()
                                     ->booleanNode('change_theme')->end()
-                                    ->scalarNode('global_composer_template')->end()
-                                    ->scalarNode('composer_template')->end()
-                                    ->scalarNode('block_template')->end()
-                                    ->scalarNode('css_template')->end()
+                                    ->stringNode('composer_template')->end()
+                                    ->stringNode('block_template')->end()
+                                    ->stringNode('css_template')->end()
                                     ->arrayNode('cancel_url')
                                         ->children()
-                                            ->scalarNode('route')->end()
+                                            ->stringNode('route')->end()
                                             ->booleanNode('need_id')->end()
                                             ->booleanNode('need_veryParent_id')->end()
                                             ->variableNode('route_prm')->end()
                                         ->end()
                                     ->end()
-                                    ->arrayNode('themes')->prototype('scalar')->end()->end()
-                                    ->arrayNode('available_blocks')->prototype('scalar')->end()->end()
+                                    ->arrayNode('themes')->prototype('string')->end()->end()
+                                    ->arrayNode('available_blocks')->prototype('string')->end()->end()
+                                    ->arrayNode('available_items')->prototype('string')->end()->end()
                                     ->arrayNode('tinymce')
                                         ->prototype('variable')->end()
                                     ->end()
                                     ->arrayNode('tinymce_simple')
-                                        ->prototype('variable')->end()
-                                    ->end()
-                                    ->arrayNode('default_blocks')
-                                        ->useAttributeAsKey('name')
-                                        ->prototype('variable')->end()
-                                    ->end()
-                                    ->arrayNode('config_blocks')
-                                        ->useAttributeAsKey('name')
                                         ->prototype('variable')->end()
                                     ->end()
                                 ->end()

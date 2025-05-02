@@ -1,0 +1,21 @@
+noSelection: Aucune sélection.
+noOptions: Aucun option à éditer.
+confirmQuestion: Êtes-vous sûr ?
+confirm: Confirmer
+cancel: Annuler
+save: Enregistrer
+chooseImage: Choisir une image...
+autoplay: Lecture automatique
+apply: Appliquer
+
+cannotDeleteBlockWithHandler: Vous ne pouvez pas supprimer un bloc contenant un module.
+
+item.image.src: Image
+item.image.alt: Text alternatif
+item.slideshow.images: Images
+item.videoEmbed.url: URL Vidéo
+item.separator.transparent: Transparent
+item.separator.space: Espacement
+item.separator.space_options.small: Petit
+item.separator.space_options.medium: Moyen
+item.separator.space_options.big: Grand

@@ -1,187 +1,41 @@
-html,
-body {
-	min-height: 100%;
+:root {
+    --composer_block-padding: 1rem;
+    --composer_block-vertical-space: 2rem;
+
+    --composer-hr-color: #000;
+    --composer-hr-space-small: 1em;
+    --composer-hr-space-medium: 2em;
+    --composer-hr-space-big: 4em;
 }
 
-html {
-	--mobileSpaceSize: 1rem;
-	--desktopSpaceSize: 1rem;
-	font-size: 62.5%;
-	font-size: calc(1em * 0.625);
+.composerBlock_full,
+.composerBlockFlex > div {
+    padding: 0 var(--composer_block-padding);
+    margin-bottom: var(--composer_block-vertical-space);
 }
 
-body {
-	font-size: 1.4rem;
+.nyroComposerVideo iframe {
+    width: 100%;
+    height: 56vw;
+    max-height: 88rem;
 }
 
-.block_column2 .text1,
-.block_column3 .text1,
-.block_column3 .text2 {
-	margin-bottom: var(--mobileSpaceSize);
+.nyroHr {
+    display: block;
+    height: 1px;
+    background-color: var(--composer-hr-color);
+    background-clip: content-box;
+    border: none;
+    padding: var(--composer-hr-space-small) 0;
+    margin: 0;
 }
 
-.block_image img,
-.block_image_text img,
-.block_text_image img,
-.block_image2 img,
-.block_image3 img {
-	display: inline-block;
-	width: 100%;
-	height: auto;
+.nyroHr.separator_transparent {
+    background-color: transparent;
 }
-
-.block_video iframe {
-	width: 100%;
-	height: 56vw;
-	max-height: 88rem;
+.nyroHr.separator_space_medium {
+    padding: var(--composer-hr-space-medium) 0;
 }
-
-.nyroCmsSlideshow {
-	overflow: hidden;
-}
-
-.nyroCmsSlideshow:after {
-	content: '';
-	display: block;
-	clear: both;
-	width: 100%;
-	height: 0;
-}
-
-.nyroCmsSlideshow img {
-	display: block;
-}
-
-.nyroCmsSlideshow_big {
-	position: relative;
-}
-
-.nyroCmsSlideshow_big img {
-	width: 100%;
-	height: auto;
-}
-
-.nyroCmsSlideshow_big span {
-	position: absolute;
-	bottom: 1rem;
-	left: 1rem;
-	right: 1rem;
-	text-align: center;
-	color: #fff;
-	text-shadow: 0 0 2px #000;
-}
-
-.nyroCmsSlideshow ul {
-	display: none;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-.nyroCmsSlideshow li {
-	float: left;
-	box-sizing: border-box;
-}
-
-.nyroCmsSlideshow li img {
-	border: 0.5rem solid transparent;
-	box-sizing: border-box;
-	-webkit-transition: border-color 300ms;
-	transition: border-color 300ms;
-}
-
-.nyroCmsSlideshow li a:hover img,
-.nyroCmsSlideshow .active img {
-	border-color: #ccc;
-}
-
-.nyroCmsSlideshow .nyroCmsSlideshow_big_anim {
-	position: absolute;
-	top: 0;
-	left: 0;
-	visibility: hidden;
-	opacity: 0;
-	-webkit-transition: opacity 300ms;
-	transition: opacity 300ms;
-}
-
-.nyroCmsSlideshow .nyroCmsSlideshow_big_anim.show {
-	visibility: visible;
-	opacity: 1;
-}
-
-.nyroCmsSlideshow .nyroCmsSlideshow_big_anim.hide {
-	visibility: hidden;
-	opacity: 0;
-	-webkit-transition: none;
-	transition: none;
-}
-
-.nyroCmsSlideshow_arrow {
-	display: block;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 15%;
-	min-width: 5rem;
-}
-
-.nyroCmsSlideshow_arrow:before,
-.nyroCmsSlideshow_arrow:after {
-	content: '';
-	position: absolute;
-	top: 50%;
-	display: block;
-	width: 4.8rem;
-	height: 4px;
-	border-radius: 2px;
-	margin-top: -2.4rem;
-	background: #fff;
-	box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.5);
-	transition: background-color 300ms;
-}
-
-.nyroCmsSlideshow_arrow:hover:before,
-.nyroCmsSlideshow_arrow:hover:after {
-	background-color: #ccc;
-}
-
-.nyroCmsSlideshow_prev {
-	left: 0;
-}
-
-.nyroCmsSlideshow_next {
-	right: 0;
-}
-
-.nyroCmsSlideshow_prev:before,
-.nyroCmsSlideshow_prev:after {
-	left: 1rem;
-	transform-origin: 0 50%;
-}
-
-.nyroCmsSlideshow_next:before,
-.nyroCmsSlideshow_next:after {
-	right: 1rem;
-	transform-origin: 100% 50%;
-}
-
-.nyroCmsSlideshow_prev:before {
-	transform: rotate(45deg) translate(0, -1px);
-}
-
-.nyroCmsSlideshow_next:after {
-	transform: rotate(45deg) translate(0, 1px);
-}
-
-.nyroCmsSlideshow_prev:after {
-	transform: rotate(-45deg) translate(0, 1px);
-}
-
-.nyroCmsSlideshow_next:before {
-	transform: rotate(-45deg) translate(0, -1px);
-}
-
-.block_separator {
-	padding: 1.5rem 0;
+.nyroHr.separator_space_big {
+    padding: var(--composer-hr-space-big) 0;
 }

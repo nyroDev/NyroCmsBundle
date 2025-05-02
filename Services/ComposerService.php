@@ -3,7 +3,6 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use Exception;
-use NyroDev\NyroCmsBundle\Event\ComposerBlockVarsEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerConfigEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerDefaultBlockEvent;
 use NyroDev\NyroCmsBundle\Event\ComposerEvent;
@@ -23,19 +22,54 @@ use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
-use NyroDev\UtilityBundle\Utility\TransparentPixelResponse;
 use Psr\Container\ContainerInterface;
-use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 
 class ComposerService extends AbstractService
 {
     use AssetsPackagesServiceableTrait;
     use TwigServiceableTrait;
+
+    public const BLOCK_FULL = 'full';
+    public const ITEM_HANDLER = 'handler';
+
+    public const READONLY = 'readonly';
+
+    public const EDITABLE_TYPE_SIMPLE_TEXT = 'simpleText';
+    public const EDITABLE_TYPE_TEXT = 'text';
+    public const EDITABLE_TYPE_CLASS = 'class';
+    public const EDITABLE_TYPE_ATTR = 'attr';
+    public const EDITABLE_TYPE_DATA_ATTR = 'dataAttr';
+    public const EDITABLE_TYPE_DOM = 'dom';
+
+    public const EDITABLE_TYPES = [
+        self::EDITABLE_TYPE_SIMPLE_TEXT,
+        self::EDITABLE_TYPE_TEXT,
+        self::EDITABLE_TYPE_CLASS,
+        self::EDITABLE_TYPE_ATTR,
+        self::EDITABLE_TYPE_DATA_ATTR,
+        self::EDITABLE_TYPE_DOM,
+    ];
+
+    public const EDITABLE_DATATYPE_TEXT = 'text';
+    public const EDITABLE_DATATYPE_NUMBER = 'number';
+    public const EDITABLE_DATATYPE_BOOLEAN = 'boolean';
+    public const EDITABLE_DATATYPE_SELECT = 'select';
+    public const EDITABLE_DATATYPE_IMAGE = 'image';
+    public const EDITABLE_DATATYPE_IMAGES = 'images';
+    public const EDITABLE_DATATYPE_VIDEO_URL = 'videoUrl';
+    public const EDITABLE_DATATYPE_VIDEO_EMBED = 'videoEmbed';
+
+    public const EDITABLE_DATATYPES = [
+        self::EDITABLE_DATATYPE_TEXT,
+        self::EDITABLE_DATATYPE_NUMBER,
+        self::EDITABLE_DATATYPE_BOOLEAN,
+        self::EDITABLE_DATATYPE_SELECT,
+        self::EDITABLE_DATATYPE_IMAGE,
+        self::EDITABLE_DATATYPE_IMAGES,
+        self::EDITABLE_DATATYPE_VIDEO_URL,
+        self::EDITABLE_DATATYPE_VIDEO_EMBED,
+    ];
 
     public function __construct(
         private readonly NyrodevService $nyrodevService,
@@ -61,7 +95,6 @@ class ComposerService extends AbstractService
 
             $ret = isset($composableConfig[$class]) ? $composableConfig[$class] : [];
             $cfgArrays = ['themes', 'available_blocks', 'tinymce', 'tinymce_simple'];
-            $cfgArraysMerge = ['default_blocks', 'config_blocks'];
 
             foreach ($cfgArrays as $cfg) {
                 if (isset($ret[$cfg]) && 0 === count($ret[$cfg])) {
@@ -70,12 +103,16 @@ class ComposerService extends AbstractService
             }
 
             $this->configs[$class] = array_merge($composableConfig['default'], $ret);
-            foreach ($cfgArraysMerge as $cfg) {
-                $this->configs[$class][$cfg] = array_replace_recursive($composableConfig['default'][$cfg], isset($ret[$cfg]) ? $ret[$cfg] : []);
-            }
         }
 
         return $this->configs[$class];
+    }
+
+    protected function getComposableConfig(string $type, string $name): array
+    {
+        $composableConfig = $this->getParameter('nyrocms.composable_'.$type);
+
+        return $composableConfig[$name];
     }
 
     public function getQuickConfig(Composable $row, string $key): mixed
@@ -134,19 +171,9 @@ class ComposerService extends AbstractService
         return $this->getQuickConfig($row, 'css_template');
     }
 
-    public function getMaxComposerButtons(Composable $row): int
-    {
-        return $this->getQuickConfig($row, 'max_composer_buttons');
-    }
-
     public function composerTemplate(Composable $row): string
     {
         return $this->getQuickConfig($row, 'composer_template');
-    }
-
-    public function globalComposerTemplate(Composable $row): string
-    {
-        return $this->getQuickConfig($row, 'global_composer_template');
     }
 
     public function getTinymceConfig(Composable $row, bool $simple = false): array
@@ -238,21 +265,9 @@ class ComposerService extends AbstractService
         return $this->getQuickConfig($row, 'available_blocks');
     }
 
-    public function getDefaultBlocks(Composable $row): array
+    public function getAvailableItems(Composable $row): array
     {
-        return $this->getQuickConfig($row, 'default_blocks');
-    }
-
-    public function getDefaultBlock(Composable $row, string $block): array
-    {
-        $cfg = $this->getConfig($row);
-
-        return isset($cfg['default_blocks']) && isset($cfg['default_blocks'][$block]) ? $cfg['default_blocks'][$block] : [];
-    }
-
-    public function getConfigBlocks(Composable $row): array
-    {
-        return $this->getQuickConfig($row, 'config_blocks');
+        return $this->getQuickConfig($row, 'available_items');
     }
 
     public function getCssTheme(Composable $row): ?string
@@ -302,550 +317,219 @@ class ComposerService extends AbstractService
         return $ret;
     }
 
-    protected array $existingImages = [];
-    protected array $existingFiles = [];
-
-    public function initComposerFor(Composable $row, string $lang, string $contentFieldName = 'content'): void
+    public function renderBlockComposerTemplate(Composable $row, string $blockName): string
     {
-        $this->existingImages = [];
-        $this->existingFiles = [];
+        $cfg = $this->getComposableConfig('blocks', $blockName);
+        unset($cfg['template']);
 
-        if ($lang != $this->nyroCmsService->getDefaultLocale($row)) {
-            $tmp = $this->getImagesAndFiles($row, $row->getContent());
-            $this->existingImages = $tmp[0];
-            $this->existingFiles = $tmp[1];
-        }
-
-        if ($row instanceof ComposableTranslatable) {
-            foreach ($row->getTranslations() as $tr) {
-                if ($tr->getField() == $contentFieldName && $tr->getLocale() != $lang) {
-                    $tmp = $this->getImagesAndFiles($row, json_decode($tr->getContent(), true));
-                    $this->existingImages += $tmp[0];
-                    $this->existingFiles += $tmp[1];
-                }
-            }
-        }
+        return $this->getTwig()->render('@NyroDevNyroCms/Composer/_composerTemplate.html.php', [
+            'type' => 'block',
+            'id' => $blockName,
+            'cfg' => $cfg,
+            'row' => $row,
+            'html' => $this->renderBlock($row, $blockName, admin: true),
+        ])."\n\n";
     }
 
-    public function setExistingImages(array $images): void
+    private function renderBlock(Composable $row, string $blockName, ?array $cont = [], bool $admin = false): string
     {
-        $this->existingImages = $images;
-    }
+        $config = $this->getComposableConfig('blocks', $blockName);
 
-    public function getExistingImages(): array
-    {
-        return $this->existingImages;
-    }
+        $template = $config['template'];
+        unset($config['template']);
 
-    public function setExistingFiles(array $files): void
-    {
-        $this->existingFiles = $files;
-    }
+        $conts = $cont['conts'] ?? [];
 
-    public function getExistingFiles(): array
-    {
-        return $this->existingFiles;
-    }
-
-    protected function getImagesAndFiles(Composable $row, array $blocks): array
-    {
-        $configs = [];
-
-        $images = [];
-        $files = [];
-        foreach ($blocks as $content) {
-            if (!isset($configs[$content['type']])) {
-                $configs[$content['type']] = $this->getBlockConfig($row, $content['type']);
-            }
-
-            $contents = isset($content['contents']) && is_array($content['contents']) ? $content['contents'] : [];
-
-            foreach ($configs[$content['type']] as $k => $v) {
-                if (isset($contents[$k]) && $contents[$k]) {
-                    if (isset($v['image']) && $v['image']) {
-                        if (isset($v['multiple']) && $v['multiple']) {
-                            if (is_array($contents[$k])) {
-                                foreach ($contents[$k] as $k => $img) {
-                                    $images[] = $img['file'];
-                                }
-                            }
-                        } else {
-                            $images[] = $contents[$k];
-                        }
-                    } elseif (isset($v['file']) && $v['file']) {
-                        $files[] = $contents[$k];
-                    }
+        // Ensure correct number of conts
+        if (count($conts) > $config['nb_containers']) {
+            $conts = array_slice($conts, 0, $config['nb_containers']);
+        } elseif (count($conts) !== $config['nb_containers']) {
+            for ($i = 0; $i < $config['nb_containers']; $i++) {
+                if (!isset($conts[$i])) {
+                    $conts[$i] = [];
                 }
             }
         }
 
-        return [$images, $files];
-    }
+        $readonlyAttr = (isset($cont[ComposerService::READONLY]) && $cont[ComposerService::READONLY] ? ' readonly' : '');
 
-    public function getBlockConfig(Composable $row, string $block): array
-    {
-        $cfg = $this->getConfig($row);
+        $renderedConts = [];
+        foreach ($conts as $cont) {
+            $itemsCont = [];
 
-        return isset($cfg['config_blocks']) && is_array($cfg['config_blocks']) && isset($cfg['config_blocks'][$block]) ? $cfg['config_blocks'][$block] : [];
-    }
-
-    public function getConsildatedConfig(Composable $row, string $block): array
-    {
-        $blockConfig = $this->getBlockConfig($row, $block);
-        $defaultBlock = $this->getDefaultBlock($row, $block);
-
-        $ret = [
-            'blockConfig' => $blockConfig,
-            'defaultBlock' => $defaultBlock,
-            'types' => [],
-            'texts' => [],
-            'textCounts' => [],
-            'images' => [],
-            'files' => [],
-            'others' => [],
-        ];
-
-        foreach ($defaultBlock as $k => $v) {
-            if (isset($blockConfig[$k]) && is_array($blockConfig[$k])) {
-                if (isset($blockConfig[$k]['image']) && $blockConfig[$k]['image']) {
-                    $ret['images'][$k] = $blockConfig[$k];
-                    $ret['types'][$k] = 'images';
-                    continue;
-                }
-                if (isset($blockConfig[$k]['file']) && $blockConfig[$k]['file']) {
-                    $ret['files'][$k] = $blockConfig[$k];
-                    $ret['types'][$k] = 'files';
-                    continue;
-                }
+            foreach ($cont as $contItem) {
+                $itemsCont[] = $this->renderItem($row, $contItem['_type'], $contItem, $admin);
             }
 
-            if ($v && str_starts_with($v, 'admin.composer.')) {
-                $ret['defaultBlock'][$k] = trim($this->trans($v));
-                $useType = str_replace('mediumText', 'text', $v);
-                $ret['texts'][$useType][] = $k;
-                if (!isset($ret['textCounts'][$useType])) {
-                    $ret['textCounts'][$useType] = 0;
-                }
-                $ret['textCounts'][$useType]++;
-                $ret['types'][$k] = $useType;
+            $renderedCont = implode(PHP_EOL, $itemsCont);
+
+            if ($admin) {
+                $renderedCont = '<nyro-composer-container'.$readonlyAttr.'>'.$renderedCont.'</nyro-composer-container>';
+            }
+
+            $renderedConts[] = $renderedCont;
+        }
+
+        $ret = $this->getTwig()->render($template, [
+            'conts' => $renderedConts,
+            'row' => $row,
+        ]);
+
+        if ($admin) {
+            $ret = '<nyro-composer-block type="'.$blockName.'"'.$readonlyAttr.'>'.$ret.'</nyro-composer-block>';
+        }
+
+        return $ret;
+    }
+
+    public function renderItemComposerTemplate(Composable $row, string $itemName): string
+    {
+        $cfg = $this->getComposableConfig('items', $itemName);
+        unset($cfg['template']);
+
+        return $this->getTwig()->render('@NyroDevNyroCms/Composer/_composerTemplate.html.php', [
+            'type' => 'item',
+            'id' => $itemName,
+            'cfg' => $cfg,
+            'row' => $row,
+            'html' => $this->renderItem($row, $itemName, admin: true),
+        ]).PHP_EOL.PHP_EOL;
+    }
+
+    private function renderItem(Composable $row, string $itemName, ?array $values = [], bool $admin = false): string
+    {
+        $config = $this->getComposableConfig('items', $itemName);
+
+        $template = $config['template'];
+        unset($config['template']);
+
+        foreach ($config['editables'] as $editableName => $editable) {
+            if (isset($values[$editableName])) {
                 continue;
             }
+            $default = $editable['default'] ?? null;
+            if (!$default) {
+                switch ($editable['type']) {
+                    case self::EDITABLE_TYPE_SIMPLE_TEXT:
+                        $default = 'simpleText';
+                        break;
+                    case self::EDITABLE_TYPE_TEXT:
+                        $default = '<p>text</p>';
+                        break;
+                }
+            }
+            $values[$editableName] = $default;
+        }
 
-            $ret['others'][$k] = $v;
-            $ret['types'][$k] = 'others';
+        $values['row'] = $row;
+
+        $ret = $this->getTwig()->render($template, $values);
+
+        if ($admin) {
+            $readonlyAttr = (isset($values[ComposerService::READONLY]) && $values[ComposerService::READONLY] ? ' readonly' : '');
+            $ret = '<nyro-composer-item type="'.$itemName.'"'.$readonlyAttr.'>'.$ret.'</nyro-composer-item>';
         }
 
         return $ret;
     }
 
-    public function getBlockTemplate(Composable $row, string $block): string
+    public function getRenderCssTheme(Composable $row): string
     {
-        $config = $this->getBlockConfig($row, $block);
-        if (!isset($config['template'])) {
-            throw new RuntimeException('Template not configured for '.$block);
-        }
-
-        return $config['template'];
+        return implode(' ', array_filter([
+            'composerTheme',
+            'composerTheme_'.$this->getCssTheme($row),
+            $this->getWrapperCssTheme($row),
+        ]));
     }
 
-    public function getBlock(Composable $row, string $id, string $block, array $defaults = [], bool $addExtract = false): array
+    public function render(Composable $row, bool $admin = false): string
     {
-        $ret = [
-            'id' => $id,
-            'type' => $block,
-            'contents' => [],
-        ];
-        if ($addExtract) {
-            $ret['texts'] = [];
-            $ret['images'] = [];
-            $ret['files'] = [];
-        }
-        $defaultBlock = $this->getDefaultBlock($row, $block);
-        if ($defaultBlock) {
-            $blockConfig = $this->getBlockConfig($row, $block);
-            foreach ($defaultBlock as $k => $v) {
-                if (isset($defaults[$k])) {
-                    if (isset($blockConfig[$k]) && isset($blockConfig[$k]['image']) && $blockConfig[$k]['image']) {
-                        if (isset($blockConfig[$k]['multiple']) && $blockConfig[$k]['multiple']) {
-                            $ret['contents'][$k] = [];
-                            if (is_array($defaults[$k])) {
-                                $multipleFields = isset($blockConfig[$k]['multipleFields']) && is_array($blockConfig[$k]['multipleFields']) && count($blockConfig[$k]['multipleFields']);
-                                if (is_array($defaults[$k][0])) {
-                                    // We're coming from a non request call, so transform structure as it should have been
-                                    $tmp = [];
-                                    $defaults['titles'] = [];
-                                    $defaults['ids'] = [];
-                                    if ($multipleFields) {
-                                        foreach ($multipleFields as $field) {
-                                            $defaults[$field.'s'] = [];
-                                        }
-                                    }
-
-                                    foreach ($defaults[$k] as $kk => $vv) {
-                                        $tmp[$kk] = $vv['file'];
-                                        $defaults['titles'][$kk] = $vv['title'] ?? null;
-                                        $defaults['ids'][$kk] = $vv['id'] ?? 'img-'.time() * 1000;
-                                        if ($multipleFields) {
-                                            foreach ($multipleFields as $field) {
-                                                $defaults[$field.'s'][$kk] = $vv[$field] ?? null;
-                                            }
-                                        }
-                                    }
-
-                                    $defaults[$k] = $tmp;
-                                }
-
-                                $deletes = isset($defaults['deletes']) ? $defaults['deletes'] : [];
-                                foreach ($defaults[$k] as $kk => $img) {
-                                    if (!isset($deletes[$kk]) || !$deletes[$kk]) {
-                                        $image = $this->handleDefaultImage($img);
-                                        $val = [
-                                            'id' => isset($defaults['ids']) && isset($defaults['ids'][$kk]) ? $defaults['ids'][$kk] : 'img-'.time() * 1000,
-                                            'title' => isset($defaults['titles']) && isset($defaults['titles'][$kk]) ? $defaults['titles'][$kk] : null,
-                                            'file' => $image,
-                                        ];
-
-                                        if ($multipleFields) {
-                                            foreach ($multipleFields as $field) {
-                                                $fields = $field.'s';
-                                                $val[$field] = isset($defaults[$fields]) && isset($defaults[$fields][$kk]) ? $defaults[$fields][$kk] : null;
-                                            }
-                                        }
-
-                                        $ret['contents'][$k][] = $val;
-
-                                        if ($addExtract) {
-                                            $ret['images'][] = $image;
-                                        }
-                                    } else {
-                                        // deletion here
-                                        $images = array_filter(explode("\n", trim($img)));
-                                        $this->removeImages($images);
-                                    }
-                                }
-                            }
-                        } else {
-                            $ret['contents'][$k] = $this->handleDefaultImage($defaults[$k]);
-                            if ($addExtract) {
-                                $ret['images'][] = $ret['contents'][$k];
-                            }
-                        }
-                    } elseif (isset($blockConfig[$k]) && isset($blockConfig[$k]['file']) && $blockConfig[$k]['file']) {
-                        $ret['contents'][$k] = $this->handleDefaultFile($defaults[$k]);
-                        if ($addExtract) {
-                            $ret['files'][] = $ret['contents'][$k];
-                        }
-                    } else {
-                        $ret['contents'][$k] = $defaults[$k];
-                        if ($addExtract) {
-                            $ret['texts'][] = $ret['contents'][$k];
-                        }
-                    }
-                } elseif (0 === strpos($v, 'OBJECT::')) {
-                    $fct = substr($v, 8);
-                    $ret['contents'][$k] = $row->{$fct}();
-                } else {
-                    $ret['contents'][$k] = !is_null($v) ? trim($this->trans($v)) : $v;
-                }
-            }
-        }
-
-        return $ret;
-    }
-
-    public function deleteBlock(Composable $row, string $id, string $block, array $contents = []): void
-    {
-        $blockConfig = $this->getBlockConfig($row, $block);
-        foreach ($blockConfig as $k => $v) {
-            if (isset($contents[$k]) && $contents[$k]) {
-                if (isset($v['image']) && $v['image']) {
-                    if (isset($v['multiple']) && $v['multiple']) {
-                        if (is_array($contents[$k])) {
-                            foreach ($contents[$k] as $k => $img) {
-                                $images = array_filter(explode("\n", trim($img)));
-                                $this->removeImages($images);
-                            }
-                        }
-                    } else {
-                        $images = array_filter(explode("\n", trim($contents[$k])));
-                        $this->removeImages($images);
-                    }
-                } elseif (isset($v['file']) && $v['file']) {
-                    $files = array_filter(explode("\n", trim($contents[$k])));
-                    $this->removeFiles($files);
-                }
-            }
-        }
-    }
-
-    public function handleImageUpload(Request $request): JsonResponse
-    {
-        $image = $request->files->get('image');
-        $file = $this->imageUpload($image);
-        $ret = [
-            'file' => $file,
-            'resized' => $this->imageResizeConfig($file, $request->request->all('cfg')),
-        ];
-
-        if ($request->request->all('cfg2')) {
-            $ret['resized2'] = $this->imageResizeConfig($file, $request->request->all('cfg2'));
-        }
-
-        return new JsonResponse($ret);
-    }
-
-    protected function handleDefaultImage(string $defaults, bool &$changed = false): ?string
-    {
-        $ret = null;
-        $tmp = array_filter(explode("\n", trim($defaults)));
-        $nb = count($tmp);
-        if ($nb > 0) {
-            $ret = $tmp[$nb - 1];
-            if ('DELETE' == $ret) {
-                $ret = null;
-            }
-            unset($tmp[$nb - 1]);
-            $changed = count($tmp) > 0;
-            $this->removeImages($tmp);
-        }
-
-        return $ret;
-    }
-
-    protected function removeImages(array $images): void
-    {
-        // Clean images to keep existing ones
-        $images = array_diff(array_map('trim', $images), $this->existingImages);
-        $fs = new Filesystem();
-        foreach ($images as $image) {
-            if (trim($image) && 'DELETE' != $image) {
-                $file = $this->getRootImageDir().'/'.trim($image);
-                if ($fs->exists($file)) {
-                    $fs->remove($file);
-                    $this->imageService->removeCache($file);
-                }
-            }
-        }
-    }
-
-    public function handleFileUpload(Request $request): JsonResponse
-    {
-        $fileUp = $request->files->all('file');
-        $file = $this->fileUpload($fileUp);
-        $ret = [
-            'file' => $file,
-        ];
-
-        return new JsonResponse($ret);
-    }
-
-    protected function handleDefaultFile(string $defaults, bool &$changed = false): ?string
-    {
-        $ret = null;
-        $tmp = array_filter(explode("\n", trim($defaults)));
-        $nb = count($tmp);
-        if ($nb > 0) {
-            $ret = $tmp[$nb - 1];
-            if ('DELETE' == $ret) {
-                $ret = null;
-            }
-            unset($tmp[$nb - 1]);
-            $changed = count($tmp) > 0;
-            $this->removeFiles($tmp);
-        }
-
-        return $ret;
-    }
-
-    protected function removeFiles(array $files): void
-    {
-        // Clean files to keep existing ones
-        $files = array_diff(array_map('trim', $files), $this->existingFiles);
-        $fs = new Filesystem();
-        foreach ($files as $file) {
-            if (trim($file) && 'DELETE' != $file) {
-                $fileUp = $this->getRootImageDir().'/'.trim($file);
-                if ($fs->exists($fileUp)) {
-                    $fs->remove($fileUp);
-                }
-            }
-        }
-    }
-
-    public function render(Composable $row, ?string $handlerContent = null, ?string $handlerAction = null, bool $admin = false): string
-    {
-        $ret = null;
-        $ret = '<div class="composer composer_'.$this->getCssTheme($row).' '.$this->getWrapperCssTheme($row).'"'.($admin ? ' id="composerCont"' : '').'>';
-        $blockName = 'div';
-
-        $hasHandler = $row instanceof ComposableHandler && $row->getContentHandler();
-        if ($row->getContent() && 0 == count($row->getContent())) {
-            // Handle empty content
+        $content = $row->getContent();
+        if (!$content || 0 === count($content)) {
+            // Handle empty content only on admin
             if ($admin) {
-                $event = new ComposerDefaultBlockEvent($row, [$this->getBlock($row, 'intro-intro', 'intro')]);
+                $event = new ComposerDefaultBlockEvent($row, []);
                 $this->eventDispatcher->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
 
                 $content = $event->getContent();
+            }
+        }
 
-                if ($hasHandler) {
-                    $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
-                    if ($handler->isWrapped() && $handler->isWrappedAs()) {
-                        $tmp = [$handler->isWrappedAs() => AbstractHandler::TEMPLATE_INDICATOR];
-                        $content[] = $this->getBlock($row, 'wrapper-'.$handler->isWrapped(), $handler->isWrapped(), $tmp);
-                    } else {
-                        $content[] = $this->getBlock($row, 'handler-handler', 'handler');
+        if ($row instanceof ComposableHandler && $row->getContentHandler()) {
+            $hasHandlerPlaced = false;
+            foreach ($content as $block) {
+                if (isset($block['conts'])) {
+                    foreach ($block['conts'] as $cont) {
+                        foreach ($cont as $contItem) {
+                            if (ComposerService::ITEM_HANDLER === $contItem['_type']) {
+                                $hasHandlerPlaced = true;
+                                break 3;
+                            }
+                        }
                     }
                 }
+            }
 
-                $row->setContent($content);
-            } elseif ($hasHandler) {
-                $content = [$this->getBlock($row, 'handler-handler', 'handler')];
-                $row->setContent($content);
-            }
-        } elseif ($hasHandler) {
-            // Check if the handler is placed, and add it if not here
-            $content = $row->getContent() ?? [];
-            $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
-            $isWrapped = $handler->isWrapped();
-            $wrappedAs = $handler->isWrappedAs();
-            $hasHandlerPlaced = false;
-            foreach ($content as $cont) {
-                if ('handler' == $cont['type'] || ($isWrapped && $isWrapped == $cont['type'] && isset($cont['contents'][$wrappedAs]) && AbstractHandler::TEMPLATE_INDICATOR == $cont['contents'][$wrappedAs])) {
-                    $hasHandlerPlaced = true;
-                }
-            }
             if (!$hasHandlerPlaced) {
-                if ($admin && $isWrapped) {
-                    $tmp = [$wrappedAs => AbstractHandler::TEMPLATE_INDICATOR];
-                    $content[] = $this->getBlock($row, 'wrapper-'.$isWrapped, $isWrapped, $tmp);
-                } else {
-                    $content[] = $this->getBlock($row, 'handler-handler', 'handler');
+                $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
+                $content[] = $handler->getDefaultComposerBlock();
+            }
+        }
+
+        $html = [];
+
+        foreach ($content as $cont) {
+            $html[] = $this->renderBlock($row, $cont['_type'], $cont, $admin);
+        }
+
+        return implode(PHP_EOL.PHP_EOL, $html);
+    }
+
+    public function applyContent(Composable $row, array $content): void
+    {
+        $firstImage = null;
+        $newTexts = [
+            $row->getTitle(),
+        ];
+
+        foreach ($content as $block) {
+            if (isset($block['conts'])) {
+                foreach ($block['conts'] as $cont) {
+                    foreach ($cont as $contItem) {
+                        $itemCfg = $this->getComposableConfig('items', $contItem['_type']);
+                        foreach ($itemCfg['editables'] as $name => $editable) {
+                            $value = $contItem[$name] ?? null;
+                            if (null === $value) {
+                                continue;
+                            }
+                            switch ($editable['dataType']) {
+                                case self::EDITABLE_DATATYPE_TEXT:
+                                    $newTexts[] = $value;
+                                    break;
+                                case self::EDITABLE_DATATYPE_IMAGE:
+                                    if (!$firstImage) {
+                                        $firstImage = $value;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
-                $row->setContent($content);
             }
         }
 
-        if ($row->getContent() && count($row->getContent())) {
-            foreach ($row->getContent() as $nb => $cont) {
-                if ((!$handlerContent && !$handlerAction) || 'handler' == $cont['type']) {
-                    $ret .= $this->renderBlock($row, $nb, $handlerContent, $cont, $admin);
-                }
-            }
+        $row->setContent($content);
+        if ($row instanceof ComposableContentSummary) {
+            $row->setContentText(implode(PHP_EOL, $newTexts));
+            $row->setFirstImage($firstImage);
         }
-
-        if ($blockName) {
-            $ret .= '</'.$blockName.'>';
-        }
-
-        return $ret;
-    }
-
-    public function renderNew(Composable $row, string $block, bool $admin = false, array $defaults = []): string
-    {
-        $cont = $this->getBlock($row, $block.'---ID--', $block, $defaults);
-
-        return $this->renderBlock($row, '--NEW--', null, $cont, $admin);
-    }
-
-    protected function renderBlock(Composable $row, int|string $nb, ?string $handlerContent, array $block, bool $admin): string
-    {
-        $event = new ComposerBlockVarsEvent($row, $this->getQuickConfig($row, 'block_template'), [
-            'nb' => $nb,
-            'row' => $row,
-            'handlerContent' => $handlerContent,
-            'block' => $block,
-            'admin' => $admin,
-            'customClass' => null,
-            'customAttrs' => null,
-        ], $this->getBlockConfig($row, $block['type']));
-
-        $this->eventDispatcher->dispatch($event, ComposerBlockVarsEvent::COMPOSER_BLOCK_VARS);
-
-        return $this->getTwig()->render($event->getTemplate(), $event->getVars())."\n\n";
-    }
-
-    public function getImageDir(): string
-    {
-        return 'uploads/composer';
-    }
-
-    protected ?string $rootImageDir = null;
-
-    public function getRootImageDir(): string
-    {
-        if (is_null($this->rootImageDir)) {
-            $this->rootImageDir = $this->nyrodevService->getKernel()->getProjectDir().'/public/'.$this->getImageDir();
-            $fs = new Filesystem();
-            if (!$fs->exists($this->rootImageDir)) {
-                $fs->mkdir($this->rootImageDir);
-            }
-        }
-
-        return $this->rootImageDir;
-    }
-
-    public function imageUpload(UploadedFile $image): string
-    {
-        $dir = $this->getRootImageDir();
-        $filename = $this->nyrodevService->getUniqFileName($dir, $image->getClientOriginalName());
-        $image->move($dir, $filename);
-
-        return $filename;
-    }
-
-    public function imageResize(string $file, int $w, ?int $h = null): ?string
-    {
-        return $this->imageResizeConfig($file, [
-            'name' => $w.'_'.$h,
-            'w' => $w,
-            'h' => $h,
-            'fit' => true,
-            'quality' => 80,
-        ]);
-    }
-
-    public function imageResizeConfig(string $file, array $config): ?string
-    {
-        $absoluteFile = $this->getRootImageDir().'/'.$file;
-        $ret = null;
-
-        if (file_exists($absoluteFile)) {
-            try {
-                if (!isset($config['name'])) {
-                    $config['name'] = md5(json_encode($config));
-                }
-
-                $resizedPath = $this->imageService->_resize($absoluteFile, $config);
-
-                $tmp = explode('/public/', $resizedPath);
-                $ret = $this->getAssetsPackages()->getUrl($tmp[1]);
-            } catch (Exception $e) {
-            }
-        }
-
-        if (!$ret) {
-            $ret = 'data:'.TransparentPixelResponse::CONTENT_TYPE.';base64,'.TransparentPixelResponse::IMAGE_CONTENT;
-        }
-
-        return $ret;
-    }
-
-    public function getFileUrl(string $file): string
-    {
-        return $this->getAssetsPackages()->getUrl($this->getImageDir().'/'.$file);
-    }
-
-    public function fileUpload(UploadedFile $file): string
-    {
-        $dir = $this->getRootImageDir();
-        $filename = $this->nyrodevService->getUniqFileName($dir, $file->getClientOriginalName());
-        $file->move($dir, $filename);
-
-        return $filename;
     }
 
     public function afterComposerEdition(Composable $row): void
     {
+        // @todo refactor this function to work with new storage
+        return;
+
         $canChangeLang = $this->canChangeLang($row);
         $langs = $this->nyroCmsService->getLocaleNames($row);
 
@@ -854,7 +538,7 @@ class ComposerService extends AbstractService
         $event = new ComposerEvent($row);
         $eventName = null;
         if ($isDefaultLocale || !$canChangeLang) {
-            // We changed the default local row
+            // We changed the default locale row
             $sameLangStructure = $this->isSameLangStructure($row);
             $sameLangMedia = $this->isSameLangMedia($row);
 
@@ -1043,24 +727,19 @@ class ComposerService extends AbstractService
         $newContents = $template->getContent();
 
         if ($rowContents && count($rowContents)) {
-            $cacheBlockConfigs = [];
             $filledContents = [];
 
-            // First loop to fill block with exact matching
+            // First loop to fill block with exact matching (block type and items)
             foreach ($rowContents as $k => $rowContent) {
-                if (!isset($cacheBlockConfigs[$rowContent['type']])) {
-                    $cacheBlockConfigs[$rowContent['type']] = $this->getConsildatedConfig($row, $rowContent['type']);
-                }
-                $rowConfig = $cacheBlockConfigs[$rowContent['type']];
-
-                if ($rowConfig['defaultBlock'] == $rowContent['contents']) {
-                    // Content was not edited at all, ignore it
-                    unset($rowContents[$k]);
+                if (0 === count(array_filter($rowContent['conts']))) {
+                    // No content, ignore it
                     continue;
                 }
 
+                $blockItems = $rowContent['_type'].'_'.$this->computeblockItems($rowContent['conts']);
+
                 foreach ($newContents as $kk => $newContent) {
-                    if ($newContent['type'] === $rowContent['type']) {
+                    if ($newContent['_type'].'_'.$this->computeblockItems($newContent['conts']) === $blockItems) {
                         $newContents[$kk] = $rowContent;
                         $filledContents[$kk] = true;
                         unset($rowContents[$k]);
@@ -1069,34 +748,20 @@ class ComposerService extends AbstractService
                 }
             }
 
-            // Second loop to fill block with same config matching
+            // Second loop to fill block with exact matching (same containeer number and same items)
             foreach ($rowContents as $k => $rowContent) {
-                $rowConfig = $cacheBlockConfigs[$rowContent['type']];
+                if (0 === count(array_filter($rowContent['conts']))) {
+                    // No content, ignore it
+                    continue;
+                }
+
+                $blockItems = $this->computeblockItems($rowContent['conts']);
 
                 foreach ($newContents as $kk => $newContent) {
                     if (isset($filledContents[$kk])) {
                         continue;
                     }
-
-                    if (!isset($cacheBlockConfigs[$newContent['type']])) {
-                        $cacheBlockConfigs[$newContent['type']] = $this->getConsildatedConfig($row, $newContent['type']);
-                    }
-                    $newConfig = $cacheBlockConfigs[$newContent['type']];
-
-                    if (
-                        $rowConfig['images'] == $newConfig['images']
-                        && $rowConfig['files'] == $newConfig['files']
-                        && $rowConfig['others'] == $newConfig['others']
-                        && $rowConfig['textCounts'] == $newConfig['textCounts']
-                    ) {
-                        // We're matching, we should transfer text to new
-                        foreach ($newConfig['texts'] as $textType => $texts) {
-                            $textMap = array_combine($rowConfig['texts'][$textType], $texts);
-                            foreach ($textMap as $rowTextKey => $newTextKey) {
-                                $newContents['contents'][$newTextKey] = $rowContents['contents'][$rowTextKey];
-                            }
-                        }
-
+                    if ($blockItems === $this->computeblockItems($newContent['conts'])) {
                         $newContents[$kk] = $rowContent;
                         $filledContents[$kk] = true;
                         unset($rowContents[$k]);
@@ -1105,92 +770,83 @@ class ComposerService extends AbstractService
                 }
             }
 
-            // Third loop to fill block contents individually
-            $partiallyFilled = [];
-            foreach ($rowContents as $k => $rowContent) {
-                $rowConfig = $cacheBlockConfigs[$rowContent['type']];
+            $handlerBlock = null;
+            $itemsByType = [];
+            foreach ($rowContents as $k => $block) {
+                if (0 === count(array_filter($rowContent['conts']))) {
+                    // No content, ignore it
+                    continue;
+                }
 
-                // Keep only filled contents
-                $filled = array_diff($rowContent['contents'], $rowConfig['defaultBlock']);
-                $filledKeys = array_keys($filled);
+                foreach ($block['conts'] as $kk => $cont) {
+                    foreach ($cont as $contItem) {
+                        if (ComposerService::ITEM_HANDLER === $contItem['_type']) {
+                            $handlerBlock = $block;
+                            continue 3;
+                        }
 
-                foreach ($newContents as $kk => $newContent) {
+                        if (!isset($itemsByType[$contItem['_type']])) {
+                            $itemsByType[$contItem['_type']] = [];
+                        }
+                        $contItem['_originBlock'] = [$block['_type'], $kk];
+                        $itemsByType[$contItem['_type']][] = $contItem;
+                    }
+                }
+            }
+
+            if (count($itemsByType)) {
+                foreach ($newContents as $k => $newContent) {
                     if (isset($filledContents[$kk])) {
                         continue;
                     }
 
-                    if (!isset($cacheBlockConfigs[$newContent['type']])) {
-                        $cacheBlockConfigs[$newContent['type']] = $this->getConsildatedConfig($row, $newContent['type']);
-                    }
-                    $newConfig = $cacheBlockConfigs[$newContent['type']];
-
-                    $mapFields = [];
-                    foreach ($filledKeys as $filledKey) {
-                        $filledKeyType = $rowConfig['types'][$filledKey];
-                        $avlKeys = [];
-                        if (isset($newConfig[$filledKeyType]) && count($newConfig[$filledKeyType])) {
-                            $avlKeys = array_keys($newConfig[$filledKeyType]);
-                        } elseif (isset($newConfig['texts'][$filledKeyType]) && count($newConfig['texts'][$filledKeyType])) {
-                            $avlKeys = $newConfig['texts'][$filledKeyType];
-                        }
-
-                        if (0 === count($avlKeys)) {
-                            // No matching for this key
-                            continue;
-                        }
-
-                        foreach ($avlKeys as $avlKey) {
-                            if (isset($partiallyFilled[$kk][$avlKey])) {
-                                continue;
+                    foreach ($newContent['conts'] as $kk => $cont) {
+                        foreach ($cont as $kkk => $contItem) {
+                            $type = $contItem['_type'];
+                            if (isset($itemsByType[$type])) {
+                                $newContents[$k]['conts'][$kk][$kkk] = array_shift($itemsByType[$type]);
+                                unset($newContents[$k]['conts'][$kk][$kkk]['_originBlock']);
+                                if (0 === count($itemsByType[$type])) {
+                                    unset($itemsByType[$type]);
+                                }
                             }
-                            $mapFields[$filledKey] = $avlKey;
-                            break;
                         }
-                    }
-
-                    if (count($mapFields) === count($filledKeys)) {
-                        foreach ($mapFields as $filledKey => $avlKey) {
-                            $newContents[$kk]['contents'][$avlKey] = $filled[$filledKey];
-                            if (!isset($partiallyFilled[$kk])) {
-                                $partiallyFilled[$kk] = [];
-                            }
-                            $partiallyFilled[$kk][$avlKey] = true;
-                        }
-
-                        unset($rowContents[$k]);
-                        continue 2;
                     }
                 }
             }
 
-            if (count($rowContents)) {
-                // Add remaining contents
-                $newContents = array_merge($newContents, $rowContents);
+            $addedMissingBlocks = [];
+            foreach ($itemsByType as $contItem) {
+                $blockType = $contItem['_originBlock'][0];
+                $blockContIdx = $contItem['_originBlock'][1];
+                unset($contItem['_originBlock']);
+                if (!isset($addedMissingBlocks[$blockType])) {
+                    $cfg = $this->getComposableConfig('blocks', $blockType);
+                    $addedMissingBlocks[$blockType] = [
+                        '_type' => $blockType,
+                        'conts' => array_fill(0, $cfg['nb_containers'], []),
+                    ];
+                }
+                $addedMissingBlocks[$blockType]['conts'][$blockContIdx][] = $contItem;
+            }
+
+            $newContents = array_merge($newContents, array_values($addedMissingBlocks));
+
+            if ($handlerBlock) {
+                $newContents[] = $handlerBlock;
             }
         }
 
-        $row->setContent($newContents);
-        if ($row instanceof ComposableContentSummary) {
-            $newTexts = [
-                $row->getTitle(),
-            ];
-            $firstImage = null;
+        $this->applyContent($row, $newContents);
+    }
 
-            foreach ($newContents as $newContent) {
-                $block = $this->getBlock($row, $newContent['id'], $newContent['type'], $newContent['contents'], true);
-                foreach ($block['texts'] as $t) {
-                    if (AbstractHandler::TEMPLATE_INDICATOR != $t) {
-                        $newTexts[] = html_entity_decode(strip_tags($t));
-                    }
-                }
-                if (is_null($firstImage) && count($block['images']) && isset($block['images'][0])) {
-                    $firstImage = $block['images'][0];
-                }
-            }
-
-            $row->setContentText(implode("\n", $newTexts));
-            $row->setFirstImage($firstImage);
-        }
+    private function computeblockItems(array $conts): string
+    {
+        return implode('_', array_map(function ($cont) {
+            return implode(',', array_map(function ($contItem) {
+                return $contItem['_type'];
+            }, $cont));
+        }, $conts));
     }
 
     protected function idifyContents(array $contents): array

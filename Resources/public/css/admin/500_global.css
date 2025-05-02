@@ -12,8 +12,8 @@ body {
 .icon {
 	width: 30px;
 	height: 30px;
-	fill: #fff;
-	stroke: #fff;
+	fill: var(--mainColorText);
+	stroke: var(--mainColorText);
 	background: var(--mainColor);
 	transition: background 300ms, fill 300ms, stroke 300ms;
 }
@@ -22,7 +22,7 @@ body {
 	padding: 0 14px;
 	height: 30px;
 	line-height: 30px;
-	color: #fff;
+	color: var(--mainColorText);
 	background: var(--mainColor);
 	font-size: 14px;
 	font-family: var(--fontFamily);
@@ -30,7 +30,7 @@ body {
 	float: none;
 	border-radius: 0;
 	text-transform: uppercase;
-	transition: background 300ms;
+	transition: background 300ms, color 300ms;
 }
 .button .icon {
 	margin: -10px -4px -8px -8px;
@@ -42,11 +42,14 @@ body {
 }
 .button:hover {
 	text-decoration: none;
-	color: #fff;
-	background: #000;
+	color: var(--mainColorHoverText);
+	background: var(--mainColorHover);
 }
 a:hover .icon, .button:hover .icon {
-	background: #000;
+	color: var(--mainColorHoverText);
+	fill: var(--mainColorHoverText);
+	stroke: var(--mainColorHoverText);
+	background: var(--mainColorHover);
 }
 
 aside {

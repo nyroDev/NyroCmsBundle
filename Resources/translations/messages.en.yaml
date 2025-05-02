@@ -85,20 +85,32 @@ admin:
       home_imageBig: Change the large image format
       home_imageMove: Change the animated image
       home_imageMobile: Change the mobile image
-    blocks:
-      title: Title
-      intro: Introduction
-      text: Text
-      image: Picture
-      image_text: Picture Text
-      text_image: Text Picture
-      image2: 2 pictures
-      image3: 3 pictures
-      video: Video
-      column2: 2 columns
-      column3: 3 columns
-      slideshow: Gallery
-      separator: Separator
+    block:
+      full:
+        title: One column
+      two:
+        title: Two columns
+      two_2_1:
+        title: Two columns 2/1
+      two_1_2:
+        title: Two columns 1/2
+      three:
+        title: Three columns
+    item:
+      title:
+        title: Title
+      text:
+        title: Text
+      image:
+        title: Image
+      slideshow:
+        title: Slideshow
+      videoEmbed:
+        title: Video
+      separator:
+        title: Separator
+      handler:
+        title: Handler
     default:
       subtitle: Subtitle
       text: |

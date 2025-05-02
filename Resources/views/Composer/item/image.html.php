@@ -1,0 +1,1 @@
+<img src="<?php echo $src; ?>" alt="<?php echo $alt; ?>" width="<?php echo $width; ?>" height="<?php echo $height; ?>" loading="lazy" />
