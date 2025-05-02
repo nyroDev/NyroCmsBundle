@@ -452,6 +452,8 @@ class ComposerService extends AbstractService
                 $this->eventDispatcher->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
 
                 $content = $event->getContent();
+            } else {
+                $content = [];
             }
         }
 
