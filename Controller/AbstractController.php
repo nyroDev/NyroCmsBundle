@@ -6,10 +6,10 @@ use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
-use NyroDev\NyroCmsBundle\Services\ComposerService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
+use NyroDev\UtilityBundle\Services\ImageService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\ShareService;
 use RuntimeException;
@@ -199,7 +199,13 @@ abstract class AbstractController extends NyroDevAbstractController
         $this->setTitle($title);
         $this->setDescription($description);
         if ($image) {
-            $this->setImage($this->get(ComposerService::class)->imageResize($image, 1000));
+            $this->setImage($this->get(ImageService::class)->resize($this->get(NyrodevService::class)->getPublicDirPath().$image, [
+                'name' => 'share',
+                'w' => 1000,
+                'h' => null,
+                'fit' => true,
+                'quality' => 80,
+            ]));
         }
 
         $this->get(ShareService::class)->setSharable($content, false);

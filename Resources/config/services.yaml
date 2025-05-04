@@ -43,6 +43,7 @@ services:
             - '@NyroDev\UtilityBundle\Services\MemberService'
             - '@NyroDev\NyroCmsBundle\Services\NyroCmsService'
             - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+            - '@Symfony\Component\EventDispatcher\EventDispatcherInterface'
         calls:
             - [setContainerInterface, ['@service_container']]
             - [setAssetsPackages, ['@assets.packages']]

@@ -3,12 +3,13 @@ Cms Bundle for Symfony
 
 # Needed npm packages
 - copy-webpack-plugin
+- sortablejs
 - jquery
 - jquery-ui
 - jquery-mobile (for slideshow swipe feature)
 
 ```
-npm i copy-webpack-plugin jquery jquery-ui jquery-mobile --save-dev
+npm i copy-webpack-plugin sortablejs jquery jquery-ui jquery-mobile --save-dev
 ```
 
 # Needed configuration
@@ -64,13 +65,24 @@ nyrocms_admin:
     prefix:   /admin
 
 frontenay:
-    resource: frontenay@App\Controller\FrontController
+    resource: 
+        handler: frontenay
+        controller: App\Controller\FrontController
+        homepage: true
     type: nyrocms
 ```
 
-Type for nyroCms routes could also add elements seperated with _ : 
-- forceLang
-- homepage in order to add _homepage route alias
+Resource configurations could be :
+- handler (string) (required): Name of the handle to user
+- controller (string) (required): Front Controller to use
+- homepage (boolean): in order to add _homepage route alias (only 1 could be set to true)
+- forceLang(boolean): to force lang in all URL
+- dynamic (array): if you want to load dynamic rootContent using host or paths:
+  - rootHandler (string) (required): Name of the parent root handler, used to find defaults and locales
+  - host (string): Dynamic host to use in URL, should contains {dynamicHandler}
+  - path (string): Dynamic path to use in URL, should contains {dynamicHandler}, starts and ends with a /
+  - xmlSitemap (boolean): Enable or disable xmlSitemap (if not provided, same as rootContent used)
+
 
 config/security.yaml
 ```yaml
@@ -120,7 +132,15 @@ security:
 
     .addPlugin(new CopyWebpackPlugin({
         patterns: [
-            {from: 'vendor/nyrodev/utility-bundle/Resources/public/vendor/tinymce', to: '../tinymce'}
+            {from: 'vendor/tinymce/tinymce', to: '../tinymce'},
+            {from: 'vendor/nyrodev/utility-bundle/Resources/public/js/filemanager', to: '../tinymce/plugins/filemanager'},
+            {
+                from: 'node_modules/tinymce-i18n/langs7/fr_FR.js',
+                to: '../tinymce/langs/fr.js',
+                transform: (input, filename) => {
+                    return input.toString().replace('tinymce.addI18n("fr_FR", {', 'tinymce.addI18n("fr", {');
+                }
+            }
         ]
     }))
 
@@ -129,7 +149,7 @@ security:
 ```
 
 # Command for entities and mapping creation
-`./bin/console nyrocms:createDbClasse`
+`./bin/console nyrocms:createDbClasses`
 
 # Others commands
 `./bin/console nyrocms:addUser`  

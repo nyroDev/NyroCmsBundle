@@ -63,6 +63,9 @@ abstract class Content extends AbstractUploadable implements ContentRootable, Co
     protected ?string $handler = null;
 
     #[Gedmo\Versioned]
+    protected ?string $dynamicHandler = null;
+
+    #[Gedmo\Versioned]
     protected ?string $host = null;
 
     #[Gedmo\Versioned]
@@ -264,6 +267,18 @@ abstract class Content extends AbstractUploadable implements ContentRootable, Co
     public function getHandler(): ?string
     {
         return $this->handler;
+    }
+
+    public function setDynamicHandler(?string $dynamicHandler): self
+    {
+        $this->dynamicHandler = $dynamicHandler;
+
+        return $this;
+    }
+
+    public function getDynamicHandler(): ?string
+    {
+        return $this->dynamicHandler;
     }
 
     public function setHost(?string $host): self

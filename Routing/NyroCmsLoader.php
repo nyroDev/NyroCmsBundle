@@ -19,130 +19,176 @@ class NyroCmsLoader extends Loader
 
     public function load(mixed $resource, ?string $type = null): mixed
     {
-        $typeCfg = array_flip(explode('_', $type));
+        if (!is_array($resource)) {
+            throw new RuntimeException('The resource for a nyroCms routing must be an array.');
+        }
 
-        $res = explode('@', $resource);
-        if (isset($this->loaded[$res[0]])) {
-            throw new RuntimeException('Do not add the "nyrocms" with "'.$res[0].'" loader twice');
+        $required = ['handler', 'controller'];
+        foreach ($required as $key) {
+            if (!isset($resource[$key])) {
+                throw new RuntimeException('The resource for a nyroCms routing must have the "'.$key.'" key.');
+            }
+        }
+
+        if (isset($this->loaded[$resource['handler']])) {
+            throw new RuntimeException('Do not add the "nyrocms" with handler "'.$resource['handler'].'" loader twice.');
+        }
+
+        /** @var NyroCmsService $nyroCms */
+        $nyroCms = $this->container->get(NyroCmsService::class);
+
+        $rootContentHandler = $resource['handler'];
+        if (isset($resource['dynamic'])) {
+            if (!is_array($resource['dynamic'])) {
+                throw new RuntimeException('The resource for a nyroCms routing must have the "dynamic" key as an array.');
+            }
+            if (!isset($resource['dynamic']['rootHandler'])) {
+                throw new RuntimeException('The resource for a nyroCms routing must have the "rootHandler" inside the "dynamic" array.');
+            }
+            $rootContentHandler = $resource['dynamic']['rootHandler'];
         }
 
         $rootContent = $this->container->get(DbAbstractService::class)->getContentRepository()->findOneBy([
             'level' => 0,
-            'handler' => $res[0],
+            'handler' => $rootContentHandler,
         ]);
         if (!$rootContent) {
-            throw new RuntimeException('No root content found with handler "'.$res[0].'"');
+            throw new RuntimeException('No root content found with handler "'.$rootContentHandler.'"');
         }
         /* @var $rootContent \NyroDev\NyroCmsBundle\Model\Content */
+
+        $host = $rootContent->getHost();
+        $xmlSitemap = $rootContent->getXmlSitemap();
+        $path = '/';
+        $priority = 0;
+
+        $locale = $nyroCms->getDefaultLocale($rootContent);
+        $locales = $nyroCms->getLocales($rootContent, true);
+
+        if (isset($resource['dynamic'])) {
+            if (isset($resource['dynamic']['host'])) {
+                if (!str_contains($resource['dynamic']['host'], '{dynamicHandler}')) {
+                    throw new RuntimeException('The dynamic host resource for a nyroCms routing must contains {dynamicHandler} /.');
+                }
+                $host = $resource['dynamic']['host'];
+            }
+            if (isset($resource['dynamic']['path'])) {
+                if (!str_contains($resource['dynamic']['path'], '{dynamicHandler}')) {
+                    throw new RuntimeException('The dynamic path resource for a nyroCms routing must contains {dynamicHandler} /.');
+                }
+                if (!str_starts_with($resource['dynamic']['path'], '/')) {
+                    throw new RuntimeException('The dynamic path resource for a nyroCms routing must starts with a /.');
+                }
+                if (!str_ends_with($resource['dynamic']['path'], '/')) {
+                    throw new RuntimeException('The dynamic path resource for a nyroCms routing must ends with a /.');
+                }
+                $path = $resource['dynamic']['path'];
+            }
+            if (isset($resource['dynamic']['xmlSitemap'])) {
+                $xmlSitemap = $resource['dynamic']['xmlSitemap'];
+            }
+            $priority = 1;
+        }
 
         $env = $this->container->getParameter('kernel.environment');
         $routes = new RouteCollection();
 
-        $locale = $this->container->get(NyroCmsService::class)->getDefaultLocale($rootContent);
-        $locales = $this->container->get(NyroCmsService::class)->getLocales($rootContent, true);
-
-        $prefixUrlLocale = '/{_locale}';
-        $hasOnly1Locale = $locale === $locales && !isset($typeCfg['forceLang']);
+        $prefixUrlLocale = $path.'{_locale}/';
+        $hasOnly1Locale = $locale === $locales && !isset($resource['forceLang']);
         if ($hasOnly1Locale) {
-            $prefixUrlLocale = null;
+            $prefixUrlLocale = $path;
         }
 
-        $routeHandlerPath = $this->container->get(NyroCmsService::class)->getParameter('nyrocms.route_handler_path');
+        $routeHandlerPath = $nyroCms->getParameter('nyrocms.route_handler_path');
         if ($routeHandlerPath) {
             $routeHandlerPath .= '/';
         }
 
-        if (isset($typeCfg['homepage'])) {
+        if (isset($resource['homepage'])) {
+            if (isset($this->loaded['_hompage'])) {
+                throw new RuntimeException('Do not add the "nyrocms" with homepage twice.');
+            }
+            $this->loaded['_hompage'] = true;
             $routes->add('_homepage', new Route(
-                '/',
-                ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
+                $path,
+                ['_controller' => $resource['controller'].'::index', '_locale' => $locale, '_config' => $resource['handler']],
                 [],
                 [],
-                $rootContent->getHost()
-            )
-            );
+                $host
+            ), $priority);
         }
 
-        $routes->add($res[0].'_homepage_noLocale', new Route(
-            '/'.(isset($typeCfg['forceLang']) ? $locale.'/' : ''),
-            ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
+        $routes->add($resource['handler'].'_homepage_noLocale', new Route(
+            $path.(isset($resource['forceLang']) ? $locale.'/' : ''),
+            ['_controller' => $resource['controller'].'::index', '_locale' => $locale, '_config' => $resource['handler']],
             [],
             [],
-            $rootContent->getHost()
-        )
-        );
+            $host
+        ), $priority);
 
-        if ($rootContent->getXmlSitemap()) {
+        if ($xmlSitemap) {
             if (!$hasOnly1Locale) {
-                $routes->add($res[0].'_sitemap_xml_index', new Route(
-                    '/sitemap.{_format}',
-                    ['_controller' => $res[1].'::sitemapIndexXml', '_config' => $res[0]],
+                $routes->add($resource['handler'].'_sitemap_xml_index', new Route(
+                    $path.'sitemap.{_format}',
+                    ['_controller' => $resource['controller'].'::sitemapIndexXml', '_config' => $resource['handler']],
                     ['_format' => 'xml'],
                     [],
-                    $rootContent->getHost()
-                )
-                );
+                    $host
+                ), $priority);
             }
-            $routes->add($res[0].'_sitemapXml', new Route(
-                $prefixUrlLocale.'/sitemap.{_format}',
-                ['_controller' => $res[1].'::sitemapXml', '_locale' => $locale, '_config' => $res[0]],
+            $routes->add($resource['handler'].'_sitemapXml', new Route(
+                $prefixUrlLocale.'sitemap.{_format}',
+                ['_controller' => $resource['controller'].'::sitemapXml', '_locale' => $locale, '_config' => $resource['handler']],
                 ['_locale' => $locales, '_format' => 'xml'],
                 [],
-                $rootContent->getHost()
-            )
-            );
+                $host
+            ), $priority);
         }
 
-        $routes->add($res[0].'_homepage', new Route(
-            $prefixUrlLocale.'/',
-            ['_controller' => $res[1].'::index', '_locale' => $locale, '_config' => $res[0]],
+        $routes->add($resource['handler'].'_homepage', new Route(
+            $prefixUrlLocale,
+            ['_controller' => $resource['controller'].'::index', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales],
             [],
-            $rootContent->getHost()
-        )
-        );
-        $routes->add($res[0].'_search', new Route(
-            $prefixUrlLocale.'/search',
-            ['_controller' => $res[1].'::search', '_locale' => $locale, '_config' => $res[0]],
+            $host
+        ), $priority);
+        $routes->add($resource['handler'].'_search', new Route(
+            $prefixUrlLocale.'search',
+            ['_controller' => $resource['controller'].'::search', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales],
             [],
-            $rootContent->getHost()
-        )
-        );
-        $routes->add($res[0].'_content_spec_handler', new Route(
-            $prefixUrlLocale.'/{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
-            ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
+            $host
+        ), $priority);
+        $routes->add($resource['handler'].'_content_spec_handler', new Route(
+            $prefixUrlLocale.'{url}/{id}/{title}/'.$routeHandlerPath.'{handler}',
+            ['_controller' => $resource['controller'].'::contentSpec', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+', 'handler' => '.+'],
             [],
-            $rootContent->getHost()
-        )
-        );
-        $routes->add($res[0].'_content_spec', new Route(
-            $prefixUrlLocale.'/{url}/{id}/{title}',
-            ['_controller' => $res[1].'::contentSpec', '_locale' => $locale, '_config' => $res[0]],
+            $host
+        ), $priority);
+        $routes->add($resource['handler'].'_content_spec', new Route(
+            $prefixUrlLocale.'{url}/{id}/{title}',
+            ['_controller' => $resource['controller'].'::contentSpec', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales, 'url' => '[^/]+', 'id' => '\d+'],
             [],
-            $rootContent->getHost()
-        )
-        );
-        $routes->add($res[0].'_content_handler', new Route(
-            $prefixUrlLocale.'/{url}/'.$routeHandlerPath.'{handler}',
-            ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
+            $host
+        ), $priority);
+        $routes->add($resource['handler'].'_content_handler', new Route(
+            $prefixUrlLocale.'{url}/'.$routeHandlerPath.'{handler}',
+            ['_controller' => $resource['controller'].'::content', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales, 'url' => '[^/]+', 'handler' => '.+'],
             [],
-            $rootContent->getHost()
-        )
-        );
-        $routes->add($res[0].'_content', new Route(
-            $prefixUrlLocale.'/{url}',
-            ['_controller' => $res[1].'::content', '_locale' => $locale, '_config' => $res[0]],
+            $host
+        ), $priority);
+        $routes->add($resource['handler'].'_content', new Route(
+            $prefixUrlLocale.'{url}',
+            ['_controller' => $resource['controller'].'::content', '_locale' => $locale, '_config' => $resource['handler']],
             ['_locale' => $locales, 'url' => 'dev' === $env ? '^(?!_wdt|_profiler|_error.).+' : '.+'],
             [],
-            $rootContent->getHost()
-        )
-        );
+            $host
+        ), $priority);
 
-        $this->loaded[$res[0]] = true;
+        $this->loaded[$resource['handler']] = true;
 
         return $routes;
     }
@@ -164,6 +210,6 @@ class NyroCmsLoader extends Loader
 
     public function supports(mixed $resource, ?string $type = null): bool
     {
-        return 'nyrocms' === substr($type, 0, 7);
+        return 'nyrocms' === $type;
     }
 }

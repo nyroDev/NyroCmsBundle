@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use App\Entity\Template;
+use NyroDev\NyroCmsBundle\Event\AdminContentTreeConfigEvent;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -12,6 +13,7 @@ use NyroDev\UtilityBundle\Services\Db\DbAbstractService as NyroDevDbService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AdminService extends NyroDevAbstractService
 {
@@ -23,6 +25,7 @@ class AdminService extends NyroDevAbstractService
         private readonly MemberService $memberService,
         private readonly NyroCmsService $nyroCmsService,
         private readonly DbAbstractService $dbService,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -201,12 +204,26 @@ class AdminService extends NyroDevAbstractService
 
     public function canRootComposer(Content $content): bool
     {
-        return $this->getParameter('nyrocms.content.root_composer');
+        $event = new AdminContentTreeConfigEvent(
+            $content,
+            AdminContentTreeConfigEvent::CONFIG_CAN_ROOT_COMPOSER,
+            $this->getParameter('nyrocms.content.root_composer')
+        );
+        $this->eventDispatcher->dispatch($event, AdminContentTreeConfigEvent::ADMIN_CONTENT_TREE_CONFIG);
+
+        return $event->value;
     }
 
     public function getContentMaxLevel(Content $content): int
     {
-        return $this->getParameter('nyrocms.content.maxlevel');
+        $event = new AdminContentTreeConfigEvent(
+            $content,
+            AdminContentTreeConfigEvent::CONFIG_CONTENT_MAX_LEVEL,
+            $this->getParameter('nyrocms.content.maxlevel')
+        );
+        $this->eventDispatcher->dispatch($event, AdminContentTreeConfigEvent::ADMIN_CONTENT_TREE_CONFIG);
+
+        return $event->value;
     }
 
     public function canHaveSub(Content $content): bool

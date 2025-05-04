@@ -80,6 +80,12 @@ if ($intro && $intro != $introKey) {
 						    if (is_object($val)) {
 						        if ($val instanceof DateTimeInterface) {
 						            $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
+						        } elseif ($val instanceof Doctrine\Common\Collections\Collection) {
+						            $val = [];
+						            foreach ($val as $v) {
+						                $val[] = $v.'';
+						            }
+						            $val = implode(', ', $val);
 						        }
 						    }
 						    echo nl2br($val);
