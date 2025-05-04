@@ -137,16 +137,19 @@ class NyroCmsService extends NyroDevAbstractService
 
         if ($object instanceof Content) {
             $root = $this->getContentRoot($object->getRoot());
+            $rootHandler = $root->getHandler();
+            if ($root->getDynamicHandler()) {
+                $prm['dynamicHandler'] = $rootHandler;
+                $rootHandler = $root->getDynamicHandler();
+            }
             if ($root->getId() == $object->getId()) {
-                $routeName = $root->getHandler().'_homepage';
+                $routeName = $rootHandler.'_homepage';
             } else {
-                $routeName = $root->getHandler().'_content';
+                $routeName = $rootHandler.'_content';
                 if (isset($prm['handler']) && $prm['handler']) {
                     $routeName .= '_handler';
                 }
-                $prm = array_merge($prm, [
-                    'url' => trim($object->getUrl(), '/'),
-                ]);
+                $prm['url'] = trim($object->getUrl(), '/');
             }
         } elseif ($object instanceof ContentSpec) {
             $parent = is_null($parent) ? $object->getParent() : $parent;
@@ -155,7 +158,12 @@ class NyroCmsService extends NyroDevAbstractService
             }
 
             $root = $this->getContentRoot($parent->getRoot());
-            $routeName = $root->getHandler().'_content_spec';
+            $rootHandler = $root->getHandler();
+            if ($root->getDynamicHandler()) {
+                $prm['dynamicHandler'] = $rootHandler;
+                $rootHandler = $root->getDynamicHandler();
+            }
+            $routeName = $rootHandler.'_content_spec';
             if (isset($prm['handler']) && $prm['handler']) {
                 $routeName .= '_handler';
             }
@@ -337,7 +345,15 @@ class NyroCmsService extends NyroDevAbstractService
         $rootContent = $this->getRootContent();
         $objectLocale = $isObjectPage ? $pathInfo['object'] : $rootContent;
 
-        $prefixRoute = $rootContent ? $rootContent->getHandler() : null;
+        $routePrm = [];
+        $prefixRoute = null;
+        if ($rootContent) {
+            $prefixRoute = $rootContent->getHandler();
+            if ($rootContent->getDynamicHandler()) {
+                $routePrm['dynamicHandler'] = $prefixRoute;
+                $prefixRoute = $rootContent->getDynamicHandler();
+            }
+        }
 
         $defaultLocale = $this->getDefaultLocale($objectLocale);
         $locales = $this->getLocales($objectLocale);
@@ -350,26 +366,23 @@ class NyroCmsService extends NyroDevAbstractService
             if ($locale != $curLocale && ($locale == $defaultLocale || empty($onlyLangs) || in_array($locale, $onlyLangs))) {
                 $prm = ['_locale' => $locale];
                 $routeName = null;
-                $routePrm = [];
                 if (!$pathInfo['route']) {
                     $routeName = $prefixRoute.'_homepage_noLocale';
-                    $routePrm = [];
                 } elseif ($pathInfo['route'] == $prefixRoute.'_homepage_noLocale' && $curLocale == $defaultLocale) {
                     $routeName = $prefixRoute.'_homepage';
-                    $routePrm = array_merge($pathInfo['routePrm'], $prm);
+                    $routePrm = array_merge($pathInfo['routePrm'], $routePrm, $prm);
                 } elseif ($pathInfo['route'] == $prefixRoute.'_homepage' && $locale == $defaultLocale) {
                     $routeName = $prefixRoute.'_homepage_noLocale';
-                    $routePrm = [];
                 } elseif ($this->pathInfoSearch && preg_match('/_search$/', $pathInfo['route'])) {
                     $routeName = $pathInfo['route'];
-                    $routePrm = array_merge($pathInfo['routePrm'], $prm, ['q' => $this->pathInfoSearch]);
+                    $routePrm = array_merge($pathInfo['routePrm'], $routePrm, $prm, ['q' => $this->pathInfoSearch]);
                 } elseif ($isObjectPage) {
                     $pathInfo['object']->setTranslatableLocale($locale);
                     $this->dbService->refresh($pathInfo['object']);
-                    $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $prm));
+                    $ret[$locale] = $this->getUrlFor($pathInfo['object'], $absolute, array_merge($pathInfo['routePrm'], $routePrm, $prm));
                 } else {
                     $routeName = $pathInfo['route'];
-                    $routePrm = array_merge($pathInfo['routePrm'], $prm);
+                    $routePrm = array_merge($pathInfo['routePrm'], $routePrm, $prm);
                 }
                 if (!is_null($routeName)) {
                     $event = new UrlGenerationEvent($routeName, $routePrm, $absolute);
