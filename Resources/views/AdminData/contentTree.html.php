@@ -2,7 +2,7 @@
 
 <?php $view['slots']->start('content'); ?>
 	<article>
-		<h1><?php echo $view['nyrodev']->trans('admin.content.viewTitle'); ?></h1>
+		<h1><?php echo $parent->getTitle(); ?></h1>
 		
 		<?php
         $introKeys = [

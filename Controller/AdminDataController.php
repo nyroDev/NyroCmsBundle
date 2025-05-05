@@ -254,6 +254,8 @@ class AdminDataController extends AbstractAdminController
             return $adminForm;
         }
 
+        $adminForm['title'] = $row->getVeryParent()->getTitle();
+
         return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
     }
 
