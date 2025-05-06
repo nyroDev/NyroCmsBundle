@@ -3,7 +3,8 @@ noOptions: No options to edit.
 confirmQuestion: Are you sure?
 confirm: Confirm
 cancel: Cancel
-chooseImage: Choose image...
+inputFile.choose.file: Choose file...
+inputFile.choose.image: Choose image...
 autoplay: Autoplay
 apply: Apply
 

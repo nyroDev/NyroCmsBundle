@@ -23,7 +23,7 @@ template.innerHTML = `
     text-align: center;
 }
 </style>
-<a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="open">Choose image...</a>
+<a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="open">Choose file...</a>
 <div class="images"></div>
 `;
 
@@ -35,7 +35,7 @@ templateImg.innerHTML = `
 </div>
 `;
 
-class NyroComposerInputImage extends HTMLElement {
+class NyroComposerInputFile extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({
@@ -47,13 +47,21 @@ class NyroComposerInputImage extends HTMLElement {
 
         const openBtn = this.shadowRoot.querySelector(".open");
 
-        openBtn.innerHTML = this.composer.trans("chooseImage");
+        openBtn.innerHTML = this.composer.trans("inputFile.choose." + this.fileType);
         openBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            this.composer.selectMedia("image", (imageData) => {
+            this.composer.selectMedia(this.fileType, (imageData) => {
                 this._handleImageData(imageData);
             });
         });
+    }
+
+    get fileType() {
+        return this.getAttribute("file-type") || "file";
+    }
+
+    set fileType(fileType) {
+        this.setAttribute("file-type", fileType);
     }
 
     get composer() {
@@ -160,6 +168,6 @@ class NyroComposerInputImage extends HTMLElement {
     }
 }
 
-window.customElements.define("nyro-composer-input-image", NyroComposerInputImage);
+window.customElements.define("nyro-composer-input-file", NyroComposerInputFile);
 
-export default NyroComposerInputImage;
+export default NyroComposerInputFile;

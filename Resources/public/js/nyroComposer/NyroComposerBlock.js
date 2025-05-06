@@ -96,6 +96,14 @@ class NyroComposerBlock extends HTMLElement {
         return this.hasAttribute("readonly");
     }
 
+    set readonly(readonly) {
+        if (readonly) {
+            this.setAttribute("readonly", "");
+        } else {
+            this.removeAttribute("readonly");
+        }
+    }
+
     connectedCallback() {
         this.setAttribute("name", "content[]");
     }

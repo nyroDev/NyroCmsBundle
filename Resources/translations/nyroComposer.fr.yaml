@@ -4,7 +4,8 @@ confirmQuestion: Êtes-vous sûr ?
 confirm: Confirmer
 cancel: Annuler
 save: Enregistrer
-chooseImage: Choisir une image...
+inputFile.choose.file: Choisir un fichier...
+inputFile.choose.image: Choisir une image...
 autoplay: Lecture automatique
 apply: Appliquer
 

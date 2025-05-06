@@ -81,6 +81,14 @@ class NyroComposerItem extends HTMLElement {
         return this.hasAttribute("readonly");
     }
 
+    set readonly(readonly) {
+        if (readonly) {
+            this.setAttribute("readonly", "");
+        } else {
+            this.removeAttribute("readonly");
+        }
+    }
+
     get value() {
         const value = {
             _type: this.type,
@@ -200,14 +208,16 @@ class NyroComposerItem extends HTMLElement {
             throw key + " element not found with selector " + editableCfg.selector;
         }
 
-        if (editableCfg.dataType === "image") {
+        if (editableCfg.dataType === "file" || editableCfg.dataType === "image") {
             // value is a media JSON here.
-            // We should update width and height, and replace value by URL only
-            if (value.w) {
-                this.setValue("width", value.w);
-            }
-            if (value.h) {
-                this.setValue("height", value.h);
+            if (editableCfg.dataType === "image") {
+                // We should update width and height, and replace value by URL only
+                if (value.w) {
+                    this.setValue("width", value.w);
+                }
+                if (value.h) {
+                    this.setValue("height", value.h);
+                }
             }
             value = value.url;
         } else if (editableCfg.dataType === "videoUrl") {

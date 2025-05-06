@@ -1,4 +1,4 @@
-import NyroComposerInputImage from "./NyroComposerInputImage.js"; // Used in template
+import NyroComposerInputFile from "./NyroComposerInputFile.js"; // Used in template
 import NyroComposerInputVideoUrl from "./NyroComposerInputVideoUrl.js"; // Used in template
 
 const template = document.createElement("template");
@@ -41,6 +41,7 @@ const templateTypes = {
     boolean: document.createElement("template"),
     select: document.createElement("template"),
     image: document.createElement("template"),
+    file: document.createElement("template"),
     images: document.createElement("template"),
     videoUrl: document.createElement("template"),
 };
@@ -69,11 +70,15 @@ templateTypes.select.innerHTML = `
 `;
 
 templateTypes.image.innerHTML = `
-    <nyro-composer-input-image class="input" exportparts="${exportParts}"></nyro-composer-input-image>
+    <nyro-composer-input-file file-type="image" class="input" exportparts="${exportParts}"></nyro-composer-input-file>
 `;
 
 templateTypes.images.innerHTML = `
-    <nyro-composer-input-image multiple class="input" exportparts="${exportParts}"></nyro-composer-input-image>
+    <nyro-composer-input-file file-type="image" multiple class="input" exportparts="${exportParts}"></nyro-composer-input-file>
+`;
+
+templateTypes.file.innerHTML = `
+    <nyro-composer-input-file class="input" exportparts="${exportParts}"></nyro-composer-input-file>
 `;
 
 templateTypes.videoUrl.innerHTML = `
