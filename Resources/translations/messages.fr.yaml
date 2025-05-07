@@ -109,6 +109,8 @@ admin:
         title: Vidéo
       separator:
         title: Séparateur
+      spacer:
+        title: Espaceur
       handler:
         title: Module
     default:

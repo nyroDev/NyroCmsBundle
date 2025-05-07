@@ -109,6 +109,8 @@ admin:
         title: Video
       separator:
         title: Separator
+      spacer:
+        title: Spacer
       handler:
         title: Handler
     default:

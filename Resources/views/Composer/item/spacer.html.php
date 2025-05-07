@@ -1,0 +1,1 @@
+<hr class="nyroHr separator_transparent <?php echo 'spacer_space_'.$space; ?>" />

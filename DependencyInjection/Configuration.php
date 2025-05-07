@@ -25,28 +25,34 @@ class Configuration implements ConfigurationInterface
             ComposerService::BLOCK_FULL => [
                 'template' => '@NyroDevNyroCms/Composer/block/full.html.php',
                 'nb_containers' => 1,
+                'addable' => true,
             ],
             'two' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two.html.php',
                 'nb_containers' => 2,
+                'addable' => true,
             ],
             'two_2_1' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two_2_1.html.php',
                 'nb_containers' => 2,
+                'addable' => true,
             ],
             'two_1_2' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two_1_2.html.php',
                 'nb_containers' => 2,
+                'addable' => true,
             ],
             'three' => [
                 'template' => '@NyroDevNyroCms/Composer/block/three.html.php',
                 'nb_containers' => 3,
+                'addable' => true,
             ],
         ];
 
         $defaultItems = [
             'title' => [
                 'template' => '@NyroDevNyroCms/Composer/item/title.html.php',
+                'addable' => true,
                 'editables' => [
                     'title' => [
                         'selector' => 'h1',
@@ -59,6 +65,7 @@ class Configuration implements ConfigurationInterface
             ],
             'text' => [
                 'template' => '@NyroDevNyroCms/Composer/item/text.html.php',
+                'addable' => true,
                 'editables' => [
                     'text' => [
                         'selector' => 'div',
@@ -71,6 +78,7 @@ class Configuration implements ConfigurationInterface
             ],
             'image' => [
                 'template' => '@NyroDevNyroCms/Composer/item/image.html.php',
+                'addable' => true,
                 'editables' => [
                     'src' => [
                         'selector' => 'img',
@@ -104,6 +112,7 @@ class Configuration implements ConfigurationInterface
             ],
             'slideshow' => [
                 'template' => '@NyroDevNyroCms/Composer/item/slideshow.html.php',
+                'addable' => true,
                 'editables' => [
                     'images' => [
                         'selector' => 'nyro-swiper',
@@ -116,6 +125,7 @@ class Configuration implements ConfigurationInterface
             ],
             'videoEmbed' => [
                 'template' => '@NyroDevNyroCms/Composer/item/videoEmbed.html.php',
+                'addable' => true,
                 'editables' => [
                     'url' => [
                         'selector' => 'iframe',
@@ -142,14 +152,26 @@ class Configuration implements ConfigurationInterface
             ],
             'separator' => [
                 'template' => '@NyroDevNyroCms/Composer/item/separator.html.php',
+                'addable' => true,
                 'editables' => [
-                    'transparent' => [
+                    'space' => [
                         'selector' => 'hr',
                         'type' => ComposerService::EDITABLE_TYPE_CLASS,
-                        'dataType' => ComposerService::EDITABLE_DATATYPE_BOOLEAN,
-                        'default' => false,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataOptions' => [
+                            'small',
+                            'medium',
+                            'big',
+                        ],
+                        'default' => 'small',
                         'auto' => false,
                     ],
+                ],
+            ],
+            'spacer' => [
+                'template' => '@NyroDevNyroCms/Composer/item/spacer.html.php',
+                'addable' => true,
+                'editables' => [
                     'space' => [
                         'selector' => 'hr',
                         'type' => ComposerService::EDITABLE_TYPE_CLASS,
@@ -166,6 +188,7 @@ class Configuration implements ConfigurationInterface
             ],
             ComposerService::ITEM_HANDLER => [
                 'template' => '@NyroDevNyroCms/Composer/item/handler.html.php',
+                'addable' => true,
                 'editables' => [],
             ],
         ];
@@ -288,6 +311,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->stringNode('name')->cannotBeEmpty()->end()
                             ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->booleanNode('addable')->defaultTrue()->end()
                             ->integerNode('nb_containers')->defaultValue(0)->min(0)->end()
                         ->end()
                     ->end()
@@ -314,6 +338,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->stringNode('name')->cannotBeEmpty()->end()
                             ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->booleanNode('addable')->defaultTrue()->end()
                             ->arrayNode('editables')
                             ->performNoDeepMerging()
                                 ->useAttributeAsKey('name')

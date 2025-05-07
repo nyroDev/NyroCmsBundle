@@ -89,6 +89,10 @@ class NyroComposer extends HTMLElement {
         const html = [];
 
         this.getTemplates(type).forEach((template) => {
+            const cfg = JSON.parse(template.dataset.cfg);
+            if (cfg && !cfg.addable) {
+                return;
+            }
             html.push(
                 '<a href="#" class="add_' +
                     type +

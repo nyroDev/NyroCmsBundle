@@ -15,8 +15,12 @@ item.image.src: Image
 item.image.alt: Text alternatif
 item.slideshow.images: Images
 item.videoEmbed.url: URL Vidéo
-item.separator.transparent: Transparent
+
 item.separator.space: Espacement
 item.separator.space_options.small: Petit
 item.separator.space_options.medium: Moyen
 item.separator.space_options.big: Grand
+item.spacer.space: Espacement
+item.spacer.space_options.small: Petit
+item.spacer.space_options.medium: Moyen
+item.spacer.space_options.big: Grand
