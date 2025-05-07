@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use Composer\Autoload\ClassLoader;
+use NyroDev\NyroCmsBundle\Event\CmsFoundClassesEvent;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Handler\Sitemap;
@@ -426,9 +427,36 @@ class NyroCmsService extends NyroDevAbstractService
                 }
             }
             sort($this->foundHandlers);
+
+            $event = new CmsFoundClassesEvent($this->foundHandlers);
+            $this->eventDispatcher->dispatch($event, CmsFoundClassesEvent::HANDLER);
+            $this->foundHandlers = $event->foundClasses;
         }
 
         return $this->foundHandlers;
+    }
+
+    protected ?array $foundComposables = null;
+
+    public function getFoundComposables(): array
+    {
+        if (is_null($this->foundComposables)) {
+            $this->foundComposables = [];
+
+            foreach ($this->getClassesInComposerClassMaps() as $class) {
+                if (strpos($class, '\\Entity\\') && in_array(Composable::class, class_implements($class))) {
+                    $this->foundComposables[] = '\\'.$class;
+                }
+            }
+
+            sort($this->foundComposables);
+
+            $event = new CmsFoundClassesEvent($this->foundComposables);
+            $this->eventDispatcher->dispatch($event, CmsFoundClassesEvent::COMPOSABLE);
+            $this->foundComposables = $event->foundClasses;
+        }
+
+        return $this->foundComposables;
     }
 
     private ?array $classesInComposerClassMaps = null;
@@ -503,7 +531,7 @@ class NyroCmsService extends NyroDevAbstractService
         }
     }
 
-    protected function forwardTo(Request $request, HttpKernelInterface $kernel, Content $content, int $code): Response
+    protected function forwardTo(Request $request, HttpKernelInterface $kernel, Content $content, int $code): ?Response
     {
         $controller = $this->routeLoader->findMatchingController($content);
         if (!$controller) {

@@ -624,8 +624,18 @@ class AdminDataController extends AbstractAdminController
 
     public function templateForm(Request $request, string $action, Template $row): Response
     {
+        $defaultForChoices = [];
+
+        foreach ($this->get(NyroCmsService::class)->getFoundComposables() as $foundComposable) {
+            $defaultForChoices[$this->trans('admin.template.defaultForComposables.'.$foundComposable)] = $foundComposable;
+        }
+
         $themes = $this->get(ComposerService::class)->getDefaultThemes();
         $moreOptions = [
+            'defaultFor' => [
+                'type' => ChoiceType::class,
+                'choices' => $defaultForChoices,
+            ],
             'theme' => [
                 'type' => ChoiceType::class,
                 'choices' => array_flip($themes),
@@ -643,11 +653,12 @@ class AdminDataController extends AbstractAdminController
 
         $fields = array_filter([
             'title',
+            'defaultFor',
             count($themes) > 1 ? 'theme' : null,
             'state',
         ]);
 
-        $adminForm = $this->createAdminForm($request, 'content', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions);
+        $adminForm = $this->createAdminForm($request, 'template', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions);
         if (!is_array($adminForm)) {
             return $adminForm;
         }

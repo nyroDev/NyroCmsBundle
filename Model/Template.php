@@ -19,6 +19,9 @@ abstract class Template implements Composable
     protected ?string $title = null;
 
     #[Gedmo\Versioned]
+    protected ?string $defaultFor = null;
+
+    #[Gedmo\Versioned]
     protected ?string $theme = null;
 
     #[Gedmo\Versioned]
@@ -51,6 +54,18 @@ abstract class Template implements Composable
     public function getTitle(): ?string
     {
         return $this->title;
+    }
+
+    public function setDefaultFor(?string $defaultFor): self
+    {
+        $this->defaultFor = $defaultFor;
+
+        return $this;
+    }
+
+    public function getDefaultFor(): ?string
+    {
+        return $this->defaultFor;
     }
 
     public function setTheme(?string $theme): self

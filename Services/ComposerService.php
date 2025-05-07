@@ -259,7 +259,15 @@ class ComposerService extends AbstractService
             $templates[$tpl->getId()] = $tpl;
         }
 
-        return $templates;
+        $event = new ComposerConfigEvent($row, 'available_templates', $templates);
+        $this->eventDispatcher->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
+
+        return $event->getConfig();
+    }
+
+    public function getTemplateDefaultFor(Composable $row): ?Template
+    {
+        return $this->dbService->getTemplateRepository()->getTemplateDefaultFor($row);
     }
 
     public function getAvailableBlocks(Composable $row): array
@@ -450,7 +458,12 @@ class ComposerService extends AbstractService
         if (!$content || 0 === count($content)) {
             // Handle empty content only on admin
             if ($admin) {
-                $event = new ComposerDefaultBlockEvent($row, []);
+                $content = [];
+                if ($template = $this->getTemplateDefaultFor($row)) {
+                    $content = $template->getContent();
+                }
+
+                $event = new ComposerDefaultBlockEvent($row, $content);
                 $this->eventDispatcher->dispatch($event, ComposerDefaultBlockEvent::COMPOSER_DEFAULT_ADMIN_CONTENT);
 
                 $content = $event->getContent();

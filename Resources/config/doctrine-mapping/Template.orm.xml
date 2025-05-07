@@ -11,6 +11,7 @@
 			</options>
         </id>
 		<field name="title" type="string" nullable="false" />
+		<field name="defaultFor" type="string" nullable="true" />
 		<field name="theme" type="string" nullable="true" />
 		<field name="content" type="json" nullable="true" />
 		<field name="state" type="smallint" nullable="false" />
