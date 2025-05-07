@@ -173,6 +173,11 @@ admin:
     viewTitle: Templates
     id: ID
     title: Titre
+    defaultFor: Par défaut pour
+    defaultForComposables:
+      "\\App\\Entity\\Content": Contenu
+      "\\App\\Entity\\ContentSpec": Contenu spécifique
+      "\\App\\Entity\\Template": Template
     theme: Thème
     state: État
     inserted: Ajouté le

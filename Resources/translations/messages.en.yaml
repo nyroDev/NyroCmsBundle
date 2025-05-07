@@ -172,7 +172,12 @@ admin:
   template:
     viewTitle: Templates
     id: ID
-    title: title
+    title: Title
+    defaultFor: Default for
+    defaultForComposables:
+      "\\App\\Entity\\Content": Content
+      "\\App\\Entity\\ContentSpec": Content Specific
+      "\\App\\Entity\\Template": Template
     theme: Theme
     state: State
     inserted: Added on
