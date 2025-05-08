@@ -5,6 +5,8 @@
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <a href="#" class="btn navPrev" slot="nav" aria-label="prev">prev</a>
-    <a href="#" class="btn navNext" slot="nav" aria-label="next">next</a>
+    <?php echo $view->render('@NyroDevNyroCms/Composer/item/_slideshowNav.html.html.php', [
+	    'row' => $row,
+        'images' => $images,
+	]); ?>
 </nyro-swiper>
