@@ -5,7 +5,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php echo $view->render('@NyroDevNyroCms/Composer/item/_slideshowNav.html.html.php', [
+    <?php echo $view->render('@NyroDevNyroCms/Composer/item/_slideshowNav.html.php', [
 	    'row' => $row,
         'images' => $images,
 	]); ?>
