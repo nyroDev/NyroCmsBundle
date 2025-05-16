@@ -73,7 +73,9 @@ foreach ($attrs as $k => $v) {
 				<select id="templateChoose">
 					<option value=""></option>
 					<?php foreach ($availableTemplates as $tpl): ?>
-						<option value="<?php echo $tpl->getId(); ?>"><?php echo $tpl; ?></option>
+						<option value="<?php echo $tpl->getId(); ?>"
+							<?php echo $selectedTemplate == $tpl->getId() ? 'selected' : ''; ?>
+						><?php echo $tpl; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</span>

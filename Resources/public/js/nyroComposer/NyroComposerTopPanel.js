@@ -46,8 +46,31 @@ class NyroComposerTopPanel extends HTMLElement {
         this.addEventListener("change", (e) => {
             if (e.target.id === "templateChoose") {
                 e.preventDefault();
-                this.composer.form.querySelector('input[name="template"]').value = e.target.value;
-                this.composer.form.submit();
+
+                const formData = new FormData(this.composer.form);
+
+                formData.append("template", e.target.value);
+
+                fetch(document.location.href, {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => {
+                        if (response.err) {
+                            this.composer.alert({
+                                content: response.err,
+                            });
+                            return;
+                        }
+                        return response.text();
+                    })
+                    .then((response) => {
+                        if (response) {
+                            this.composer.workspace.innerHTML = response;
+                            this.composer.workspace.initBlocks();
+                        }
+                    });
+
                 return;
             } else if (e.target.id === "themeChoose") {
                 e.preventDefault();

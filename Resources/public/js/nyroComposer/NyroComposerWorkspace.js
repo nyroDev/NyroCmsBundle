@@ -51,6 +51,10 @@ class NyroComposerWorkspace extends HTMLElement {
             animation: 150,
         });
 
+        this.initBlocks();
+    }
+
+    initBlocks() {
         this.querySelectorAll("nyro-composer-block").forEach((element) => {
             element.init();
         });

@@ -115,6 +115,8 @@ class AdminComposerController extends AbstractAdminController
                 }
 
                 $composerService->applyTemplate($availableTemplates[$templateId], $row);
+
+                return new Response($composerService->render($row, true));
             }
 
             $this->get(DbAbstractService::class)->flush();
@@ -139,7 +141,7 @@ class AdminComposerController extends AbstractAdminController
             }
         }
 
-        return $this->render($this->get(ComposerService::class)->composerTemplate($row), [
+        return $this->render($composerService->composerTemplate($row), [
             'type' => $type,
             'id' => $id,
             'composerUrl' => $url,
@@ -147,6 +149,7 @@ class AdminComposerController extends AbstractAdminController
             'lang' => $lang,
             'langs' => $langs,
             'availableTemplates' => $availableTemplates,
+            'selectedTemplate' => $composerService->getSelectedTemplateId($row),
             'availableBlocks' => $availableBlocks,
             'availableItems' => $availableItems,
             'canChangeTheme' => $canChangeTheme,

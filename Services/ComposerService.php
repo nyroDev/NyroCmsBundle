@@ -35,6 +35,8 @@ class ComposerService extends AbstractService
 
     public const READONLY = 'readonly';
 
+    public const TEMPLATE = '_template';
+
     public const EDITABLE_TYPE_SIMPLE_TEXT = 'simpleText';
     public const EDITABLE_TYPE_TEXT = 'text';
     public const EDITABLE_TYPE_CLASS = 'class';
@@ -498,6 +500,10 @@ class ComposerService extends AbstractService
         $html = [];
 
         foreach ($content as $cont) {
+            if (isset($cont[self::TEMPLATE])) {
+                $html[] = '<input type="hidden" data-template="'.$cont[self::TEMPLATE].'" name="content[]" value="{&quot;'.self::TEMPLATE.'&quot;:&quot;'.$cont[self::TEMPLATE].'&quot;}"/>';
+                continue;
+            }
             $html[] = $this->renderBlock($row, $cont['_type'], $cont, $admin);
         }
 
@@ -738,6 +744,18 @@ class ComposerService extends AbstractService
         }
     }
 
+    public function getSelectedTemplateId(Composable $row): ?string
+    {
+        $contents = $row->getContent();
+        foreach ($contents as $content) {
+            if (isset($content[self::TEMPLATE])) {
+                return $content[self::TEMPLATE];
+            }
+        }
+
+        return null;
+    }
+
     public function applyTemplate(Template $template, Composable $row): void
     {
         $rowContents = $row->getContent();
@@ -856,7 +874,10 @@ class ComposerService extends AbstractService
             }
         }
 
-        $this->applyContent($row, $newContents);
+        $this->applyContent($row, [
+            [self::TEMPLATE => $template->getId()],
+            ...$newContents,
+        ]);
     }
 
     private function computeblockItems(array $conts): string
