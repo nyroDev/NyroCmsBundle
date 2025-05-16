@@ -54,6 +54,7 @@ class ComposerService extends AbstractService
     public const EDITABLE_DATATYPE_TEXT = 'text';
     public const EDITABLE_DATATYPE_NUMBER = 'number';
     public const EDITABLE_DATATYPE_BOOLEAN = 'boolean';
+    public const EDITABLE_DATATYPE_RADIO = 'radio';
     public const EDITABLE_DATATYPE_SELECT = 'select';
     public const EDITABLE_DATATYPE_IMAGE = 'image';
     public const EDITABLE_DATATYPE_FILE = 'file';
@@ -65,6 +66,7 @@ class ComposerService extends AbstractService
         self::EDITABLE_DATATYPE_TEXT,
         self::EDITABLE_DATATYPE_NUMBER,
         self::EDITABLE_DATATYPE_BOOLEAN,
+        self::EDITABLE_DATATYPE_RADIO,
         self::EDITABLE_DATATYPE_SELECT,
         self::EDITABLE_DATATYPE_IMAGE,
         self::EDITABLE_DATATYPE_FILE,

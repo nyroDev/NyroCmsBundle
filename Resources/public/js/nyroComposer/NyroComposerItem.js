@@ -130,7 +130,7 @@ class NyroComposerItem extends HTMLElement {
                     }
                     break;
                 case "dom":
-                    if (cfg.dataType === "select") {
+                    if (cfg.dataType === "select" || cfg.dataType === "radio") {
                         value[key] = element.nodeName.toLowerCase();
                     } else if (cfg.dataType === "images") {
                         value[key] = [];
@@ -185,7 +185,7 @@ class NyroComposerItem extends HTMLElement {
                 value: value[key],
             };
 
-            if (cfg.dataType === "select" && cfg.dataOptions) {
+            if ((cfg.dataType === "select" || cfg.dataType === "radio") && cfg.dataOptions) {
                 panelOption.dataOptions = [];
                 cfg.dataOptions.forEach((dataOption) => {
                     panelOption.dataOptions.push({
@@ -254,7 +254,7 @@ class NyroComposerItem extends HTMLElement {
                 }
                 break;
             case "dom":
-                if (editableCfg.dataType === "select") {
+                if (editableCfg.dataType === "select" || editableCfg.dataType === "radio") {
                     if (element.nodeName.toLowerCase() !== value) {
                         const newElement = document.createElement(value);
                         newElement.innerHTML = element.innerHTML;

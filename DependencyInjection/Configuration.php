@@ -57,7 +57,7 @@ class Configuration implements ConfigurationInterface
                     'level' => [
                         'selector' => 'h1, h2, h3, h4, h5, h6',
                         'type' => ComposerService::EDITABLE_TYPE_DOM,
-                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_RADIO,
                         'dataOptions' => [
                             'h1',
                             'h2',
@@ -172,7 +172,7 @@ class Configuration implements ConfigurationInterface
                     'space' => [
                         'selector' => 'hr',
                         'type' => ComposerService::EDITABLE_TYPE_CLASS,
-                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_RADIO,
                         'dataOptions' => [
                             'small',
                             'medium',
@@ -190,7 +190,7 @@ class Configuration implements ConfigurationInterface
                     'space' => [
                         'selector' => 'hr',
                         'type' => ComposerService::EDITABLE_TYPE_CLASS,
-                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_RADIO,
                         'dataOptions' => [
                             'small',
                             'medium',

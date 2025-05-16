@@ -40,6 +40,8 @@ const templateTypes = {
     number: document.createElement("template"),
     boolean: document.createElement("template"),
     select: document.createElement("template"),
+    radio: document.createElement("template"),
+    radioOption: document.createElement("template"),
     image: document.createElement("template"),
     file: document.createElement("template"),
     images: document.createElement("template"),
@@ -67,6 +69,17 @@ templateTypes.boolean.innerHTML = `
 
 templateTypes.select.innerHTML = `
     <select class="input"></select>
+`;
+
+templateTypes.radio.innerHTML = `
+    <div class="inputRadio"></div>
+`;
+
+templateTypes.radioOption.innerHTML = `
+<label>
+    <input type="radio" class="input" />
+    <span></span>
+<label>
 `;
 
 templateTypes.image.innerHTML = `
@@ -103,6 +116,11 @@ class NyroComposerSidePanel extends HTMLElement {
 
             e.preventDefault();
             e.stopImmediatePropagation();
+
+            if (input.type === "radio" && !input.checked) {
+                return;
+            }
+
             if (this._selected) {
                 let value = input.value;
                 if (input.type === "checkbox") {
@@ -167,8 +185,10 @@ class NyroComposerSidePanel extends HTMLElement {
             option.querySelector("label").innerHTML = panelOption.label;
             option.querySelector("label").setAttribute("for", ident);
 
-            input.id = ident;
-            input.dataset.name = panelOption.name;
+            if (input) {
+                input.id = ident;
+                input.dataset.name = panelOption.name;
+            }
 
             if (panelOption.dataType === "select" && panelOption.dataOptions) {
                 const options = [];
@@ -176,20 +196,41 @@ class NyroComposerSidePanel extends HTMLElement {
                     options.push('<option value="' + dataOption.value + '">' + dataOption.name + "</option>");
                 });
                 input.innerHTML = options.join("");
+            } else if (panelOption.dataType === "radio" && panelOption.dataOptions) {
+                const container = inputOuter.querySelector(".inputRadio");
+                panelOption.dataOptions.forEach((dataOption) => {
+                    const optionHtml = templateTypes.radioOption.content.cloneNode(true),
+                        inputRadio = optionHtml.querySelector(".input");
+
+                    inputRadio.name = ident;
+                    inputRadio.value = dataOption.value;
+                    inputRadio.dataset.name = panelOption.name;
+
+                    if (panelOption.value === dataOption.value) {
+                        inputRadio.checked = true;
+                    }
+
+                    inputRadio.id = ident + "_" + dataOption.value;
+                    optionHtml.querySelector("span").innerHTML = dataOption.name;
+
+                    container.appendChild(optionHtml);
+                });
             }
 
             option.querySelector("span").appendChild(inputOuter);
 
             this._form.appendChild(option);
 
-            if (input.type === "checkbox") {
-                input.checked = !!panelOption.value;
-            } else {
-                input.value = panelOption.value;
-            }
+            if (input) {
+                if (input.type === "checkbox") {
+                    input.checked = !!panelOption.value;
+                } else {
+                    input.value = panelOption.value;
+                }
 
-            if (input.init) {
-                input.init();
+                if (input.init) {
+                    input.init();
+                }
             }
         });
     }
