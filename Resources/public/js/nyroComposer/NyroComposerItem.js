@@ -24,6 +24,8 @@ nav {
 <slot></slot>
 `;
 
+const TINYMCE_TYPES = ["simpleText", "text"];
+
 class NyroComposerItem extends HTMLElement {
     constructor() {
         super();
@@ -128,7 +130,9 @@ class NyroComposerItem extends HTMLElement {
                     }
                     break;
                 case "dom":
-                    if (cfg.dataType === "images") {
+                    if (cfg.dataType === "select") {
+                        value[key] = element.nodeName.toLowerCase();
+                    } else if (cfg.dataType === "images") {
                         value[key] = [];
                         element.querySelectorAll("img").forEach((img) => {
                             value[key].push({
@@ -160,7 +164,7 @@ class NyroComposerItem extends HTMLElement {
         if (this.readonly) {
             return;
         }
-        this._configureComposer();
+        this._configureComposer(true);
         this.composer.fillNav(this._nav, ["select", "drag", "delete"]);
     }
 
@@ -250,7 +254,16 @@ class NyroComposerItem extends HTMLElement {
                 }
                 break;
             case "dom":
-                if (editableCfg.dataType === "images") {
+                if (editableCfg.dataType === "select") {
+                    if (element.nodeName.toLowerCase() !== value) {
+                        const newElement = document.createElement(value);
+                        newElement.innerHTML = element.innerHTML;
+                        element.after(newElement);
+                        element.remove();
+
+                        this._configureComposer();
+                    }
+                } else if (editableCfg.dataType === "images") {
                     const exsitingImgs = Array.from(element.querySelectorAll("img"));
                     value.forEach((imgValue, idx) => {
                         if (!exsitingImgs[idx]) {
@@ -295,7 +308,7 @@ class NyroComposerItem extends HTMLElement {
         );
     }
 
-    _configureComposer() {
+    _configureComposer(isInit) {
         let listenInput = false;
         for (const [key, cfg] of Object.entries(this.cfg.editables)) {
             const element = this.querySelector(cfg.selector);
@@ -307,24 +320,21 @@ class NyroComposerItem extends HTMLElement {
                 element.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
             }
 
-            switch (cfg.type) {
-                case "simpleText":
-                case "text":
-                    const tinymceOptions = this.composer.getTinymceOptions(cfg.type === "simpleText");
+            if (TINYMCE_TYPES.includes(cfg.type) && !element.contentEditable != "true") {
+                const tinymceOptions = this.composer.getTinymceOptions(cfg.type === "simpleText");
 
-                    tinymceOptions.setup = (ed) => {
-                        ed.on("change", () => {
-                            this._dispatchChange();
-                        });
-                    };
+                tinymceOptions.setup = (ed) => {
+                    ed.on("change", () => {
+                        this._dispatchChange();
+                    });
+                };
 
-                    jQuery(element).myTinymce(tinymceOptions, this.composer.tinymceUrl);
-                    listenInput = true;
-                    break;
+                jQuery(element).myTinymce(tinymceOptions, this.composer.tinymceUrl);
+                listenInput = true;
             }
         }
 
-        if (listenInput) {
+        if (isInit && listenInput) {
             this.addEventListener("input", () => {
                 this._dispatchChange();
             });

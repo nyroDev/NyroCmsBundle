@@ -1,1 +1,1 @@
-<h1><?php echo $title; ?></h1>
+<<?php echo $level; ?>><?php echo $title; ?></<?php echo $level; ?>>

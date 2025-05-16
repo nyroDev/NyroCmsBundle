@@ -10,6 +10,14 @@ apply: Apply
 
 cannotDeleteBlockWithHandler: You cannot remove a block containing an handler.
 
+item.title.level: Level title
+item.title.level_options.h1: H1
+item.title.level_options.h2: H2
+item.title.level_options.h3: H3
+item.title.level_options.h4: H4
+item.title.level_options.h5: H5
+item.title.level_options.h6: H6
+
 item.image.src: Image
 item.image.alt: Alternative text
 item.slideshow.images: Images

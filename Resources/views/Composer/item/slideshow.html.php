@@ -6,7 +6,7 @@
     <?php endif; ?>
 
     <?php echo $view->render('@NyroDevNyroCms/Composer/item/_slideshowNav.html.php', [
-	    'row' => $row,
+        'row' => $row,
         'images' => $images,
-	]); ?>
+    ]); ?>
 </nyro-swiper>

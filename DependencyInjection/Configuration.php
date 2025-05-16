@@ -54,8 +54,23 @@ class Configuration implements ConfigurationInterface
                 'template' => '@NyroDevNyroCms/Composer/item/title.html.php',
                 'addable' => true,
                 'editables' => [
+                    'level' => [
+                        'selector' => 'h1, h2, h3, h4, h5, h6',
+                        'type' => ComposerService::EDITABLE_TYPE_DOM,
+                        'dataType' => ComposerService::EDITABLE_DATATYPE_SELECT,
+                        'dataOptions' => [
+                            'h1',
+                            'h2',
+                            'h3',
+                            'h4',
+                            'h5',
+                            'h6',
+                        ],
+                        'default' => 'h1',
+                        'auto' => false,
+                    ],
                     'title' => [
-                        'selector' => 'h1',
+                        'selector' => 'h1, h2, h3, h4, h5, h6',
                         'type' => ComposerService::EDITABLE_TYPE_SIMPLE_TEXT,
                         'dataType' => ComposerService::EDITABLE_DATATYPE_TEXT,
                         'default' => null,
