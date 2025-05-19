@@ -24,26 +24,31 @@ class Configuration implements ConfigurationInterface
         $defaultBlocks = [
             ComposerService::BLOCK_FULL => [
                 'template' => '@NyroDevNyroCms/Composer/block/full.html.php',
+                'icon' => 'block_full',
                 'nb_containers' => 1,
                 'addable' => true,
             ],
             'two' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two.html.php',
-                'nb_containers' => 2,
-                'addable' => true,
-            ],
-            'two_2_1' => [
-                'template' => '@NyroDevNyroCms/Composer/block/two_2_1.html.php',
+                'icon' => 'block_two',
                 'nb_containers' => 2,
                 'addable' => true,
             ],
             'two_1_2' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two_1_2.html.php',
+                'icon' => 'block_two_1_2',
+                'nb_containers' => 2,
+                'addable' => true,
+            ],
+            'two_2_1' => [
+                'template' => '@NyroDevNyroCms/Composer/block/two_2_1.html.php',
+                'icon' => 'block_two_2_1',
                 'nb_containers' => 2,
                 'addable' => true,
             ],
             'three' => [
                 'template' => '@NyroDevNyroCms/Composer/block/three.html.php',
+                'icon' => 'block_three',
                 'nb_containers' => 3,
                 'addable' => true,
             ],
@@ -52,6 +57,7 @@ class Configuration implements ConfigurationInterface
         $defaultItems = [
             'title' => [
                 'template' => '@NyroDevNyroCms/Composer/item/title.html.php',
+                'icon' => 'item_title',
                 'addable' => true,
                 'editables' => [
                     'level' => [
@@ -80,6 +86,7 @@ class Configuration implements ConfigurationInterface
             ],
             'text' => [
                 'template' => '@NyroDevNyroCms/Composer/item/text.html.php',
+                'icon' => 'item_text',
                 'addable' => true,
                 'editables' => [
                     'text' => [
@@ -93,6 +100,7 @@ class Configuration implements ConfigurationInterface
             ],
             'image' => [
                 'template' => '@NyroDevNyroCms/Composer/item/image.html.php',
+                'icon' => 'item_image',
                 'addable' => true,
                 'editables' => [
                     'src' => [
@@ -127,6 +135,7 @@ class Configuration implements ConfigurationInterface
             ],
             'slideshow' => [
                 'template' => '@NyroDevNyroCms/Composer/item/slideshow.html.php',
+                'icon' => 'item_slideshow',
                 'addable' => true,
                 'editables' => [
                     'images' => [
@@ -140,6 +149,7 @@ class Configuration implements ConfigurationInterface
             ],
             'videoEmbed' => [
                 'template' => '@NyroDevNyroCms/Composer/item/videoEmbed.html.php',
+                'icon' => 'item_videoEmbed',
                 'addable' => true,
                 'editables' => [
                     'url' => [
@@ -167,6 +177,7 @@ class Configuration implements ConfigurationInterface
             ],
             'separator' => [
                 'template' => '@NyroDevNyroCms/Composer/item/separator.html.php',
+                'icon' => 'item_separator',
                 'addable' => true,
                 'editables' => [
                     'space' => [
@@ -185,6 +196,7 @@ class Configuration implements ConfigurationInterface
             ],
             'spacer' => [
                 'template' => '@NyroDevNyroCms/Composer/item/spacer.html.php',
+                'icon' => 'item_spacer',
                 'addable' => true,
                 'editables' => [
                     'space' => [
@@ -203,6 +215,7 @@ class Configuration implements ConfigurationInterface
             ],
             ComposerService::ITEM_HANDLER => [
                 'template' => '@NyroDevNyroCms/Composer/item/handler.html.php',
+                'icon' => 'item_handler',
                 'addable' => true,
                 'editables' => [],
             ],
@@ -235,11 +248,15 @@ class Configuration implements ConfigurationInterface
                     ['title' => 'admin.composer.tinymce.styleFormats.formats.code', 'icon' => 'code', 'format' => 'code'],
                 ]],
             ],
+            'skin' => 'tinymce-5',
+            'license_key' => 'gpl',
         ];
 
         $defaultTinymceSimple = [
             'toolbar' => 'undo redo',
             'paste_block_drop' => 'true',
+            'skin' => 'tinymce-5',
+            'license_key' => 'gpl',
         ];
 
         $rootNode
@@ -273,6 +290,7 @@ class Configuration implements ConfigurationInterface
                                 ->stringNode('content_handler_config')->defaultValue('ContentHandlerConfig')->end()
                                 ->stringNode('content_handler_config_log')->defaultValue('Log\\ContentHandlerConfigLog')->end()
                                 ->stringNode('content_handler_config_translation')->defaultValue('Translation\\ContentHandlerConfigTranslation')->end()
+                                ->stringNode('template_category')->defaultValue('TemplateCategory')->end()
                                 ->stringNode('template')->defaultValue('Template')->end()
                                 ->stringNode('template_log')->defaultValue('Log\\TemplateLog')->end()
                                 ->stringNode('translation')->defaultValue('Translation')->end()
@@ -326,6 +344,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->stringNode('name')->cannotBeEmpty()->end()
                             ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->stringNode('icon')->isRequired()->end()
                             ->booleanNode('addable')->defaultTrue()->end()
                             ->integerNode('nb_containers')->defaultValue(0)->min(0)->end()
                         ->end()
@@ -353,6 +372,7 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->stringNode('name')->cannotBeEmpty()->end()
                             ->stringNode('template')->isRequired()->cannotBeEmpty()->end()
+                            ->stringNode('icon')->isRequired()->end()
                             ->booleanNode('addable')->defaultTrue()->end()
                             ->arrayNode('editables')
                             ->performNoDeepMerging()

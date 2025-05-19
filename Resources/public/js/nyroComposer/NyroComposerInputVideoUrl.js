@@ -1,32 +1,40 @@
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
-input[type="url"] {
-    font-family: var(--font);
-    font-size: 12px;
-    border-radius: none;
-    border: none;
-    outline: none;
+.inputUrl {
     width: 100%;
     box-sizing: border-box;
-    padding: 2px 4px;
+    font-family: var(--composer-font-family);
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    line-height: 26px;
+    border: 1px solid var(--composer-color-secondary);
+    outline: none;
+    transition: border-color var(--composer-transition-time);
 }
+.inputUrl:focus {
+    border-color: var(--composer-color);
+}
+.autoplayOption {
+    font-size: 12px;
+    margin: 10px 0;
+  }
 .error {
+    margin: 10px 0;
     display: none;
-    color: red;
+    color: var(--composer-color-error);
 }
 .error:not(:empty) {
     display: block;
 }
 </style>
-
-<br />
-<input type="url" required placeholder="https://www.youtube.com/watch?v=KbNiayAk-70" /><br />
+<input type="url" class="inputUrl" required placeholder="https://www.youtube.com/watch?v=KbNiayAk-70" /><br />
 <div class="autoplayOption">
     <input type="checkbox" id="autoplay" value="1" />
-    <label for="autoplay">Autoplay</label>
+    <label for="autoplay">Autoplay when the page is opened</label>
 </div>
-<a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="apply">Apply</a><br />
+<a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="apply">Validate URL</a><br />
 <div class="error"></div>
 `;
 
@@ -43,9 +51,9 @@ class NyroComposerInputVideoUrl extends HTMLElement {
         this._autoplay = this._autoplayOption.querySelector("input");
         this._error = this.shadowRoot.querySelector(".error");
 
-        this._autoplayOption.querySelector("label").innerHTML = this.composer.trans("autoplay");
+        this._autoplayOption.querySelector("label").innerHTML = this.composer.trans("item.videoEmbed.autoplay");
         const applyBtn = this.shadowRoot.querySelector(".apply");
-        applyBtn.innerHTML = this.composer.trans("apply");
+        applyBtn.innerHTML = this.composer.trans("item.videoEmbed.validate");
         applyBtn.addEventListener("click", (e) => {
             e.preventDefault();
             this._fetchUrl();

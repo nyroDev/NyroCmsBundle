@@ -9,6 +9,7 @@ use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\Template;
+use NyroDev\NyroCmsBundle\Model\TemplateCategory;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Model\UserRole;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
@@ -561,6 +562,80 @@ class AdminDataController extends AbstractAdminController
     }
 
     // /////////////////////////////////////////////////////////////
+    // template categories
+
+    public function templateCategoryAction(Request $request): Response
+    {
+        $repo = $this->get(DbAbstractService::class)->getTemplateCategoryRepository();
+
+        $route = 'nyrocms_admin_data_templateCategory';
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
+            array_merge(
+                [
+                    'name' => 'templateCategory',
+                    'route' => $route,
+                    'fields' => [
+                        'id',
+                        'title',
+                    ],
+                ],
+                $this->createList($request, $repo, $route, [], 'title', 'asc')
+            ));
+    }
+
+    public function templateCategoryDeleteAction(string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTemplateCategoryRepository()->find($id);
+        if ($row) {
+            $this->get(DbAbstractService::class)->remove($row);
+            $this->get(DbAbstractService::class)->flush();
+        }
+
+        return $this->redirect($this->generateUrl('nyrocms_admin_data_templateCategory'));
+    }
+
+    public function templateCategoryAddAction(Request $request): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getNew('template_category', false);
+
+        return $this->templateCategoryForm($request, self::ADD, $row);
+    }
+
+    public function templateCategoryEditAction(Request $request, string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTemplateCategoryRepository()->find($id);
+        if (!$row) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->templateCategoryForm($request, self::EDIT, $row);
+    }
+
+    public function templateCategoryForm(Request $request, string $action, TemplateCategory $row): Response
+    {
+        $moreOptions = [
+            'submit' => [
+                'attr' => [
+                    'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_templateCategory'),
+                ],
+            ],
+        ];
+
+        $fields = array_filter([
+            'title',
+            $this->get(AdminService::class)->isDeveloper() ? 'icon' : false,
+        ]);
+
+        $adminForm = $this->createAdminForm($request, 'templateCategory', $action, $row, $fields, 'nyrocms_admin_data_templateCategory', [], null, null, null, $moreOptions);
+        if (!is_array($adminForm)) {
+            return $adminForm;
+        }
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
+    }
+
+    // /////////////////////////////////////////////////////////////
     // templates
 
     public function templateAction(Request $request): Response
@@ -576,6 +651,7 @@ class AdminDataController extends AbstractAdminController
                     'route' => $route,
                     'fields' => [
                         'id',
+                        'templateCategory',
                         'title',
                         'updated',
                     ],
@@ -630,10 +706,23 @@ class AdminDataController extends AbstractAdminController
             $defaultForChoices[$this->trans('admin.template.defaultForComposables.'.$foundComposable)] = $foundComposable;
         }
 
+        $repoTemplateCategory = $this->get(DbAbstractService::class)->getTemplateCategoryRepository();
         $themes = $this->get(ComposerService::class)->getDefaultThemes();
         $moreOptions = [
+            'templateCategory' => [
+                'query_builder' => function ($er) use ($repoTemplateCategory) {
+                    return $repoTemplateCategory->createQueryBuilder('tc')
+                        ->orderBy('tc.title', 'ASC');
+                },
+            ],
             'defaultFor' => [
                 'type' => ChoiceType::class,
+                'choices' => $defaultForChoices,
+            ],
+            'enabledFor' => [
+                'type' => ChoiceType::class,
+                'multiple' => true,
+                'expanded' => true,
                 'choices' => $defaultForChoices,
             ],
             'theme' => [
@@ -652,7 +741,10 @@ class AdminDataController extends AbstractAdminController
         ];
 
         $fields = array_filter([
+            'templateCategory',
             'title',
+            $this->get(AdminService::class)->isDeveloper() ? 'icon' : false,
+            'enabledFor',
             'defaultFor',
             count($themes) > 1 ? 'theme' : null,
             'state',

@@ -747,6 +747,10 @@ class ComposerService extends AbstractService
     public function getSelectedTemplateId(Composable $row): ?string
     {
         $contents = $row->getContent();
+        if (!$contents || !is_array($contents) || 0 === count($contents)) {
+            return null;
+        }
+
         foreach ($contents as $content) {
             if (isset($content[self::TEMPLATE])) {
                 return $content[self::TEMPLATE];

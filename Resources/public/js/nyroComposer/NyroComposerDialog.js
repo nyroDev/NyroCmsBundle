@@ -1,6 +1,9 @@
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
+:host {
+    font-family: var(--composer-font-family);
+}
 dialog {
 	border: none;
 	background: #fff;
@@ -15,11 +18,38 @@ dialog .nyroComposerDialogClose {
 	position: absolute;
 	top: -15px;
 	right: -15px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
 	padding: 0 !important;
 	font-size: 18px !important;
 	text-align: center !important;
-	width: 30px !important;
-	border-radius: 50% !important;
+	width: 26px !important;
+	border-radius: none !important;
+}
+
+dialog .nyroComposerDialogClose .icon {
+    width: 16px;
+    height: 16px;
+}
+
+dialog p {
+    margin: 0 0 var(--composer-panel-space) 0;
+    text-align: center;
+    line-height: 1.5;
+}
+
+:host(.nyroComposerDialogConfirm) p {
+    max-width: 250px;
+}
+
+dialog .actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+dialog .actions a + a {
+    margin-left: var(--composer-panel-space);
 }
 
 :host(.nyroComposerDialogIframe) dialog {
@@ -69,6 +99,7 @@ class NyroComposerDialog extends HTMLElement {
             }
         });
 
+        this._dialog.querySelector(".nyroComposerDialogClose").innerHTML = this.composer.getIcon("close");
         this._dialog.querySelector(".nyroComposerDialogClose").addEventListener("click", (e) => {
             e.preventDefault();
             this._dialog.close();
@@ -109,6 +140,10 @@ class NyroComposerDialog extends HTMLElement {
 
     get noAutoremove() {
         return this.hasAttribute("no-autoremove");
+    }
+
+    get composer() {
+        return document.querySelector("nyro-composer");
     }
 
     open() {

@@ -335,10 +335,10 @@ class AdminService extends NyroDevAbstractService
         }
     }
 
-    public function getIcon(string $name): string
+    public function getIcon(string $name, string $src = 'icons.svg'): string
     {
         return '<svg class="icon icon-'.$name.'">'.
-                    '<use xlink:href="'.$this->getAssetsPackages()->getUrl('bundles/nyrodevnyrocms/images/icons.svg').'#'.$name.'"></use>'.
+                    '<use xlink:href="'.$this->getAssetsPackages()->getUrl('bundles/nyrodevnyrocms/images/'.$src).'#'.$name.'"></use>'.
                 '</svg>';
     }
 }

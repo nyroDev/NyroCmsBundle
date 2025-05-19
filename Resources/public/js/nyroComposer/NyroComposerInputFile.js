@@ -10,17 +10,51 @@ template.innerHTML = `
     justify-content: space-between;
 }
 .image {
+    position: relative;
     width: 48%;
     margin-bottom: 10px;
+    border: 1px solid var(--composer-color-item);
+    box-sizing: border-box;
 }
 .image img {
+    display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 1;
     object-fit: cover;
 }
 .image nav {
-    text-align: center;
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.image nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--composer-action-size);
+    height: var(--composer-action-size);
+    background-color: var(--composer-color-bg-nav);
+    border: 1px solid var(--composer-color-item);
+    text-decoration: none;
+    color: var(--composer-color);
+    transition: color var(--composer-transition-time), background-color var(--composer-transition-time);
+}
+.image nav a:hover {
+    color: var(--composer-color-bg-nav);
+    background-color: var(--composer-color-item);
+}
+.image nav a[data-action="delete"]:hover {
+    background-color: var(--composer-color-error);
+}
+
+.image nav a .icon {
+    width: 16px;
+    height: 16px;
 }
 </style>
 <a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="open">Choose file...</a>
@@ -47,7 +81,7 @@ class NyroComposerInputFile extends HTMLElement {
 
         const openBtn = this.shadowRoot.querySelector(".open");
 
-        openBtn.innerHTML = this.composer.trans("inputFile.choose." + this.fileType);
+        openBtn.innerHTML = this.composer.trans("inputFile.choose." + this.fileType + (this.multiple ? "s" : ""));
         openBtn.addEventListener("click", (e) => {
             e.preventDefault();
             this.composer.selectMedia(this.fileType, (imageData) => {
@@ -81,17 +115,24 @@ class NyroComposerInputFile extends HTMLElement {
         this._imagesCont = this.shadowRoot.querySelector(".images");
 
         this._imagesCont.addEventListener("click", (e) => {
-            const del = e.target.closest(".deleteHandle");
-            if (!del) {
+            const actionable = e.target.closest("[data-action]");
+            if (!actionable) {
                 return;
             }
 
             e.preventDefault();
-
-            this.composer.confirm(() => {
-                del.closest(".image").remove();
-                this._dispatchChange();
-            });
+            if (actionable.dataset.action === "delete") {
+                this.composer.confirm(
+                    () => {
+                        actionable.closest(".image").remove();
+                        this._dispatchChange();
+                    },
+                    false,
+                    {
+                        text: this.composer.trans("inputFile.deleteConfirm." + this.fileType, false),
+                    }
+                );
+            }
         });
 
         this._sortable = Sortable.create(this._imagesCont, {
@@ -136,7 +177,7 @@ class NyroComposerInputFile extends HTMLElement {
         img.width = imgValue.width;
         img.height = imgValue.height;
 
-        this.composer.fillNav(imageCont.querySelector("nav"), ["drag", "delete"]);
+        imageCont.querySelector("nav").appendChild(this.composer.getTemplate("ui", "multipleFilesNav").content.cloneNode(true));
 
         this._imagesCont.appendChild(imageCont);
     }

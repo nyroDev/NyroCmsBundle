@@ -6,18 +6,69 @@ template.innerHTML = `
     display: block;
     padding-top: 25px;
 }
+:host(.composerSelected) {
+    z-index: 1;
+}
+:host(:hover) {
+    z-index: 2;
+}
 nav {
     position: absolute;
-    bottom: 100%;
-    left: 0;
-    right: 0;
-    text-align: center;
+    top: -1px;
+    left: calc(-1 * var(--composer-action-size) - 2px);
+    right: calc(-1 * var(--composer-action-size) - 2px);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;;
     opacity: 0;
     visibility: hidden;
 }
-:host(:hover) nav {
+
+:host(:hover) nav,
+:host(.composerSelected) nav{
     opacity: 1;
     visibility: visible;
+}
+
+nav > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+nav a,
+nav .title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--composer-action-size);
+    height: var(--composer-action-size);
+    background-color: var(--composer-color-bg-nav);
+    border: 1px solid var(--composer-elt-color);
+    text-decoration: none;
+    color: var(--composer-color);
+    transition: color var(--composer-transition-time), background-color var(--composer-transition-time);
+}
+nav a:hover {
+    color: var(--composer-color-bg-nav);
+    background-color: var(--composer-elt-color);
+}
+nav a[data-action="delete"]:hover {
+    background-color: var(--composer-color-error);
+}
+nav a .icon {
+    width: 16px;
+    height: 16px;
+}
+nav .title {
+    color: var(--composer-elt-color);
+    font-family: var(--composer-font-family);
+    font-size: 12px;
+    padding: 5px 0;
+    height: auto;
+    letter-spacing: -0.2em;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
 }
 </style>
 <nav></nav>
@@ -39,29 +90,15 @@ class NyroComposerBlock extends HTMLElement {
 
         this._nav = this.shadowRoot.querySelector("nav");
         this._nav.addEventListener("click", (e) => {
-            const del = e.target.closest(".deleteHandle");
-            if (!del) {
+            const actionable = e.target.closest("[data-action]");
+            if (!actionable) {
                 return;
             }
+
             e.preventDefault();
-
-            if (this.querySelector('nyro-composer-item[type="handler"]')) {
-                this.composer.alert({
-                    content: this.composer.trans("cannotDeleteBlockWithHandler"),
-                });
-                return;
+            if (this["_" + actionable.dataset.action]) {
+                this["_" + actionable.dataset.action]();
             }
-
-            this.composer.confirm(() => {
-                const parent = this.parentElement;
-                this.remove();
-                parent.dispatchEvent(
-                    new Event("change", {
-                        bubbles: true,
-                        cancelable: true,
-                    })
-                );
-            });
         });
 
         this.addEventListener("change", () => {
@@ -78,6 +115,10 @@ class NyroComposerBlock extends HTMLElement {
 
     get composer() {
         return this.closest("nyro-composer");
+    }
+
+    get workspace() {
+        return this.closest("nyro-composer-workspace");
     }
 
     get containers() {
@@ -102,9 +143,11 @@ class NyroComposerBlock extends HTMLElement {
         } else {
             this.removeAttribute("readonly");
         }
+        this._setChildParentReadonly();
     }
 
     connectedCallback() {
+        this.classList.add("composerBlock");
         this.setAttribute("name", "content[]");
     }
 
@@ -113,37 +156,144 @@ class NyroComposerBlock extends HTMLElement {
 
         this.containers.forEach((element) => {
             element.init();
+            if (this.readonly) {
+                element.parentReadonly = true;
+            }
         });
-        const btns = ["select", "drag"];
-        if (!this.readonly) {
-            btns.push("delete");
-        }
-        this.composer.fillNav(this._nav, btns);
+
+        this._nav.appendChild(this.composer.getElementNav(this.composer.getTemplate("block", this.blockType).title));
     }
 
-    getPanelOptions() {
+    _setChildParentReadonly() {
+        this.containers.forEach((container) => {
+            container.parentReadonly = this.readonly;
+        });
+    }
+
+    _edit() {
+        this.select();
+    }
+
+    _duplicate() {
+        const newBlock = this.composer.getNewBlock(this.blockType);
+        this.after(newBlock);
+
+        newBlock.init();
+
         if (this.readonly) {
-            return [];
+            newBlock.readonly = true;
         }
 
-        const typeOptions = [];
-
-        this.composer.getTemplates("block").forEach((blockTemplate) => {
-            typeOptions.push({
-                value: blockTemplate.dataset.id,
-                name: blockTemplate.title,
+        this.containers.forEach((container, idxContainer) => {
+            const newContainer = newBlock.containers[idxContainer];
+            container.items.forEach((item) => {
+                const newItem = this.composer.getNewItem(item.type);
+                newContainer.appendChild(newItem);
+                newItem.init();
+                newItem.setValueFrom(item);
             });
         });
 
-        return [
-            {
-                name: "type",
-                label: "Type",
-                dataType: "select",
-                value: this.blockType,
-                dataOptions: typeOptions,
+        newBlock.select();
+
+        newBlock.dispatchEvent(
+            new Event("change", {
+                bubbles: true,
+                cancelable: true,
+            })
+        );
+    }
+
+    _delete() {
+        if (this.querySelector('nyro-composer-item[type="handler"]')) {
+            this.composer.alert({
+                content: this.composer.trans("cannotDeleteBlockWithHandler"),
+            });
+            return;
+        }
+
+        this.composer.confirm(
+            () => {
+                const parent = this.parentElement;
+                this.remove();
+                parent.dispatchEvent(
+                    new Event("change", {
+                        bubbles: true,
+                        cancelable: true,
+                    })
+                );
             },
-        ];
+            false,
+            {
+                text: this.composer.trans("block.deleteConfirm", false),
+            }
+        );
+    }
+
+    _moveTop() {
+        if (this.workspace) {
+            this.workspace.insertBefore(this, this.workspace.firstChild);
+            this._dispatchChange();
+        }
+    }
+
+    _moveBottom() {
+        if (this.workspace) {
+            this.workspace.appendChild(this);
+            this._dispatchChange();
+        }
+    }
+
+    _moveUp() {
+        if (this.previousElementSibling) {
+            this.parentElement.insertBefore(this, this.previousElementSibling);
+            this._dispatchChange();
+        }
+    }
+
+    _moveDown() {
+        if (this.nextElementSibling) {
+            this.parentElement.insertBefore(this.nextElementSibling, this);
+            this._dispatchChange();
+        }
+    }
+
+    getPanelConfig() {
+        const panelConfig = [];
+
+        panelConfig.push({
+            type: "icon",
+            icon: "block",
+        });
+
+        panelConfig.push({
+            type: "title",
+            title: this.composer.trans("block.title"),
+        });
+
+        if (this.readonly) {
+            panelConfig.push({
+                type: "text",
+                text: this.composer.trans("block.readonly"),
+            });
+
+            return panelConfig;
+        }
+
+        panelConfig.push({
+            type: "text",
+            text: this.composer.trans("block.intro"),
+        });
+
+        panelConfig.push({
+            type: "buttons",
+            name: "type",
+            templateType: "block",
+            active: this.blockType,
+            conditional: this.composer.trans("block.editText"),
+        });
+
+        return panelConfig;
     }
 
     setValue(name, value) {
@@ -185,9 +335,25 @@ class NyroComposerBlock extends HTMLElement {
         );
     }
 
+    selectFirstContainer() {
+        const firstContainer = this.containers[0];
+        if (firstContainer) {
+            firstContainer.select();
+        }
+    }
+
     unselect() {
         this.dispatchEvent(
             new Event("composerUnselect", {
+                bubbles: true,
+                cancelable: true,
+            })
+        );
+    }
+
+    _dispatchChange() {
+        this.dispatchEvent(
+            new Event("change", {
                 bubbles: true,
                 cancelable: true,
             })

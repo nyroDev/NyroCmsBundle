@@ -6,18 +6,67 @@ template.innerHTML = `
     display: block;
     margin-top: 25px;
 }
+:host(.composerSelected) {
+    z-index: 1;
+}
+:host(:hover) {
+    z-index: 2;
+}
 nav {
     position: absolute;
     bottom: 100%;
-    left: 0;
-    right: 0;
-    text-align: center;
+    left: -1px;
+    right: -1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     opacity: 0;
     visibility: hidden;
 }
-:host(:hover) nav {
+nav div {
+    display: flex;
+}
+
+:host(:not([parent-readonly]):hover) nav,
+:host(.composerSelected:not([parent-readonly])) nav {
     opacity: 1;
     visibility: visible;
+}
+
+nav a,
+nav .title {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--composer-action-size);
+    height: var(--composer-action-size);
+    background-color: var(--composer-color-bg-nav);
+    border: 1px solid var(--composer-elt-color);
+    text-decoration: none;
+    color: var(--composer-color);
+    transition: color var(--composer-transition-time), background-color var(--composer-transition-time);
+}
+nav a:hover {
+    color: var(--composer-color-bg-nav);
+    background-color: var(--composer-elt-color);
+}
+nav a[data-action="delete"]:hover {
+    background-color: var(--composer-color-error);
+}
+nav a .icon {
+    width: 16px;
+    height: 16px;
+}
+nav .title {
+    font-family: var(--composer-font-family);
+    color: var(--composer-elt-color);
+    font-size: 12px;
+    padding: 0 5px;
+    width: auto;
+}
+
+nav .actions {
+    flex-direction: row-reverse;
 }
 </style>
 <nav></nav>
@@ -36,23 +85,15 @@ class NyroComposerItem extends HTMLElement {
 
         this._nav = this.shadowRoot.querySelector("nav");
         this._nav.addEventListener("click", (e) => {
-            const del = e.target.closest(".deleteHandle");
-            if (!del) {
+            const actionable = e.target.closest("[data-action]");
+            if (!actionable) {
                 return;
             }
 
             e.preventDefault();
-            this.composer.confirm(() => {
-                const parent = this.parentElement;
-                this.unselect();
-                this.remove();
-                parent.dispatchEvent(
-                    new Event("change", {
-                        bubbles: true,
-                        cancelable: true,
-                    })
-                );
-            });
+            if (this["_" + actionable.dataset.action]) {
+                this["_" + actionable.dataset.action]();
+            }
         });
 
         this.addEventListener("click", (e) => {
@@ -65,6 +106,10 @@ class NyroComposerItem extends HTMLElement {
 
     get composer() {
         return this.closest("nyro-composer");
+    }
+
+    get container() {
+        return this.closest("nyro-composer-container");
     }
 
     get type() {
@@ -88,6 +133,18 @@ class NyroComposerItem extends HTMLElement {
             this.setAttribute("readonly", "");
         } else {
             this.removeAttribute("readonly");
+        }
+    }
+
+    get parentReadonly() {
+        return this.hasAttribute("parent-readonly");
+    }
+
+    set parentReadonly(parentReadonly) {
+        if (parentReadonly) {
+            this.setAttribute("parent-readonly", "");
+        } else {
+            this.removeAttribute("parent-readonly");
         }
     }
 
@@ -156,6 +213,73 @@ class NyroComposerItem extends HTMLElement {
         return value;
     }
 
+    getClone() {
+        const newItem = this.composer.getNewItem(this.type);
+    }
+
+    _edit() {
+        this.select();
+    }
+
+    _duplicate() {
+        const newItem = this.composer.getNewItem(this.type);
+
+        this.after(newItem);
+        newItem.init();
+
+        newItem.setValueFrom(this);
+
+        newItem.select();
+    }
+
+    _delete() {
+        this.composer.confirm(
+            () => {
+                const parent = this.parentElement;
+                this.unselect();
+                this.remove();
+                parent.dispatchEvent(
+                    new Event("change", {
+                        bubbles: true,
+                        cancelable: true,
+                    })
+                );
+            },
+            false,
+            {
+                text: this.composer.trans("item." + this.type + ".deleteConfirm", false),
+            }
+        );
+    }
+
+    _moveTop() {
+        if (this.container) {
+            this.container.insertBefore(this, this.container.firstChild);
+            this._dispatchChange();
+        }
+    }
+
+    _moveBottom() {
+        if (this.container) {
+            this.container.appendChild(this);
+            this._dispatchChange();
+        }
+    }
+
+    _moveUp() {
+        if (this.previousElementSibling) {
+            this.parentElement.insertBefore(this, this.previousElementSibling);
+            this._dispatchChange();
+        }
+    }
+
+    _moveDown() {
+        if (this.nextElementSibling) {
+            this.parentElement.insertBefore(this.nextElementSibling, this);
+            this._dispatchChange();
+        }
+    }
+
     init() {
         if (this._inited) {
             return;
@@ -165,20 +289,48 @@ class NyroComposerItem extends HTMLElement {
             return;
         }
         this._configureComposer(true);
-        this.composer.fillNav(this._nav, ["select", "drag", "delete"]);
+
+        this._nav.appendChild(this.composer.getElementNav(this.composer.getTemplate("item", this.type).title));
     }
 
-    getPanelOptions() {
-        const panelOptions = [],
+    getPanelConfig() {
+        const panelConfig = [],
             value = this.value,
             prefixTrans = "item." + this.type + ".";
+
+        panelConfig.push({
+            type: "icon",
+            icon: this.cfg.icon,
+        });
+        panelConfig.push({
+            type: "title",
+            title: this.composer.getTemplate("item", this.type).title,
+        });
+
+        if (this.readonly) {
+            panelConfig.push({
+                type: "text",
+                text: this.composer.trans("item.readonly"),
+            });
+
+            return panelConfig;
+        }
+
+        const intro = this.composer.trans("item." + this.type + ".intro", false);
+        if (intro) {
+            panelConfig.push({
+                type: "text",
+                text: intro,
+            });
+        }
 
         for (const [key, cfg] of Object.entries(this.cfg.editables)) {
             if (cfg.auto || cfg.type === "text" || cfg.type === "simpleText") {
                 continue;
             }
 
-            const panelOption = {
+            const panelCfg = {
+                type: "input",
                 name: key,
                 label: this.composer.trans(prefixTrans + key, key),
                 dataType: cfg.dataType,
@@ -186,22 +338,35 @@ class NyroComposerItem extends HTMLElement {
             };
 
             if ((cfg.dataType === "select" || cfg.dataType === "radio") && cfg.dataOptions) {
-                panelOption.dataOptions = [];
+                panelCfg.dataOptions = [];
                 cfg.dataOptions.forEach((dataOption) => {
-                    panelOption.dataOptions.push({
+                    panelCfg.dataOptions.push({
                         value: dataOption,
                         name: this.composer.trans(prefixTrans + key + "_options." + dataOption),
                     });
                 });
             }
 
-            panelOptions.push(panelOption);
+            panelConfig.push(panelCfg);
         }
 
-        return panelOptions;
+        return panelConfig;
     }
 
-    setValue(name, value) {
+    setValueFrom(item) {
+        for (const [key, value] of Object.entries(item.value)) {
+            if (key === "_type") {
+                continue;
+            }
+            if (key === "readonly") {
+                this.readonly = value;
+                continue;
+            }
+            this.setValue(key, value, true);
+        }
+    }
+
+    setValue(name, value, direct) {
         const editableCfg = this.cfg.editables[name];
         if (!editableCfg) {
             return;
@@ -212,7 +377,7 @@ class NyroComposerItem extends HTMLElement {
             throw key + " element not found with selector " + editableCfg.selector;
         }
 
-        if (editableCfg.dataType === "file" || editableCfg.dataType === "image") {
+        if (!direct && (editableCfg.dataType === "file" || editableCfg.dataType === "image")) {
             // value is a media JSON here.
             if (editableCfg.dataType === "image") {
                 // We should update width and height, and replace value by URL only
@@ -222,12 +387,20 @@ class NyroComposerItem extends HTMLElement {
                 if (value.h) {
                     this.setValue("height", value.h);
                 }
+                if (this._contentPlaceholder) {
+                    this._contentPlaceholder.remove();
+                    delete this._contentPlaceholder;
+                }
             }
             value = value.url;
-        } else if (editableCfg.dataType === "videoUrl") {
+        } else if (!direct && editableCfg.dataType === "videoUrl") {
             this.setValue("src", value.src);
             if (this.cfg.editables.autoplay) {
                 this.setValue("autoplay", value.autoplay);
+            }
+            if (this._contentPlaceholder) {
+                this._contentPlaceholder.remove();
+                delete this._contentPlaceholder;
             }
             value = value.url;
         }
@@ -284,6 +457,11 @@ class NyroComposerItem extends HTMLElement {
                     for (let idx = value.length; idx < exsitingImgs.length; idx++) {
                         exsitingImgs[idx].remove();
                     }
+
+                    if (this._contentPlaceholder) {
+                        this._contentPlaceholder.remove();
+                        delete this._contentPlaceholder;
+                    }
                 }
                 break;
         }
@@ -316,12 +494,27 @@ class NyroComposerItem extends HTMLElement {
                 throw key + " element not found with selector " + cfg.selector;
             }
 
+            let needContentPlaceholder = false;
             if (cfg.dataType === "image" && !element.getAttribute("src")) {
                 element.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+                needContentPlaceholder = element;
+            } else if (cfg.dataType === "images" && !element.querySelector("img")) {
+                needContentPlaceholder = element;
+            } else if (cfg.dataType === "videoUrl" && !element.getAttribute("src")) {
+                needContentPlaceholder = element.closest(".nyroComposerVideo");
+            }
+
+            if (needContentPlaceholder) {
+                this._contentPlaceholder = document.createElement("div");
+                this._contentPlaceholder.classList.add("nyroComposerContentPlaceholder");
+                this._contentPlaceholder.innerHTML = this.composer.getIcon("item_" + this.type);
+                needContentPlaceholder.before(this._contentPlaceholder);
             }
 
             if (TINYMCE_TYPES.includes(cfg.type) && !element.contentEditable != "true") {
                 const tinymceOptions = this.composer.getTinymceOptions(cfg.type === "simpleText");
+
+                tinymceOptions.toolbar_location = "bottom";
 
                 tinymceOptions.setup = (ed) => {
                     ed.on("change", () => {

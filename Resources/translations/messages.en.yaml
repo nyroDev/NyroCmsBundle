@@ -91,9 +91,9 @@ admin:
       two:
         title: Two columns
       two_2_1:
-        title: Two columns 2/1
+        title: ⅔ + ⅓
       two_1_2:
-        title: Two columns 1/2
+        title: ⅓ + ⅔
       three:
         title: Three columns
     item:
@@ -169,11 +169,22 @@ admin:
     hasAdmin: Administration?
     inserted: Added on
     updated: Updated on
+  templateCategory:
+    viewTitle: Template Categories
+    id: ID
+    title: Title
+    icon: Icon
+    inserted: Added on
+    updated: Updated on
   template:
     viewTitle: Templates
     id: ID
+    templateCategory: Template category
     title: Title
+    icon: Icon
+    custom: Custom
     defaultFor: Default for
+    enabledFor: Enabled for
     defaultForComposables:
       "\\App\\Entity\\Content": Content
       "\\App\\Entity\\ContentSpec": Content Specific

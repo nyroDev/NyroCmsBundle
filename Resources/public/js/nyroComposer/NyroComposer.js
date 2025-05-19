@@ -5,16 +5,12 @@ template.innerHTML = `
 <style>
 :host {
     display: block;
-    padding:
-        calc(var(--composer-panel-top-height) + var(--composer-panel-space))
-        var(--composer-panel-space)
-        var(--composer-panel-space)
-        calc(var(--composer-panel-side-width) + var(--composer-panel-space));
 }
 </style>
 <slot></slot>
 `;
 
+const iconsCache = new Map();
 class NyroComposer extends HTMLElement {
     constructor() {
         super();
@@ -81,46 +77,11 @@ class NyroComposer extends HTMLElement {
         return this.hasAttribute("no-media-change");
     }
 
-    _getAddNavHtml(type) {
-        if (this._navsHtml[type]) {
-            return this._navsHtml[type];
-        }
-
-        const html = [];
-
-        this.getTemplates(type).forEach((template) => {
-            const cfg = JSON.parse(template.dataset.cfg);
-            if (cfg && !cfg.addable) {
-                return;
-            }
-            html.push(
-                '<a href="#" class="add_' +
-                    type +
-                    '" data-type="' +
-                    template.dataset.id +
-                    '" part="nyroComposerBtn nyroComposerBtnUi">' +
-                    template.title +
-                    "</a>"
-            );
-        });
-
-        this._navsHtml[type] = html.join(" ");
-        return this._navsHtml[type];
-    }
-
     getTemplates(type) {
         return this.querySelectorAll("template." + type);
     }
 
-    getAddBlocksNavHtml() {
-        return this._getAddNavHtml("block");
-    }
-
-    getAddItemsNavHtml() {
-        return this._getAddNavHtml("item");
-    }
-
-    _getTemplate(type, id) {
+    getTemplate(type, id) {
         const template = this.querySelector("template." + type + '[data-id="' + CSS.escape(id) + '"]');
         if (!template) {
             throw type + " " + id + " not found.";
@@ -130,11 +91,11 @@ class NyroComposer extends HTMLElement {
     }
 
     getNewBlock(id) {
-        return this._getTemplate("block", id).content.cloneNode(true).querySelector("nyro-composer-block");
+        return this.getTemplate("block", id).content.cloneNode(true).querySelector("nyro-composer-block");
     }
 
     getNewItem(id) {
-        return this._getTemplate("item", id).content.cloneNode(true).querySelector("nyro-composer-item");
+        return this.getTemplate("item", id).content.cloneNode(true).querySelector("nyro-composer-item");
     }
 
     getItemCfg(id) {
@@ -142,7 +103,7 @@ class NyroComposer extends HTMLElement {
             return this._itemCfgs[id];
         }
 
-        const template = this._getTemplate("item", id);
+        const template = this.getTemplate("item", id);
 
         this._itemCfgs[id] = JSON.parse(template.dataset.cfg);
 
@@ -184,10 +145,22 @@ class NyroComposer extends HTMLElement {
         dialog.open();
     }
 
-    confirm(clb, cancelClb) {
+    confirm(clb, cancelClb, options) {
         const dialog = new NyroComposerDialog();
 
-        dialog.setContent(this._getTemplate("ui", "confirm").content.cloneNode(true));
+        dialog.setContent(this.getTemplate("ui", "confirm").content.cloneNode(true));
+
+        if (options && options.text) {
+            dialog.in.querySelector("p").innerHTML = options.text;
+        }
+
+        if (options && options.cancel) {
+            dialog.in.querySelector(".cancel").innerHTML = options.cancel;
+        }
+
+        if (options && options.confirm) {
+            dialog.in.querySelector(".confirm").innerHTML = options.confirm;
+        }
 
         dialog.in.addEventListener("click", (e) => {
             const confirm = e.target.closest(".confirm");
@@ -233,17 +206,36 @@ class NyroComposer extends HTMLElement {
         dialog.open();
     }
 
+    getElementNav(title) {
+        const innerNav = this.getTemplate("ui", "elementNav").content.cloneNode(true);
+        innerNav.querySelector(".title").innerHTML = title;
+
+        return innerNav;
+    }
+
     fillNav(nav, btns) {
         btns.forEach((btn) => {
-            nav.appendChild(this._getTemplate("ui", "btn_" + btn).content.cloneNode(true));
+            nav.appendChild(this.getTemplate("ui", "btn_" + btn).content.cloneNode(true));
         });
     }
 
     trans(id, def) {
-        if (!def) {
+        if (def === undefined) {
             def = id;
         }
         return this._trans[id] ?? def;
+    }
+
+    getIcon(name) {
+        if (iconsCache.has(name)) {
+            return iconsCache.get(name);
+        }
+
+        const icon = this.getTemplate("ui", "icon").innerHTML.replaceAll("IDENT", name);
+
+        iconsCache.set(name, icon);
+
+        return icon;
     }
 }
 

@@ -58,7 +58,7 @@ admin:
           code: Code
     action:
       addBlock: Ajouter
-      template: Template
+      template: Modèle
       confirm: Confirmer
       cancel: Annuler
       save: Enregistrer
@@ -91,9 +91,9 @@ admin:
       two:
         title: Deux colonnes
       two_2_1:
-        title: Deux colonnes 2/1
+        title: ⅔ + ⅓
       two_1_2:
-        title: Deux colonnes 2/1
+        title: ⅓ + ⅔
       three:
         title: Trois colonnes
     item:
@@ -169,15 +169,26 @@ admin:
     hasAdmin: Administration ?
     inserted: Ajouté le
     updated: Mis à jour le
-  template:
-    viewTitle: Templates
+  templateCategory:
+    viewTitle: Catégories de modèles
     id: ID
     title: Titre
+    icon: Icône
+    inserted: Ajouté le
+    updated: Mis à jour le
+  template:
+    viewTitle: Modèles
+    id: ID
+    templateCategory: Catégorie de modèle
+    title: Titre
+    icon: Icône
+    custom: Personnalisé
     defaultFor: Par défaut pour
+    enabledFor: Activé pour
     defaultForComposables:
       "\\App\\Entity\\Content": Contenu
       "\\App\\Entity\\ContentSpec": Contenu spécifique
-      "\\App\\Entity\\Template": Template
+      "\\App\\Entity\\Template": Modèle
     theme: Thème
     state: État
     inserted: Ajouté le

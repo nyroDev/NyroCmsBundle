@@ -8,9 +8,11 @@ template.innerHTML = `
     flex-grow: 1;
 }
 </style>
-<slot></slot>
+<slot name="nav"></slot>
 <span class="flexSpacer"></span>
-<a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="cancel">Cancel</a>
+<slot name="title"></slot>
+<span class="flexSpacer"></span>
+<a href="#" part="nyroComposerBtn nyroComposerBtnCancel" class="cancel">Cancel</a>
 <a href="#" part="nyroComposerBtn nyroComposerBtnDisabled" class="submit">Save</a>
 `;
 

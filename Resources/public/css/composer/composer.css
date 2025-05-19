@@ -1,13 +1,54 @@
-:root {
-    --mainColorHover: var(--secondColor);
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;1,400;1,600&display=swap");
 
-    --composer-panel-bg: #1f2124;
-    --composer-panel-color: #fff;
-    --composer-panel-border-color: #aaa;
+:root {
+    --composer-font: "Poppins", sans-serif;
+    --composer-font-bold-weight: 600;
+
+    --composer-color: #000;
+    --composer-color-secondary: #999999;
+    --composer-color-secondary-text: #e3e3e3;
+
+    --composer-color-highlight: #009ee0;
+
+    --composer-color-light-hover: #f5f7f6;
+
+    --composer-color-error: #e32119;
+    --composer-color-error-text: #fff;
+    --composer-color-alert: #fabb00;
+    --composer-color-alert-text: #000;
+    --composer-color-success: #a2c862;
+    --composer-color-success-text: #000;
+    --composer-color-info: #009ee0;
+    --composer-color-info-text: #fff;
+
+    --composer-color-block: #e2007a;
+    --composer-color-item: #009ee0;
+    --composer-color-svg: var(--composer-color);
+    --composer-color-svg-secondary: var(--composer-color-secondary);
+
+    --composer-size-panel-top-height: 60px;
+    --composer-color-panel-top-bg: #2f5876;
+    --composer-color-panel-top-text: #fff;
+
+    --composer-color-panel-side-bg: #fff;
+    --composer-color-panel-side-text: var(--composer-color);
+    --composer-size-panel-side-width: 250px;
+    --composer-shadow-panel: 0.5px 0.5px 10px 0px rgba(0, 0, 0, 0.25);
+
+    --composer-color-bg-nav: #fff;
+    --composer-color-readonly-alt: #fff;
 
     --composer-panel-space: 15px;
-    --composer-panel-top-height: 60px;
-    --composer-panel-side-width: 250px;
+
+    --composer-action-size: 26px;
+
+    --composer-transition-time: 300ms;
+
+    --svg-secondary-color: var(--composer-color-secondary);
+}
+
+body {
+    accent-color: var(--composer-color-highlight);
 }
 
 nyro-composer > textarea,
@@ -15,25 +56,30 @@ nyro-composer > textarea,
     display: none;
 }
 
+nyro-composer {
+    padding: calc(var(--composer-size-panel-top-height) + var(--composer-panel-space)) calc(var(--composer-panel-space) + var(--composer-action-size))
+        var(--composer-panel-space) calc(var(--composer-size-panel-side-width) + var(--composer-panel-space) + var(--composer-action-size));
+    transition: padding-left var(--composer-transition-time);
+}
+
 nyro-composer-top-panel,
 nyro-composer-side-panel {
     position: fixed;
     left: 0;
     box-sizing: border-box;
-    padding: var(--composer-panel-space);
-    background: var(--composer-panel-bg);
-    color: var(--composer-panel-color);
     z-index: 99999;
 }
 
 nyro-composer-top-panel {
     top: 0;
     right: 0;
-    height: var(--composer-panel-top-height);
+    height: var(--composer-size-panel-top-height);
+    color: var(--composer-color-panel-top-text);
+    background: var(--composer-color-panel-top-bg);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    border-bottom: 1px solid var(--composer-panel-border-color);
+    padding: 0 var(--composer-panel-space);
 }
 
 nyro-composer-top-panel > span {
@@ -48,71 +94,132 @@ nyro-composer-top-panel > span > select {
 
 nyro-composer-side-panel {
     display: block;
-    top: calc(var(--composer-panel-top-height) - 1px);
+    top: var(--composer-size-panel-top-height);
     bottom: 0;
-    width: var(--composer-panel-side-width);
-    border-right: 1px solid var(--composer-panel-border-color);
+    width: var(--composer-size-panel-side-width);
+    color: var(--composer-color-panel-side-text);
+    background: var(--composer-color-panel-side-bg);
+    border-right: 1px solid var(--composer-color-secondary);
+    box-shadow: var(--composer-shadow-panel);
+    transition: transform var(--composer-transition-time);
+}
+
+nyro-composer.sideToggled {
+    padding-left: var(--composer-panel-space);
+}
+
+nyro-composer.sideToggled nyro-composer-side-panel {
+    transform: translate(calc(-1 * var(--composer-size-panel-side-width)), 0);
+    box-shadow: none;
 }
 
 .nyroComposerBtn,
 ::part(nyroComposerBtn) {
     display: inline-block;
     padding: 0 14px;
-    height: 30px;
-    line-height: 30px;
-    color: var(--mainColorText);
-    background: var(--mainColor);
+    height: 26px;
+    line-height: 26px;
+    color: var(--composer-color-info-text);
+    background-color: var(--composer-color-info);
+    border: 1px solid var(--composer-color-info);
     font-size: 14px;
-    font-family: var(--fontFamily);
-    font-weight: 900;
+    font-family: var(--composer-font);
+    font-weight: var(--composer-font-bold-weight);
     float: none;
-    border-radius: 0;
-    text-transform: uppercase;
+    border-radius: 5px;
     text-decoration: none;
-    transition: background 300ms, color 300ms;
-}
-
-.nyroComposerBtnUi,
-::part(nyroComposerBtnUi) {
-    padding: 0 6px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 11px;
-}
-
-.nyroComposerBtn:hover,
-::part(nyroComposerBtn):hover {
-    text-decoration: none;
-    color: var(--mainColorHoverText);
-    background: var(--mainColorHover);
+    transition: background-color var(--composer-transition-time), color var(--composer-transition-time);
 }
 
 .nyroComposerBtn.disabled,
 ::part(nyroComposerBtnDisabled) {
     pointer-events: none;
-    opacity: 0.5;
+    color: var(--composer-color-secondary-text);
+    background-color: var(--composer-color-secondary);
+    border-color: var(--composer-color-secondary);
 }
 
-nyro-composer-item:hover,
-nyro-composer-block:hover {
-    box-shadow: 0 0 0 1px red;
+.nyroComposerBtn:hover,
+::part(nyroComposerBtn):hover {
+    text-decoration: none;
+    color: var(--composer-color-info);
+    background-color: var(--composer-color-info-text);
+    opacity: 1;
 }
 
-nyro-composer-item.composerSelected,
-nyro-composer-block.composerSelected {
-    box-shadow: 0 0 0 1px var(--mainColor);
+.nyroComposerBtnCancel,
+::part(nyroComposerBtnCancel) {
+    font-weight: normal;
+    color: var(--composer-color-info);
+    background-color: var(--composer-color-info-text);
 }
 
-.sortable-chosen {
+.nyroComposerBtnCancel:hover,
+::part(nyroComposerBtnCancel):hover {
+    color: var(--composer-color-info-text);
+    background-color: var(--composer-color-info);
+}
+
+.nyroComposerBtnDelete,
+::part(nyroComposerBtnDelete) {
+    color: var(--composer-color-error-text);
+    border-color: var(--composer-color-error);
+    background-color: var(--composer-color-error);
+}
+
+.nyroComposerBtnDelete:hover,
+::part(nyroComposerBtnDelete):hover {
+    color: var(--composer-color-error);
+    background-color: var(--composer-color-error-text);
+}
+
+nyro-composer-block {
     position: relative;
+    --composer-elt-color: var(--composer-color-block);
 }
-.sortable-chosen:before {
+nyro-composer-item,
+nyro-composer-container {
+    position: relative;
+    --composer-elt-color: var(--composer-color-item);
+}
+
+nyro-composer-block:before,
+nyro-composer-item:before,
+nyro-composer-container:before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    pointer-events: none;
+    z-index: 1;
+    border: 1px solid transparent;
+    transition: border-color var(--composer-transition-time);
+}
+
+nyro-composer-item:not([parent-readonly]):hover:before,
+nyro-composer-block:not([parent-readonly]):hover:before,
+nyro-composer-container:not([parent-readonly]).composerSelected:before {
+    border-color: var(--composer-elt-color);
+}
+
+nyro-composer-item.composerSelected:before,
+nyro-composer-block.composerSelected:before {
+    border-color: var(--composer-elt-color);
+    border-width: 2px;
+}
+
+nyro-composer-container.composerSelected:before {
+    border-style: dotted;
+}
+
+.sortable-chosen.sortable-chosen:after {
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--mainColor);
+    --composer-color-readonly-alt: transparent;
+    --readonly-color: #fff;
+    background-color: var(--composer-elt-color);
     opacity: 0.5;
-    z-index: 1;
+    z-index: 10;
 }
 
 nyro-composer-block[readonly]:after,
@@ -120,11 +227,19 @@ nyro-composer-container[readonly]:after,
 nyro-composer-item[readonly]:after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: repeating-linear-gradient(45deg, #989898, #989898 4px, #fff 4px, #fff 12px);
+    inset: 0;
+    --readonly-color: var(--composer-elt-color);
+    background-image: linear-gradient(
+        45deg,
+        var(--readonly-color) 2.38%,
+        var(--composer-color-readonly-alt) 2.38%,
+        var(--composer-color-readonly-alt) 50%,
+        var(--readonly-color) 50%,
+        var(--readonly-color) 52.38%,
+        var(--composer-color-readonly-alt) 52.38%,
+        var(--composer-color-readonly-alt) 100%
+    );
+    background-size: 29.7px 29.7px;
     opacity: 0.5;
     z-index: 1;
 }
@@ -133,4 +248,18 @@ nyro-composer-block[readonly] nyro-composer-container[readonly]:after,
 nyro-composer-block[readonly] nyro-composer-item[readonly]:after,
 nyro-composer-container[readonly] nyro-composer-item[readonly]:after {
     display: none;
+}
+
+.nyroComposerContentPlaceholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7rem;
+    --s-svg-size: 6rem;
+    background: var(--composer-color-secondary-text);
+    color: var(--composer-color);
+}
+
+.nyroComposerContentPlaceholder + * {
+    display: none !important;
 }

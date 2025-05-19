@@ -1,34 +1,61 @@
 noSelection: Aucune sélection.
-noOptions: Aucun option à éditer.
+noConfig: Rien à éditer.
 confirmQuestion: Êtes-vous sûr ?
-confirm: Confirmer
+delete: Supprimer
 cancel: Annuler
 save: Enregistrer
+
 inputFile.choose.file: Choisir un fichier...
+inputFile.choose.files: Choisir des fichiers...
+inputFile.deleteConfirm.file: "Êtes-vous sûr de vouloir supprimer ce fichier ?"
 inputFile.choose.image: Choisir une image...
-autoplay: Lecture automatique
-apply: Appliquer
+inputFile.choose.images: Choisir des images...
+inputFile.deleteConfirm.image: "Êtes-vous sûr de vouloir supprimer cette image ?"
 
 cannotDeleteBlockWithHandler: Vous ne pouvez pas supprimer un bloc contenant un module.
 
-item.title.level: Niveau de titre
+block.add: Ajouter un bloc
+block.title: Bloc
+block.intro: Pour organiser ou modifier l’apparence de votre bloc, veuillez ajouter, compléter ou déplacer au moins un contenu.
+block.readonly: Ce bloc est en lecture seule. Vous ne pouvez pas le modifier.
+block.editText: Pour appliquer une autre structure de colonnes à ce bloc, cliquez sur <a href="#">ce lien</a>.
+block.deleteConfirm: "Êtes-vous sûr de vouloir supprimer ce bloc et tout son contenu ?"
+
+item.add: Ajouter un contenu
+item.readonly: Ce contenu est en lecture seule. Vous ne pouvez pas le modifier.
+
+item.title.level: Sélectionnez le niveau hiérarchique du titre
 item.title.level_options.h1: H1
 item.title.level_options.h2: H2
 item.title.level_options.h3: H3
 item.title.level_options.h4: H4
 item.title.level_options.h5: H5
 item.title.level_options.h6: H6
+item.title.deleteConfirm: "Êtes-vous sûr de vouloir supprimer ce titre ?"
 
-item.image.src: Image
-item.image.alt: Text alternatif
-item.slideshow.images: Images
-item.videoEmbed.url: URL Vidéo
+item.text.intro: Pour modifier son apparence, utilisez le menu apparu en haut du texte.
+item.text.deleteConfirm: "Êtes-vous sûr de vouloir supprimer ce texte ?"
+
+item.image.src: Sélectionnez une image
+item.image.alt: Saisissez ici le texte alternatif
+item.image.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette image ?"
+
+item.slideshow.images: Sélectionnez des images
+item.slideshow.deleteConfirm: "Êtes-vous sûr de vouloir supprimer ce diaporama ?"
+
+item.videoEmbed.url: Pour intégrer une vidéo, saisissez son URL dans ce champ
+item.videoEmbed.autoplay: Lancer la lecture automatique à l’ouverture de la page
+item.videoEmbed.validate: Valider l’URL
+item.videoEmbed.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette vidéo ?"
 
 item.separator.space: Espacement
 item.separator.space_options.small: Petit
 item.separator.space_options.medium: Moyen
 item.separator.space_options.big: Grand
+item.separator.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cet séparateur ?"
+
 item.spacer.space: Espacement
 item.spacer.space_options.small: Petit
 item.spacer.space_options.medium: Moyen
 item.spacer.space_options.big: Grand
+item.spacer.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cet espaceur ?"

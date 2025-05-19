@@ -4,22 +4,36 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
+use JsonSerializable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class Template implements Composable
+abstract class Template implements Composable, JsonSerializable
 {
     public const STATE_DISABLED = 0;
     public const STATE_ACTIVE = 1;
 
     protected $id;
 
+    #[Gedmo\Versioned]
+    protected ?TemplateCategory $templateCategory = null;
+
     #[Assert\NotBlank]
     #[Gedmo\Versioned]
     protected ?string $title = null;
 
     #[Gedmo\Versioned]
+    protected ?string $icon = null;
+
+    #[Gedmo\Versioned]
+    protected ?bool $custom = null;
+
+    #[Gedmo\Versioned]
     protected ?string $defaultFor = null;
+
+    #[Assert\NotBlank]
+    #[Gedmo\Versioned]
+    protected array $enabledFor = [];
 
     #[Gedmo\Versioned]
     protected ?string $theme = null;
@@ -44,6 +58,18 @@ abstract class Template implements Composable
         return $this->id;
     }
 
+    public function setTemplateCategory(?TemplateCategory $templateCategory): self
+    {
+        $this->templateCategory = $templateCategory;
+
+        return $this;
+    }
+
+    public function getTemplateCategory(): ?TemplateCategory
+    {
+        return $this->templateCategory;
+    }
+
     public function setTitle(?string $title): self
     {
         $this->title = $title;
@@ -56,6 +82,30 @@ abstract class Template implements Composable
         return $this->title;
     }
 
+    public function setIcon(?string $icon): self
+    {
+        $this->icon = $icon;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setCustom(?bool $custom): self
+    {
+        $this->custom = $custom;
+
+        return $this;
+    }
+
+    public function getCustom(): ?bool
+    {
+        return $this->custom;
+    }
+
     public function setDefaultFor(?string $defaultFor): self
     {
         $this->defaultFor = $defaultFor;
@@ -66,6 +116,18 @@ abstract class Template implements Composable
     public function getDefaultFor(): ?string
     {
         return $this->defaultFor;
+    }
+
+    public function getEnabledFor(): array
+    {
+        return $this->enabledFor;
+    }
+
+    public function setEnabledFor(array $enabledFor): self
+    {
+        $this->enabledFor = $enabledFor;
+
+        return $this;
     }
 
     public function setTheme(?string $theme): self
@@ -148,5 +210,17 @@ abstract class Template implements Composable
     public function getParent(): mixed
     {
         return false;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'category' => $this->getTemplateCategory(),
+            'title' => $this->getTitle(),
+            'icon' => $this->getIcon(),
+            'custom' => $this->getCustom(),
+            'theme' => $this->getTheme(),
+        ];
     }
 }

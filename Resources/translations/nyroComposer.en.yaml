@@ -1,33 +1,60 @@
 noSelection: No selection.
-noOptions: No options to edit.
+noConfig: Nothing to edit.
 confirmQuestion: Are you sure?
-confirm: Confirm
+delete: Delete
 cancel: Cancel
+
 inputFile.choose.file: Choose file...
+inputFile.choose.files: Choose files...
+inputFile.deleteConfirm.file: "Are you sure you want to delete this file?"
 inputFile.choose.image: Choose image...
-autoplay: Autoplay
-apply: Apply
+inputFile.choose.images: Choose images...
+inputFile.deleteConfirm.image: "Are you sure you want to delete this image?"
 
 cannotDeleteBlockWithHandler: You cannot remove a block containing an handler.
 
-item.title.level: Level title
+block.add: Add a block
+block.title: Block
+block.intro: To organize or edit the appearance of your block, please add, complete, or move at least one content.
+block.readonly: This block is read-only. You cannot edit it.
+block.editText: To apply a different column structure to this block, click on <a href="#">this link</a>.
+block.deleteConfirm: "Are you sure you want to delete this block and all its contents?"
+
+item.add: Add content
+item.readonly: This content is read-only. You cannot edit it.
+
+item.title.level: Select the hierarchical level of the title
 item.title.level_options.h1: H1
 item.title.level_options.h2: H2
 item.title.level_options.h3: H3
 item.title.level_options.h4: H4
 item.title.level_options.h5: H5
 item.title.level_options.h6: H6
+item.title.deleteConfirm: "Are you sure you want to delete this title?"
 
-item.image.src: Image
-item.image.alt: Alternative text
-item.slideshow.images: Images
-item.videoEmbed.url: Video URL
+item.text.intro: To modify its appearance, use the menu that appears at the top of the text.
+item.text.deleteConfirm: "Are you sure you want to delete this text?"
+
+item.image.src: Select an image
+item.image.alt: Enter the alternative text here
+item.image.deleteConfirm: "Are you sure you want to delete this image?"
+
+item.slideshow.images: Sélectionner une image
+item.slideshow.deleteConfirm: "Are you sure you want to delete this slideshow?"
+
+item.videoEmbed.url: To embed a video, enter its URL in this field
+item.videoEmbed.autoplay: Autoplay when the page is opened
+item.videoEmbed.validate: Validate URL
+item.videoEmbed.deleteConfirm: "Are you sure you want to delete this video?"
 
 item.separator.space: Space
 item.separator.space_options.small: Small
 item.separator.space_options.medium: Medium
 item.separator.space_options.big: Big
+item.separator.deleteConfirm: "Are you sure you want to delete this separator?"
+
 item.spacer.space: Space
 item.spacer.space_options.small: Small
 item.spacer.space_options.medium: Medium
 item.spacer.space_options.big: Big
+item.spacer.deleteConfirm: "Are you sure you want to delete this spacer?"

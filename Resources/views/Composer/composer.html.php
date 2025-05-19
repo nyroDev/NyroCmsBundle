@@ -23,7 +23,6 @@ $attrs = array_merge(
         'data-tinymceurl' => $view['assets']->getUrl('tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),
-        $prefixTinymce.'skin' => 'tinymce-5',
         $prefixTinymce.'promotion' => 'false',
         $prefixTinymce.'branding' => 'false',
         $prefixTinymce.'license_key' => 'gpl',
@@ -43,6 +42,10 @@ if (!$canChangeStructure) {
 }
 if (!$canChangeMedia) {
     $attrs['no-media-change'] = true;
+}
+
+if ($availableTemplates) {
+    $attrs['data-available-templates'] = json_encode($availableTemplates);
 }
 
 $attrsHtml = null;
@@ -67,22 +70,8 @@ foreach ($attrs as $k => $v) {
 	<nyro-composer-top-panel
 		cancel-url="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>"
 	>
-		<?php if (count($availableTemplates)): ?>
-			<span>
-				<label for="templateChoose"><?php echo $view['nyrodev']->trans('admin.composer.action.template'); ?></label>
-				<select id="templateChoose">
-					<option value=""></option>
-					<?php foreach ($availableTemplates as $tpl): ?>
-						<option value="<?php echo $tpl->getId(); ?>"
-							<?php echo $selectedTemplate == $tpl->getId() ? 'selected' : ''; ?>
-						><?php echo $tpl; ?></option>
-					<?php endforeach; ?>
-				</select>
-			</span>
-		<?php endif; ?>
-
-		<?php if ($canChangeTheme && count($themes) > 1): ?>
-			<span>
+		<?php if ($canChangeTheme && count($themes) > 1): // @todo need implement and integration?>
+			<span slot="nav">
 				<label for="themeChoose"><?php echo $view['nyrodev']->trans('admin.content.themeSelectInput'); ?></label>
 				<select id="themeChoose" name="theme">
 					<?php if ($row->getParent()): ?>
@@ -120,8 +109,8 @@ foreach ($attrs as $k => $v) {
 				</nav>
 			</nav>
 		<?php endif; ?>
-		<?php if ($canChangeLang && count($langs) > 0): ?>
-			<span>
+		<?php if ($canChangeLang && count($langs) > 0):  // @todo need implement and integration?>
+			<span slot="nav">
 				<label for="langSwitch"><?php echo $view['nyrodev']->trans('admin.content.lang'); ?></label>
 				<select id="langSwitch" class="nyroComposerSelectAutoLocation">
 					<?php foreach ($langs as $lg => $lang): ?>
@@ -133,6 +122,8 @@ foreach ($attrs as $k => $v) {
 				</select>
 			</span>
 		<?php endif; ?>
+
+		<span slot="title"><?php echo $row; ?></span>
 	</nyro-composer-top-panel>
 
 	<nyro-composer-side-panel></nyro-composer-side-panel>

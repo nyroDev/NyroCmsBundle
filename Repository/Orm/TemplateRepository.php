@@ -12,47 +12,70 @@ class TemplateRepository extends EntityRepository implements TemplateRepositoryI
 {
     public function getAvailableTemplatesFor(Composable $row): array
     {
-        return $this->createQueryBuilder('t')
+        if ($row instanceof Template) {
+            // No filter for Template
+            return $this->createQueryBuilder('t')
                         ->andWhere('t.state = :state')
                             ->setParameter('state', Template::STATE_ACTIVE)
                         ->andWhere('t.content IS NOT NULL')
                         ->addOrderBy('t.title', 'asc')
                         ->getQuery()
                         ->execute();
-    }
+        }
 
-    public function getTemplateDefaultFor(Composable $row): ?Template
-    {
-        $searchPrefix = str_replace('\\', '\\\\', '\\'.get_class($row).'%');
+        $search = '%'.str_replace('\\', '\\\\', '\\'.get_class($row).'%');
 
         $templates = $this->createQueryBuilder('t')
                         ->andWhere('t.state = :state')
                             ->setParameter('state', Template::STATE_ACTIVE)
                         ->andWhere('t.content IS NOT NULL')
-                        ->andWhere('t.defaultFor LIKE :searchPrefix')
-                            ->setParameter('searchPrefix', $searchPrefix)
+                        ->andWhere('t.enabledFor LIKE :search')
+                            ->setParameter('search', $search)
+                        ->addOrderBy('t.title', 'asc')
                         ->getQuery()
-                        ->getResult();
+                        ->execute();
 
-        $propertyAccess = PropertyAccess::createPropertyAccessor();
-        $matchingTemplate = null;
-        foreach ($templates as $template) {
-            $tmp = explode('::', $template->getDefaultFor());
-            if (isset($tmp[1])) {
-                $fieldFilter = explode('=', $tmp[1]);
-                if ($propertyAccess->getValue($row, $fieldFilter[0]) !== $fieldFilter[1]) {
-                    continue;
+        return array_filter($templates, function (Template $template) use ($row) {
+            foreach ($template->getEnabledFor() as $enabledFor) {
+                if ($this->isMatchingFor($row, $enabledFor)) {
+                    return true;
                 }
             }
 
-            if (
-                !$matchingTemplate
-                || strlen($matchingTemplate->getDefaultFor()) <= strlen($template->getDefaultFor())
-            ) {
-                $matchingTemplate = $template;
+            return false;
+        });
+    }
+
+    public function getTemplateDefaultFor(Composable $row): ?Template
+    {
+        $availableTemplates = $this->getAvailableTemplatesFor($row);
+
+        foreach ($availableTemplates as $template) {
+            if ($template->getDefaultFor() && $this->isMatchingFor($row, $template->getDefaultFor())) {
+                return $template;
             }
         }
 
-        return $matchingTemplate;
+        return null;
+    }
+
+    private function isMatchingFor(Composable $row, string $matchingFor): bool
+    {
+        $class = '\\'.get_class($row);
+
+        $tmp = explode('::', $matchingFor);
+
+        if ($tmp[0] !== $class) {
+            return false;
+        }
+
+        if (!isset($tmp[1])) {
+            return true;
+        }
+
+        $fieldFilter = explode('=', $tmp[1]);
+        $propertyAccess = PropertyAccess::createPropertyAccessor();
+
+        return $propertyAccess->getValue($row, $fieldFilter[0]) === $fieldFilter[1];
     }
 }

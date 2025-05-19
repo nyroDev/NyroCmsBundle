@@ -114,6 +114,26 @@ nyrocms_admin_data_contentHandler:
         page: \d+
 
 
+nyrocms_admin_data_templateCategory_add:
+    path:  /templateCategory/add
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::templateCategoryAddAction }
+nyrocms_admin_data_templateCategory_edit:
+    path:  /templateCategory/edit/{id}
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::templateCategoryEditAction }
+    requirements:
+        id: \d+
+nyrocms_admin_data_templateCategory_delete:
+    path:  /templateCategory/delete/{id}
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::templateCategoryDeleteAction }
+    requirements:
+        id: \d+
+nyrocms_admin_data_templateCategory:
+    path:  /templateCategory
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::templateCategoryAction }
+    requirements:
+        page: \d+
+
+
 nyrocms_admin_data_template_add:
     path:  /template/add
     defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::templateAddAction }
