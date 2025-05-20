@@ -107,6 +107,8 @@ admin:
         title: Galerie
       videoEmbed:
         title: Vidéo
+      iframe:
+        title: Iframe
       separator:
         title: Séparateur
       spacer:

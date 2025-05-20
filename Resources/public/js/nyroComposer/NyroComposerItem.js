@@ -186,6 +186,9 @@ class NyroComposerItem extends HTMLElement {
                         }
                     }
                     break;
+                case "style":
+                    value[key] = element.style[key];
+                    break;
                 case "dom":
                     if (cfg.dataType === "select" || cfg.dataType === "radio") {
                         value[key] = element.nodeName.toLowerCase();
@@ -393,10 +396,13 @@ class NyroComposerItem extends HTMLElement {
                 }
             }
             value = value.url;
-        } else if (!direct && editableCfg.dataType === "videoUrl") {
+        } else if (!direct && (editableCfg.dataType === "videoUrl" || editableCfg.dataType === "iframeUrl")) {
             this.setValue("src", value.src);
             if (this.cfg.editables.autoplay) {
                 this.setValue("autoplay", value.autoplay);
+            }
+            if (value.data && value.data.width && value.data.height) {
+                this.setValue("aspectRatio", value.data.width + "/" + value.data.height);
             }
             if (this._contentPlaceholder) {
                 this._contentPlaceholder.remove();
@@ -425,6 +431,9 @@ class NyroComposerItem extends HTMLElement {
                         element.classList.toggle(prefixClass + "_" + dataOption, value === dataOption);
                     });
                 }
+                break;
+            case "style":
+                element.style[name] = value;
                 break;
             case "dom":
                 if (editableCfg.dataType === "select" || editableCfg.dataType === "radio") {
@@ -500,8 +509,8 @@ class NyroComposerItem extends HTMLElement {
                 needContentPlaceholder = element;
             } else if (cfg.dataType === "images" && !element.querySelector("img")) {
                 needContentPlaceholder = element;
-            } else if (cfg.dataType === "videoUrl" && !element.getAttribute("src")) {
-                needContentPlaceholder = element.closest(".nyroComposerVideo");
+            } else if ((cfg.dataType === "videoUrl" || cfg.dataType === "iframeUrl") && !element.getAttribute("src")) {
+                needContentPlaceholder = element;
             }
 
             if (needContentPlaceholder) {
@@ -514,7 +523,13 @@ class NyroComposerItem extends HTMLElement {
             if (TINYMCE_TYPES.includes(cfg.type) && !element.contentEditable != "true") {
                 const tinymceOptions = this.composer.getTinymceOptions(cfg.type === "simpleText");
 
-                tinymceOptions.toolbar_location = "bottom";
+                if (cfg.type === "text") {
+                    const cont = document.createElement("div");
+                    cont.classList.add("nyroComposerTinymce");
+                    this.insertBefore(cont, this.firstChild);
+
+                    tinymceOptions.fixed_toolbar_container_target = cont;
+                }
 
                 tinymceOptions.setup = (ed) => {
                     ed.on("change", () => {

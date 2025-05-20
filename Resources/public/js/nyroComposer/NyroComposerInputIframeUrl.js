@@ -9,16 +9,13 @@ template.innerHTML = `
     padding: 2px 5px;
     border-radius: 5px;
     line-height: 26px;
+    margin-bottom: 10px;
     border: 1px solid var(--composer-color-secondary);
     outline: none;
     transition: border-color var(--composer-transition-time);
 }
 .inputUrl:focus {
     border-color: var(--composer-color);
-}
-.autoplayOption {
-    font-size: 12px;
-    margin: 10px 0;
 }
 .error {
     margin: 10px 0;
@@ -30,17 +27,13 @@ template.innerHTML = `
 }
 </style>
 <form>
-    <input type="url" name="videoUrl" class="inputUrl" required placeholder="https://www.youtube.com/watch?v=KbNiayAk-70" /><br />
-    <div class="autoplayOption">
-        <input type="checkbox" id="autoplay" name="autoplay" value="1" />
-        <label for="autoplay">Autoplay when the page is opened</label>
-    </div>
+    <input type="url" name="iframeUrl" class="inputUrl" required placeholder="https://www.canva.com/design/DAGoAeyHSBk/FPyJ5FLcXVj3bB4Z4VT6JA/view" /><br />
     <button type="submit" class="apply" part="nyroComposerBtn nyroComposerBtnUi">Validate URL</button><br />
 </form>
 <div class="error"></div>
 `;
 
-class NyroComposerInputVideoUrl extends HTMLElement {
+class NyroComposerInputIframeUrl extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({
@@ -50,11 +43,8 @@ class NyroComposerInputVideoUrl extends HTMLElement {
 
         this._form = this.shadowRoot.querySelector("form");
         this._url = this.shadowRoot.querySelector('input[type="url"]');
-        this._autoplayOption = this.shadowRoot.querySelector(".autoplayOption");
-        this._autoplay = this._autoplayOption.querySelector("input");
         this._error = this.shadowRoot.querySelector(".error");
 
-        this._autoplayOption.querySelector("label").innerHTML = this.composer.trans("item.videoEmbed.autoplay");
         const applyBtn = this.shadowRoot.querySelector(".apply");
         applyBtn.innerHTML = this.composer.trans("item.videoEmbed.validate");
 
@@ -108,18 +98,8 @@ class NyroComposerInputVideoUrl extends HTMLElement {
                 );
             });
     }
-
-    init() {
-        if (this.selected.cfg.editables.autoplay) {
-            if (this.selected.value.autoplay) {
-                this._autoplay.checked = true;
-            }
-        } else {
-            this._autoplayOption.style.display = "none";
-        }
-    }
 }
 
-window.customElements.define("nyro-composer-input-video-url", NyroComposerInputVideoUrl);
+window.customElements.define("nyro-composer-input-iframe-url", NyroComposerInputIframeUrl);
 
-export default NyroComposerInputVideoUrl;
+export default NyroComposerInputIframeUrl;

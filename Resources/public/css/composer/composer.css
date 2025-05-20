@@ -128,6 +128,7 @@ nyro-composer.sideToggled nyro-composer-side-panel {
     float: none;
     border-radius: 5px;
     text-decoration: none;
+    cursor: pointer;
     transition: background-color var(--composer-transition-time), color var(--composer-transition-time);
 }
 
@@ -262,4 +263,15 @@ nyro-composer-container[readonly] nyro-composer-item[readonly]:after {
 
 .nyroComposerContentPlaceholder + * {
     display: none !important;
+}
+
+.nyroComposerTinymce {
+    position: sticky;
+    top: var(--composer-size-panel-top-height);
+    z-index: 15;
+}
+
+nyro-composer-block:has(.tox-dialog-wrap),
+nyro-composer-item:has(.tox-dialog-wrap) {
+    z-index: 999999 !important;
 }

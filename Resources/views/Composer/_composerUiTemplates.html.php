@@ -36,7 +36,7 @@
 
 <template class="ui" data-id="multipleFilesNav">
     <a href="#" class="dragHandle"><?php echo $view['nyrocms_admin']->getIcon('drag', 'composer.svg'); ?></a>
-    <a href="#" data-action="delete"><?php echo $view['nyrocms_admin']->getIcon('close', 'composer.svg'); ?></a>
+    <a href="#" data-action="delete"><?php echo $view['nyrocms_admin']->getIcon('delete', 'composer.svg'); ?></a>
 </template>
 
 <template class="ui" data-id="icon">

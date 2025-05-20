@@ -42,6 +42,7 @@ class ComposerService extends AbstractService
     public const EDITABLE_TYPE_CLASS = 'class';
     public const EDITABLE_TYPE_ATTR = 'attr';
     public const EDITABLE_TYPE_DATA_ATTR = 'dataAttr';
+    public const EDITABLE_TYPE_STYLE = 'style';
     public const EDITABLE_TYPE_DOM = 'dom';
 
     public const EDITABLE_TYPES = [
@@ -50,6 +51,7 @@ class ComposerService extends AbstractService
         self::EDITABLE_TYPE_CLASS,
         self::EDITABLE_TYPE_ATTR,
         self::EDITABLE_TYPE_DATA_ATTR,
+        self::EDITABLE_TYPE_STYLE,
         self::EDITABLE_TYPE_DOM,
     ];
 
@@ -63,6 +65,8 @@ class ComposerService extends AbstractService
     public const EDITABLE_DATATYPE_IMAGES = 'images';
     public const EDITABLE_DATATYPE_VIDEO_URL = 'videoUrl';
     public const EDITABLE_DATATYPE_VIDEO_EMBED = 'videoEmbed';
+    public const EDITABLE_DATATYPE_IFRAME_URL = 'iframeUrl';
+    public const EDITABLE_DATATYPE_IFRAME_EMBED = 'iframeEmbed';
 
     public const EDITABLE_DATATYPES = [
         self::EDITABLE_DATATYPE_TEXT,
@@ -75,6 +79,8 @@ class ComposerService extends AbstractService
         self::EDITABLE_DATATYPE_IMAGES,
         self::EDITABLE_DATATYPE_VIDEO_URL,
         self::EDITABLE_DATATYPE_VIDEO_EMBED,
+        self::EDITABLE_DATATYPE_IFRAME_URL,
+        self::EDITABLE_DATATYPE_IFRAME_EMBED,
     ];
 
     public function __construct(

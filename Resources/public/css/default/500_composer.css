@@ -14,10 +14,9 @@
     margin-bottom: var(--composer_block-vertical-space);
 }
 
-.nyroComposerVideo iframe {
+iframe.nyroComposerIframe {
+    display: block;
     width: 100%;
-    height: 56vw;
-    max-height: 88rem;
 }
 
 .nyroHr {

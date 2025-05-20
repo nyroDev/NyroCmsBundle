@@ -20,18 +20,3 @@
 .composerBlock_three > div {
     width: calc(33.33% - var(--composer-block-gap) / 2);
 }
-
-.nyroComposerVideo {
-    position: relative;
-    padding-top: 56.25%;
-}
-
-.nyroComposerVideo iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-}

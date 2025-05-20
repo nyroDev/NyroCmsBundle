@@ -1,5 +1,6 @@
 import NyroComposerInputFile from "./NyroComposerInputFile.js"; // Used in template
 import NyroComposerInputVideoUrl from "./NyroComposerInputVideoUrl.js"; // Used in template
+import NyroComposerInputIframeUrl from "./NyroComposerInputIframeUrl.js"; // Used in template
 
 const template = document.createElement("template");
 template.innerHTML = `
@@ -244,6 +245,7 @@ const templateInputTypes = {
     file: document.createElement("template"),
     images: document.createElement("template"),
     videoUrl: document.createElement("template"),
+    iframeUrl: document.createElement("template"),
 };
 
 const exportParts =
@@ -294,6 +296,10 @@ templateInputTypes.file.innerHTML = `
 
 templateInputTypes.videoUrl.innerHTML = `
     <nyro-composer-input-video-url class="input" exportparts="${exportParts}"></nyro-composer-input-video-url>
+`;
+
+templateInputTypes.iframeUrl.innerHTML = `
+    <nyro-composer-input-iframe-url class="input" exportparts="${exportParts}"></nyro-composer-input-iframe-url>
 `;
 
 class NyroComposerSidePanel extends HTMLElement {

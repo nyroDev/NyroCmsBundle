@@ -48,6 +48,10 @@ item.videoEmbed.autoplay: Lancer la lecture automatique à l’ouverture de la p
 item.videoEmbed.validate: Valider l’URL
 item.videoEmbed.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette vidéo ?"
 
+item.iframe.url: Pour intégrer une iframe, saisissez son URL dans ce champ
+item.iframe.validate: Valider l’URL
+item.iframe.deleteConfirm: "Êtes-vous sûr de vouloir supprimer cette iframe ?"
+
 item.separator.space: Espacement
 item.separator.space_options.small: Petit
 item.separator.space_options.medium: Moyen

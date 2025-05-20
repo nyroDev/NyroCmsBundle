@@ -47,6 +47,10 @@ item.videoEmbed.autoplay: Autoplay when the page is opened
 item.videoEmbed.validate: Validate URL
 item.videoEmbed.deleteConfirm: "Are you sure you want to delete this video?"
 
+item.iframe.url: To embed an iframe, enter its URL in this field
+item.iframe.validate: Validate URL
+item.iframe.deleteConfirm: "Are you sure you want to delete this iframe?"
+
 item.separator.space: Space
 item.separator.space_options.small: Small
 item.separator.space_options.medium: Medium

@@ -87,6 +87,36 @@ class AdminComposerController extends AbstractAdminController
                         'url' => $url,
                         'src' => $embedUrl,
                         'autoplay' => $autoplay,
+                        'data' => $dataUrl,
+                    ];
+                } else {
+                    $tmp = [];
+                    foreach ($errors as $err) {
+                        $tmp[] = $err->getMessage();
+                    }
+                    $ret['err'] = implode(', ', $tmp);
+                }
+
+                return new JsonResponse($ret);
+            } elseif ($request->request->has('iframeUrl')) {
+                $ret = [];
+
+                $url = $request->request->get('iframeUrl');
+                $constraints = [
+                    new NotBlank(),
+                    new EmbedUrl([
+                        'type' => '',
+                    ]),
+                ];
+                $errors = $this->get('nyrodev_form')->getValidator()->validate($url, $constraints);
+
+                if (0 == count($errors)) {
+                    $dataUrl = $this->get(EmbedService::class)->data($url);
+                    $embedUrl = $dataUrl['urlEmbed'];
+                    $ret = [
+                        'url' => $url,
+                        'src' => $embedUrl,
+                        'data' => $dataUrl,
                     ];
                 } else {
                     $tmp = [];
