@@ -57,6 +57,8 @@ nyro-composer > textarea,
 }
 
 nyro-composer {
+    --composer-ui-margin-top: 25px;
+    --composer-ui-visibility: visible;
     padding: calc(var(--composer-size-panel-top-height) + var(--composer-panel-space)) calc(var(--composer-panel-space) + var(--composer-action-size))
         var(--composer-panel-space) calc(var(--composer-size-panel-side-width) + var(--composer-panel-space) + var(--composer-action-size));
     transition: padding-left var(--composer-transition-time);
@@ -105,6 +107,8 @@ nyro-composer-side-panel {
 }
 
 nyro-composer.sideToggled {
+    --composer-ui-margin-top: 0;
+    --composer-ui-visibility: hidden;
     padding-left: var(--composer-panel-space);
 }
 
@@ -193,6 +197,7 @@ nyro-composer-container:before {
     pointer-events: none;
     z-index: 1;
     border: 1px solid transparent;
+    visibility: var(--composer-ui-visibility);
     transition: border-color var(--composer-transition-time);
 }
 
@@ -241,6 +246,7 @@ nyro-composer-item[readonly]:after {
         var(--composer-color-readonly-alt) 100%
     );
     background-size: 29.7px 29.7px;
+    visibility: var(--composer-ui-visibility);
     opacity: 0.5;
     z-index: 1;
 }

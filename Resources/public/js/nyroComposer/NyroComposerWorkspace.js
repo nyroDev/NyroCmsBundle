@@ -7,7 +7,9 @@ template.innerHTML = `
     display: block;
 }
 nav {
+    display: var(--composer-ui-hidden, block);
     margin-top: var(--composer-panel-space);
+    visibility: var(--composer-ui-visibility);
 }
 nav .add_block {
     display: flex;

@@ -4,7 +4,7 @@ template.innerHTML = `
 :host {
     position: relative;
     display: block;
-    padding-top: 25px;
+    padding-top: var(--composer-ui-margin-top);
 }
 :host(.composerSelected) {
     z-index: 1;
@@ -27,7 +27,7 @@ nav {
 :host(:hover) nav,
 :host(.composerSelected) nav{
     opacity: 1;
-    visibility: visible;
+    visibility: var(--composer-ui-visibility);
 }
 
 nav > div {

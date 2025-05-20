@@ -7,6 +7,9 @@ template.innerHTML = `
     display: block;
     min-height: calc(var(--s-header-padding) * 2);
 }
+nav {
+    display: var(--composer-ui-hidden, block);
+}
 nav .add_item {
     display: flex;
     justify-content: center;

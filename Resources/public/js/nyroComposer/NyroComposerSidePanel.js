@@ -68,7 +68,8 @@ form {
 .iconCont,
 .title,
 .text,
-.buttons {
+.buttons,
+.noSelection {
     text-align: center;
     margin: var(--composer-panel-space);
     color: var(--composer-color);
@@ -91,6 +92,7 @@ form {
     text-align: left;
 }
 
+.noSelection,
 .text.help,
 .buttons.conditional span {
     color: var(--composer-color-secondary);
