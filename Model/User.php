@@ -344,6 +344,11 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         return $this->getFirstname().' '.$this->getLastname().' ('.$this->getEmail().')';
     }
 
+    public function getUsualName()
+    {
+        return $this->getFirstname().' '.$this->getLastname();
+    }
+
     protected function getFileFields(): array
     {
         return [];

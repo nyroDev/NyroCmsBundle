@@ -3,8 +3,10 @@
 namespace NyroDev\NyroCmsBundle\Form\Type;
 
 use NyroDev\NyroCmsBundle\Services\AdminService;
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UserFilterType extends Type\AbstractFilterType
 {
@@ -25,5 +27,14 @@ class UserFilterType extends Type\AbstractFilterType
             ->add('valid', Type\FilterBoolType::class, ['label' => $this->trans('admin.user.valid')])
         ;
         parent::buildForm($builder, $options);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'submitOptions' => [
+                'icon' => NyroCmsService::ICON_PATH.'#filter',
+            ],
+        ]);
     }
 }

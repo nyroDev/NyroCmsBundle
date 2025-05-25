@@ -45,6 +45,11 @@ class AdminController extends NyroDevAbstractController
         return $this->render('@NyroDevNyroCms/Admin/account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
     }
 
+    public function passwordAction(Request $request): Response
+    {
+        return $this->render('@NyroDevNyroCms/Admin/password.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
+    }
+
     public function ccAction(): Response
     {
         $fs = new Filesystem();

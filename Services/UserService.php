@@ -194,7 +194,8 @@ class UserService extends NyroDevAbstractService
             'password' => false,
         ];
 
-        $user = $this->memberService->getUser();
+        $user = $this->memberService->getEntityUser();
+
         $fields = [
             'email',
             'firstname',
@@ -203,18 +204,31 @@ class UserService extends NyroDevAbstractService
 
         $form = $this->formService->getFormFactory()->createNamedBuilder('fields', FormType::class, $user);
         foreach ($fields as $f) {
-            $form->add($f, null, [
+            $options = [
                 'label' => $this->trans('admin.user.'.$f),
-            ]);
+            ];
+            if ('email' === $f) {
+                $options['icon'] = NyroCmsService::ICON_PATH.'#email';
+            }
+            $form->add($f, null, $options);
         }
         $form->add('submit', SubmitType::class, [
             'label' => $this->trans('admin.misc.send'),
+            'icon' => NyroCmsService::ICON_PATH.'#save',
         ]);
 
         $formFields = $form->getForm();
 
+        $passwordOptions = [
+            'wc' => 'nyro-password',
+            'icon' => NyroCmsService::ICON_PATH.'#password',
+            'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#hide').'</span>'.
+                '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#show').'</span>',
+        ];
+
         $formPassword = $this->formService->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
             ->add('curPassword', PasswordType::class, [
+                ...$passwordOptions,
                 'label' => $this->trans('admin.user.curPassword'),
                 'required' => true,
                 'mapped' => false,
@@ -232,15 +246,18 @@ class UserService extends NyroDevAbstractService
                 'required' => true,
                 'type' => PasswordType::class,
                 'first_options' => [
+                    ...$passwordOptions,
                     'label' => $this->trans('admin.user.newPassword'),
                 ],
                 'second_options' => [
+                    ...$passwordOptions,
                     'label' => $this->trans('admin.user.passwordConfirm'),
                 ],
                 'invalid_message' => $this->trans('admin.user.samePassword'),
             ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->trans('admin.misc.send'),
+                'icon' => NyroCmsService::ICON_PATH.'#save',
             ])
             ->getForm();
 

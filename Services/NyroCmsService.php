@@ -34,6 +34,7 @@ class NyroCmsService extends NyroDevAbstractService
 {
     use TwigServiceableTrait;
     use MailerInterfaceServiceableTrait;
+    public const ICON_PATH = 'bundles/nyrodevnyrocms/images/nyroCms.svg';
 
     protected ?NyroCmsLoader $routeLoader = null;
     protected ?TagRendererHelper $tagRendereHelper = null;

@@ -77,7 +77,7 @@ class AdminHandlerContentsController extends AbstractAdminController
                             'routePrm' => $routePrm,
                         ] : false,
                         'composer' => $handler->hasComposer() ? [
-                            'name' => $this->get(AdminService::class)->getIcon('pencil'),
+                            'name' => $this->get(AdminService::class)->getIcon('composer'),
                             '_blank' => true,
                             'route' => 'nyrocms_admin_composer',
                             'routePrm' => [
@@ -175,12 +175,10 @@ class AdminHandlerContentsController extends AbstractAdminController
                 'type' => ChoiceType::class,
                 'choices' => array_flip($this->get(AdminService::class)->getContentSpecStateChoices()),
             ],
-            'validStart' => $this->get(NyroCmsService::class)->getDateFormOptions(),
-            'validEnd' => $this->get(NyroCmsService::class)->getDateFormOptions(),
             'submit' => [
-                'attr' => [
-                    'data-cancelurl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_handler_contents', $routePrm),
-                ],
+                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_handler_contents', $routePrm),
+                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
             ],
         ];
 
@@ -202,7 +200,6 @@ class AdminHandlerContentsController extends AbstractAdminController
         }
 
         if ($handler->useDateSpec()) {
-            $moreOptions['dateSpec'] = $this->get(NyroCmsService::class)->getDateFormOptions();
             if (self::ADD == $action) {
                 $row->setDateSpec(new DateTime());
             }

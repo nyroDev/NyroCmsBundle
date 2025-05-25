@@ -1,0 +1,12 @@
+:root {
+    --s-header-height: 6rem;
+    --s-nav-width: 27rem;
+}
+
+body:has(#adminNav) {
+    padding-left: var(--s-nav-width);
+}
+
+.mobileOnly {
+    display: none !important;
+}

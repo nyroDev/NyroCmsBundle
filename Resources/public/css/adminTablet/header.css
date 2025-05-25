@@ -1,0 +1,10 @@
+header label[for="switch_adminMenu"] {
+    display: none;
+}
+#adminNav {
+    transform: none;
+    border-right: 2px solid var(--c-light-background);
+}
+#adminNav label .icon {
+    top: -0.7rem;
+}

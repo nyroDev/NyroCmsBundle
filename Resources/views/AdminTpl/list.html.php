@@ -2,6 +2,9 @@
 
 <?php $view['slots']->start('content'); ?>
 	<?php $prefix = isset($prefix) && $prefix ? $prefix : 'admin'; ?>
+	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/breadcrumbs.html.php', [
+	    'title' => isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'),
+	]); ?>
 	<article id="<?php echo $name; ?>" class="list">
 		<h1><?php echo isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'); ?></h1>
 		
@@ -14,10 +17,19 @@ if ($intro && $intro != $introKey) {
 ?>
 		
 		<?php if ($filter): ?>
-			<a href="#filter" class="switcher filterSwitcher"><?php echo $view['translator']->trans('admin.misc.filter'); ?></a>
-			<div id="filter">
+			<div class="filter">
+				<input type="checkbox" id="filterSwitch" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
+				<label for="filterSwitch">
+					<?php echo $view['nyrocms_admin']->getIcon('filter'); ?>
+					<?php echo $view['translator']->trans('admin.misc.filters'); ?>
+					<span class="flexSpacer"></span>
+					<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+				</label>
 				<?php echo $view['form']->form($filter); ?>
-				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, ['clearFilter' => 1])); ?>" class="clearFilter"><?php echo $view['translator']->trans('admin.misc.clearFilter'); ?></a>
+				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, ['clearFilter' => 1])); ?>" class="btn btnLight clearFilter">
+					<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+					<span><?php echo $view['translator']->trans('admin.misc.clearFilter'); ?></span>
+				</a>
 			</div>
 		<?php endif; ?>
 		
@@ -25,7 +37,7 @@ if ($intro && $intro != $introKey) {
 			<div class="listButtons">
 				<?php if (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions)): ?>
 					<?php foreach ($moreGlobalActions as $k => $action): ?>
-						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], isset($action['routePrm']) ? $action['routePrm'] : []); ?>" class="button <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
+						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], isset($action['routePrm']) ? $action['routePrm'] : []); ?>" class="btn <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
 							<?php if (isset($action['icon']) && $action['icon']): ?>
 								<?php echo $view['nyrocms_admin']->getIcon($action['icon']); ?>
 							<?php endif; ?>
@@ -34,9 +46,9 @@ if ($intro && $intro != $introKey) {
 					<?php endforeach; ?>
 				<?php endif; ?>
 				<?php if (!isset($noAdd) || !$noAdd): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : []); ?>" class="button add">
+					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : []); ?>" class="btn add">
 						<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
-						<?php echo $view['translator']->trans('admin.misc.add'); ?>
+						<span><?php echo $view['translator']->trans('admin.misc.add'); ?></span>
 					</a>
 				<?php endif; ?>
 			</div>
@@ -73,40 +85,56 @@ if ($intro && $intro != $introKey) {
 				<tbody>
 				<?php foreach ($results as $r): ?>
 					<tr>
-						<?php foreach ($fields as $f): ?>
+						<?php $first = true;
+				    foreach ($fields as $f): ?>
 							<td><?php
-					            $fct = 'get'.ucfirst($f);
-						    $val = $r->{$fct}();
-						    if (is_object($val)) {
-						        if ($val instanceof DateTimeInterface) {
-						            $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
-						        } elseif ($val instanceof Doctrine\Common\Collections\Collection) {
-						            $val = [];
-						            foreach ($val as $v) {
-						                $val[] = $v.'';
-						            }
-						            $val = implode(', ', $val);
-						        }
-						    }
-						    echo nl2br($val);
-						    ?></td>
+				            $fct = 'get'.ucfirst($f);
+				        $val = $r->{$fct}();
+				        if (is_object($val)) {
+				            if ($val instanceof DateTimeInterface) {
+				                $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
+				            } elseif ($val instanceof Doctrine\Common\Collections\Collection) {
+				                $tmpVal = [];
+				                foreach ($val as $v) {
+				                    $tmpVal[] = $v.'';
+				                }
+				                $val = implode(', ', $tmpVal);
+				            }
+				        }
+				        if ($first) {
+				            if (!isset($noEdit) || !$noEdit) {
+				                $urlEdit = $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()]));
+				                echo  '<a href="'.$urlEdit.'" class="editLink">'.nl2br($val).'</a>';
+				                echo  '<a href="'.$urlEdit.'" class="btn mobileOnly">'.$view['nyrocms_admin']->getIcon('edit').'</a>';
+				            }
+				            $first = false;
+				        } else {
+				            echo nl2br($val);
+				        }
+				        ?></td>
 						<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>
 						<td class="actions">
 							<?php if (isset($moreActions) && is_array($moreActions)): ?>
 								<?php foreach ($moreActions as $k => $action): ?>
-									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()])); ?>" class="noIcon <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?><?php echo isset($action['attrs']) && $action['attrs'] ? ' '.$action['attrs'] : ''; ?>>
-										<?php echo $action['name']; ?>
+									<?php if (isset($action['enabled']) && is_callable($action['enabled'])): ?>
+										<?php if (!$action['enabled']($r)): ?>
+											<?php continue; ?>
+										<?php endif; ?>
+									<?php endif; ?>
+									<?php $actionRoutePrm = isset($action['routePrm']) && is_callable($action['routePrm']) ? $action['routePrm']($r) : array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()]); ?>
+									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], $actionRoutePrm); ?>" class="btn btnSmall <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?><?php echo isset($action['attrs']) && $action['attrs'] ? ' '.$action['attrs'] : ''; ?>>
+										<?php echo $view['nyrocms_admin']->getIcon($k); ?>
 									</a>
 								<?php endforeach; ?>
 							<?php endif; ?>
 							<?php if (!isset($noEdit) || !$noEdit): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()])); ?>" class="edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
+								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()])); ?>" class="btn btnSmall edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
 								</a>
 							<?php endif; ?>
 							<?php if (!isset($noDelete) || !$noDelete): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : [], ['id' => $r->getId()])); ?>" class="delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
+								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : [], ['id' => $r->getId()])); ?>" class="btn btnSmall btnDelete delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
 								</a>
 							<?php endif; ?>
@@ -118,21 +146,25 @@ if ($intro && $intro != $introKey) {
 			</table>
 			<br />
 			<?php if ($pager->hasToPaginate()): ?>
-				<div class="pagination">
-					<?php if ($pager->hasPrevious()): ?>
-						<a href="<?php echo $pager->getPreviousUrl(); ?>" class="prev"><?php echo $view['translator']->trans('admin.pager.prev'); ?></a>
-					<?php endif; ?>
-					<?php foreach ($pager->getPagesIndex() as $i => $page): ?>
-						<?php if ($page[1]): ?>
-							<strong><?php echo $i; ?></strong>
-						<?php else: ?>
-							<a href="<?php echo $page[0]; ?>"><?php echo $i; ?></a>
-						<?php endif; ?>
-					<?php endforeach; ?>
-					<?php if ($pager->hasNext()): ?>
-						<a href="<?php echo $pager->getNextUrl(); ?>" class="next"><?php echo $view['translator']->trans('admin.pager.next'); ?></a>
-					<?php endif; ?>
-				</div>
+				<nav class="pagination">
+					<?php /* <a href="<?php echo $pager->hasPrevious() ? $pager->getFirstUrl() : '#'; ?>" class="prev first" title="<?php echo $view['translator']->trans('admin.pager.first'); ?>"><?php echo $view['nyrocms_admin']->getIcon('doubleChevron'); ?></a> */ ?>
+					<a href="<?php echo $pager->hasPrevious() ? $pager->getPreviousUrl() : '#'; ?>" class="btn btnLightWhite prev" title="<?php echo $view['translator']->trans('admin.pager.prev'); ?>">
+						<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+					</a>
+					<span>
+						<?php foreach ($pager->getPagesIndex() as $i => $page): ?>
+							<?php if ($page[1]): ?>
+								<strong><?php echo $i; ?></strong>
+							<?php else: ?>
+								<a href="<?php echo $page[0]; ?>" class="btn btnLightWhite"><?php echo $i; ?></a>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</span>
+					<a href="<?php echo $pager->hasNext() ? $pager->getNextUrl() : '#'; ?>" class="btn btnLightWhite next" title="<?php echo $view['translator']->trans('admin.pager.next'); ?>">
+						<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+					</a>
+					<?php /* <a href="<?php echo $pager->hasNext() ? $pager->getLastUrl() : '#'; ?>" class="next last" title="<?php echo $view['translator']->trans('admin.pager.last'); ?>"><?php echo $view['nyrocms_admin']->getIcon('doubleChevron'); ?></a> */ ?>
+				</nav>
 			<?php endif; ?>
 
 		<?php else: ?>

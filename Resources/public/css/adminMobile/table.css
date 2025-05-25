@@ -1,0 +1,62 @@
+table,
+table thead,
+table tbody,
+table tfoot,
+table tr,
+table td,
+table th {
+    display: block;
+    padding: 0;
+    margin: 0;
+}
+
+table thead {
+    display: none;
+}
+
+table tr {
+    position: relative;
+    border: 1px solid var(--c-secondary);
+    color: var(--c-text);
+    margin-bottom: 2rem;
+    border-radius: var(--s-radius);
+}
+
+table td {
+    position: relative;
+    padding: 0.8rem 1.2rem 0.8rem 1.2rem;
+}
+
+table td:empty {
+    display: none;
+}
+
+table td:first-child {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 2.4rem;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: var(--font-bold-weight);
+    line-height: 150%;
+    border-top: none;
+    background-color: var(--c-light-background);
+    border-radius: var(--s-radius) var(--s-radius) 0 0;
+}
+
+table td:first-child > a:not(.btn) {
+    color: var(--c-text);
+}
+
+table tr .actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: var(--c-light-background);
+    border-radius: 0 0 var(--s-radius) var(--s-radius);
+}
+
+table tr .actions > a {
+    margin-left: 1rem;
+}

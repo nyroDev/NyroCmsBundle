@@ -2,8 +2,10 @@
 
 namespace NyroDev\NyroCmsBundle\Form\Type;
 
+use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentHandlerFilterType extends Type\AbstractFilterType
 {
@@ -17,5 +19,14 @@ class ContentHandlerFilterType extends Type\AbstractFilterType
             ->add('hasAdmin', Type\FilterBoolType::class, ['label' => $this->trans('admin.contentHandler.hasAdmin')])
         ;
         parent::buildForm($builder, $options);
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'submitOptions' => [
+                'icon' => NyroCmsService::ICON_PATH.'#filter',
+            ],
+        ]);
     }
 }

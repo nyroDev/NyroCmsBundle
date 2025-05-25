@@ -1,0 +1,305 @@
+.form form {
+    padding: var(--s-padding);
+    background: var(--c-light-background);
+}
+.form form > div {
+    background: var(--c-white);
+}
+.form form nyro-tabs {
+    --nyro-tab-nav-border: 1px solid var(--c-white);
+    --nyro-tab-border-color: var(--c-light-background);
+    --nyro-tab-nav-background: var(--c-light-background);
+}
+.form form nyro-tabs nyro-tab {
+    display: flex;
+    align-items: center;
+}
+.form form nyro-tabs nyro-tab .icon {
+    margin-right: 1rem;
+}
+.form form nyro-tabs nyro-tab[selected],
+.form form nyro-tabs nyro-tab:hover {
+    background: var(--c-white);
+}
+
+.form form > div:not(:has(fieldset)) {
+    padding: var(--s-padding);
+}
+
+.form form fieldset {
+    border: none;
+    padding: var(--s-padding);
+}
+.form form fieldset legend {
+    display: none;
+}
+
+textarea,
+input[type="text"],
+input[type="button"],
+input[type="submit"] {
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+select,
+nyro-select,
+nyro-password,
+nyro-select-autocomplete {
+    border-radius: 0;
+}
+
+nyro-select,
+nyro-select-autocomplete {
+    --nyro-select-placeholder-color: var(--c-secondary);
+    --nyro-select-dropdown-border-color: var(--c-secondary);
+    --nyro-select-arrow-focused-opacity: 1;
+    --nyro-select-dropdown-max-width: 0px;
+}
+nyro-select-option,
+nyro-select-selected {
+    font-family: var(--font);
+    color: var(--c-text);
+    padding: 0.5rem 1rem;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+nyro-select-option[selected] {
+    color: var(--c-highlight-text);
+    background-color: var(--c-highlight);
+}
+
+.form_row {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.form_row label {
+    display: block;
+    color: var(--c-secondary);
+    font-size: 1.6rem;
+}
+
+.form_row input,
+.form_row select,
+.form_row nyro-select,
+.form_row nyro-password,
+.form_row nyro-select-autocomplete,
+.form_row textarea {
+    border: 1px solid var(--c-secondary);
+    border-radius: var(--s-radius);
+    background-color: var(--c-white);
+    font-family: var(--font);
+    padding: 0.5rem 1rem;
+    font-size: 1.6rem;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.form_row_checkbox {
+    display: flex;
+    align-items: center;
+}
+.form_row_checkbox input {
+    display: inline;
+    width: auto;
+    margin-left: 0;
+}
+
+.form_row.form_row_checkbox label {
+    display: inline;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.form_row textarea {
+    min-height: 4em;
+}
+
+.form_row input:focus,
+.form_row textarea:focus {
+    border-color: var(--c-text);
+}
+
+ul.form_errors {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.form_errors.form_errors {
+    max-width: none;
+    text-align: left;
+    color: var(--c-error);
+}
+
+.form_button {
+    text-align: right;
+}
+
+.form_button:has(.cancel) {
+    display: flex;
+    justify-content: space-between;
+}
+
+.iconWidget {
+    position: relative;
+}
+
+.iconWidget > .icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    color: var(--c-title);
+    z-index: 1;
+}
+
+.form_row .iconWidget input,
+.form_row .iconWidget nyro-password {
+    padding-left: calc(1.5rem + var(--s-svg-size));
+}
+
+.calendarWidget .icon {
+    left: auto;
+    right: 1rem;
+    pointer-events: none;
+}
+
+.form_row .calendarWidget input {
+    padding-left: 1rem;
+    padding-right: calc(1.5rem + var(--s-svg-size));
+}
+
+.form_row .calendarWidget input::-webkit-inner-spin-button,
+.form_row .calendarWidget input::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    opacity: 0;
+    width: var(--s-svg-size);
+    height: var(--s-svg-size);
+}
+
+nyro-select-option:not(:defined) {
+    display: none;
+}
+
+.form_row_dummy_captcha {
+    display: none;
+}
+
+.form_row_choice ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.form_row_choice input {
+    width: auto;
+}
+.form_row_choice ul label {
+    display: inline-block;
+    margin-left: 0.5rem;
+}
+
+.filter {
+    position: relative;
+}
+.filter > input {
+    display: none;
+}
+.filter > label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) var(--s-padding);
+    background: var(--c-light-background);
+    color: var(--c-secondary);
+    border: 1px solid var(--c-secondary);
+    border-radius: var(--s-radius);
+}
+.filter > label .icon-filter {
+    margin-right: 0.5rem;
+}
+.filter .row_form_transformer,
+.filter form,
+.filter .clearFilter {
+    display: none;
+}
+
+.filter > input:checked ~ label {
+    border-radius: var(--s-radius) var(--s-radius) 0 0;
+}
+
+.filter > input:checked ~ label .icon-chevron {
+    rotate: 90deg;
+}
+
+.filter .form_button {
+    padding-top: var(--s-padding);
+}
+
+.filter > input:checked ~ form {
+    display: block;
+    border: 1px solid var(--c-secondary);
+    border-top: none;
+    border-radius: 0 0 var(--s-radius) var(--s-radius);
+    padding: calc(var(--s-padding) / 2) var(--s-padding);
+}
+
+.filter > input:checked ~ .clearFilter {
+    position: absolute;
+    left: calc(var(--s-padding) * 2);
+    bottom: var(--s-padding);
+    display: inline-flex;
+}
+
+.contentLvl1 {
+    margin-left: var(--s-padding);
+}
+.contentLvl2 {
+    margin-left: calc(var(--s-padding) * 2);
+}
+.contentLvl3 {
+    margin-left: calc(var(--s-padding) * 3);
+}
+.contentLvl4 {
+    margin-left: calc(var(--s-padding) * 4);
+}
+.contentLvl5 {
+    margin-left: calc(var(--s-padding) * 5);
+}
+.form_errors,
+.form_row .form_errors {
+    margin: 3px 0;
+}
+.mapGeoloc {
+    float: left;
+    width: 407px;
+    height: 350px;
+    margin: 5px 0 10px;
+}
+
+.formCentered {
+    max-width: 40rem;
+    margin: 10rem auto;
+    text-align: center;
+}
+
+.formCentered form {
+    margin-top: 2rem;
+}
+
+.formCentered .form_row_password .forgotCont {
+    display: block;
+    margin-top: 0.5rem;
+    text-align: right;
+}
+
+.formCentered .form_button {
+    margin-top: 2rem;
+    text-align: center;
+}

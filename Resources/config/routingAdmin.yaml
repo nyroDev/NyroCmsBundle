@@ -18,9 +18,13 @@ nyrocms_admin_account:
     path: /account
     defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::accountAction }
 
+nyrocms_admin_password:
+    path: /password
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminController::passwordAction }
+
 nyrocms_admin_switch_rootContent:
     path: /switchRootContent/{id}
-    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminTplController::switchRootContentAction }
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::switchRootContentAction }
 
 nyrocms_admin_cc:
     path: /cc

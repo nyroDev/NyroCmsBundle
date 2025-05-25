@@ -1,1 +1,1 @@
-import './webcomps/nyro-swiper.js';
+import "./webcomps/nyro-swiper.js";

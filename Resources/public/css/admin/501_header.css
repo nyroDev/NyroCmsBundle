@@ -1,0 +1,219 @@
+body {
+    padding-top: var(--s-header-height);
+}
+
+header,
+aside {
+    position: fixed;
+    left: 0;
+    box-sizing: border-box;
+    z-index: 99999;
+}
+
+#switch_adminMenu {
+    display: none;
+}
+
+header {
+    top: 0;
+    right: 0;
+    height: var(--s-header-height);
+    color: var(--c-header-text);
+    background: var(--c-header-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--s-header-padding);
+}
+
+header label[for="switch_adminMenu"] {
+    position: relative;
+    display: block;
+    width: 2.6rem;
+    height: 2.2rem;
+    margin-right: 0;
+    margin-top: -0.5rem;
+    text-align: left;
+    text-indent: -999em;
+    cursor: pointer;
+}
+
+header label[for="switch_adminMenu"]:before,
+header label[for="switch_adminMenu"]:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 0.2rem;
+    background: var(--c-header-text);
+    transform-origin: -1px 50%;
+    transition: transform var(--transition-time), box-shadow var(--transition-time);
+}
+
+header label[for="switch_adminMenu"]:before {
+    top: 0;
+    box-shadow: 0 1rem 0 var(--c-header-text);
+}
+
+header label[for="switch_adminMenu"]:after {
+    bottom: 0;
+}
+
+#switch_adminMenu:checked ~ header label[for="switch_adminMenu"]:before {
+    transform: rotate(45deg);
+    box-shadow: none;
+}
+
+#switch_adminMenu:checked ~ header label[for="switch_adminMenu"]:after {
+    transform: rotate(-45deg);
+}
+
+#adminNav {
+    display: block;
+    top: var(--s-header-height);
+    bottom: 0;
+    width: var(--s-nav-width);
+    color: var(--c-nav-text);
+    background: var(--c-nav-bg);
+    padding: var(--s-padding) 0;
+    transform: translate(-100%, 0);
+    transition: transform var(--transition-time);
+}
+#switch_adminMenu:checked ~ #adminNav {
+    transform: translate(0, 0);
+}
+
+#adminNav {
+    font-size: 1.6rem;
+    overflow: auto;
+}
+
+#adminNav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-weight: var(--font-bold-weight);
+}
+
+#adminNav li {
+    position: relative;
+    display: block;
+}
+
+#adminNav li a,
+#adminNav li .menuText {
+    display: flex;
+    color: var(--c-text);
+    padding: calc(var(--s-padding) / 2) var(--s-padding);
+    height: var(--s-svg-size);
+    align-items: center;
+    transition: color var(--transition-time), background-color var(--transition-time);
+}
+
+#adminNav li .icon {
+    margin-right: 1rem;
+}
+
+#adminNav li.menu-separator,
+#adminNav li li.menu-text {
+    padding: calc(var(--s-padding) / 2) var(--s-padding);
+}
+#adminNav li.menu-separator:before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: var(--c-secondary);
+}
+
+#adminNav .menu-active > a,
+#adminNav .menu-active > .menuText,
+#adminNav a:hover,
+#adminNav li.menu-text:hover > .menuText {
+    text-decoration: none;
+    color: var(--c-header-text);
+    background: var(--c-highlight-dark);
+}
+#adminNav .menu-active > label,
+#adminNav li:hover > label {
+    color: var(--c-header-text);
+}
+
+#adminNav input {
+    display: none;
+}
+
+#adminNav .menu-has-childs {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#adminNav .menu-has-childs > ul {
+    display: none;
+    margin-left: var(--s-padding);
+}
+#adminNav .menu-has-childs > .menuText ~ label {
+    left: var(--s-padding);
+}
+#adminNav label {
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    top: calc(var(--s-padding) / 2);
+    padding-top: calc(var(--s-padding) / 2);
+    right: calc(var(--s-padding) * 1.5);
+    margin-right: 0;
+    width: auto;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+#adminNav label .icon {
+    position: relative;
+    top: -0.4rem;
+    margin: 0;
+    transition: rotate var(--transition-time);
+}
+
+#adminNav .menu-has-childs input:checked ~ ul {
+    display: block;
+}
+#adminNav .menu-has-childs input:checked ~ label .icon {
+    rotate: 90deg;
+}
+
+#breadcrumbs,
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: calc(var(--s-padding) / 2) var(--s-padding);
+    background: var(--c-light-background);
+    color: var(--c-secondary);
+}
+#breadcrumbs a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--c-secondary);
+    transition: color var(--transition-time);
+}
+#breadcrumbs a:hover {
+    color: var(--c-text);
+}
+#breadcrumbs strong {
+    color: var(--c-text);
+    font-weight: normal;
+}
+#breadcrumbs a,
+#breadcrumbs strong {
+    margin: 0 calc(var(--s-padding) / 2);
+}
+#breadcrumbs a:first-child {
+    margin-left: 0;
+}
+#breadcrumbs a .icon {
+    margin-right: calc(var(--s-padding) / 2);
+}
+
+.toolbar > *:not(:last-child) {
+    margin-right: 1rem;
+}

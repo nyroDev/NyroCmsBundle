@@ -9,6 +9,7 @@ admin:
     logout: Déconnexion
     admin: Administration
     site: site
+    filters: Filtres
     filter: Filtrer
     sortAsc: Trier par ordre Croissant
     sortDesc: Trier par ordre Décroissant
@@ -17,8 +18,16 @@ admin:
     handlerContents: Contenus
     account: Mon compte
     back: Retour
+    deleteConfirm: Êtes-vous sûr de vouloir supprimer cet élément ?
+    cancel: Annuler
+    delete: Supprimer
   menu:
-    contents: Gestion des contenus
+    home: Accueil
+    account: Mon compte
+    password: Mon mot de passe
+    logout: Me déconnecter
+    contents: Contenus
+    contentHandler: Modules
     access: Gestion des accès
     homes: Gestion des pages d'accueil
     modules: Gestion des modules
@@ -134,6 +143,8 @@ admin:
     superadmin: Superadmin
   content:
     viewTitle: Site internet
+    contentFieldset: Contenu
+    metadataFieldset: Metadonnées
     drag: Glisser / déposer
     emptyTree: Aucun contenu
     expandAll: Tout déplier

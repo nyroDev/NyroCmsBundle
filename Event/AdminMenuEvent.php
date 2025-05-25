@@ -2,49 +2,40 @@
 
 namespace NyroDev\NyroCmsBundle\Event;
 
+use NyroDev\UtilityBundle\Utility\Menu\Menuable;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class AdminMenuEvent extends Event
 {
     public const ADMIN_MENU = 'nyrocms.events.adminMenu';
 
-    protected ?array $menu = null;
-
     public function __construct(
-        protected readonly array $uriSplitted,
-        protected readonly bool $adminPerRoot,
-        protected readonly array $rootContents,
-        protected readonly string $curRootId,
+        public array $vars,
     ) {
     }
 
     public function getUriSplitted(): array
     {
-        return $this->uriSplitted;
+        return $this->vars['uriSplitted'] ?? [];
     }
 
     public function getAdminPerRoot(): bool
     {
-        return $this->adminPerRoot;
+        return $this->vars['adminPerRoot'] ?? false;
     }
 
     public function getRootContents(): array
     {
-        return $this->rootContents;
+        return $this->vars['rootContents'] ?? [];
     }
 
     public function getCurRootId(): string
     {
-        return $this->curRootId;
+        return $this->vars['curRootId'] ?? '';
     }
 
-    public function setMenu(array $menu): void
+    public function getMenu(): ?Menuable
     {
-        $this->menu = $menu;
-    }
-
-    public function getMenu(): ?array
-    {
-        return $this->menu;
+        return $this->vars['menu'] ?? null;
     }
 }

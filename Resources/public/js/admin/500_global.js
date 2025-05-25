@@ -1,93 +1,65 @@
-jQuery(function ($) {
-	var $b = $('body'),
-		contentTree = $b.find('#contentTree'),
-		form_contactEnabled = $b.find('#form_contactEnabled'),
-		switcher = $b.find('.switcher'),
-		selectRedirect = $b.find('.selectRedirect');
+import Sortable from "sortablejs";
 
-	if (contentTree.length) {
-		var updateLevels = function (elt) {
-			var par = elt.parent();
-			elt.children('input[name^="treeLevel"]').val(par.parents('ul').length + 1)
-			par.children('.node').children('input[name^="treeChanged"]').val(1);
-			elt.children('ul').children('.node').each(function () {
-				updateLevels($(this));
-			});
-		};
-		contentTree
-			.on('click', '.expandAll', function (e) {
-				e.preventDefault();
-				contentTree.find('.node').addClass('expanded');
-			})
-			.on('click', '.reduceAll', function (e) {
-				e.preventDefault();
-				contentTree.find('.node').removeClass('expanded');
-			})
-			.find('.tree').sortable({
-				items: 'li',
-				handle: '.move',
-				connectWith: '.treeEditable',
-				placeholder: 'ui-state-highlight',
-				update: function (e, ui) {
-					updateLevels(ui.item);
-				}
-			}).disableSelection()
-			.find('.reduce, .expand')
-			.on('click', function (e) {
-				e.preventDefault();
-				$(this).closest('li').toggleClass('expanded');
-			});
-	}
+(function () {
+    const contentTree = document.getElementById("contentTree");
+    const templateClose = document.querySelector("template#closeTpl");
+    const templateConfirm = document.querySelector("template#deleteConfirmTpl");
 
-	if (form_contactEnabled.length) {
-		form_contactEnabled.each(function () {
-			var me = $(this),
-				contactFields = me.closest('form').find('.contactField').closest('.form_row');
+    document.body.addEventListener("click", function (e) {
+        const deleteConfirm = e.target.closest(".delete, .confirmLink");
+        if (deleteConfirm) {
+            e.preventDefault();
+            const confirmText = deleteConfirm.classList.contains("confirmLink") ? deleteConfirm.dataset.confirmtxt : deleteConfirm.dataset.deletetxt;
 
-			me.on('change', function () {
-				if (me.is(':checked')) {
-					contactFields.slideDown();
-				} else {
-					contactFields.slideUp();
-				}
-			}).trigger('change');
-		});
-	}
+            const dialog = document.createElement("nyro-cms-dialog");
 
-	$b.on('click', '.delete, .confirmLink', function (e) {
-		e.preventDefault();
-		var me = $(this);
-		$.nmConfirm({
-			text: me.is('.confirmLink') ? me.data('confirmtxt') : me.data('deletetxt') || 'Êtes-vous sûr de vouloir supprimer cet élément ?',
-			cancel: 'Annuler',
-			clbOk: function () {
-				document.location.href = me.attr('href');
-			}
-		});
-	});
+            dialog.appendChild(templateClose.content.cloneNode(true));
 
-	if (switcher.length) {
-		switcher
-			.on('click', function (e) {
-				e.preventDefault();
-				$($(this).attr('href')).slideToggle();
-			}).filter('.filterSwitcher').each(function () {
-				var me = $(this),
-					filter = $(me.attr('href')),
-					hasData = false;
-				filter.find(':input').not('.row_form_transformer :input, button').each(function () {
-					if ($(this).val().length)
-						hasData = true;
-				});
-				if (hasData) {
-					filter.show();
-				}
-			});
-	}
+            const content = templateConfirm.content.cloneNode(true);
 
-	if (selectRedirect.length) {
-		selectRedirect.on('change', function () {
-			document.location.href = $(this).val();
-		});
-	}
-});
+            if (confirmText) {
+                content.in.querySelector("p").innerHTML = confirmText;
+            }
+
+            content.querySelector(".actions").addEventListener("click", (e) => {
+                const confirm = e.target.closest(".confirm");
+                if (!confirm) {
+                    return;
+                }
+                e.preventDefault();
+                document.location.href = deleteConfirm.href;
+            });
+
+            dialog.appendChild(content);
+            dialog.classList.add("nyroCmsDialogConfirm");
+            document.body.appendChild(dialog);
+            dialog.open();
+        }
+    });
+
+    if (contentTree) {
+        const contentTreeSubmit = contentTree.querySelector('button[type="submit"]');
+        contentTree.addEventListener("click", function (e) {
+            const expandReduceAll = e.target.closest(".expandAll, .reduceAll");
+            if (expandReduceAll) {
+                e.preventDefault();
+                contentTree.classList.toggle("expandedAll");
+                const shouldExpand = contentTree.classList.contains("expandedAll");
+                contentTree.querySelectorAll(".expandToggle").forEach((toggle) => {
+                    toggle.checked = shouldExpand;
+                });
+            }
+        });
+
+        contentTree.querySelectorAll("ul").forEach((ul) => {
+            Sortable.create(ul, {
+                group: "contentTree",
+                handle: ".dragHandle",
+                animation: 150,
+                onEnd: (e) => {
+                    contentTreeSubmit.classList.remove("disabled");
+                },
+            });
+        });
+    }
+})();

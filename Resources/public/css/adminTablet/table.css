@@ -1,0 +1,62 @@
+.tabletOnly {
+    display: revert !important;
+}
+
+table {
+    padding: 0 !important;
+    margin: var(--s-padding);
+    width: calc(100% - var(--s-padding) * 2);
+    box-sizing: border-box;
+    border-collapse: collapse;
+    background-color: var(--c-white);
+    color: var(--c-text);
+
+    --cell-padding-h: 1.5rem;
+    --cell-padding-w: 2.5rem;
+}
+
+table th,
+table td {
+    vertical-align: middle;
+    padding: var(--cell-padding-h) 0 var(--cell-padding-h) var(--cell-padding-w);
+}
+table th:last-child,
+table td:last-child {
+    padding-right: var(--cell-padding-w);
+}
+table th,
+table td {
+    vertical-align: middle;
+    padding: var(--cell-padding-h) 0 var(--cell-padding-h) var(--cell-padding-w);
+}
+
+table .actions {
+    text-align: right;
+    width: 0;
+    white-space: nowrap;
+}
+
+table th {
+    text-align: left;
+    font-weight: var(--font-bold-weight);
+    font-size: 1.7rem;
+}
+table thead tr {
+    border-top: 1px solid var(--c-text);
+    border-bottom: 1px solid var(--c-text);
+}
+table tbody tr {
+    border-bottom: 1px solid var(--c-secondary);
+    transition: background-color var(--transition-time);
+}
+table tbody tr:hover {
+    background-color: var(--c-light-background);
+}
+
+table td {
+    min-height: 5rem;
+}
+
+table .cellSquare {
+    width: 3.5rem;
+}

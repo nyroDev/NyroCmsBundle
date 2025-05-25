@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Services;
 
 use App\Entity\Template;
 use NyroDev\NyroCmsBundle\Event\AdminContentTreeConfigEvent;
+use NyroDev\NyroCmsBundle\Event\AdminMenuEvent;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -13,11 +14,17 @@ use NyroDev\UtilityBundle\Services\Db\DbAbstractService as NyroDevDbService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\AssetsPackagesServiceableTrait;
+use NyroDev\UtilityBundle\Utility\Menu\Link;
+use NyroDev\UtilityBundle\Utility\Menu\RootMenu;
+use NyroDev\UtilityBundle\Utility\Menu\Separator;
+use NyroDev\UtilityBundle\Utility\Menu\Text;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class AdminService extends NyroDevAbstractService
 {
     use AssetsPackagesServiceableTrait;
+
+    public const SESSION_ROOT_NAME = 'rootContent';
 
     public function __construct(
         private readonly NyrodevService $nyrodevService,
@@ -102,6 +109,11 @@ class AdminService extends NyroDevAbstractService
         }
 
         return $this->administrableContentIds;
+    }
+
+    public function getTreeChildren(Content $parent, $directOnly = false): array
+    {
+        return $this->dbService->getContentRepository()->children($parent, $directOnly);
     }
 
     protected array $administrableRootContentIds = [];
@@ -335,10 +347,187 @@ class AdminService extends NyroDevAbstractService
         }
     }
 
-    public function getIcon(string $name, string $src = 'icons.svg'): string
+    public function getHeaderVars(): array
     {
-        return '<svg class="icon icon-'.$name.'">'.
-                    '<use xlink:href="'.$this->getAssetsPackages()->getUrl('bundles/nyrodevnyrocms/images/'.$src).'#'.$name.'"></use>'.
-                '</svg>';
+        $rootMenu = new RootMenu();
+
+        $vars = [
+            'logged' => $this->memberService->isLogged(),
+            'menu' => $rootMenu,
+        ];
+        if ($vars['logged']) {
+            $rootMenu->addChild('home', new Link(
+                $this->generateUrl('nyrocms_admin_homepage'),
+                $this->trans('admin.menu.home'),
+                icon: 'home',
+            ));
+
+            $rootMenu->addChild('sep1', new Separator());
+
+            $tmpUriInit = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $adminPrefix = $this->getParameter('adminPrefix').'/';
+            $tmpUriT = substr($tmpUriInit, strpos($tmpUriInit, $adminPrefix) + strlen($adminPrefix));
+            $tmpUri = array_merge(explode('/', trim($tmpUriT, '/')), array_fill(0, 2, false));
+
+            $vars['uriSplitted'] = $tmpUri;
+
+            $user = $this->memberService->getUser();
+            $loggedUserMenu = new Text($user->getUsualName(), icon: 'user');
+            $rootMenu->addChild('loggedUser', $loggedUserMenu);
+
+            $loggedUserMenu->addChild('account', new Link(
+                $this->generateUrl('nyrocms_admin_account'),
+                $this->trans('admin.menu.account'),
+                'account' == $tmpUri[0],
+                icon: 'user'
+            ));
+
+            $loggedUserMenu->addChild('password', new Link(
+                $this->generateUrl('nyrocms_admin_password'),
+                $this->trans('admin.menu.password'),
+                'password' == $tmpUri[0],
+                icon: 'password'
+            ));
+
+            $loggedUserMenu->addChild('logout', new Link(
+                $this->generateUrl('nyrocms_admin_security_logout'),
+                $this->trans('admin.menu.logout'),
+                icon: 'logout'
+            ));
+
+            $rootMenu->addChild('sep2', new Separator());
+
+            $adminPerRoot = $this->getParameter('nyrocms.content.admin_per_root');
+            $vars['adminPerRoot'] = $adminPerRoot;
+
+            $rootContents = [];
+            $tmp = $this->dbService->getContentRepository()->findBy(['level' => 0], ['title' => 'ASC']);
+            $firstRoot = 1;
+            foreach ($tmp as $t) {
+                $rootContents[$t->getId()] = $t;
+                if (!$firstRoot) {
+                    $firstRoot = $t->getId();
+                }
+            }
+            $curRootId = $this->get('request_stack')->getSession()->get(self::SESSION_ROOT_NAME, $firstRoot);
+            $vars['rootContents'] = $rootContents;
+            $vars['curRootId'] = $curRootId;
+
+            $contentsMenu = new Text($this->trans('admin.menu.contents'), icon: 'content');
+            $rootMenu->addChild('contents', $contentsMenu);
+
+            $vars['adminPerRoot'] = $adminPerRoot;
+            if ($adminPerRoot) {
+                $isCurrentRoot = $this->getContentParentId() == $curRootId;
+                $contentsMenu->addChild('root_'.$curRootId, new Link(
+                    $this->generateUrl($isCurrentRoot ? 'nyrocms_admin_data_content_tree' : 'nyrocms_admin_switch_rootContent', ['id' => $curRootId]),
+                    $rootContents[$curRootId]->getTitle(),
+                    'content' == $tmpUri[0] && $isCurrentRoot,
+                    icon: 'content'
+                ));
+                $vars['rootContents'] = $rootContents;
+                $vars['curRootId'] = $curRootId;
+            } else {
+                foreach ($rootContents as $rootContent) {
+                    $contentsMenu->addChild('root_'.$rootContent->getId(), new Link(
+                        $this->generateUrl('nyrocms_admin_data_content_tree', ['id' => $rootContent->getId()]),
+                        $rootContent->getTitle(),
+                        'content' == $tmpUri[0] && $this->getContentParentId() == $rootContent->getId(),
+                        icon: 'content'
+                    ));
+                }
+            }
+
+            $contentHandlers = $this->dbService->getContentHandlerRepository()->findBy(['hasAdmin' => 1]);
+            foreach ($contentHandlers as $contentHandler) {
+                $canAdmin = false;
+                foreach ($contentHandler->getContents() as $content) {
+                    $canAdmin = $canAdmin || $this->canAdminContent($content) && (!$adminPerRoot || $content->getRoot() == $curRootId);
+                }
+                if ($canAdmin) {
+                    $handler = $this->nyroCmsService->getHandler($contentHandler);
+                    if ($handler->hasAdminMenuLink()) {
+                        $uri = $this->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
+                        $name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $contentHandler->getName())) : $contentHandler->getName();
+
+                        $contentsMenu->addChild('module_'.$contentHandler->getId(), new Link(
+                            $uri,
+                            $name,
+                            $uri == $tmpUriInit || false !== strpos($tmpUriInit, $uri.'/'),
+                            icon: 'misc'
+                        ));
+
+                        $otherRoutes = $handler->getOtherAdminRoutes();
+                        if (is_array($otherRoutes) && count($otherRoutes)) {
+                            foreach ($otherRoutes as $k => $route) {
+                                $uri = $this->generateUrl($route['route'], $route['routePrm']);
+                                $name = $adminPerRoot ? trim(str_replace($rootContents[$curRootId]->getTitle(), '', $route['name'])) : $route['name'];
+
+                                $contentsMenu->addChild('module_'.$contentHandler->getId().'_'.$k, new Link(
+                                    $uri,
+                                    $name,
+                                    $uri == $tmpUriInit || false !== strpos($tmpUriInit, $uri.'/'),
+                                    icon: 'misc'
+                                ));
+                            }
+                        }
+                    }
+                }
+            }
+
+            if ($this->isSuperAdmin()) {
+                // Don't forget to protect these URLs in security.yaml!
+
+                if ($this->isDeveloper()) {
+                    $contentsMenu->addChild('contenthandler', new Link(
+                        $this->generateUrl('nyrocms_admin_data_contentHandler'),
+                        $this->trans('admin.contentHandler.viewTitle'),
+                        'contentHandler' == $tmpUri[0],
+                        icon: 'misc'
+                    ));
+                }
+
+                $contentsMenu->addChild('template', new Link(
+                    $this->generateUrl('nyrocms_admin_data_template'),
+                    $this->trans('admin.template.viewTitle'),
+                    'template' == $tmpUri[0],
+                    icon: 'composer'
+                ));
+
+                $contentsMenu->addChild('templateCategory', new Link(
+                    $this->generateUrl('nyrocms_admin_data_templateCategory'),
+                    $this->trans('admin.templateCategory.viewTitle'),
+                    'templateCategory' == $tmpUri[0],
+                    icon: 'composer'
+                ));
+
+                $accessMenu = new Text($this->trans('admin.menu.access'), icon: 'rights');
+                $rootMenu->addChild('access', $accessMenu);
+                $accessMenu->addChild('user', new Link(
+                    $this->generateUrl('nyrocms_admin_data_user'),
+                    $this->trans('admin.user.viewTitle'),
+                    'user' == $tmpUri[0],
+                    icon: 'user'
+                ));
+                $accessMenu->addChild('userRole', new Link(
+                    $this->generateUrl('nyrocms_admin_data_userRole'),
+                    $this->trans('admin.userRole.viewTitle'),
+                    'userRole' == $tmpUri[0],
+                    icon: 'rights'
+                ));
+            }
+        }
+
+        $adminMenuEvent = new AdminMenuEvent($vars);
+        $this->eventDispatcher->dispatch($adminMenuEvent, AdminMenuEvent::ADMIN_MENU);
+
+        $vars = $adminMenuEvent->vars;
+
+        return $vars;
+    }
+
+    public function getIcon(string $name, ?string $class = null, ?string $attrs = null): string
+    {
+        return $this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#'.$name, $class, $attrs);
     }
 }

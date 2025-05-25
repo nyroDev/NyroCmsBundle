@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\EventListener;
 
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
+use NyroDev\UtilityBundle\Model\SecurityUserEntityableInterface;
 use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -11,6 +12,10 @@ class SecurityLoginListener extends NyroDevAbstractService
     public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $user = $event->getAuthenticationToken()->getUser();
+
+        if ($user && $user instanceof SecurityUserEntityableInterface) {
+            $user = $user->getEntityUser();
+        }
 
         if ($this->get(DbAbstractService::class)->isA($user, 'user') && method_exists($event->getAuthenticationToken(), 'getProviderKey')) {
             $userLogin = $this->get(DbAbstractService::class)->getNew('user_login');
