@@ -20,25 +20,25 @@
 
 <template class="ui" data-id="elementNav">
     <div class="sort">
-        <a href="#" class="dragHandle"><?php echo $view['nyrocms_admin']->getIcon('drag', 'composer.svg'); ?></a>
-        <a href="#" data-action="moveBottom"><?php echo $view['nyrocms_admin']->getIcon('moveBottom', 'composer.svg'); ?></a>
-        <a href="#" data-action="moveTop"><?php echo $view['nyrocms_admin']->getIcon('moveTop', 'composer.svg'); ?></a>
-        <a href="#" data-action="moveDown"><?php echo $view['nyrocms_admin']->getIcon('moveDown', 'composer.svg'); ?></a>
-        <a href="#" data-action="moveUp"><?php echo $view['nyrocms_admin']->getIcon('moveUp', 'composer.svg'); ?></a>
+        <a href="#" class="dragHandle"><?php echo $view['nyrocms_composer']->getIcon('drag'); ?></a>
+        <a href="#" data-action="moveBottom"><?php echo $view['nyrocms_composer']->getIcon('moveBottom'); ?></a>
+        <a href="#" data-action="moveTop"><?php echo $view['nyrocms_composer']->getIcon('moveTop'); ?></a>
+        <a href="#" data-action="moveDown"><?php echo $view['nyrocms_composer']->getIcon('moveDown'); ?></a>
+        <a href="#" data-action="moveUp"><?php echo $view['nyrocms_composer']->getIcon('moveUp'); ?></a>
     </div>
     <div class="actions">
-        <a href="#" data-action="delete"><?php echo $view['nyrocms_admin']->getIcon('delete', 'composer.svg'); ?></a>
-        <a href="#" data-action="duplicate"><?php echo $view['nyrocms_admin']->getIcon('duplicate', 'composer.svg'); ?></a>
-        <a href="#" data-action="edit"><?php echo $view['nyrocms_admin']->getIcon('edit', 'composer.svg'); ?></a>
+        <a href="#" data-action="delete"><?php echo $view['nyrocms_composer']->getIcon('delete'); ?></a>
+        <a href="#" data-action="duplicate"><?php echo $view['nyrocms_composer']->getIcon('duplicate'); ?></a>
+        <a href="#" data-action="edit"><?php echo $view['nyrocms_composer']->getIcon('edit'); ?></a>
         <span class="title"></span>
     </div>
 </template>
 
 <template class="ui" data-id="multipleFilesNav">
-    <a href="#" class="dragHandle"><?php echo $view['nyrocms_admin']->getIcon('drag', 'composer.svg'); ?></a>
-    <a href="#" data-action="delete"><?php echo $view['nyrocms_admin']->getIcon('delete', 'composer.svg'); ?></a>
+    <a href="#" class="dragHandle"><?php echo $view['nyrocms_composer']->getIcon('drag'); ?></a>
+    <a href="#" data-action="delete"><?php echo $view['nyrocms_composer']->getIcon('delete'); ?></a>
 </template>
 
 <template class="ui" data-id="icon">
-    <?php echo $view['nyrocms_admin']->getIcon('IDENT', 'composer.svg'); ?>
+    <?php echo $view['nyrocms_composer']->getIcon('IDENT'); ?>
 </template>

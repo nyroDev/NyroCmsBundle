@@ -29,6 +29,7 @@ class ComposerService extends AbstractService
 {
     use AssetsPackagesServiceableTrait;
     use TwigServiceableTrait;
+    public const ICON_PATH = 'bundles/nyrodevnyrocms/images/composer.svg';
 
     public const BLOCK_FULL = 'full';
     public const ITEM_HANDLER = 'handler';
@@ -908,5 +909,10 @@ class ComposerService extends AbstractService
         }
 
         return $ret;
+    }
+
+    public function getIcon(string $name, ?string $class = null, ?string $attrs = null): string
+    {
+        return $this->nyrodevService->getIconHelper()->getIcon(self::ICON_PATH.'#'.$name, $class, $attrs);
     }
 }

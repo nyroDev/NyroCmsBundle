@@ -32,9 +32,11 @@ iframe.nyroComposerIframe {
 .nyroHr.separator_transparent {
     background-color: transparent;
 }
-.nyroHr.separator_space_medium {
+.nyroHr.separator_space_medium,
+.nyroHr.spacer_space_medium {
     padding: var(--composer-hr-space-medium) 0;
 }
-.nyroHr.separator_space_big {
+.nyroHr.separator_space_big,
+.nyroHr.spacer_space_big {
     padding: var(--composer-hr-space-big) 0;
 }

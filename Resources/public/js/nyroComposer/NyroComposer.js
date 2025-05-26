@@ -51,7 +51,7 @@ class NyroComposer extends HTMLElement {
         });
 
         document.body.addEventListener("click", (e) => {
-            if (e.target.closest("nyro-composer-block, nyro-composer-side-panel")) {
+            if (e.target.closest("nyro-composer-block, nyro-composer-side-panel, nyro-composer-workspace")) {
                 return;
             }
             this.sidePanel.selected = false;
