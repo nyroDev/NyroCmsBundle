@@ -125,6 +125,18 @@ class NyroPassword extends HTMLElement {
             this._setValue();
         });
 
+        this._input.addEventListener("keyup", (e) => {
+            if (e.key === "Enter") {
+                if (this._internals.form) {
+                    if (this._internals.form.requestSubmit) {
+                        this._internals.form.requestSubmit();
+                    } else {
+                        this._internals.form.submit();
+                    }
+                }
+            }
+        });
+
         this.shadowRoot.querySelector(".toggle").addEventListener("click", (e) => {
             e.preventDefault();
             const toggle = e.target.closest("a");
