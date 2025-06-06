@@ -90,7 +90,7 @@ class Configuration implements ConfigurationInterface
                 'addable' => true,
                 'editables' => [
                     'text' => [
-                        'selector' => 'div',
+                        'selector' => 'div.text',
                         'type' => ComposerService::EDITABLE_TYPE_TEXT,
                         'dataType' => ComposerService::EDITABLE_DATATYPE_TEXT,
                         'default' => null,

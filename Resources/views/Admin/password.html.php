@@ -2,6 +2,9 @@
 
 <?php $view['slots']->start('content'); ?>
 	<article class="form">
+		<?php echo $view->render('@NyroDevNyroCms/AdminTpl/breadcrumbs.html.php', [
+		    'title' => $view['translator']->trans('admin.menu.password'),
+		]); ?>
 		<h1><?php echo $view['nyrodev']->trans('admin.menu.password'); ?></h1>
 		
 		<?php if (isset($password) && $password): ?>

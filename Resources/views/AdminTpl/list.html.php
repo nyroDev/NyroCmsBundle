@@ -104,8 +104,7 @@ if ($intro && $intro != $introKey) {
 				        if ($first) {
 				            if (!isset($noEdit) || !$noEdit) {
 				                $urlEdit = $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()]));
-				                echo  '<a href="'.$urlEdit.'" class="editLink">'.nl2br($val).'</a>';
-				                echo  '<a href="'.$urlEdit.'" class="btn mobileOnly">'.$view['nyrocms_admin']->getIcon('edit').'</a>';
+				                echo '<a href="'.$urlEdit.'" class="editLink">'.nl2br($val).'</a>';
 				            }
 				            $first = false;
 				        } else {

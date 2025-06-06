@@ -392,6 +392,11 @@ class AdminService extends NyroDevAbstractService
             $loggedUserMenu->addChild('logout', new Link(
                 $this->generateUrl('nyrocms_admin_security_logout'),
                 $this->trans('admin.menu.logout'),
+                attrs: [
+                    'class' => 'confirmLink',
+                    'data-confirmtxt' => $this->trans('admin.menu.logoutConfirm'),
+                    'data-confirmbtntxt' => $this->getIcon('logout').$this->trans('admin.menu.logout'),
+                ],
                 icon: 'logout'
             ));
 

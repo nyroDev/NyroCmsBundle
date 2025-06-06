@@ -76,6 +76,7 @@ svg.icon {
 button {
     --c-btn-text: var(--c-highlight-text);
     --c-btn-bg: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
     --c-btn-text-hover: var(--c-highlight);
     --c-btn-bg-hover: var(--c-highlight-text);
     display: inline-block;
@@ -84,7 +85,8 @@ button {
     font-size: 1.4rem;
     color: var(--c-btn-text);
     padding: 0.8rem 2rem;
-    border: 1px solid transparent;
+    border: 1px solid var(--c-btn-border);
+    border-color: var(--c-btn-border);
     border-radius: var(--s-radius);
     background-color: var(--c-btn-bg);
     transition: background-color var(--transition-time), color var(--transition-time);
@@ -100,13 +102,14 @@ button[disabled] {
 }
 
 .btnDelete {
+    --c-btn-border: var(--c-delete);
     --c-btn-text: var(--c-delete-text);
     --c-btn-bg: var(--c-delete);
     --c-btn-text-hover: var(--c-delete);
 }
 
 .btnGrey {
-    border-color: var(--c-white);
+    --c-btn-border: var(--c-white);
     --c-btn-text: var(--c-text);
     --c-btn-bg: var(--c-light-background);
     --c-btn-text-hover: var(--c-text);
@@ -136,7 +139,7 @@ button:hover {
     --c-btn-bg: var(--c-highlight-text);
     --c-btn-text-hover: var(--c-highlight-text);
     --c-btn-bg-hover: var(--c-highlight);
-    border-color: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
 }
 
 .btn:has(.icon),
@@ -164,6 +167,11 @@ main > article > * {
     padding: calc(var(--s-padding) / 2) var(--s-padding);
 }
 
+main > article > h1 {
+    background: var(--c-white);
+    padding: 0.8em var(--s-padding);
+}
+
 nyro-cms-dialog .nyroCmsDialogClose {
     position: absolute;
     top: -15px;
@@ -183,7 +191,7 @@ nyro-cms-dialog .nyroCmsDialogClose {
 nyro-cms-dialog p {
     margin: 0 0 var(--s-padding) 0;
     font-size: 1.6rem;
-    max-width: 25rem;
+    max-width: 26rem;
     font-weight: var(--font-bold-weight);
     text-align: center;
     line-height: 1.5;
@@ -193,6 +201,14 @@ nyro-cms-dialog .actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+nyro-cms-dialog .actions * + * {
+    margin-left: var(--s-padding);
+}
+
+.listButtons {
+    text-align: right;
 }
 
 .pagination {

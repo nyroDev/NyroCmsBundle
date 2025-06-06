@@ -3,6 +3,10 @@
     --s-nav-width: 27rem;
 }
 
+h1 {
+    font-size: 2.8rem;
+}
+
 body:has(#adminNav) {
     padding-left: var(--s-nav-width);
 }

@@ -8,7 +8,7 @@ template.innerHTML = `
     min-height: calc(var(--s-header-padding) * 2);
 }
 nav {
-    display: var(--composer-ui-hidden, block);
+    display: var(--composer-ui-display, block);
 }
 nav .add_item {
     display: flex;

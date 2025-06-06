@@ -10,6 +10,7 @@ import Sortable from "sortablejs";
         if (deleteConfirm) {
             e.preventDefault();
             const confirmText = deleteConfirm.classList.contains("confirmLink") ? deleteConfirm.dataset.confirmtxt : deleteConfirm.dataset.deletetxt;
+            const confirmBtnText = deleteConfirm.dataset.confirmbtntxt;
 
             const dialog = document.createElement("nyro-cms-dialog");
 
@@ -18,7 +19,10 @@ import Sortable from "sortablejs";
             const content = templateConfirm.content.cloneNode(true);
 
             if (confirmText) {
-                content.in.querySelector("p").innerHTML = confirmText;
+                content.querySelector("p").innerHTML = confirmText;
+            }
+            if (confirmBtnText) {
+                content.querySelector(".confirm").innerHTML = confirmBtnText;
             }
 
             content.querySelector(".actions").addEventListener("click", (e) => {

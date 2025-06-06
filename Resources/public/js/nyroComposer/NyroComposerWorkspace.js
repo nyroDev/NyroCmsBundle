@@ -7,7 +7,7 @@ template.innerHTML = `
     display: block;
 }
 nav {
-    display: var(--composer-ui-hidden, block);
+    display: var(--composer-ui-display, block);
     margin-top: var(--composer-panel-space);
     visibility: var(--composer-ui-visibility);
 }

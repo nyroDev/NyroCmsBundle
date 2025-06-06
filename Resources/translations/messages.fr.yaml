@@ -26,6 +26,7 @@ admin:
     account: Mon compte
     password: Mon mot de passe
     logout: Me déconnecter
+    logoutConfirm: Êtes-vous sûr de vouloir vous déconnecter ?
     contents: Contenus
     contentHandler: Modules
     access: Gestion des accès
@@ -174,6 +175,13 @@ admin:
     ogImage: Image de partage
     inserted: Ajouté le
     updated: Mis à jour le
+    actions:
+      show: Voir la page
+      composer: Accéder au Composer
+      edit: Modifier la page
+      addSub: Ajouter une sous-page
+      delete: Supprimer la page
+      deleteConfirm: Êtes-vous sûr de vouloir supprimer cette page et toute les sous-pages ?
   contentHandler:
     viewTitle: Modules associés
     id: ID
@@ -247,7 +255,7 @@ admin:
     wrongPassword: Le mot de passe n'est pas bon
     newPassword: Nouveau mot de passe
     samePassword: Le mot de passe et la confirmation doivent être identique.
-    accountFields: Informations personelles
+    accountFields: Informations personnelles
     accountFieldsSaved: |
       Les informations de votre compte ont bien été enregistrées.
     accountPassword: Mot de passe

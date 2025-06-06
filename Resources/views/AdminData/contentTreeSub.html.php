@@ -35,21 +35,21 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 			<nav class="menuNode">
 				<a href="<?php echo $view['nyrocms']->getUrlFor($content, true, ['_locale' => $view['nyrocms']->getDefaultLocale($content)]); ?>" target="_blank">
 					<?php echo $view['nyrocms_admin']->getIcon('show'); ?>
-					<?php echo $view['nyrodev']->trans('admin.misc.watch'); ?>
+					<?php echo $view['nyrodev']->trans('admin.content.actions.show'); ?>
 				</a>
 				<?php if ($canEdit): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $content->getId()]); ?>" target="_blank">
 						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
-						<?php echo $view['nyrodev']->trans('admin.composer.title'); ?>
+						<?php echo $view['nyrodev']->trans('admin.content.actions.composer'); ?>
 					</a>
 					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', ['id' => $content->getId()]); ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
-						<?php echo $view['translator']->trans('admin.misc.edit'); ?>
+						<?php echo $view['translator']->trans('admin.content.actions.edit'); ?>
 					</a>
 					<?php if ($curCanHavSub): ?>
 						<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', ['pid' => $content->getId()]); ?>">
 							<?php echo $view['nyrocms_admin']->getIcon('treeAdd'); ?>
-							<?php echo $view['translator']->trans('admin.misc.add'); ?>
+							<?php echo $view['translator']->trans('admin.content.actions.addSub'); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ($content->getContentHandler() && $content->getContentHandler()->getHasAdmin()): ?>
@@ -61,9 +61,10 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 							</a>
 						<?php endif; ?>
 					<?php endif; ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', ['id' => $content->getId()]); ?>" class="delete">
+					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', ['id' => $content->getId()]); ?>" class="delete"
+						data-deletetxt="<?php echo $view->escape($view['translator']->trans('admin.content.actions.deleteConfirm')); ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
-						<?php echo $view['translator']->trans('admin.misc.delete'); ?>
+						<?php echo $view['translator']->trans('admin.content.actions.delete'); ?>
 					</a>
 				<?php endif; ?>
 			</nav>

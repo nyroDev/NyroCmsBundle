@@ -110,6 +110,10 @@ header label[for="switch_adminMenu"]:after {
     transition: color var(--transition-time), background-color var(--transition-time);
 }
 
+#adminNav li a.confirmLink {
+    color: var(--c-delete);
+}
+
 #adminNav li .icon {
     margin-right: 1rem;
 }
@@ -133,6 +137,12 @@ header label[for="switch_adminMenu"]:after {
     color: var(--c-header-text);
     background: var(--c-highlight-dark);
 }
+
+#adminNav li a:hover.confirmLink {
+    color: var(--c-delete-text);
+    background: var(--c-delete);
+}
+
 #adminNav .menu-active > label,
 #adminNav li:hover > label {
     color: var(--c-header-text);
@@ -189,6 +199,9 @@ header label[for="switch_adminMenu"]:after {
     padding: calc(var(--s-padding) / 2) var(--s-padding);
     background: var(--c-light-background);
     color: var(--c-secondary);
+}
+#breadcrumbs {
+    border-bottom: 1px solid var(--c-border);
 }
 #breadcrumbs a {
     display: inline-flex;

@@ -109,6 +109,7 @@ nyro-composer-side-panel {
 nyro-composer.sideToggled {
     --composer-ui-margin-top: 0;
     --composer-ui-visibility: hidden;
+    --composer-ui-display: none;
     padding-left: var(--composer-panel-space);
 }
 

@@ -116,6 +116,7 @@ nyro-select-option[selected] {
 
 .form_row textarea {
     min-height: 4em;
+    resize: vertical;
 }
 
 .form_row input:focus,

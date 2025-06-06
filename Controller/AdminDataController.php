@@ -847,7 +847,7 @@ class AdminDataController extends AbstractAdminController
                         'updated',
                     ],
                     'moreActions' => [
-                        'welcome' => [
+                        'mailOut' => [
                             'name' => $this->get(AdminService::class)->getIcon('misc'),
                             'route' => 'nyrocms_admin_data_user_welcome',
                             'attrs' => 'title="'.$this->trans('admin.user.resendWelcome').'"',

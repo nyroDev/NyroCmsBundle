@@ -26,6 +26,7 @@ admin:
     account: My account
     password: My password
     logout: Logout
+    logoutConfirm: Are you sure you want to logout?
     contents: Contents
     access: Access management
     homes: Homepage management
@@ -173,6 +174,13 @@ admin:
     ogImage: Share image
     inserted: Added on
     updated: Updated on
+    actions:
+      show: See the page
+      composer: Go to Composer
+      edit: Edit the page
+      addSub: Add a suboage
+      delete: Delete the page
+      deleteConfirm: Are you sure you want to delete this page and all its subpages?
   contentHandler:
     viewTitle: Associated modules
     id: ID

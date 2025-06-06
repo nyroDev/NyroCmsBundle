@@ -103,7 +103,7 @@
 #contentTree .menuNode {
     position: absolute;
     top: 100%;
-    right: 0;
+    right: calc(-1 * var(--s-padding));
     display: flex;
     flex-direction: column;
     background: var(--c-white);
