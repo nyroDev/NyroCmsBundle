@@ -210,12 +210,22 @@ class AdminDataController extends AbstractAdminController
                 'icon' => NyroCmsService::ICON_PATH.'#save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_content_tree', $routePrm),
                 'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'fieldset' => [
+                    'name' => 'actions',
+                    'attr' => [
+                        'slot' => 'footer',
+                    ],
+                ],
             ],
         ];
+
+        $isDeveloper = $this->get(AdminService::class)->isDeveloper();
 
         $fields = array_filter([
             'title',
             count($themes) > 1 ? 'theme' : null,
+            $isDeveloper ? 'contentHandler' : null,
+            $isDeveloper ? 'menuOption' : null,
             'state',
             'goUrl',
             'goBlank',
@@ -244,16 +254,7 @@ class AdminDataController extends AbstractAdminController
             ];
         }
 
-        $moreOptions['submit']['fieldset'] = [
-            'name' => 'actions',
-            'attr' => [
-                'slot' => 'footer',
-            ],
-        ];
-
-        if ($this->get(AdminService::class)->isDeveloper()) {
-            $fields[] = 'contentHandler';
-            $fields[] = 'menuOption';
+        if ($isDeveloper) {
             $repoContentHandler = $this->get(DbAbstractService::class)->getContentHandlerRepository();
             $moreOptions['contentHandler'] = [
                 'query_builder' => function ($er) use ($repoContentHandler) {
