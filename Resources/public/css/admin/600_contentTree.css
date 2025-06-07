@@ -1,3 +1,6 @@
+#contentTree {
+    overflow: auto;
+}
 #contentTree.expandedAll .toolbar .expandAll,
 #contentTree:not(.expandedAll) .toolbar .reduceAll {
     display: none;

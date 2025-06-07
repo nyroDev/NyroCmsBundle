@@ -24,6 +24,8 @@ class AdminService extends NyroDevAbstractService
 {
     use AssetsPackagesServiceableTrait;
 
+    public const ROLE_COMPOSER_EDIT = 'COMPOSER_EDIT';
+
     public const SESSION_ROOT_NAME = 'rootContent';
 
     public function __construct(
@@ -166,9 +168,9 @@ class AdminService extends NyroDevAbstractService
         return $this->hasRole('ROLE_SUPERADMIN');
     }
 
-    public function hasRole(string $role): bool
+    public function hasRole(string $role, mixed $subject = null): bool
     {
-        return $this->memberService->isGranted($role);
+        return $this->memberService->isGranted($role, $subject);
     }
 
     public function isDeveloper(): bool
@@ -188,8 +190,12 @@ class AdminService extends NyroDevAbstractService
             }
         } elseif ($this->dbService->isA($row, 'template')) {
             $canAdmin = $this->canAdminTemplate($row);
-        } else {
+        } elseif ($row->getParent()) {
             $canAdmin = $this->canAdminContent($row->getParent());
+        }
+
+        if ($canAdmin || !$row->getParent()) {
+            $canAdmin = $this->hasRole(self::ROLE_COMPOSER_EDIT, $row);
         }
 
         return $canAdmin;
@@ -353,6 +359,7 @@ class AdminService extends NyroDevAbstractService
 
         $vars = [
             'logged' => $this->memberService->isLogged(),
+            'user' => $this->memberService->getUser(),
             'menu' => $rootMenu,
         ];
         if ($vars['logged']) {

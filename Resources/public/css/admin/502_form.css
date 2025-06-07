@@ -198,6 +198,15 @@ nyro-select-option:not(:defined) {
     padding: 0;
     list-style: none;
 }
+
+.form_row_choice .form_expanded_group > label {
+    font-weight: var(--font-bold-weight);
+}
+
+.form_row_choice .form_expanded_group ul {
+    margin-left: 2rem;
+}
+
 .form_row_choice input {
     width: auto;
 }

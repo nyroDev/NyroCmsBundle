@@ -85,7 +85,18 @@ if ($intro && $intro != $introKey) {
 				<tbody>
 				<?php foreach ($results as $r): ?>
 					<tr>
-						<?php $first = true;
+						<?php
+                    $first = true;
+				    $canEdit = !isset($noEdit) || !$noEdit;
+				    $canDelete = !isset($noDelete) || !$noDelete;
+
+				    if ($canEdit && isset($editEnabled) && is_callable($editEnabled)) {
+				        $canEdit = $editEnabled($r);
+				    }
+				    if ($canDelete && isset($deleteEnabled) && is_callable($deleteEnabled)) {
+				        $canDelete = $deleteEnabled($r);
+				    }
+
 				    foreach ($fields as $f): ?>
 							<td><?php
 				            $fct = 'get'.ucfirst($f);
@@ -102,9 +113,11 @@ if ($intro && $intro != $introKey) {
 				            }
 				        }
 				        if ($first) {
-				            if (!isset($noEdit) || !$noEdit) {
+				            if ($canEdit) {
 				                $urlEdit = $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()]));
 				                echo '<a href="'.$urlEdit.'" class="editLink">'.nl2br($val).'</a>';
+				            } else {
+				                echo nl2br($val);
 				            }
 				            $first = false;
 				        } else {
@@ -127,12 +140,12 @@ if ($intro && $intro != $introKey) {
 									</a>
 								<?php endforeach; ?>
 							<?php endif; ?>
-							<?php if (!isset($noEdit) || !$noEdit): ?>
+							<?php if ($canEdit): ?>
 								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()])); ?>" class="btn btnSmall edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
 								</a>
 							<?php endif; ?>
-							<?php if (!isset($noDelete) || !$noDelete): ?>
+							<?php if ($canDelete): ?>
 								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : [], ['id' => $r->getId()])); ?>" class="btn btnSmall btnDelete delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
 									<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
 								</a>
