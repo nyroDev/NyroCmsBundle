@@ -51,7 +51,6 @@ template.innerHTML = `
 .image nav a[data-action="delete"]:hover {
     background-color: var(--composer-color-error);
 }
-
 .image nav a .icon {
     width: 16px;
     height: 16px;

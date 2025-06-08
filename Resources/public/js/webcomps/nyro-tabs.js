@@ -151,7 +151,7 @@ class NyroTabs extends HTMLElement {
     }
 
     get elements() {
-        return this.querySelectorAll(this.selector+':not([slot="header"], [slot="footer"], [slot="nav"])');
+        return this.querySelectorAll(this.selector + ':not([slot="header"], [slot="footer"], [slot="nav"])');
     }
 
     constructor() {

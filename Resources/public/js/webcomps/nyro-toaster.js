@@ -3,7 +3,7 @@ templateToaster.innerHTML = `
 <style>
 :host {
     --nyro-toaster-closing-time: 0.3s;
-    
+
     display: block;
 
     background: #fff;

@@ -9,5 +9,5 @@ interface TemplateRepositoryInterface
 {
     public function getAvailableTemplatesFor(Composable $row): array;
 
-    public function getTemplateDefaultFor(Composable $row): ?Template;
+    public function getDefaultTemplateFor(Composable $row): ?Template;
 }

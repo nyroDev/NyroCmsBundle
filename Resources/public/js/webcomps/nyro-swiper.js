@@ -24,12 +24,7 @@ main {
 }
 main div {
     display: flex;
-    transform: translateX(
-        max(
-            var(--pos) * -1 * var(--nyro-swiper-slide-width),
-            var(--maxTranslate)
-        )
-    );
+    transform: translateX(max(var(--pos) * -1 * var(--nyro-swiper-slide-width), var(--maxTranslate)));
     transition: transform var(--nyro-swiper-animation-time);
 }
 ::slotted(*) {

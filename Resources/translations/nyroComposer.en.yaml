@@ -3,6 +3,15 @@ noConfig: Nothing to edit.
 confirmQuestion: Are you sure?
 delete: Delete
 cancel: Cancel
+back: Back
+
+page.title: Page
+page.intro: To organize or change the appearance of your page, please select at least one block or content.
+page.chooseTemplate: To apply another template to this page, click <a href="#">this link</a>.
+
+template.title: Templates
+template.standard: Predefined templates
+template.custom: Added templates
 
 inputFile.choose.file: Choose file...
 inputFile.choose.files: Choose files...

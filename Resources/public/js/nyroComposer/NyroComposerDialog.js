@@ -5,44 +5,39 @@ template.innerHTML = `
     font-family: var(--composer-font-family);
 }
 dialog {
-	border: none;
-	background: #fff;
-	overflow: visible;
+    border: none;
+    background: #fff;
+    overflow: visible;
 }
 dialog::backdrop {
     background-color: rgba(60, 60, 60, 0.3);
     backdrop-filter: blur(0.5rem);
 }
-
 dialog .nyroComposerDialogClose {
-	position: absolute;
-	top: -15px;
-	right: -15px;
+    position: absolute;
+    top: -15px;
+    right: -15px;
     display: flex !important;
     justify-content: center;
     align-items: center;
-	padding: 0 !important;
-	font-size: 18px !important;
-	text-align: center !important;
-	width: 26px !important;
-	border-radius: none !important;
+    padding: 0 !important;
+    font-size: 18px !important;
+    text-align: center !important;
+    width: 26px !important;
+    border-radius: none !important;
 }
-
 dialog .nyroComposerDialogClose .icon {
     width: 16px;
     height: 16px;
 }
-
 dialog p {
     margin: 0 0 var(--composer-panel-space) 0;
     text-align: center;
     line-height: 1.5;
 }
-
 :host(.nyroComposerDialogConfirm) p {
     max-width: 250px;
 }
-
 dialog .actions {
     display: flex;
     justify-content: space-between;
@@ -51,7 +46,6 @@ dialog .actions {
 dialog .actions a + a {
     margin-left: var(--composer-panel-space);
 }
-
 :host(.nyroComposerDialogIframe) dialog {
     width: 80vw;
     height: 90vh;

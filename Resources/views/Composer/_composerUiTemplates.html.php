@@ -42,3 +42,7 @@
 <template class="ui" data-id="icon">
     <?php echo $view['nyrocms_composer']->getIcon('IDENT'); ?>
 </template>
+
+<template class="ui" data-id="iconAdmin">
+    <?php echo $view['nyrocms_admin']->getIcon('IDENT'); ?>
+</template>

@@ -276,9 +276,9 @@ class ComposerService extends AbstractService
         return $event->getConfig();
     }
 
-    public function getTemplateDefaultFor(Composable $row): ?Template
+    public function getDefaultTemplateFor(Composable $row): ?Template
     {
-        return $this->dbService->getTemplateRepository()->getTemplateDefaultFor($row);
+        return $this->dbService->getTemplateRepository()->getDefaultTemplateFor($row);
     }
 
     public function getAvailableBlocks(Composable $row): array
@@ -470,8 +470,16 @@ class ComposerService extends AbstractService
             // Handle empty content only on admin
             if ($admin) {
                 $content = [];
-                if ($template = $this->getTemplateDefaultFor($row)) {
-                    $content = $template->getContent();
+                if ($template = $this->getDefaultTemplateFor($row)) {
+                    $content = array_merge(
+                        [
+                            [
+                                self::TEMPLATE => $template->getId(),
+                                'fresh' => true,
+                            ],
+                        ],
+                        $template->getContent()
+                    );
                 }
 
                 $event = new ComposerDefaultBlockEvent($row, $content);
@@ -508,7 +516,10 @@ class ComposerService extends AbstractService
 
         foreach ($content as $cont) {
             if (isset($cont[self::TEMPLATE])) {
-                $html[] = '<input type="hidden" data-template="'.$cont[self::TEMPLATE].'" name="content[]" value="{&quot;'.self::TEMPLATE.'&quot;:&quot;'.$cont[self::TEMPLATE].'&quot;}"/>';
+                $html[] = '<input type="hidden" data-template="'.$cont[self::TEMPLATE].'"
+                    name="content[]" value="{&quot;'.self::TEMPLATE.'&quot;:&quot;'.$cont[self::TEMPLATE].'&quot;}"
+                    '.(isset($cont['fresh']) ? 'data-fresh' : '').'
+                    />';
                 continue;
             }
             $html[] = $this->renderBlock($row, $cont['_type'], $cont, $admin);
@@ -751,22 +762,6 @@ class ComposerService extends AbstractService
         }
     }
 
-    public function getSelectedTemplateId(Composable $row): ?string
-    {
-        $contents = $row->getContent();
-        if (!$contents || !is_array($contents) || 0 === count($contents)) {
-            return null;
-        }
-
-        foreach ($contents as $content) {
-            if (isset($content[self::TEMPLATE])) {
-                return $content[self::TEMPLATE];
-            }
-        }
-
-        return null;
-    }
-
     public function applyTemplate(Template $template, Composable $row): void
     {
         $rowContents = $row->getContent();
@@ -779,7 +774,7 @@ class ComposerService extends AbstractService
 
             // First loop to fill block with exact matching (block type and items)
             foreach ($rowContents as $k => $rowContent) {
-                if (0 === count(array_filter($rowContent['conts']))) {
+                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
                     // No content, ignore it
                     continue;
                 }
@@ -796,9 +791,9 @@ class ComposerService extends AbstractService
                 }
             }
 
-            // Second loop to fill block with exact matching (same containeer number and same items)
+            // Second loop to fill block with exact matching (same container number and same items)
             foreach ($rowContents as $k => $rowContent) {
-                if (0 === count(array_filter($rowContent['conts']))) {
+                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
                     // No content, ignore it
                     continue;
                 }
@@ -820,23 +815,23 @@ class ComposerService extends AbstractService
 
             $handlerBlock = null;
             $itemsByType = [];
-            foreach ($rowContents as $k => $block) {
-                if (0 === count(array_filter($rowContent['conts']))) {
+            foreach ($rowContents as $k => $rowContent) {
+                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
                     // No content, ignore it
                     continue;
                 }
 
-                foreach ($block['conts'] as $kk => $cont) {
+                foreach ($rowContent['conts'] as $kk => $cont) {
                     foreach ($cont as $contItem) {
                         if (ComposerService::ITEM_HANDLER === $contItem['_type']) {
-                            $handlerBlock = $block;
+                            $handlerBlock = $rowContent;
                             continue 3;
                         }
 
                         if (!isset($itemsByType[$contItem['_type']])) {
                             $itemsByType[$contItem['_type']] = [];
                         }
-                        $contItem['_originBlock'] = [$block['_type'], $kk];
+                        $contItem['_originBlock'] = [$rowContent['_type'], $kk];
                         $itemsByType[$contItem['_type']][] = $contItem;
                     }
                 }
@@ -864,18 +859,20 @@ class ComposerService extends AbstractService
             }
 
             $addedMissingBlocks = [];
-            foreach ($itemsByType as $contItem) {
-                $blockType = $contItem['_originBlock'][0];
-                $blockContIdx = $contItem['_originBlock'][1];
-                unset($contItem['_originBlock']);
-                if (!isset($addedMissingBlocks[$blockType])) {
-                    $cfg = $this->getComposableConfig('blocks', $blockType);
-                    $addedMissingBlocks[$blockType] = [
-                        '_type' => $blockType,
-                        'conts' => array_fill(0, $cfg['nb_containers'], []),
-                    ];
+            foreach ($itemsByType as $type => $contItems) {
+                foreach ($contItems as $contItem) {
+                    $blockType = $contItem['_originBlock'][0];
+                    $blockContIdx = $contItem['_originBlock'][1];
+                    unset($contItem['_originBlock']);
+                    if (!isset($addedMissingBlocks[$blockType])) {
+                        $cfg = $this->getComposableConfig('blocks', $blockType);
+                        $addedMissingBlocks[$blockType] = [
+                            '_type' => $blockType,
+                            'conts' => array_fill(0, $cfg['nb_containers'], []),
+                        ];
+                    }
+                    $addedMissingBlocks[$blockType]['conts'][$blockContIdx][] = $contItem;
                 }
-                $addedMissingBlocks[$blockType]['conts'][$blockContIdx][] = $contItem;
             }
 
             $newContents = array_merge($newContents, array_values($addedMissingBlocks));

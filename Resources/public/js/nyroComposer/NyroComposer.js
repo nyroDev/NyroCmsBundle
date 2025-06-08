@@ -84,6 +84,141 @@ class NyroComposer extends HTMLElement {
         return this.hasAttribute("no-media-change");
     }
 
+    get selectedTemplate() {
+        if (this._selectedTemplate !== undefined) {
+            return this._selectedTemplate;
+        }
+
+        this._selectedTemplate = false;
+
+        const templateInputValue = this.templateInput.value;
+        if (templateInputValue) {
+            const tmp = JSON.parse(templateInputValue);
+            this._selectedTemplate = tmp["_template"] || false;
+        }
+
+        return this._selectedTemplate;
+    }
+
+    get templateInput() {
+        if (this._templateInput !== undefined) {
+            return this._templateInput;
+        }
+
+        this._templateInput = this.workspace.querySelector("input[data-template]");
+
+        if (!this._templateInput) {
+            this._templateInput = document.createElement("input");
+            this._templateInput.type = "hidden";
+            this._templateInput.name = "content[]";
+            this._templateInput.dataset.template = "1";
+            this.workspace.prepend(this._templateInput);
+        }
+
+        return this._templateInput;
+    }
+
+    get availableTemplates() {
+        if (this._availableTemplates !== undefined) {
+            return this._availableTemplates;
+        }
+
+        this._availableTemplates = false;
+
+        if (!this.dataset.availableTemplates) {
+            return this._availableTemplates;
+        }
+
+        const avlTemplates = JSON.parse(this.dataset.availableTemplates);
+        if (!avlTemplates || avlTemplates.length === 0) {
+            return this._availableTemplates;
+        }
+
+        this._availableTemplates = {
+            templates: {},
+            categories: {},
+        };
+
+        avlTemplates.forEach((template) => {
+            this._availableTemplates.templates[template.id] = template;
+
+            const tplKey = template.custom ? "custom" : "standard";
+
+            const category = template.category;
+            if (!category) {
+                if (!this._availableTemplates.noCategoryTemplates) {
+                    this._availableTemplates.noCategoryTemplates = {
+                        standard: [],
+                        custom: [],
+                    };
+                }
+                this._availableTemplates.noCategoryTemplates[tplKey].push(template.id);
+                return;
+            }
+
+            if (!this._availableTemplates.categories[category.id]) {
+                this._availableTemplates.categories[category.id] = category;
+                this._availableTemplates.categories[category.id].templates = {
+                    standard: [],
+                    custom: [],
+                };
+            }
+
+            this._availableTemplates.categories[category.id].templates[tplKey].push(template.id);
+        });
+
+        return this._availableTemplates;
+    }
+
+    chooseTemplate(id) {
+        if (!id || this._choosingTemplate) {
+            return;
+        }
+
+        this._choosingTemplate = true;
+
+        const formData = new FormData(this.form);
+        formData.append("template", id);
+
+        fetch(document.location.href, {
+            method: "POST",
+            body: formData,
+        })
+            .then((response) => {
+                return response.text();
+            })
+            .then((response) => {
+                this.workspace.innerHTML = response;
+                this.workspace.initBlocks();
+            });
+    }
+
+    getPanelConfig(init) {
+        const panelConfig = [];
+
+        panelConfig.push({
+            type: "icon",
+            icon: "page",
+        });
+
+        panelConfig.push({
+            type: "title",
+            title: this.trans("page.title"),
+        });
+
+        panelConfig.push({
+            type: "text",
+            text: this.trans("page.intro"),
+        });
+
+        panelConfig.push({
+            type: "template",
+            conditional: this.trans("page.chooseTemplate"),
+        });
+
+        return panelConfig;
+    }
+
     getTemplates(type) {
         return this.querySelectorAll("template." + type);
     }
@@ -241,6 +376,22 @@ class NyroComposer extends HTMLElement {
         const icon = this.getTemplate("ui", "icon").innerHTML.replaceAll("IDENT", name);
 
         iconsCache.set(name, icon);
+
+        return icon;
+    }
+
+    getIconAdmin(name, iconFallback) {
+        if (!name) {
+            return this.getIcon(iconFallback);
+        }
+        const cacheKey = "admin_" + name;
+        if (iconsCache.has(cacheKey)) {
+            return iconsCache.get(cacheKey);
+        }
+
+        const icon = this.getTemplate("ui", "iconAdmin").innerHTML.replaceAll("IDENT", name);
+
+        iconsCache.set(cacheKey, icon);
 
         return icon;
     }

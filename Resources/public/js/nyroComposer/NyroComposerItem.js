@@ -64,7 +64,6 @@ nav .title {
     padding: 0 5px;
     width: auto;
 }
-
 nav .actions {
     flex-direction: row-reverse;
 }

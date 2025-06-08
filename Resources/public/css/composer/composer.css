@@ -49,6 +49,7 @@
 
 body {
     accent-color: var(--composer-color-highlight);
+    min-height: 100vh;
 }
 
 nyro-composer > textarea,

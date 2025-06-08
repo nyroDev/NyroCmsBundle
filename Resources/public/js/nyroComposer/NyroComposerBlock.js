@@ -19,23 +19,20 @@ nav {
     right: calc(-1 * var(--composer-action-size) - 2px);
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;;
+    align-items: flex-start;
     opacity: 0;
     visibility: hidden;
 }
-
 :host(:hover) nav,
-:host(.composerSelected) nav{
+:host(.composerSelected) nav {
     opacity: 1;
     visibility: var(--composer-ui-visibility);
 }
-
 nav > div {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 nav a,
 nav .title {
     display: inline-flex;
@@ -70,6 +67,7 @@ nav .title {
     writing-mode: vertical-rl;
     text-orientation: upright;
 }
+
 </style>
 <nav></nav>
 <slot></slot>

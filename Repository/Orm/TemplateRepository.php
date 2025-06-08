@@ -46,7 +46,7 @@ class TemplateRepository extends EntityRepository implements TemplateRepositoryI
         });
     }
 
-    public function getTemplateDefaultFor(Composable $row): ?Template
+    public function getDefaultTemplateFor(Composable $row): ?Template
     {
         $availableTemplates = $this->getAvailableTemplatesFor($row);
 

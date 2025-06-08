@@ -53,7 +53,6 @@ template.innerHTML = `
 }
 
 .noConfig,
-:host(.hasSelection) .noSelection,
 form {
     display: none;
 }
@@ -68,15 +67,15 @@ form {
 .iconCont,
 .title,
 .text,
-.buttons,
-.noSelection {
+.buttons {
     text-align: center;
     margin: var(--composer-panel-space);
     color: var(--composer-color);
 }
 
 .iconCont .icon,
-.buttons .icon {
+.buttons .icon,
+.templates .icon {
     width: 38px;
     height: 38px;
 }
@@ -87,26 +86,29 @@ form {
 }
 
 .text,
-.buttons.conditional span {
+.buttons.conditional > span,
+.templates.conditional > span {
     font-size: 11px;
     text-align: left;
 }
 
-.noSelection,
 .text.help,
-.buttons.conditional span {
+.buttons.conditional > span,
+.templates.conditional > span {
     color: var(--composer-color-secondary);
     font-style: italic;
 }
 
-.buttons {
+.buttons,
+.templates.conditional {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
     margin: var(--composer-panel-space) 10px;
 }
 
-.buttons .button {
+.buttons .button,
+.templates .button {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -120,9 +122,11 @@ form {
     --border-hover-color: var(--composer-color-secondary);
     color: var(--composer-color);
     margin-bottom: 10px;
+    cursor: pointer;
     transition: border-color var(--composer-transition-time), background-color var(--composer-transition-time);
 }
-.buttons .icon {
+.buttons .icon,
+.templates .button .icon {
     margin-bottom: 5px;
 }
 
@@ -135,7 +139,9 @@ form {
 }
 
 .buttons .button:hover,
-.buttons .button.active {
+.buttons .button.active,
+.templates .button:hover,
+.templates .button.active {
     border-width: 2px;
     border-color: var(--border-hover-color);
     background-color: var(--composer-color-light-hover);
@@ -145,16 +151,19 @@ form {
     display: none;
 }
 
-.buttons.conditional span {
+.buttons.conditional > span,
+.templates.conditional > span {
     display: block;
     width: 100%;
 }
 
-.buttons.conditional span a {
+.buttons.conditional > span a,
+.templates.conditional > span a {
     color: var(--composer-color-secondary);
     font-weight: var(--composer-font-bold-weight);
 }
-.buttons.conditional span a:hover {
+.buttons.conditional > span a:hover,
+.templates.conditional > span a:hover {
     text-decoration: none;
 }
 
@@ -199,9 +208,47 @@ label {
     border-color: var(--composer-color);
 }
 
+.templates input,
+.templates > div {
+    display: none !important;
+}
+
+.templates:not(.conditional) {
+    position: absolute;
+    inset: 0;
+    background: var(--composer-color-panel-side-bg);
+    overflow: auto;
+    z-index: 5;
+}
+
+.templates:not(.conditional) > input:checked + div {
+    display: block !important;
+}
+
+.templates .templateBack {
+    color: var(--composer-color-secondary);
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 10px;
+    top: 25px;
+    cursor: pointer;
+    transition: color var(--composer-transition-time);
+}
+.templates .templateBack:hover {
+    color: var(--composer-color);
+}
+.templates .templateBack .icon {
+    width: 16px;
+    height: 16px;
+}
+.templateChoiceTitle {
+    font-weight: var(--composer-font-bold-weight);
+    font-size: 16px;
+    margin: 10px;
+}
 </style>
 <a href="#" class="toggle"></a>
-<div class="noSelection">Empty Selection</div>
 <div class="noConfig">Nothing to edit</div>
 <form action=""></form>
 <slot></slot>
@@ -232,6 +279,30 @@ templateInput.innerHTML = `
 <div class="option">
     <label></label>
     <span></span>
+</div>
+`;
+
+const templateTemplates = document.createElement("template");
+templateTemplates.innerHTML = `
+<div class="templates">
+    <input type="radio" id="template_category_empty" name="template_category" class="templateCategorySelector" checked />
+    <div class="templateCategory templateCategoryRoot"></div>
+</div>
+`;
+
+const templateTemplateCategory = document.createElement("template");
+templateTemplateCategory.innerHTML = `
+<input type="radio" name="template_category" class="templateCategorySelector" />
+<div class="templateCategory">
+    <label for="template_category_empty" class="templateBack">Back</label>
+</div>
+`;
+
+const templateTemplateChoices = document.createElement("template");
+templateTemplateChoices.innerHTML = `
+<div class="templateChoices">
+    <div class="templateChoiceTitle"></div>
+    <div class="buttons"></div>
 </div>
 `;
 
@@ -369,9 +440,9 @@ class NyroComposerSidePanel extends HTMLElement {
     }
 
     init() {
-        this.shadowRoot.querySelector(".noSelection").innerHTML = this.composer.trans("noSelection");
         this.shadowRoot.querySelector(".noConfig").innerHTML = this.composer.trans("noConfig");
         this._toggle.innerHTML = this.composer.getIcon("back");
+        this._handleSelected(true);
     }
 
     toggle(force) {
@@ -379,18 +450,12 @@ class NyroComposerSidePanel extends HTMLElement {
         this.composer.classList.toggle("sideToggled", force);
     }
 
-    _handleSelected() {
+    _handleSelected(init) {
         this._form.innerHTML = "";
-        this.classList.remove("hasSelection", "hasNoConfig", "hasConfig");
+        this.classList.remove("hasNoConfig", "hasConfig");
 
-        if (!this._selected) {
-            this.classList.remove("hasSelection");
-            return;
-        }
+        const panelConfig = this._selected ? this._selected.getPanelConfig() : this.composer.getPanelConfig(init);
 
-        this.classList.add("hasSelection");
-
-        const panelConfig = this._selected.getPanelConfig();
         if (panelConfig.length === 0) {
             this.classList.add("hasNoConfig");
             return;
@@ -401,31 +466,35 @@ class NyroComposerSidePanel extends HTMLElement {
         panelConfig.forEach((panelCfg) => {
             switch (panelCfg.type) {
                 case "icon":
-                    this._handlePanelIcon(panelCfg);
+                    this._form.appendChild(this._handlePanelIcon(panelCfg));
                     break;
                 case "title":
-                    this._handlePanelTitle(panelCfg);
+                    this._form.appendChild(this._handlePanelTitle(panelCfg));
                     break;
                 case "text":
-                    this._handlePanelText(panelCfg);
+                    this._form.appendChild(this._handlePanelText(panelCfg));
                     break;
                 case "buttons":
-                    this._handlePanelButtons(panelCfg);
+                    this._form.appendChild(this._handlePanelButtons(panelCfg));
                     break;
                 case "input":
-                    this._handlePanelInput(panelCfg);
+                    this._form.appendChild(this._handlePanelInput(panelCfg));
+                    break;
+                case "template":
+                    this._form.appendChild(this._handlePanelTemplate(panelCfg));
                     break;
             }
         });
     }
 
     _handlePanelIcon(panelCfg) {
-        const iconCont = templateIcon.content.cloneNode(true),
-            icon = this.composer.getIcon(panelCfg.icon);
+        const iconCont = templateIcon.content.cloneNode(true);
 
-        iconCont.querySelector("div").innerHTML = icon;
+        iconCont.querySelector("div").innerHTML = panelCfg.iconAdmin
+            ? this.composer.getIconAdmin(panelCfg.iconAdmin)
+            : this.composer.getIcon(panelCfg.icon);
 
-        this._form.appendChild(iconCont);
+        return iconCont;
     }
 
     _handlePanelTitle(panelCfg) {
@@ -433,7 +502,7 @@ class NyroComposerSidePanel extends HTMLElement {
 
         titleCont.querySelector("div").innerHTML = panelCfg.title;
 
-        this._form.appendChild(titleCont);
+        return titleCont;
     }
 
     _handlePanelText(panelCfg) {
@@ -444,7 +513,7 @@ class NyroComposerSidePanel extends HTMLElement {
             textCont.querySelector("div").classList.add("help");
         }
 
-        this._form.appendChild(textCont);
+        return textCont;
     }
 
     _handlePanelButtons(panelCfg) {
@@ -513,7 +582,7 @@ class NyroComposerSidePanel extends HTMLElement {
             this._selected.setValue(panelCfg.name, button.dataset.id);
         });
 
-        this._form.appendChild(buttonsCont);
+        return buttonsCont;
     }
 
     _handlePanelInput(panelCfg) {
@@ -559,19 +628,194 @@ class NyroComposerSidePanel extends HTMLElement {
 
         option.querySelector("span").appendChild(inputOuter);
 
-        this._form.appendChild(option);
-
         if (input) {
-            if (input.type === "checkbox") {
-                input.checked = !!panelCfg.value;
-            } else {
-                input.value = panelCfg.value;
+            setTimeout(() => {
+                if (input.type === "checkbox") {
+                    input.checked = !!panelCfg.value;
+                } else {
+                    input.value = panelCfg.value;
+                }
+
+                if (input.init) {
+                    input.init();
+                }
+            }, 250);
+        }
+
+        return option;
+    }
+
+    _handlePanelTemplate(panelCfg) {
+        const templates = this.composer.availableTemplates;
+        if (!templates) {
+            return;
+        }
+
+        const templatesCont = templateTemplates.content.cloneNode(true),
+            div = templatesCont.querySelector("div.templates"),
+            templateCategoryRoot = templatesCont.querySelector(".templateCategoryRoot");
+
+        if (panelCfg.conditional) {
+            div.classList.add("conditional");
+            const condtionalText = document.createElement("span");
+            condtionalText.innerHTML = panelCfg.conditional;
+            div.appendChild(condtionalText);
+
+            condtionalText.addEventListener("click", (e) => {
+                const a = e.target.closest("a");
+                if (!a) {
+                    return;
+                }
+                e.preventDefault();
+                condtionalText.remove();
+                div.classList.remove("conditional");
+            });
+        }
+
+        templateCategoryRoot.appendChild(
+            this._handlePanelIcon({
+                icon: "templates",
+            })
+        );
+
+        templateCategoryRoot.appendChild(
+            this._handlePanelTitle({
+                title: this.composer.trans("template.title"),
+            })
+        );
+
+        const categoryIds = Object.keys(templates.categories);
+        if (categoryIds.length) {
+            const rootbuttons = document.createElement("div");
+            rootbuttons.classList.add("buttons");
+
+            categoryIds.forEach((categoryId) => {
+                const category = templates.categories[categoryId],
+                    templateCategory = templateTemplateCategory.content.cloneNode(true),
+                    templateForId = "template_category_" + categoryId,
+                    categoryDiv = templateCategory.querySelector("div");
+
+                templateCategory.querySelector("label").innerHTML = this.composer.getIcon("back") + this.composer.trans("back");
+                templateCategory.querySelector("input").setAttribute("id", templateForId);
+
+                const label = document.createElement("label");
+                label.classList.add("button");
+                label.setAttribute("for", templateForId);
+                label.innerHTML = this.composer.getIconAdmin(category.icon || "tpl") + category.title;
+
+                rootbuttons.appendChild(label);
+
+                categoryDiv.appendChild(
+                    this._handlePanelIcon({
+                        iconAdmin: category.icon || "tpl",
+                    })
+                );
+
+                categoryDiv.appendChild(
+                    this._handlePanelTitle({
+                        title: category.title,
+                    })
+                );
+
+                if (category.templates.standard.length) {
+                    categoryDiv.appendChild(
+                        this._handlePanelTemplateChoices({
+                            type: "standard",
+                            templateIds: category.templates.standard,
+                            templates: templates.templates,
+                        })
+                    );
+                }
+
+                if (category.templates.custom.length) {
+                    categoryDiv.appendChild(
+                        this._handlePanelTemplateChoices({
+                            type: "custom",
+                            templateIds: category.templates.custom,
+                            templates: templates.templates,
+                        })
+                    );
+                }
+
+                div.appendChild(templateCategory);
+            });
+
+            templateCategoryRoot.appendChild(rootbuttons);
+        }
+
+        if (templates.noCategoryTemplates) {
+            if (templates.noCategoryTemplates.standard.length) {
+                templateCategoryRoot.appendChild(
+                    this._handlePanelTemplateChoices({
+                        type: "standard",
+                        templateIds: templates.noCategoryTemplates.standard,
+                        templates: templates.templates,
+                    })
+                );
             }
 
-            if (input.init) {
-                input.init();
+            if (templates.noCategoryTemplates.custom.length) {
+                templateCategoryRoot.appendChild(
+                    this._handlePanelTemplateChoices({
+                        type: "custom",
+                        templateIds: templates.noCategoryTemplates.custom,
+                        templates: templates.templates,
+                    })
+                );
             }
         }
+
+        let active = div.querySelector(".button.active");
+        if (active) {
+            active.closest(".templateCategory").previousElementSibling.checked = true;
+        }
+
+        div.addEventListener("click", (e) => {
+            const button = e.target.closest("a.button");
+            if (!button || this._selected || button.classList.contains("active")) {
+                return;
+            }
+            e.preventDefault();
+
+            if (active) {
+                active.classList.remove("active");
+            }
+
+            button.classList.add("active");
+            this.composer.chooseTemplate(button.dataset.id);
+        });
+
+        return templatesCont;
+    }
+
+    _handlePanelTemplateChoices(panelCfg) {
+        const templateChoices = templateTemplateChoices.content.cloneNode(true),
+            div = templateChoices.querySelector(".buttons");
+
+        templateChoices.querySelector(".templateChoiceTitle").innerHTML = this.composer.trans("template." + panelCfg.type);
+
+        const templateSelected = this.composer.selectedTemplate;
+
+        panelCfg.templateIds.forEach((templateId) => {
+            const template = panelCfg.templates[templateId];
+            if (!template) {
+                return;
+            }
+
+            const button = document.createElement("a");
+            button.href = "#";
+            button.className = "button";
+            button.innerHTML = this.composer.getIconAdmin(template.icon, "templates") + template.title;
+            button.dataset.id = template.id;
+
+            if (template.id == templateSelected) {
+                button.classList.add("active");
+            }
+
+            div.appendChild(button);
+        });
+
+        return templateChoices;
     }
 }
 

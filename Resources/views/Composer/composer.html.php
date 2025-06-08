@@ -109,7 +109,7 @@ foreach ($attrs as $k => $v) {
 				</nav>
 			</nav>
 		<?php endif; ?>
-		<?php if ($canChangeLang && count($langs) > 0):  // @todo need implement and integration?>
+		<?php if ($canChangeLang && count($langs) > 0): // @todo need implement and integration?>
 			<span slot="nav">
 				<label for="langSwitch"><?php echo $view['nyrodev']->trans('admin.content.lang'); ?></label>
 				<select id="langSwitch" class="nyroComposerSelectAutoLocation">
@@ -130,7 +130,6 @@ foreach ($attrs as $k => $v) {
 
 	<form id="composer" method="post" action="" class="<?php echo $view['nyrocms_composer']->getRenderCssTheme($row); ?>">
 		<input type="hidden" name="theme" value="<?php echo $row->getTheme(); ?>" />
-		<input type="hidden" name="template" value="" />
 
 		<nyro-composer-workspace>
 			<?php echo $view['nyrocms_composer']->render($row, true); ?>

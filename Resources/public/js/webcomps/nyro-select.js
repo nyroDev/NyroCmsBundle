@@ -287,7 +287,7 @@ template.innerHTML = `
     outline: 2px solid #000;
 }
 :host:after {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     right: var(--nyro-select-arrow-width-right);

@@ -4,6 +4,15 @@ confirmQuestion: Êtes-vous sûr ?
 delete: Supprimer
 cancel: Annuler
 save: Enregistrer
+back: Retour
+
+page.title: Page
+page.intro: Pour organiser ou modifier l’apparence de votre page, veuillez sélectionner au moins un bloc ou  un contenu.
+page.chooseTemplate: Pour appliquer un autre modèle à cette page, cliquez sur <a href="#">ce lien</a>.
+
+template.title: Modèles
+template.standard: Modèles prédéfinis
+template.custom: Modèles ajoutés
 
 inputFile.choose.file: Choisir un fichier...
 inputFile.choose.files: Choisir des fichiers...

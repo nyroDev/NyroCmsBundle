@@ -26,7 +26,7 @@ abstract class Template implements Composable, JsonSerializable
     protected ?string $icon = null;
 
     #[Gedmo\Versioned]
-    protected ?bool $custom = null;
+    protected ?bool $custom = true;
 
     #[Gedmo\Versioned]
     protected ?string $defaultFor = null;
