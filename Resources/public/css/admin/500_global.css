@@ -172,6 +172,44 @@ main > article > h1 {
     padding: 0.8em var(--s-padding);
 }
 
+nyro-toaster-stack {
+    top: calc(var(--s-header-height) + var(--s-padding));
+    bottom: auto;
+}
+
+nyro-toaster {
+    --textColor: var(--c-success-text);
+
+    position: relative;
+    color: var(--textColor);
+    background: var(--c-success);
+    border-radius: var(--s-radius);
+    padding: 1.5rem 3rem;
+    margin: 0 auto 1rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    width: 30rem;
+    max-width: calc(100vw - 2 * var(--s-padding));
+    box-sizing: border-box;
+    text-align: center;
+}
+
+nyro-toaster.deleteToaster {
+    --textColor: var(--c-delete-text);
+    background: var(--c-delete);
+}
+
+nyro-toaster .close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: var(--textColor);
+    --s-svg-size: 1.5rem;
+}
+nyro-toaster .close:hover {
+    color: var(--c-error);
+}
+
 nyro-cms-dialog .nyroCmsDialogClose {
     position: absolute;
     top: -15px;

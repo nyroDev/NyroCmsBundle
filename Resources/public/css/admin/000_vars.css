@@ -25,7 +25,7 @@
     --c-alert: #fabb00;
     --c-alert-text: #000;
     --c-success: #a2c862;
-    --c-success-text: #000;
+    --c-success-text: #fff;
     --c-info: var(--c-highlight);
     --c-info-text: var(--c-highlight-text);
 

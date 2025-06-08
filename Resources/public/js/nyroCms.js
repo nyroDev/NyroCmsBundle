@@ -1,5 +1,6 @@
 import "./../../../../utility-bundle/Resources/public/js/_jquery.js";
 
+import "./webcomps/nyro-toaster.js";
 import "./webcomps/nyro-cms-dialog.js";
 import "./webcomps/nyro-password.js";
 import "./webcomps/nyro-tabs.js";

@@ -24,9 +24,6 @@
 
 	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/footer.html.php'); ?>
 	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/templates.html.php'); ?>
-		
-	<?php if ($view['session']->hasFlash('confirm')): ?>
-		<dialog id="confirmMsg"><?php echo implode('<br />', $view['session']->getFlash('confirm')); ?></dialog>
-	<?php endif; ?>
+	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/toaster.html.php'); ?>
 </body>
 </html>
