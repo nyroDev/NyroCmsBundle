@@ -2,7 +2,7 @@
 $route = 'nyrocms_admin_data_content';
 $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 ?>
-<ul class="tree <?php echo $view['nyrocms_admin']->canAdminContent($parent) ? 'treeEditable' : 'treeNonEditable'; ?>">
+<ul class="tree <?php echo $view['nyrocms_admin']->canAdmin($parent) ? 'treeEditable' : 'treeNonEditable'; ?>">
 	<?php foreach ($contents as $content): ?>
 	<li class="node node_<?php echo $content->getState(); ?>">
 		<input type="hidden" name="tree[]" value="<?php echo $content->getId(); ?>" />
@@ -10,7 +10,7 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 		<input type="hidden" name="treeChanged[<?php echo $content->getId(); ?>]" value="0" />
 
 		<?php
-        $canEdit = $view['nyrocms_admin']->canAdminContent($content);
+        $canEdit = $view['nyrocms_admin']->canAdmin($content);
 	    $maxLevel = $view['nyrocms_admin']->getContentMaxLevel($content);
 	    $curCanHavSub = $view['nyrocms_admin']->canHaveSub($content);
 	    ?>

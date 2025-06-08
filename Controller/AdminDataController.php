@@ -62,7 +62,7 @@ class AdminDataController extends AbstractAdminController
         $this->get(AdminService::class)->setContentParentId($parent->getVeryParent()->getId());
 
         $canRootComposer = $this->get(AdminService::class)->canRootComposer($parent);
-        $canAdminContent = $this->get(AdminService::class)->canAdminContent($parent);
+        $canAdminContent = $this->get(AdminService::class)->canAdmin($parent);
         if ($canAdminContent && $request->isMethod('post')) {
             $tree = $request->request->all('tree');
             $treeLevel = $request->request->all('treeLevel');
@@ -136,7 +136,7 @@ class AdminDataController extends AbstractAdminController
     public function contentDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
-        if ($row && !$row->getHandler() && true === $this->get(AdminService::class)->canAdminContent($row)) {
+        if ($row && !$row->getHandler() && true === $this->get(AdminService::class)->canAdmin($row)) {
             $this->get(DbAbstractService::class)->remove($row);
             $this->get(DbAbstractService::class)->flush();
         }
@@ -150,7 +150,7 @@ class AdminDataController extends AbstractAdminController
 
         if ($pid) {
             $parent = $this->get(DbAbstractService::class)->getContentRepository()->find($pid);
-            if (!$parent || !$this->get(AdminService::class)->canAdminContent($parent)) {
+            if (!$parent || !$this->get(AdminService::class)->canAdmin($parent)) {
                 throw $this->createNotFoundException();
             }
             $row->setParent($parent);
@@ -163,7 +163,7 @@ class AdminDataController extends AbstractAdminController
     public function contentEditAction(Request $request, string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getContentRepository()->find($id);
-        if (!$row || true === !$this->get(AdminService::class)->canAdminContent($row)) {
+        if (!$row || true === !$this->get(AdminService::class)->canAdmin($row)) {
             throw $this->createNotFoundException();
         }
         $this->get(AdminService::class)->setContentParentId($row->getVeryParent()->getId());

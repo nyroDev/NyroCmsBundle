@@ -24,7 +24,7 @@ class AdminService extends NyroDevAbstractService
 {
     use AssetsPackagesServiceableTrait;
 
-    public const ROLE_COMPOSER_EDIT = 'COMPOSER_EDIT';
+    public const ROLE_COMPOSER = 'NYROCMS_COMPOSER';
 
     public const SESSION_ROOT_NAME = 'rootContent';
 
@@ -195,13 +195,13 @@ class AdminService extends NyroDevAbstractService
         }
 
         if ($canAdmin || !$row->getParent()) {
-            $canAdmin = $this->hasRole(self::ROLE_COMPOSER_EDIT, $row);
+            $canAdmin = $this->hasRole(self::ROLE_COMPOSER, $row);
         }
 
         return $canAdmin;
     }
 
-    public function canAdminContent(Content $content): bool
+    private function canAdminContent(Content $content): bool
     {
         if ($this->isSuperAdmin()) {
             return true;
@@ -211,7 +211,7 @@ class AdminService extends NyroDevAbstractService
         return isset($contentIds[$content->getId()]) ? $contentIds[$content->getId()] : false;
     }
 
-    public function canAdminTemplate(Template $template): bool
+    private function canAdminTemplate(Template $template): bool
     {
         if ($this->isSuperAdmin()) {
             return true;
@@ -374,7 +374,7 @@ class AdminService extends NyroDevAbstractService
             $tmpUriInit = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $adminPrefix = $this->getParameter('adminPrefix').'/';
             $tmpUriT = substr($tmpUriInit, strpos($tmpUriInit, $adminPrefix) + strlen($adminPrefix));
-            $tmpUri = array_merge(explode('/', trim($tmpUriT, '/')), array_fill(0, 2, false));
+            $tmpUri = array_merge(explode('/', trim($tmpUriT, '/')), array_fill(0, 4, false));
 
             $vars['uriSplitted'] = $tmpUri;
 
@@ -454,7 +454,7 @@ class AdminService extends NyroDevAbstractService
             foreach ($contentHandlers as $contentHandler) {
                 $canAdmin = false;
                 foreach ($contentHandler->getContents() as $content) {
-                    $canAdmin = $canAdmin || $this->canAdminContent($content) && (!$adminPerRoot || $content->getRoot() == $curRootId);
+                    $canAdmin = $canAdmin || $this->canAdmin($content) && (!$adminPerRoot || $content->getRoot() == $curRootId);
                 }
                 if ($canAdmin) {
                     $handler = $this->nyroCmsService->getHandler($contentHandler);

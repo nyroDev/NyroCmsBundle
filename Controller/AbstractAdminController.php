@@ -22,7 +22,7 @@ class AbstractAdminController extends SrcAbstractAdminController
         $canAdmin = false;
         $nyrocmsAdmin = $this->get(AdminService::class);
         foreach ($contentHandler->getContents() as $content) {
-            $canAdmin = $canAdmin || $nyrocmsAdmin->canAdminContent($content);
+            $canAdmin = $canAdmin || $nyrocmsAdmin->canAdmin($content);
         }
 
         if (!$canAdmin) {
