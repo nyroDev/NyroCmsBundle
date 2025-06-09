@@ -13,6 +13,9 @@ templateOption.innerHTML = `
     background-color: #fff;
     padding: 2px 3px;
 }
+:host([disabled]) {
+    display: none;
+}
 :host(:hover) {
     background-color: #e9ecef;
 }
@@ -56,6 +59,18 @@ class NyroSelectOption extends HTMLElement {
             this.setAttribute("selected", "");
         } else {
             this.removeAttribute("selected");
+        }
+    }
+
+    get disabled() {
+        return this.hasAttribute("disabled");
+    }
+
+    set disabled(disabled) {
+        if (disabled) {
+            this.setAttribute("disabled", "");
+        } else {
+            this.removeAttribute("disabled");
         }
     }
 
@@ -561,14 +576,14 @@ class NyroSelect extends HTMLElement {
             this.focused = true;
             this._filter();
             this._positionDropdown();
-            const currentSelected = this.querySelector("nyro-select-option[selected]");
+            const currentSelected = this.querySelector("nyro-select-option[selected]:not([disabled])");
             if (currentSelected) {
                 this._scrollIntoView(currentSelected);
             }
         });
 
         this._dropdown.addEventListener("click", (e) => {
-            const option = e.target.closest("nyro-select-option");
+            const option = e.target.closest("nyro-select-option:not([disabled])");
             if (!option) {
                 return;
             }
@@ -583,7 +598,7 @@ class NyroSelect extends HTMLElement {
             this._parseOrBlur();
         });
 
-        this._defaultOption = this.querySelector('nyro-select-option[value=""], nyro-select-option:not([value])');
+        this._defaultOption = this.querySelector('nyro-select-option[value=""]:not([disabled]), nyro-select-option:not([value], [disabled])');
         if (this._defaultOption) {
             //this._defaultOption.hidden = true;
         }
@@ -621,7 +636,7 @@ class NyroSelect extends HTMLElement {
         }
 
         this._unselectAll();
-        const newSelecteds = this.querySelectorAll('nyro-select-option[value="' + value.join('], nyro-select-option[value="') + '"]');
+        const newSelecteds = this.querySelectorAll('nyro-select-option[value="' + value.join('], nyro-select-option[value="') + '"]:not([disabled])');
         newSelecteds.forEach((newSelected) => {
             newSelected.selected = true;
         });
@@ -665,7 +680,7 @@ class NyroSelect extends HTMLElement {
     }
 
     _parseSelected(ignoreDispatch) {
-        const currentSelecteds = this.querySelectorAll('nyro-select-option[selected][value]:not([value=""])');
+        const currentSelecteds = this.querySelectorAll('nyro-select-option[selected][value]:not([value=""],[disabled])');
         if (currentSelecteds.length > 1 && !this.multiple) {
             console.error("Multiple selected option found in single mode, only first found will be used");
         }
@@ -677,9 +692,7 @@ class NyroSelect extends HTMLElement {
         }
 
         let value = undefined;
-        if (this.html) {
-            this._search.value = "";
-        }
+        this._search.value = "";
         currentSelecteds.forEach((currentSelected) => {
             if (this.multiple) {
                 if (!value) {
@@ -726,7 +739,7 @@ class NyroSelect extends HTMLElement {
 
     _filter() {
         const searchVal = normalizeText(this._search.value);
-        this.querySelectorAll("nyro-select-option").forEach((option) => {
+        this.querySelectorAll("nyro-select-option:not([disabled])").forEach((option) => {
             const matching = searchVal.length ? normalizeText(option.textLabel).indexOf(searchVal) !== -1 : true;
             option.hidden = !matching;
             if (!matching && option.focused) {
@@ -736,12 +749,12 @@ class NyroSelect extends HTMLElement {
     }
 
     _moveFocus(direction) {
-        let currentlyFocused = this.querySelector("nyro-select-option[focused]:not([hidden])");
+        let currentlyFocused = this.querySelector("nyro-select-option[focused]:not([hidden],[disabled])");
         if (!currentlyFocused) {
-            currentlyFocused = this.querySelector("nyro-select-option[selected]:not([hidden])");
+            currentlyFocused = this.querySelector("nyro-select-option[selected]:not([hidden],[disabled])");
         }
         if (!currentlyFocused) {
-            currentlyFocused = this.querySelector("nyro-select-option:not([hidden])");
+            currentlyFocused = this.querySelector("nyro-select-option:not([hidden],[disabled])");
             if (direction === 1) {
                 // focus it directly, this is the first arrow down
                 currentlyFocused.focused = true;
@@ -759,26 +772,26 @@ class NyroSelect extends HTMLElement {
             // Search through all next sibling
             while (!newFocused && currentCursor.nextElementSibling) {
                 currentCursor = currentCursor.nextElementSibling;
-                if (currentCursor.matches("nyro-select-option:not([hidden])")) {
+                if (currentCursor.matches("nyro-select-option:not([hidden],[disabled])")) {
                     newFocused = currentCursor;
                 }
             }
 
             if (!newFocused) {
-                newFocused = this.querySelector("nyro-select-option:not([hidden])");
+                newFocused = this.querySelector("nyro-select-option:not([hidden],[disabled])");
             }
         } else {
             let currentCursor = currentlyFocused;
             // Search through all previous sibling
             while (!newFocused && currentCursor.previousElementSibling) {
                 currentCursor = currentCursor.previousElementSibling;
-                if (currentCursor.matches("nyro-select-option:not([hidden])")) {
+                if (currentCursor.matches("nyro-select-option:not([hidden],[disabled])")) {
                     newFocused = currentCursor;
                 }
             }
 
             if (!newFocused) {
-                newFocused = this.querySelector("nyro-select-option:not([hidden]):last-child");
+                newFocused = this.querySelector("nyro-select-option:not([hidden],[disabled]):last-child");
             }
         }
 
@@ -791,7 +804,7 @@ class NyroSelect extends HTMLElement {
 
     _actionFocused() {
         const haveUnselected = this.multiple ? false : this._unselectAll();
-        const currentlyFocused = this.querySelector("nyro-select-option[focused]:not([hidden])");
+        const currentlyFocused = this.querySelector("nyro-select-option[focused]:not([hidden],[disabled])");
 
         if (!currentlyFocused) {
             if (haveUnselected) {

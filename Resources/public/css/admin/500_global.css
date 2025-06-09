@@ -194,6 +194,7 @@ nyro-toaster {
     text-align: center;
 }
 
+nyro-toaster.errorToaster,
 nyro-toaster.deleteToaster {
     --textColor: var(--c-delete-text);
     background: var(--c-delete);
