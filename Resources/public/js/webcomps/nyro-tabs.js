@@ -69,6 +69,9 @@ template.innerHTML = `
 
     display: block;
 }
+:host([html-nav]) nav {
+    display: none;
+}
 nav {
     position: relative;
     display: flex;
@@ -92,6 +95,7 @@ nav:after {
     display: none;
 }
 </style>
+<slot name="htmlNav"></slot>
 <nav>
     <slot name="nav"></slot>
 </nav>
@@ -126,6 +130,18 @@ class NyroTabs extends HTMLElement {
         }
     }
 
+    get htmlNav() {
+        return this.hasAttribute("html-nav");
+    }
+
+    get listenPrevNext() {
+        return this.hasAttribute("listen-prev-next");
+    }
+
+    get isLastTab() {
+        return this.hasAttribute("is-last-tab");
+    }
+
     get selector() {
         return this.getAttribute("selector") || ':scope > *:not([slot="nav"])';
     }
@@ -151,7 +167,7 @@ class NyroTabs extends HTMLElement {
     }
 
     get elements() {
-        return this.querySelectorAll(this.selector + ':not([slot="header"], [slot="footer"], [slot="nav"])');
+        return this.querySelectorAll(this.selector + ':not([slot="header"], [slot="footer"], [slot="nav"], [slot="htmlNav"])');
     }
 
     constructor() {
@@ -162,16 +178,39 @@ class NyroTabs extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this.shadowRoot.querySelector("nav").addEventListener("click", (e) => {
-            const tab = e.target.closest("nyro-tab");
-            if (tab) {
-                e.preventDefault();
-                this.tab = tab.index;
-            }
+            this._handleNavClick(e);
         });
     }
 
+    _handleNavClick(e) {
+        const tab = e.target.closest("nyro-tab");
+        if (tab) {
+            e.preventDefault();
+            this.tab = tab.index;
+        }
+    }
+
     connectedCallback() {
-        this.writeTabs();
+        if (this.htmlNav) {
+            this.setupHtmlNav();
+        } else {
+            this.writeTabs();
+        }
+
+        if (this.listenPrevNext) {
+            this.addEventListener("click", (e) => {
+                const prevNext = e.target.closest(".nyro-tabs-prev, .nyro-tabs-next");
+                if (!prevNext) {
+                    return;
+                }
+                e.preventDefault();
+                if (prevNext.classList.contains("nyro-tabs-prev")) {
+                    this.tab = Math.max(0, this.tab - 1);
+                } else if (prevNext.classList.contains("nyro-tabs-next")) {
+                    this.tab = Math.min(this.elements.length - 1, this.tab + 1);
+                }
+            });
+        }
 
         const form = this.closest("form");
         if (form) {
@@ -195,7 +234,28 @@ class NyroTabs extends HTMLElement {
         }
     }
 
+    setupHtmlNav() {
+        if (!this.htmlNav) {
+            console.warn("NyroTabs: htmlNav is not set, should ne setup html nav.");
+            return;
+        }
+        const htmlNav = this.querySelector('[slot="htmlNav"]');
+        if (!htmlNav) {
+            console.warn("NyroTabs: htmlNav slot is not found, should be set.");
+            return;
+        }
+        htmlNav.addEventListener("click", (e) => {
+            this._handleNavClick(e);
+        });
+        this._selectTab();
+    }
+
     writeTabs() {
+        if (this.htmlNav) {
+            console.warn("NyroTabs: htmlNav is set, no tabs will be written.");
+            return;
+        }
+
         const elements = this.elements;
 
         this.querySelectorAll("nyro-tab").forEach((tab) => {
@@ -240,8 +300,18 @@ class NyroTabs extends HTMLElement {
             selectedTab.selected = false;
         }
 
+        if (!newSelectedTab) {
+            return;
+        }
+
         newSelectedTab.selected = true;
         elements[this.tab].slot = "content";
+
+        if (this.tab === elements.length - 1) {
+            this.setAttribute("is-last-tab", "");
+        } else {
+            this.removeAttribute("is-last-tab");
+        }
 
         this.dispatchEvent(
             new CustomEvent("tabchange", {
