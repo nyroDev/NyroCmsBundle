@@ -34,6 +34,9 @@ class UserFilterType extends Type\AbstractFilterType
         $resolver->setDefaults([
             'submitOptions' => [
                 'icon' => NyroCmsService::ICON_PATH.'#filter',
+                'cancelUrl' => $this->generateUrl('nyrocms_admin_data_user', ['clearFilter' => 1]),
+                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelText' => $this->trans('admin.misc.clearFilter'),
             ],
         ]);
     }

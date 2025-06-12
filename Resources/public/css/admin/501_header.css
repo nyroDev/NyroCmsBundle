@@ -146,7 +146,8 @@ header label[for="switch_adminMenu"]:after {
 }
 
 #adminNav .menu-active > label,
-#adminNav li:hover > label {
+#adminNav li.menu-text:hover > label,
+#adminNav a:hover ~ label {
     color: var(--c-header-text);
 }
 
@@ -183,6 +184,7 @@ header label[for="switch_adminMenu"]:after {
     position: relative;
     top: -0.4rem;
     margin: 0;
+    rotate: 90deg;
     transition: rotate var(--transition-time);
 }
 
@@ -190,7 +192,7 @@ header label[for="switch_adminMenu"]:after {
     display: block;
 }
 #adminNav .menu-has-childs input:checked ~ label .icon {
-    rotate: 90deg;
+    rotate: 270deg;
 }
 
 #breadcrumbs,

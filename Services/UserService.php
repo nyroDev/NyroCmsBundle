@@ -206,6 +206,9 @@ class UserService extends NyroDevAbstractService
         foreach ($fields as $f) {
             $options = [
                 'label' => $this->trans('admin.user.'.$f),
+                'row_attr' => [
+                    'class' => 'form_row_100',
+                ],
             ];
             if ('email' === $f) {
                 $options['icon'] = NyroCmsService::ICON_PATH.'#email';
@@ -222,6 +225,9 @@ class UserService extends NyroDevAbstractService
         $passwordOptions = [
             'wc' => 'nyro-password',
             'icon' => NyroCmsService::ICON_PATH.'#password',
+            'row_attr' => [
+                'class' => 'form_row_100',
+            ],
             'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#hide').'</span>'.
                 '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#show').'</span>',
         ];
@@ -230,6 +236,9 @@ class UserService extends NyroDevAbstractService
             ->add('curPassword', PasswordType::class, [
                 ...$passwordOptions,
                 'label' => $this->trans('admin.user.curPassword'),
+                'row_attr' => [
+                    'class' => 'form_row_100',
+                ],
                 'required' => true,
                 'mapped' => false,
                 'constraints' => [

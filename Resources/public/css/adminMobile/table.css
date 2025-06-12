@@ -16,7 +16,8 @@ table thead {
 
 table tr {
     position: relative;
-    border: 1px solid var(--c-secondary);
+    border: 1px solid var(--c-border);
+    background: var(--c-white);
     color: var(--c-text);
     margin-bottom: 2rem;
     border-radius: var(--s-radius);
@@ -31,18 +32,17 @@ table td:empty {
     display: none;
 }
 
+table td:not(:last-child) {
+    border-bottom: 1px solid var(--c-border);
+}
+
 table td:first-child {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     min-height: 2.4rem;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-style: normal;
     font-weight: var(--font-bold-weight);
     line-height: 150%;
-    border-top: none;
-    background-color: var(--c-light-background);
-    border-radius: var(--s-radius) var(--s-radius) 0 0;
+    border-bottom: 2px solid var(--c-border);
 }
 
 table td:first-child > a:not(.btn) {
@@ -53,8 +53,8 @@ table tr .actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    background-color: var(--c-light-background);
-    border-radius: 0 0 var(--s-radius) var(--s-radius);
+    border-top: 1px solid var(--c-border);
+    --s-svg-size: 2rem;
 }
 
 table tr .actions > a {

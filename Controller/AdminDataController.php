@@ -190,9 +190,17 @@ class AdminDataController extends AbstractAdminController
                 'type' => ChoiceType::class,
                 'choices' => array_flip($this->get(AdminService::class)->getContentStateChoices()),
             ],
+            'goUrl' => [
+                'row_attr' => [
+                    'class' => 'form_row_100',
+                ],
+            ],
             'relateds' => [
                 'wc' => true,
                 'expanded' => true,
+                'row_attr' => [
+                    'class' => 'form_row_100',
+                ],
                 'choice_label' => function ($row) {
                     return $row.''.($row->getParent() ? ' ('.$row->getParent().')' : '');
                 },
@@ -231,12 +239,13 @@ class AdminDataController extends AbstractAdminController
             'goBlank',
             'redirectToChildren',
             'relateds',
-            'metaTitle',
-            'metaDescription',
-            'metaKeywords',
+
             'ogTitle',
-            'ogDescription',
+            'metaTitle',
             'ogImage',
+            'metaDescription',
+            'ogDescription',
+            'metaKeywords',
         ]);
 
         $isInMeta = false;
@@ -244,7 +253,7 @@ class AdminDataController extends AbstractAdminController
             if (!isset($moreOptions[$field])) {
                 $moreOptions[$field] = [];
             }
-            $isInMeta = $isInMeta || 'metaTitle' === $field;
+            $isInMeta = $isInMeta || 'ogTitle' === $field;
             $moreOptions[$field]['fieldset'] = $isInMeta ? [
                 'name' => 'metadata',
                 'label' => $this->get(AdminService::class)->getIcon('seo').$this->trans('admin.content.metadataFieldset'),
@@ -459,7 +468,19 @@ class AdminDataController extends AbstractAdminController
     public function userRoleForm(Request $request, string $action, UserRole $row): Response
     {
         $moreOptions = [
-            'contents' => $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content')),
+            'roleName' => [
+                'row_attr' => [
+                    'class' => 'form_row_new_line',
+                ],
+            ],
+            'contents' => array_merge(
+                [
+                    'row_attr' => [
+                        'class' => 'form_row_100 form_row_new_line',
+                    ],
+                ],
+                $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content'))
+            ),
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
@@ -758,13 +779,13 @@ class AdminDataController extends AbstractAdminController
         ];
 
         $fields = array_filter([
-            'templateCategory',
             'title',
+            'templateCategory',
             $this->get(AdminService::class)->isDeveloper() ? 'icon' : false,
-            'enabledFor',
-            'defaultFor',
-            count($themes) > 1 ? 'theme' : null,
             'state',
+            'defaultFor',
+            'enabledFor',
+            count($themes) > 1 ? 'theme' : null,
         ]);
 
         $adminForm = $this->createAdminForm($request, 'template', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions);
@@ -907,6 +928,28 @@ class AdminDataController extends AbstractAdminController
             'email' => [
                 'icon' => NyroCmsService::ICON_PATH.'#email',
             ],
+            'validStart' => [
+                'icon' => NyroCmsService::ICON_PATH.'#calendar',
+                'row_attr' => [
+                    'class' => 'form_row_25',
+                ],
+            ],
+            'validEnd' => [
+                'icon' => NyroCmsService::ICON_PATH.'#calendar',
+                'row_attr' => [
+                    'class' => 'form_row_25',
+                ],
+            ],
+            'valid' => [
+                'row_attr' => [
+                    'class' => 'form_row_25',
+                ],
+            ],
+            'developper' => [
+                'row_attr' => [
+                    'class' => 'form_row_25',
+                ],
+            ],
             'userType' => [
                 'type' => ChoiceType::class,
                 'placeholder' => '',
@@ -917,6 +960,9 @@ class AdminDataController extends AbstractAdminController
                 'query_builder' => function (UserRoleRepositoryInterface $er) {
                     return $er->getFormQueryBuilder();
                 },
+                'row_attr' => [
+                    'class' => 'form_row_new_line form_row_100',
+                ],
             ],
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',
@@ -931,9 +977,9 @@ class AdminDataController extends AbstractAdminController
             'lastname',
             // 'password',
             'userType',
-            'valid',
             'validStart',
             'validEnd',
+            'valid',
             $this->get(AdminService::class)->isDeveloper() ? 'developper' : null,
             'userRoles',
         ]), 'nyrocms_admin_data_user', [], 'userFormUpdate', 'userFormFlush', null, $moreOptions, 'userFormAfterFlush');

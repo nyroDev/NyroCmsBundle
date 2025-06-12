@@ -3,16 +3,33 @@
 }
 
 table {
+    --border: 1px solid var(--c-border);
     padding: 0 !important;
     margin: var(--s-padding);
     width: calc(100% - var(--s-padding) * 2);
     box-sizing: border-box;
-    border-collapse: collapse;
+    border-spacing: 0;
+    border-collapse: separate;
     background-color: var(--c-white);
     color: var(--c-text);
+    border: var(--border);
+    border-radius: var(--s-radius);
 
     --cell-padding-h: 1.5rem;
     --cell-padding-w: 2.5rem;
+}
+
+table > thead > tr > th,
+table > thead > tr > td {
+    border-bottom: 2px solid var(--c-border);
+}
+table > tbody > tr:not(:last-child) > th,
+table > tbody > tr:not(:last-child) > td,
+table > tr:not(:last-child) > td,
+table > tr:not(:last-child) > th,
+table > thead:not(:last-child),
+table > tbody:not(:last-child) {
+    border-bottom: var(--border);
 }
 
 table th,
@@ -34,6 +51,7 @@ table .actions {
     text-align: right;
     width: 0;
     white-space: nowrap;
+    --s-svg-size: 2rem;
 }
 
 table th {
@@ -42,11 +60,10 @@ table th {
     font-size: 1.7rem;
 }
 table thead tr {
-    border-top: 1px solid var(--c-text);
-    border-bottom: 1px solid var(--c-text);
+    border-bottom: 2px solid var(--c-border);
 }
 table tbody tr {
-    border-bottom: 1px solid var(--c-secondary);
+    border-bottom: 1px solid var(--c-border);
     transition: background-color var(--transition-time);
 }
 table tbody tr:hover {

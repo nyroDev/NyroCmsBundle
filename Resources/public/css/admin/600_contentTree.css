@@ -31,7 +31,7 @@
 
 #contentTree > ul ul {
     display: none;
-    margin-left: var(--s-svg-size);
+    margin-left: calc(var(--s-svg-size) + 1.7rem);
 }
 
 #contentTree li {
@@ -55,7 +55,7 @@
     display: flex;
     align-items: center;
     height: 4.5rem;
-    border: 1px solid var(--c-secondary);
+    border: 1px solid var(--c-border);
     border-radius: var(--s-radius);
     background-color: var(--c-white);
     transition: background-color var(--transition-time);
@@ -89,7 +89,7 @@
     --s-svg-size: 3rem;
     color: var(--c-secondary);
     border-radius: var(--s-radius) 0 0 var(--s-radius);
-    border-right: 1px solid var(--c-secondary);
+    border-right: 1px solid var(--c-border);
     transition: color var(--transition-time), background-color var(--transition-time);
 }
 
@@ -100,7 +100,7 @@
 
 #contentTree .menuToggleLabel {
     border-radius: 0 var(--s-radius) var(--s-radius) 0;
-    border-left: 1px solid var(--c-secondary);
+    border-left: 1px solid var(--c-border);
 }
 
 #contentTree .menuNode {
@@ -110,7 +110,7 @@
     display: flex;
     flex-direction: column;
     background: var(--c-white);
-    border: 1px solid var(--c-secondary);
+    border: 1px solid var(--c-border);
     border-radius: var(--s-radius);
     z-index: 1;
     opacity: 0;
@@ -139,10 +139,11 @@
     background-color: var(--c-light-background);
 }
 #contentTree .toggleSub .icon {
-    transition: transform var(--transition-time);
+    rotate: 90deg;
+    transition: rotate var(--transition-time);
 }
 #contentTree .expandToggle:checked ~ .nodeCont .toggleSub .icon {
-    transform: rotate(90deg);
+    rotate: 270deg;
 }
 
 #contentTree .expandToggle:checked ~ ul {
@@ -152,7 +153,7 @@
 #contentTree .empty {
     padding: 0.4rem 0.8rem;
     font-style: italic;
-    border: 1px dashed var(--c-secondary);
+    border: 1px dashed var(--c-border);
     border-radius: var(--s-radius);
     margin-top: 1px;
     margin-bottom: 2px;

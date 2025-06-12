@@ -16,25 +16,8 @@ if ($intro && $intro != $introKey) {
 }
 ?>
 		
-		<?php if ($filter): ?>
-			<div class="filter">
-				<input type="checkbox" id="filterSwitch" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
-				<label for="filterSwitch">
-					<?php echo $view['nyrocms_admin']->getIcon('filter'); ?>
-					<?php echo $view['translator']->trans('admin.misc.filters'); ?>
-					<span class="flexSpacer"></span>
-					<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
-				</label>
-				<?php echo $view['form']->form($filter); ?>
-				<a href="<?php echo $pager->getUrl(1, false, array_merge($routePrm, ['clearFilter' => 1])); ?>" class="btn btnLight clearFilter">
-					<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
-					<span><?php echo $view['translator']->trans('admin.misc.clearFilter'); ?></span>
-				</a>
-			</div>
-		<?php endif; ?>
-		
 		<?php if (!isset($noAdd) || !$noAdd || (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions))): ?>
-			<div class="listButtons">
+			<nav class="listButtons">
 				<?php if (isset($moreGlobalActions) && is_array($moreGlobalActions) && count($moreGlobalActions)): ?>
 					<?php foreach ($moreGlobalActions as $k => $action): ?>
 						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], isset($action['routePrm']) ? $action['routePrm'] : []); ?>" class="btn <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
@@ -47,10 +30,23 @@ if ($intro && $intro != $introKey) {
 				<?php endif; ?>
 				<?php if (!isset($noAdd) || !$noAdd): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : []); ?>" class="btn add">
-						<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
+						<?php echo $view['nyrocms_admin']->getIcon('addCircle'); ?>
 						<span><?php echo $view['translator']->trans('admin.misc.add'); ?></span>
 					</a>
 				<?php endif; ?>
+			</nav>
+		<?php endif; ?>
+
+		<?php if ($filter): ?>
+			<div class="filter<?php echo $filterFilled ? ' filterFilled' : ''; ?>">
+				<input type="checkbox" id="filterSwitch" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
+				<label for="filterSwitch">
+					<?php echo $view['nyrocms_admin']->getIcon('filter'); ?>
+					<?php echo $view['translator']->trans('admin.misc.filters'); ?>
+					<span class="flexSpacer"></span>
+					<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+				</label>
+				<?php echo $view['form']->form($filter); ?>
 			</div>
 		<?php endif; ?>
 		
