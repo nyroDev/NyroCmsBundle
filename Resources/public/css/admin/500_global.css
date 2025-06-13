@@ -155,7 +155,11 @@ button:has(.icon),
 .btn .icon + span,
 .button .icon + span,
 button .icon + span,
-.btnWithIcon .icon + span {
+.btnWithIcon .icon + span,
+.btn span + .icon,
+.button span + .icon,
+button span + .icon,
+.btnWithIcon span + .icon {
     margin-left: 1rem;
 }
 
