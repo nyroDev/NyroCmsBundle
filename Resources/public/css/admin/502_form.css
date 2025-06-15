@@ -203,6 +203,7 @@ ul.form_errors {
     bottom: 1px;
     width: 1px;
     background-color: var(--c-border);
+    z-index: 1;
 }
 
 .iconWidget > .icon {
@@ -215,6 +216,8 @@ ul.form_errors {
 }
 
 .form_row .iconWidget input,
+.form_row .iconWidget select,
+.form_row .iconWidget nyro-select,
 .form_row .iconWidget nyro-password {
     padding-left: calc(1.5rem + var(--s-svg-size));
 }

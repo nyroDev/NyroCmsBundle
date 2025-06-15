@@ -78,3 +78,9 @@ services:
             - { name: routing.loader }
     nyrocms_routeLoader:
         alias: NyroDev\NyroCmsBundle\Routing\NyroCmsLoader
+    
+    NyroDev\NyroCmsBundle\Twig\IconExtension:
+        arguments:
+            - '@NyroDev\NyroCmsBundle\Services\AdminService'
+        tags:
+          - { name: twig.extension }
