@@ -72,6 +72,18 @@ svg.icon {
     display: none !important;
 }
 
+.text-error {
+    color: var(--c-error);
+}
+
+.text-warning {
+    color: var(--c-warning);
+}
+
+.text-success {
+    color: var(--c-success);
+}
+
 .btn,
 .button,
 button {
@@ -80,7 +92,10 @@ button {
     --c-btn-border: var(--c-highlight);
     --c-btn-text-hover: var(--c-highlight);
     --c-btn-bg-hover: var(--c-highlight-text);
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--s-svg-size);
     font-family: var(--font);
     font-weight: var(--font-bold-weight);
     font-size: 1.4rem;
@@ -149,7 +164,6 @@ button:has(.icon),
 .btnWithIcon {
     display: inline-flex;
     align-items: center;
-    padding: 0.4rem 2rem;
 }
 
 .btn .icon + span,

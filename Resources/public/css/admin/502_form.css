@@ -112,7 +112,7 @@ nyro-select-option[selected] {
     display: block;
     font-size: 1.4rem;
     color: var(--c-secondary);
-    margin-bottom: 0.3rem;
+    margin-bottom: 1rem;
 }
 
 .form_row input,
@@ -126,11 +126,28 @@ nyro-select-option[selected] {
     border-radius: var(--s-radius);
     background-color: var(--c-white);
     font-family: var(--font);
-    padding: 0.5rem 1rem;
+    padding: 1rem;
     font-size: 1.6rem;
     width: 100%;
     box-sizing: border-box;
     outline: none;
+}
+
+.form_row input[type="file"] {
+    padding: 0.8rem 0.8rem 0.7rem 0.8rem;
+}
+
+.form_row select,
+.form_row input[type="date"] {
+    padding: 0.9rem 1rem 0.9rem 1rem;
+}
+
+.form_row nyro-select {
+    --nyro-select-search-font-size: 1.6rem;
+}
+
+.form_row nyro-password {
+    padding: 0.5rem 1rem;
 }
 
 .form_row input[disabled],
@@ -169,7 +186,7 @@ nyro-select-option[selected] {
 }
 
 .form_row textarea {
-    min-height: 4em;
+    min-height: 5em;
     resize: vertical;
 }
 

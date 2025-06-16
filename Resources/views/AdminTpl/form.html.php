@@ -1,18 +1,19 @@
+<?php $title = isset($title) ? $title : $view['nyrodev']->trans('admin.'.$name.'.viewTitle'); ?>
+<?php if (!$view['nyrodev']->isAjax()): ?>
 <?php $view->extend('@NyroDevNyroCms/Admin/_layout.html.php'); ?>
 
 <?php $view['slots']->start('content'); ?>
+	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/breadcrumbs.html.php', [
+	    'links' => [
+	        [
+	            'url' => $view['nyrodev']->generateUrl($route, $routePrm),
+	            'label' => $title,
+	        ],
+	    ],
+	    'title' => $view['translator']->trans('admin.misc.'.$action),
+	]); ?>
+<?php endif; ?>
 	<article id="<?php echo $name; ?>" class="form">
-		<?php $title = isset($title) ? $title : $view['nyrodev']->trans('admin.'.$name.'.viewTitle'); ?>
-		<?php echo $view->render('@NyroDevNyroCms/AdminTpl/breadcrumbs.html.php', [
-		    'links' => [
-		        [
-		            'url' => $view['nyrodev']->generateUrl($route, $routePrm),
-		            'label' => $title,
-		        ],
-		    ],
-		    'title' => $view['translator']->trans('admin.misc.'.$action),
-		]); ?>
-
 		<h1><?php echo $title; ?></h1>
 
 		<?php if (isset($intro) && $intro): ?>
@@ -25,4 +26,7 @@
 			<?php echo $outro; ?>
 		<?php endif; ?>
 	</article>
+
+<?php if (!$view['nyrodev']->isAjax()): ?>
 <?php $view['slots']->stop(); ?>
+<?php endif; ?>

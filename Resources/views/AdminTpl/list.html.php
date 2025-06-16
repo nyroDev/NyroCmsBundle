@@ -1,10 +1,12 @@
+<?php $prefix = isset($prefix) && $prefix ? $prefix : 'admin'; ?>
+<?php if (!$view['nyrodev']->isAjax()): ?>
 <?php $view->extend('@NyroDevNyroCms/Admin/_layout.html.php'); ?>
 
 <?php $view['slots']->start('content'); ?>
-	<?php $prefix = isset($prefix) && $prefix ? $prefix : 'admin'; ?>
 	<?php echo $view->render('@NyroDevNyroCms/AdminTpl/breadcrumbs.html.php', [
 	    'title' => isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'),
 	]); ?>
+<?php endif; ?>
 	<article id="<?php echo $name; ?>" class="list">
 		<h1><?php echo isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'); ?></h1>
 		
@@ -24,7 +26,7 @@ if ($intro && $intro != $introKey) {
 							<?php if (isset($action['icon']) && $action['icon']): ?>
 								<?php echo $view['nyrocms_admin']->getIcon($action['icon']); ?>
 							<?php endif; ?>
-							<?php echo $action['name']; ?>
+							<span><?php echo $action['name']; ?></span>
 						</a>
 					<?php endforeach; ?>
 				<?php endif; ?>
@@ -179,4 +181,6 @@ if ($intro && $intro != $introKey) {
 			<p><?php echo $view['translator']->trans('admin.misc.noResults'); ?></p>
 		<?php endif; ?>
 	</article>
+<?php if (!$view['nyrodev']->isAjax()): ?>
 <?php $view['slots']->stop(); ?>
+<?php endif; ?>

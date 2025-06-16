@@ -6,6 +6,20 @@ import Sortable from "sortablejs";
     const templateConfirm = document.querySelector("template#deleteConfirmTpl");
 
     document.body.addEventListener("click", function (e) {
+        const dialogLink = e.target.closest(".dialogLink");
+        if (dialogLink) {
+            e.preventDefault();
+            const dialog = document.createElement("nyro-cms-dialog");
+
+            dialog.appendChild(templateClose.content.cloneNode(true));
+
+            dialog.loadUrl(dialogLink.href);
+
+            document.body.appendChild(dialog);
+            dialog.open();
+            return;
+        }
+
         const deleteConfirm = e.target.closest(".delete, .confirmLink");
         if (deleteConfirm) {
             e.preventDefault();

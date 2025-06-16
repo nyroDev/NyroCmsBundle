@@ -19,6 +19,7 @@ use NyroDev\UtilityBundle\Utility\Menu\RootMenu;
 use NyroDev\UtilityBundle\Utility\Menu\Separator;
 use NyroDev\UtilityBundle\Utility\Menu\Text;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminService extends NyroDevAbstractService
 {
@@ -402,7 +403,7 @@ class AdminService extends NyroDevAbstractService
                 attrs: [
                     'class' => 'confirmLink',
                     'data-confirmtxt' => $this->trans('admin.menu.logoutConfirm'),
-                    'data-confirmbtntxt' => $this->getIcon('logout').$this->trans('admin.menu.logout'),
+                    'data-confirmbtntxt' => $this->getIcon('logout').'<span>'.$this->trans('admin.menu.logout').'</span>',
                 ],
                 icon: 'logout'
             ));
@@ -541,5 +542,12 @@ class AdminService extends NyroDevAbstractService
     public function getIcon(string $name, ?string $class = null, ?string $attrs = null): string
     {
         return $this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#'.$name, $class, $attrs);
+    }
+
+    public function goToUrlDialogResponse(
+        string $redirectUrl,
+        string $text,
+    ): Response {
+        return new Response('<a href="'.$redirectUrl.'" class="goToUrl">'.$text.'</a>');
     }
 }

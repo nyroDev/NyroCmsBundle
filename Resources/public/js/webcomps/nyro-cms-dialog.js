@@ -48,6 +48,23 @@ dialog .actions a + a {
 </dialog>
 `;
 
+const fetchOptions = (options = {}) => {
+    return Object.assign(
+        {
+            method: "GET",
+            mode: "cors",
+            credentials: "same-origin",
+            cache: "no-cache",
+            redirect: "follow",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-JS-FETCH": 1,
+            },
+        },
+        options
+    );
+};
+
 class NyroCmsDialog extends HTMLElement {
     constructor() {
         super();
@@ -77,6 +94,13 @@ class NyroCmsDialog extends HTMLElement {
         this.addEventListener("click", (e) => {
             const closeDialog = e.target.closest(".cancel, .nyroCmsDialogClose, .closeDialogAfterClick");
             if (!closeDialog) {
+                if (this.keepInDialog) {
+                    const link = e.target.closest("a");
+                    if (link) {
+                        e.preventDefault();
+                        this.loadUrl(link.href);
+                    }
+                }
                 return;
             }
 
@@ -88,6 +112,38 @@ class NyroCmsDialog extends HTMLElement {
                 e.preventDefault();
                 this._dialog.close();
             }
+        });
+
+        this.addEventListener("submit", (e) => {
+            if (!this.keepInDialog) {
+                return;
+            }
+
+            const form = e.target.closest("form");
+            if (!form) {
+                return;
+            }
+            e.preventDefault();
+
+            const url = new URL(form.action || document.location.href),
+                method = form.method.toUpperCase() || "POST",
+                formData = new FormData(form);
+
+            if (method === "GET") {
+                for (const [key, value] of formData.entries()) {
+                    url.searchParams.append(key, value);
+                }
+            }
+
+            this.loadFetch(
+                fetch(
+                    url,
+                    fetchOptions({
+                        method: method,
+                        body: method === "GET" ? undefined : formData,
+                    })
+                )
+            );
         });
     }
 
@@ -119,6 +175,55 @@ class NyroCmsDialog extends HTMLElement {
 
     get noAutoremove() {
         return this.hasAttribute("no-autoremove");
+    }
+
+    set keepInDialog(keepInDialog) {
+        if (keepInDialog) {
+            this.setAttribute("keep-in-dialog", "");
+        } else {
+            this.removeAttribute("keep-in-dialog");
+        }
+    }
+
+    get keepInDialog() {
+        return this.hasAttribute("keep-in-dialog");
+    }
+
+    loadUrl(url) {
+        this.keepInDialog = true;
+        return this.loadFetch(fetch(url, fetchOptions()));
+    }
+
+    loadFetch(fetchPromise) {
+        this.keepInDialog = true;
+        this.classList.add("loading");
+        return fetchPromise
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then((html) => {
+                this.classList.remove("loading");
+
+                if (!this._loadedContent) {
+                    this._loadedContent = document.createElement("div");
+                    this._loadedContent.slot = "content";
+                    this.appendChild(this._loadedContent);
+                }
+
+                this._loadedContent.innerHTML = html;
+
+                const goToUrl = this._loadedContent.querySelector(".goToUrl");
+                if (goToUrl) {
+                    document.location.href = goToUrl.href;
+                }
+            })
+            .catch((error) => {
+                this.classList.remove("loading");
+                console.error("Error loading dialog content:", error);
+            });
     }
 
     open() {
