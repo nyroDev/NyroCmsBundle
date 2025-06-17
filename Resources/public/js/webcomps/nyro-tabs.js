@@ -215,22 +215,20 @@ class NyroTabs extends HTMLElement {
         const form = this.closest("form");
         if (form) {
             let lastInvalidTimestamp = false;
-            this._invalidListener = (e) => {
-                if (!lastInvalidTimestamp || lastInvalidTimestamp + 1000 < e.timeStamp) {
-                    lastInvalidTimestamp = e.timeStamp;
-                    this.elements.forEach((el, index) => {
-                        if (el.contains(e.target)) {
-                            this.tab = index;
-                        }
-                    });
-                }
-            };
-            for (let i = 0; i < form.elements.length; i++) {
-                const el = form.elements[i];
-                if (el.willValidate && this.contains(el)) {
-                    el.addEventListener("invalid", this._invalidListener);
-                }
-            }
+            form.addEventListener(
+                "invalid",
+                (e) => {
+                    if (!lastInvalidTimestamp || lastInvalidTimestamp + 250 < e.timeStamp) {
+                        lastInvalidTimestamp = e.timeStamp;
+                        this.elements.forEach((el, index) => {
+                            if (el.contains(e.target)) {
+                                this.tab = index;
+                            }
+                        });
+                    }
+                },
+                true
+            );
         }
     }
 
