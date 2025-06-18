@@ -123,7 +123,7 @@ nyro-select-selected a {
     transition: color var(--transition-time);
 }
 nyro-select-selected a:hover {
-    color: var(--c-text);
+    color: var(--c-hightlight-hover);
 }
 
 nyro-select-option:hover,
@@ -387,6 +387,28 @@ nyro-select-option:not(:defined) {
     border-top: none;
     border-radius: 0 0 var(--s-radius) var(--s-radius);
     padding: calc(var(--s-padding) / 2) var(--s-padding);
+}
+
+.filterFormRange {
+    display: flex;
+    justify-content: space-between;
+}
+.filterFormRange > .form_row {
+    position: relative;
+    width: 48%;
+}
+.filterFormRange > .form_row > label {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 0.5rem;
+    margin: 0;
+}
+.filterFormRange > .form_row > input {
+    padding-left: 2.7rem;
+    padding-right: 0.2rem;
+    font-size: 1.3rem;
+    line-height: 1.9rem;
 }
 
 .contentLvl1 {

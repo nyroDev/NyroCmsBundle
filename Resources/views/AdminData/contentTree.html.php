@@ -27,17 +27,17 @@ foreach ($introKeys as $introKey) {
 		<form action="" method="post" id="contentTree">
 			<nav class="toolbar">
 				<?php if ($canRootComposer && $view['nyrocms_admin']->canAdmin($parent)): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" target="_blank" class="btn btnGrey">
+					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" target="_blank" class="btn btnLightGray">
 						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
 						<span><?php echo $view['nyrodev']->trans('admin.composer.rootEdit'); ?></span>
 					</a>
 				<?php endif; ?>
 
-				<a href="#" class="btn btnGrey expandAll">
+				<a href="#" class="btn btnLightGray expandAll">
 					<?php echo $view['nyrocms_admin']->getIcon('treeExpand'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.content.expandAll'); ?></span>
 				</a>
-				<a href="#" class="btn btnGrey reduceAll">
+				<a href="#" class="btn btnLightGray reduceAll">
 					<?php echo $view['nyrocms_admin']->getIcon('treeReduce'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.content.reduceAll'); ?></span>
 				</a>

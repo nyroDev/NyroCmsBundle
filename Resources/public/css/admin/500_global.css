@@ -124,7 +124,15 @@ button[disabled] {
     --c-btn-text-hover: var(--c-delete);
 }
 
-.btnGrey {
+.btnGray {
+    --c-btn-border: var(--c-light-background2);
+    --c-btn-text: var(--c-white);
+    --c-btn-bg: var(--c-light-background2);
+    --c-btn-text-hover: var(--c-highlight-text);
+    --c-btn-bg-hover: var(--c-highlight);
+}
+
+.btnLightGray {
     --c-btn-border: var(--c-white);
     --c-btn-text: var(--c-text);
     --c-btn-bg: var(--c-light-background);
