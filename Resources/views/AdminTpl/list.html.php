@@ -109,6 +109,8 @@ if ($intro && $intro != $introKey) {
 				                }
 				                $val = implode(', ', $tmpVal);
 				            }
+				        } elseif (isset($choices) && is_array($choices) && isset($choices[$f]) && isset($choices[$f][$val])) {
+				            $val = $choices[$f][$val];
 				        }
 				        if ($first) {
 				            if ($canEdit) {
