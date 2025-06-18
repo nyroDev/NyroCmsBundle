@@ -95,6 +95,11 @@ header label[for="switch_adminMenu"]:after {
     padding: 0;
     list-style: none;
     font-weight: var(--font-bold-weight);
+    font-size: 1.5rem;
+}
+
+#adminNav ul ul {
+    font-size: 1.4rem;
 }
 
 #adminNav li {
@@ -221,7 +226,7 @@ header label[for="switch_adminMenu"]:after {
     font-weight: normal;
 }
 #breadcrumbs a,
-#breadcrumbs strong {
+#breadcrumbs > strong {
     margin: 0 calc(var(--s-padding) / 2);
 }
 #breadcrumbs a:first-child {

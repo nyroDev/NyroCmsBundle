@@ -2,8 +2,29 @@ import Sortable from "sortablejs";
 
 (function () {
     const contentTree = document.getElementById("contentTree");
+    const templateIcon = document.querySelector("template#iconTpl");
     const templateClose = document.querySelector("template#closeTpl");
     const templateConfirm = document.querySelector("template#deleteConfirmTpl");
+
+    const customizeSelected = (selected) => {
+        if (selected.classList.contains("hideRemove")) {
+            return;
+        }
+
+        const remove = document.createElement("a");
+        remove.classList.add("remove");
+        remove.href = "#";
+        remove.innerHTML = templateIcon.innerHTML.replaceAll("IDENT", "closeCircle");
+
+        selected.classList.add("hideRemove");
+        selected.appendChild(remove);
+    };
+
+    document.body.addEventListener("nyroSelectSelectedCreated", (e) => {
+        customizeSelected(e.detail);
+    });
+
+    document.querySelectorAll("nyro-select-selected").forEach(customizeSelected);
 
     document.body.addEventListener("click", function (e) {
         const dialogLink = e.target.closest(".dialogLink");

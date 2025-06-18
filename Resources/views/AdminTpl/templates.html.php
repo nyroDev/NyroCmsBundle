@@ -12,3 +12,6 @@
         </nav>
     </div>
 </template>
+<template id="iconTpl">
+    <?php echo $view['nyrocms_admin']->getIcon('IDENT'); ?>
+</template>

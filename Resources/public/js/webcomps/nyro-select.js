@@ -111,6 +111,13 @@ class NyroSelectOption extends HTMLElement {
 
         this._selected.unique = unique;
 
+        this.dispatchEvent(
+            new CustomEvent("nyroSelectSelectedCreated", {
+                bubbles: true,
+                detail: this._selected,
+            })
+        );
+
         return this._selected;
     }
 }
@@ -160,7 +167,7 @@ templateSelected.innerHTML = `
     color: var(--nyro-select-selected-color-hover);
     background: var(--nyro-select-selected-background-hover);
 }
-:host(:not([unique])) slot {
+:host(:not([unique, .hideRemove])) slot {
     display: inline-block;
     padding: var(--nyro-select-selected-padding);
 }
@@ -179,6 +186,9 @@ templateSelected.innerHTML = `
     color: var(--nyro-select-selected-border-remove-color-hover);
     outline: none;
 }
+:host(.hideRemove) a {
+    display: none;
+}
 </style>
 <a href="#">X</a>
 <slot></slot>
@@ -191,10 +201,15 @@ class NyroSelectSelected extends HTMLElement {
             mode: "open",
         });
         this.shadowRoot.append(templateSelected.content.cloneNode(true));
-        this._span = this.shadowRoot.querySelector("span");
         this.shadowRoot.querySelector("a").addEventListener("click", (e) => {
             e.preventDefault();
             this.parentElement.removeValue(this.value);
+        });
+        this.addEventListener("click", (e) => {
+            if (e.target.closest(".remove")) {
+                e.preventDefault();
+                this.parentElement.removeValue(this.value);
+            }
         });
     }
 
@@ -221,14 +236,6 @@ class NyroSelectSelected extends HTMLElement {
             this.removeAttribute("unique");
         }
     }
-
-    get label() {
-        return this._span.innerHTML;
-    }
-
-    set label(label) {
-        this._span.innerHTML = label;
-    }
 }
 
 window.customElements.define("nyro-select-selected", NyroSelectSelected);
@@ -251,26 +258,13 @@ const valueMissingMessage = (() => {
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
-::-webkit-scrollbar {
-    width: var(--scrollbar-width, 10px);
-    z-index: var(--nyro-select-dropdown-z-index);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb, #fff);
-    border-radius: var(--scrollbar-width, 10px);
-    border: 2px solid transparent;
-    background-clip: padding-box;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: var(--scrollbar-thumb-hover, #ddd);
-}
-
 :host {
+    --nyro-select-searchCont-margin: 0;
     --nyro-select-search-height: 100%;
     --nyro-select-search-font-size: 14px;
     --nyro-select-search-width: 13em;
+    --nyro-select-search-padding: 0;
+    --nyro-select-search-margin: 0;
     --nyro-select-arrow-width: 2px;
     --nyro-select-arrow-width-right: calc(var(--nyro-select-arrow-width) * 3);
     --nyro-select-arrow-color: currentColor;
@@ -318,6 +312,7 @@ template.innerHTML = `
     flex-wrap: wrap;
     align-items: center;
     height: 100%;
+    margin: var(--nyro-select-searchCont-margin);
 }
 #search {
     flex-grow: 1;
@@ -330,7 +325,8 @@ template.innerHTML = `
     color: var(--nyro-select-color);
     border: none;
     background: transparent;
-    padding: 0;
+    padding: var(--nyro-select-search-padding);
+    margin: var(--nyro-select-search-margin);
     outline: none;
 }
 #search::placeholder {

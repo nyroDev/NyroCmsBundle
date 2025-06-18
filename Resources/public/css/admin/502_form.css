@@ -85,22 +85,60 @@ nyro-select-autocomplete {
     --nyro-select-arrow-focused-opacity: 1;
     --nyro-select-dropdown-max-width: 0px;
 }
-nyro-select-option,
-nyro-select-selected {
+
+nyro-select[multiple],
+nyro-select-autocomplete[multiple] {
+    --nyro-select-searchCont-margin: -0.5rem 0;
+    --nyro-select-search-padding: 0.5rem 0.8rem;
+    --nyro-select-search-margin: 0 0.5rem 0.5rem 0;
+}
+
+nyro-select-option {
     font-family: var(--font);
-    color: var(--c-text);
+    color: var(--c-secondary);
     padding: 0.5rem 1rem;
     font-size: 1.6rem;
     cursor: pointer;
 }
 
 nyro-select-selected {
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font);
+    font-size: 1.6rem;
+    color: var(--c-white);
+    background-color: var(--c-highlight);
+    padding: 0.5rem 0.8rem;
+    margin: 0 0.5rem 0.5rem 0;
+    border: none;
+    border-radius: var(--s-radius);
+}
+nyro-select-selected a {
+    display: inline-flex;
+    align-items: center;
+    color: var(--c-white);
+    text-decoration: none;
+    padding-left: 0.5rem;
+    --s-svg-size: 2rem;
+    transition: color var(--transition-time);
+}
+nyro-select-selected a:hover {
+    color: var(--c-text);
+}
+
+nyro-select-option:hover,
+nyro-select-option[focused] {
+    background-color: var(--c-light-background);
 }
 
 nyro-select-option[selected] {
     color: var(--c-highlight-text);
     background-color: var(--c-highlight);
+}
+
+nyro-select-option[selected]:hover,
+nyro-select-option[selected][focused] {
+    text-decoration: underline;
 }
 
 .form_row {
@@ -131,6 +169,11 @@ nyro-select-option[selected] {
     width: 100%;
     box-sizing: border-box;
     outline: none;
+}
+
+.form_row nyro-select[multiple],
+.form_row nyro-select-autocomplete[multiple] {
+    padding-bottom: 0.5rem;
 }
 
 .form_row input[type="file"] {
@@ -302,11 +345,15 @@ nyro-select-option:not(:defined) {
     flex-wrap: wrap;
     align-items: center;
     padding: calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) calc(var(--s-padding) / 2) var(--s-padding);
-    background: var(--c-light-background);
+    background: var(--c-white);
     color: var(--c-secondary);
     border: 1px solid var(--c-border);
     border-radius: var(--s-radius);
     cursor: pointer;
+    transition: background-color var(--transition-time);
+}
+.filter > label:hover {
+    background-color: var(--c-light-background);
 }
 .filter > label .icon-filter {
     margin-right: 0.5rem;

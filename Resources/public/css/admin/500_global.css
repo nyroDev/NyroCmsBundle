@@ -191,6 +191,10 @@ main > article > h1 {
     padding: 0.8em var(--s-padding);
 }
 
+main > article > h1:has(strong) {
+    font-weight: normal;
+}
+
 nyro-toaster-stack {
     top: calc(var(--s-header-height) + var(--s-padding));
     bottom: auto;
