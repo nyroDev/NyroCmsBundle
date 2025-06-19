@@ -111,6 +111,8 @@ if ($intro && $intro != $introKey) {
 				            }
 				        } elseif (isset($choices) && is_array($choices) && isset($choices[$f]) && isset($choices[$f][$val])) {
 				            $val = $choices[$f][$val];
+				        } elseif (isset($formatter) && is_array($formatter) && isset($formatter[$f])) {
+				            $val = $formatter[$f]($r);
 				        }
 				        if ($first) {
 				            if ($canEdit) {
