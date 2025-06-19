@@ -6,7 +6,9 @@ template.innerHTML = `
 }
 dialog {
 	border: none;
-	background: #fff;
+	background: var(--c-white);
+    padding: 0;
+    border-radius: var(--s-radius);
 	overflow: visible;
 }
 dialog::backdrop {
@@ -14,7 +16,21 @@ dialog::backdrop {
     backdrop-filter: blur(0.5rem);
 }
 
-:host(.nyroCmsDialogConfirm) p {
+dialog header {
+    min-height: var(--s-svg-size);
+    border-radius: var(--s-radius) var(--s-radius) 0 0;
+    padding: var(--s-padding);
+}
+
+dialog main {
+    border-radius: 0 0 var(--s-radius) var(--s-radius);
+    padding: var(--s-padding);
+    background-color: var(--c-light-background);
+    overflow: auto;
+    max-height: 80vh;
+}
+
+:host(.nyroCmsDialogConfirm) {
     max-width: 250px;
 }
 
@@ -32,7 +48,7 @@ dialog .actions a + a {
     height: 90vh;
     padding: 0;
 }
-:host(.nyroCmsDialogIframe) dialog .dialogIn {
+:host(.nyroCmsDialogIframe) dialog main {
     width: 100%;
     height: 100%;
 }
@@ -43,8 +59,13 @@ dialog .actions a + a {
 }
 </style>
 <dialog>
-    <slot name="close"></slot>
-    <div class="dialogIn"><slot name="content"></slot></div>
+    <header>
+        <slot name="title"></slot>
+        <slot name="close"></slot>
+    </header>
+    <main>
+        <slot name="content"></slot>
+    </main>
 </dialog>
 `;
 
@@ -74,7 +95,6 @@ class NyroCmsDialog extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this._dialog = this.shadowRoot.querySelector("dialog");
-        this._dialogIn = this._dialog.querySelector(".dialogIn");
 
         this._dialog.addEventListener("close", () => {
             this.dispatchEvent(
@@ -92,7 +112,10 @@ class NyroCmsDialog extends HTMLElement {
         });
 
         this.addEventListener("click", (e) => {
-            const closeDialog = e.target.closest(".cancel, .nyroCmsDialogClose, .closeDialogAfterClick");
+            let closeDialog = e.target.closest(".cancel, .nyroCmsDialogClose, .closeDialogAfterClick");
+            if (closeDialog && closeDialog.classList.contains("cancel") && closeDialog.closest(".form_button")) {
+                closeDialog = false;
+            }
             if (!closeDialog) {
                 if (this.keepInDialog) {
                     const link = e.target.closest("a");
@@ -147,24 +170,6 @@ class NyroCmsDialog extends HTMLElement {
         });
     }
 
-    connectedCallback() {
-        const closeBtn = this.querySelector(".nyroCmsDialogClose");
-        if (closeBtn) {
-            closeBtn.addEventListener("click", (e) => {
-                e.preventDefault();
-                this._dialog.close();
-            });
-        }
-    }
-
-    setContent(content) {
-        this._dialogIn.appendChild(content);
-    }
-
-    get in() {
-        return this._dialogIn;
-    }
-
     set noAutoremove(noAutoremove) {
         if (noAutoremove) {
             this.setAttribute("no-autoremove", "");
@@ -207,15 +212,28 @@ class NyroCmsDialog extends HTMLElement {
             .then((html) => {
                 this.classList.remove("loading");
 
-                if (!this._loadedContent) {
-                    this._loadedContent = document.createElement("div");
-                    this._loadedContent.slot = "content";
-                    this.appendChild(this._loadedContent);
+                this.querySelectorAll("[slot=content], [slot=title]").forEach((slotted) => {
+                    slotted.remove();
+                });
+
+                const template = document.createElement("template");
+                template.innerHTML = html;
+
+                const slotContent = template.content.querySelector("[slot=content]");
+                if (slotContent) {
+                    const slotTitle = template.content.querySelector("[slot='title']");
+                    if (slotTitle) {
+                        this.appendChild(slotTitle);
+                    }
+                    this.appendChild(slotContent);
+                } else {
+                    const div = document.createElement("div");
+                    div.slot = "content";
+                    div.innerHTML = html;
+                    this.appendChild(div);
                 }
 
-                this._loadedContent.innerHTML = html;
-
-                const goToUrl = this._loadedContent.querySelector(".goToUrl");
+                const goToUrl = this.querySelector(".goToUrl");
                 if (goToUrl) {
                     document.location.href = goToUrl.href;
                 }

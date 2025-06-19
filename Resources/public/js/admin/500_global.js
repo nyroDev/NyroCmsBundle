@@ -4,7 +4,8 @@ import Sortable from "sortablejs";
     const contentTree = document.getElementById("contentTree");
     const templateIcon = document.querySelector("template#iconTpl");
     const templateClose = document.querySelector("template#closeTpl");
-    const templateConfirm = document.querySelector("template#deleteConfirmTpl");
+    const templateConfirmTitle = document.querySelector("template#deleteConfirmTitleTpl");
+    const templateConfirmContent = document.querySelector("template#deleteConfirmContentTpl");
 
     const customizeSelected = (selected) => {
         if (selected.classList.contains("hideRemove")) {
@@ -51,10 +52,11 @@ import Sortable from "sortablejs";
 
             dialog.appendChild(templateClose.content.cloneNode(true));
 
-            const content = templateConfirm.content.cloneNode(true);
+            const title = templateConfirmTitle.content.cloneNode(true);
+            const content = templateConfirmContent.content.cloneNode(true);
 
             if (confirmText) {
-                content.querySelector("p").innerHTML = confirmText;
+                title.querySelector("p").innerHTML = confirmText;
             }
             if (confirmBtnText) {
                 content.querySelector(".confirm").innerHTML = confirmBtnText;
@@ -69,6 +71,7 @@ import Sortable from "sortablejs";
                 document.location.href = deleteConfirm.href;
             });
 
+            dialog.appendChild(title);
             dialog.appendChild(content);
             dialog.classList.add("nyroCmsDialogConfirm");
             document.body.appendChild(dialog);

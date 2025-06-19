@@ -14,3 +14,13 @@ body:has(#adminNav) {
 .mobileOnly {
     display: none !important;
 }
+
+nyro-cms-dialog .filter,
+nyro-cms-dialog .data {
+    width: 75rem;
+    min-width: 0;
+}
+
+nyro-cms-dialog .filter form > div {
+    grid-template-columns: repeat(2, 1fr);
+}

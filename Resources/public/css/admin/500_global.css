@@ -244,26 +244,27 @@ nyro-toaster .close:hover {
 
 nyro-cms-dialog .nyroCmsDialogClose {
     position: absolute;
-    top: -15px;
-    right: -15px;
-    display: flex !important;
+    top: calc(var(--s-padding) / 1);
+    right: calc(var(--s-padding) / 1);
+    display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 !important;
-    font-size: 18px !important;
-    text-align: center !important;
-    width: 26px !important;
-    height: 26px !important;
-    border-radius: none !important;
-    --s-svg-size: 16px;
+    color: var(--c-secondary);
+    --s-svg-size: 2.4rem;
+    transition: color var(--transition-time);
+}
+nyro-cms-dialog .nyroCmsDialogClose:hover {
+    color: var(--c-delete);
 }
 
-nyro-cms-dialog p {
-    margin: 0 0 var(--s-padding) 0;
-    font-size: 1.6rem;
-    max-width: 26rem;
+nyro-cms-dialog.nyroCmsDialogConfirm p {
+    margin: 0;
+    padding: 0 4rem;
+    max-width: 35rem;
+    font-size: 2.1rem;
     font-weight: var(--font-bold-weight);
     text-align: center;
+    text-wrap: balance;
     line-height: 1.5;
 }
 
@@ -271,10 +272,24 @@ nyro-cms-dialog .actions {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    min-width: 20rem;
 }
 
 nyro-cms-dialog .actions * + * {
     margin-left: var(--s-padding);
+}
+
+nyro-cms-dialog .data {
+    width: 100%;
+    margin: 0;
+    margin-top: var(--s-padding);
+    min-width: calc(100vw - 5 * var(--s-padding));
+}
+
+nyro-cms-dialog .form form,
+nyro-cms-dialog .form form > div {
+    padding: 0;
+    background: none;
 }
 
 .listButtons {

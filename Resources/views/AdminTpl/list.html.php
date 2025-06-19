@@ -41,8 +41,8 @@ if ($intro && $intro != $introKey) {
 
 		<?php if ($filter): ?>
 			<div class="filter<?php echo $filterFilled ? ' filterFilled' : ''; ?>">
-				<input type="checkbox" id="filterSwitch" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
-				<label for="filterSwitch">
+				<input type="checkbox" id="filterSwitch_<?php echo $name; ?>" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
+				<label for="filterSwitch_<?php echo $name; ?>">
 					<?php echo $view['nyrocms_admin']->getIcon('filter'); ?>
 					<?php echo $view['translator']->trans('admin.misc.filters'); ?>
 					<span class="flexSpacer"></span>
@@ -156,8 +156,8 @@ if ($intro && $intro != $introKey) {
 				<?php endforeach; ?>
 				<tbody>
 			</table>
-			<br />
 			<?php if ($pager->hasToPaginate()): ?>
+				<br />
 				<nav class="pagination">
 					<?php /* <a href="<?php echo $pager->hasPrevious() ? $pager->getFirstUrl() : '#'; ?>" class="prev first" title="<?php echo $view['translator']->trans('admin.pager.first'); ?>"><?php echo $view['nyrocms_admin']->getIcon('doubleChevron'); ?></a> */ ?>
 					<a href="<?php echo $pager->hasPrevious() ? $pager->getPreviousUrl() : '#'; ?>" class="btn btnLightWhite prev" title="<?php echo $view['translator']->trans('admin.pager.prev'); ?>">
