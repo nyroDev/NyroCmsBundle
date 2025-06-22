@@ -5,6 +5,7 @@ import "./webcomps/nyro-cms-dialog.js";
 import "./webcomps/nyro-password.js";
 import "./webcomps/nyro-tabs.js";
 import "./webcomps/nyro-select.js";
+import "./webcomps/nyro-select-autocomplete.js";
 import "./webcomps/nyro-form-map.js";
 
 import "./admin/500_global.js";
