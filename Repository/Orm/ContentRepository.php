@@ -97,14 +97,15 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
 
     public function search(array $searches, $rootId = null, $state = null, $sortByField = null, $direction = 'ASC')
     {
-        $query = $parameters = [];
+        $qb = $this->createQueryBuilder('c');
+
+        $query = [];
         foreach ($searches as $k => $v) {
             $query[] = 'c.contentText LIKE :text'.$k;
-            $parameters['text'.$k] = '%'.$v.'%';
+            $qb->setParameter('text'.$k, '%'.$v.'%');
         }
 
-        $qb = $this->createQueryBuilder('c')
-                ->andWhere('('.implode(' AND ', $query).')')->setParameters($parameters);
+        $qb->andWhere('('.implode(' AND ', $query).')');
 
         if (!is_null($rootId)) {
             $qb->andWhere('c.root = :root')->setParameter('root', $rootId);

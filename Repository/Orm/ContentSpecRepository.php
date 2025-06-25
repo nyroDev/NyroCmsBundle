@@ -140,14 +140,15 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
 
     public function search(array $searches, array $contentHandlersIds = [], $state = null)
     {
-        $query = $parameters = [];
+        $qb = $this->createQueryBuilder('cs');
+
+        $query = [];
         foreach ($searches as $k => $v) {
             $query[] = 'cs.contentText LIKE :text'.$k;
-            $parameters['text'.$k] = '%'.$v.'%';
+            $qb->setParameter('text'.$k, '%'.$v.'%');
         }
 
-        $qb = $this->createQueryBuilder('cs')
-            ->andWhere('('.implode(' AND ', $query).')')->setParameters($parameters);
+        $qb->andWhere('('.implode(' AND ', $query).')');
 
         if (count($contentHandlersIds)) {
             $qb->andWhere('cs.contentHandler IN (:ctids)')->setParameter('ctids', $contentHandlersIds);
