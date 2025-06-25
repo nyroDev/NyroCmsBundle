@@ -781,10 +781,11 @@ class AdminDataController extends AbstractAdminController
         $fields = array_filter([
             'title',
             'templateCategory',
-            $this->get(AdminService::class)->isDeveloper() ? 'icon' : false,
             'state',
             'defaultFor',
             'enabledFor',
+            $this->get(AdminService::class)->isDeveloper() ? 'icon' : false,
+            $this->get(AdminService::class)->isDeveloper() ? 'custom' : false,
             count($themes) > 1 ? 'theme' : null,
         ]);
 

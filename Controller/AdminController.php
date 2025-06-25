@@ -37,17 +37,17 @@ class AdminController extends NyroDevAbstractController
 
     public function forgotAction(Request $request, ?string $id = null, ?string $key = null, bool $welcome = false): Response
     {
-        return $this->render('@NyroDevNyroCms/Admin/forgot.html.php', $this->get(UserService::class)->handleForgot('admin', $request, $id, $key, $welcome));
+        return $this->render('@NyroDevNyroCms/Admin/forgot.html.php', $this->get(UserService::class)->handleForgot('nyrocms_admin', $request, $id, $key, $welcome));
     }
 
     public function accountAction(Request $request): Response
     {
-        return $this->render('@NyroDevNyroCms/Admin/account.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
+        return $this->render('@NyroDevNyroCms/Admin/account.html.php', $this->get(UserService::class)->handleAccount('nyrocms_admin', $request));
     }
 
     public function passwordAction(Request $request): Response
     {
-        return $this->render('@NyroDevNyroCms/Admin/password.html.php', $this->get(UserService::class)->handleAccount('admin', $request));
+        return $this->render('@NyroDevNyroCms/Admin/password.html.php', $this->get(UserService::class)->handleAccount('nyrocms_admin', $request));
     }
 
     public function ccAction(): Response
