@@ -3,8 +3,10 @@
 namespace NyroDev\NyroCmsBundle\Controller;
 
 use Exception;
+use NyroDev\NyroCmsBundle\Event\AdminHomeRedirectEvent;
 use NyroDev\NyroCmsBundle\Services\UserService;
 use NyroDev\UtilityBundle\Controller\AbstractController as NyroDevAbstractController;
+use NyroDev\UtilityBundle\Services\MemberService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +19,9 @@ class AdminController extends NyroDevAbstractController
 
     public function loginAction(Request $request, AuthenticationUtils $authenticationUtils): Response
     {
+        if ($this->get(MemberService::class)->isLogged()) {
+            return $this->redirectToRoute('nyrocms_admin_homepage');
+        }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -32,7 +37,12 @@ class AdminController extends NyroDevAbstractController
 
     public function indexAction(): Response
     {
-        return $this->redirectToRoute('nyrocms_admin_data_content_tree');
+        $adminHomeRedirectEvent = new AdminHomeRedirectEvent(
+            $this->generateUrl('nyrocms_admin_data_content_tree'),
+        );
+        $this->get('event_dispatcher')->dispatch($adminHomeRedirectEvent, AdminHomeRedirectEvent::ADMIN_HOME_REDIRECT);
+
+        return $this->redirect($adminHomeRedirectEvent->url);
     }
 
     public function forgotAction(Request $request, ?string $id = null, ?string $key = null, bool $welcome = false): Response
