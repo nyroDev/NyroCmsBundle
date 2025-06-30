@@ -133,9 +133,9 @@ class AdminComposerController extends AbstractAdminController
                 $row->setTheme($request->request->get('theme'));
             }
 
-            $newContents = array_map(function ($val) {
+            $newContents = array_values(array_filter(array_map(function ($val) {
                 return json_decode($val, true);
-            }, $request->request->all('content'));
+            }, $request->request->all('content'))));
 
             $composerService->applyContent($row, $newContents);
 
