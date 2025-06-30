@@ -443,6 +443,7 @@ class ComposerService extends AbstractService
         }
 
         $values['row'] = $row;
+        $values['admin'] = $admin;
 
         $ret = $this->getTwig()->render($template, $values);
 

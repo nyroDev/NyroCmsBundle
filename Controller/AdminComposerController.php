@@ -118,6 +118,11 @@ class AdminComposerController extends AbstractAdminController
                         'src' => $embedUrl,
                         'data' => $dataUrl,
                     ];
+                } elseif (filter_var($url, FILTER_VALIDATE_URL)) {
+                    $ret = [
+                        'url' => $url,
+                        'src' => $url,
+                    ];
                 } else {
                     $tmp = [];
                     foreach ($errors as $err) {

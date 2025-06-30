@@ -279,6 +279,10 @@ nyro-composer-container[readonly] nyro-composer-item[readonly]:after {
     z-index: 15;
 }
 
+nyro-composer-item[type="text"] .mce-edit-focus {
+    padding: 1rem 0;
+}
+
 nyro-composer-block:has(.tox-dialog-wrap),
 nyro-composer-item:has(.tox-dialog-wrap) {
     z-index: 999999 !important;

@@ -48,6 +48,25 @@ class NyroComposerInputIframeUrl extends HTMLElement {
         const applyBtn = this.shadowRoot.querySelector(".apply");
         applyBtn.innerHTML = this.composer.trans("item.videoEmbed.validate");
 
+        const templateIframeAnalyser = document.createElement("template");
+        this._url.addEventListener("input", () => {
+            this._iframeInput = false;
+            if (this._url.value.indexOf("</iframe>") === -1) {
+                return;
+            }
+
+            templateIframeAnalyser.innerHTML = this._url.value;
+            const iframe = templateIframeAnalyser.content.querySelector("iframe");
+            if (iframe) {
+                this._iframeInput = {
+                    width: iframe.width || 600,
+                    height: iframe.height || 450,
+                    rawIframe: this._url.value,
+                };
+                this._url.value = iframe.src;
+            }
+        });
+
         this._form.addEventListener("submit", (e) => {
             e.preventDefault();
             this._fetchUrl();
@@ -87,6 +106,10 @@ class NyroComposerInputIframeUrl extends HTMLElement {
                 if (response.err) {
                     this._error.innerHTML = response.err;
                     return;
+                }
+
+                if (this._iframeInput) {
+                    response.data = this._iframeInput;
                 }
 
                 this._value = response;
