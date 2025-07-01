@@ -765,21 +765,21 @@ class ComposerService extends AbstractService
 
     public function applyTemplate(Template $template, Composable $row): void
     {
-        $rowContents = $row->getContent();
+        // Ignore empty blocks
+        $rowContents = array_filter($row->getContent(), function($v) {
+            return is_array($v) && isset($v['conts']) && count(array_filter($v['conts']));
+        });
 
         // Use template contents as new contents first
-        $newContents = $template->getContent();
+        $newContents = array_filter($template->getContent(), function($v) {
+            return is_array($v) && isset($v['_type']);
+        });
 
         if ($rowContents && count($rowContents)) {
             $filledContents = [];
 
             // First loop to fill block with exact matching (block type and items)
             foreach ($rowContents as $k => $rowContent) {
-                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
-                    // No content, ignore it
-                    continue;
-                }
-
                 $blockItems = $rowContent['_type'].'_'.$this->computeblockItems($rowContent['conts']);
 
                 foreach ($newContents as $kk => $newContent) {
@@ -794,11 +794,6 @@ class ComposerService extends AbstractService
 
             // Second loop to fill block with exact matching (same container number and same items)
             foreach ($rowContents as $k => $rowContent) {
-                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
-                    // No content, ignore it
-                    continue;
-                }
-
                 $blockItems = $this->computeblockItems($rowContent['conts']);
 
                 foreach ($newContents as $kk => $newContent) {
@@ -817,11 +812,6 @@ class ComposerService extends AbstractService
             $handlerBlock = null;
             $itemsByType = [];
             foreach ($rowContents as $k => $rowContent) {
-                if (!isset($rowContent['conts']) || 0 === count(array_filter($rowContent['conts']))) {
-                    // No content, ignore it
-                    continue;
-                }
-
                 foreach ($rowContent['conts'] as $kk => $cont) {
                     foreach ($cont as $contItem) {
                         if (ComposerService::ITEM_HANDLER === $contItem['_type']) {
