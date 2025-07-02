@@ -432,10 +432,10 @@ class ComposerService extends AbstractService
             if (!$default) {
                 switch ($editable['type']) {
                     case self::EDITABLE_TYPE_SIMPLE_TEXT:
-                        $default = 'simpleText';
+                        $default = 'Lorem ipsum';
                         break;
                     case self::EDITABLE_TYPE_TEXT:
-                        $default = '<p>text</p>';
+                        $default = '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit</p>';
                         break;
                 }
             }

@@ -727,10 +727,19 @@ class NyroSelect extends HTMLElement {
 
     _positionDropdown() {
         const bounding = this.getBoundingClientRect();
+        const dropdownHeight = this._dropdown.offsetHeight;
+        const bottomPos = bounding.top + bounding.height + dropdownHeight;
 
         this._dropdown.style.minWidth = bounding.width + "px";
-        this._dropdown.style.top = bounding.top + bounding.height + "px";
         this._dropdown.style.left = bounding.left + "px";
+
+        if (bottomPos > window.innerHeight && bounding.top - dropdownHeight > 0) {
+            // Show on top
+            this._dropdown.style.top = bounding.top - dropdownHeight + "px";
+        } else {
+            // Show on bottom
+            this._dropdown.style.top = bounding.top + bounding.height + "px";
+        }
     }
 
     _filter() {

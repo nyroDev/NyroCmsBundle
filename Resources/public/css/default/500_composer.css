@@ -12,6 +12,7 @@
 .composerBlockFlex > div {
     padding: 0 var(--composer_block-padding);
     margin-bottom: var(--composer_block-vertical-space);
+    box-sizing: border-box;
 }
 
 iframe.nyroComposerIframe {

@@ -28,10 +28,13 @@ $attrs = array_merge(
         $prefixTinymce.'license_key' => 'gpl',
         $prefixTinymce.'relative_urls' => 'false',
         $prefixTinymce.'browser_spellcheck' => 'true',
+        $prefixTinymce.'contextmenu' => 'false',
 
         $prefixTinymceSimple.'inline' => 'true',
         $prefixTinymceSimple.'menubar' => 'false',
         $prefixTinymceSimple.'valid_elements' => '',
+        $prefixTinymceSimple.'browser_spellcheck' => 'true',
+        $prefixTinymceSimple.'contextmenu' => 'false',
     ],
     $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymce),
     $view['nyrocms_composer']->tinymceAttrs($row, $prefixTinymceSimple, true)

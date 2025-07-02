@@ -264,7 +264,7 @@ class Configuration implements ConfigurationInterface
             'plugins' => 'anchor,autolink,charmap,code,fullscreen,image,emoticons,insertdatetime,link,lists,advlist,media,nonbreaking,preview,searchreplace,table,visualblocks,visualchars,wordcount',
             'menubar' => 'insert edit view table tools',
             'removed_menuitems' => 'image media preview',
-            'toolbar' => 'undo redo | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | link unlink | fullscreen | bullist numlist outdent indent',
+            'toolbar' => 'undo redo | link unlink | styles | bold italic | removeformat | alignleft aligncenter alignright alignjustify | fullscreen | bullist numlist outdent indent',
             'paste_block_drop' => 'true',
             'style_formats' => [
                 ['title' => 'admin.composer.tinymce.styleFormats.formats.bold', 'icon' => 'bold', 'format' => 'bold'],
