@@ -460,6 +460,10 @@ nyro-select-option:not(:defined) {
     text-align: center;
 }
 
+.tox-tinymce-aux {
+    z-index: 999999 !important;
+}
+
 @media all and (min-width: 32em) {
     .filter form > div {
         display: grid;

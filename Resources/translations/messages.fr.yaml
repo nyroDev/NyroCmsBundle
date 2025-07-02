@@ -66,35 +66,6 @@ admin:
           superscript: Exposant
           subscript: Indice
           code: Code
-    action:
-      addBlock: Ajouter
-      template: Modèle
-      confirm: Confirmer
-      cancel: Annuler
-      save: Enregistrer
-      drag: Glisser / déposer
-      delete: Supprimer
-      addPhoto: Ajouter des photos
-      slideshowTitle: Titre de la photo
-      slideshowDelete: Êtes-vous sûr de vouloir supprimer cette image ?
-      langChange: Si vous changez de langue, vous perdrez les modifications actuelles.
-      posChange: Si vous changez de tableau, vous perdrez les modifications actuelles.
-      moveChange: Si vous déplacez ce tableau, vous perdrez les modifications actuelles.
-      cancelConfirm: Si vous quittez la page, vous perdrez les modifications actuelles.
-      deleteBlock: Êtes-vous sûr de vouloir supprimer ce bloc ?
-      deleteImgConfirm: Êtes-vous sûr de vouloir supprimer cette image ?
-      video: Sélectionner une URL vidéo
-      videoAutoplay: Lecture automatique ?
-      linkUrl: Modifier la destination
-      home_linkUrl: Modifier la destination
-      home_title_bg: Modifier la couleur de fond du titre
-      home_text_bg: Modifier la couleur de fond du texte
-      home_theme: Modifier le thème du bloc
-      home_image: Changer l'image
-      home_image_delete: Supprimer l'image
-      home_imageBig: Changer l'image grand format
-      home_imageMove: Changer l'image animée
-      home_imageMobile: Changer l'image mobile
     block:
       full:
         title: Une colonne

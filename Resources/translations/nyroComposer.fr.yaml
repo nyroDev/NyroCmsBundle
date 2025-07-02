@@ -6,6 +6,14 @@ cancel: Annuler
 save: Enregistrer
 back: Retour
 
+drag: Déplacer
+moveBottom: Déplacer tout en bas
+moveTop: Déplacer tout en haut
+moveDown: Déplacer vers le bas
+moveUp: Déplacer vers le haut
+duplicate: Dupliquer
+edit: Modifier
+
 page.title: Page
 page.intro: Pour organiser ou modifier l’apparence de votre page, veuillez sélectionner au moins un bloc ou  un contenu.
 page.chooseTemplate: Pour appliquer un autre modèle à cette page, cliquez sur <a href="#">ce lien</a>.

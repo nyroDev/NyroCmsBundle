@@ -5,6 +5,14 @@ delete: Delete
 cancel: Cancel
 back: Back
 
+drag: Drag&Drop
+moveBottom: Move to bottom
+moveTop: Move to top
+moveDown: Move down
+moveUp: move up
+duplicate: duplicate
+edit: Edit
+
 page.title: Page
 page.intro: To organize or change the appearance of your page, please select at least one block or content.
 page.chooseTemplate: To apply another template to this page, click <a href="#">this link</a>.

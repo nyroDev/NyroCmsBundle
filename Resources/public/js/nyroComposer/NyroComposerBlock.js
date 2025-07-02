@@ -28,6 +28,9 @@ nav {
     opacity: 1;
     visibility: var(--composer-ui-visibility);
 }
+:host([readonly]) nav .actions a {
+    display: none;
+}
 nav > div {
     display: flex;
     flex-direction: column;
@@ -67,7 +70,6 @@ nav .title {
     writing-mode: vertical-rl;
     text-orientation: upright;
 }
-
 </style>
 <nav></nav>
 <slot></slot>
