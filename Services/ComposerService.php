@@ -766,12 +766,12 @@ class ComposerService extends AbstractService
     public function applyTemplate(Template $template, Composable $row): void
     {
         // Ignore empty blocks
-        $rowContents = array_filter($row->getContent(), function($v) {
+        $rowContents = array_filter($row->getContent(), function ($v) {
             return is_array($v) && isset($v['conts']) && count(array_filter($v['conts']));
         });
 
         // Use template contents as new contents first
-        $newContents = array_filter($template->getContent(), function($v) {
+        $newContents = array_filter($template->getContent(), function ($v) {
             return is_array($v) && isset($v['_type']);
         });
 
