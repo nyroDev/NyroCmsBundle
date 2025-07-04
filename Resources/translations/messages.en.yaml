@@ -115,7 +115,7 @@ admin:
   content:
     viewTitle: Website
     contentFieldset: Content
-    metadataFieldset: Metadata
+    metadataFieldset: SEO/Metadata
     drag: Drag and drop
     emptyTree: No content
     expandAll: Unfold all

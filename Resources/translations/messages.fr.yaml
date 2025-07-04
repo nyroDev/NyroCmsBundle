@@ -116,7 +116,7 @@ admin:
   content:
     viewTitle: Site internet
     contentFieldset: Contenu
-    metadataFieldset: Metadonnées
+    metadataFieldset: Référencement
     drag: Glisser / déposer
     emptyTree: Aucun contenu
     expandAll: Tout déplier
