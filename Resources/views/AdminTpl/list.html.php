@@ -71,8 +71,10 @@ if ($intro && $intro != $introKey) {
 					    ?>
 						<th><?php
 					    echo $label;
-					    echo '<a href="'.$linkAsc.'" class="listSort listSortAsc'.('asc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortAsc').'">↓</a>';
-					    echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.('desc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDesc').'">↑</a>';
+					    if (!isset($unsortableFields) || !is_array($unsortableFields) || !in_array($field, $unsortableFields)) {
+					        echo '<a href="'.$linkAsc.'" class="listSort listSortAsc'.('asc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortAsc').'">↓</a>';
+					        echo '<a href="'.$linkDesc.'" class="listSort listSortDesc'.('desc' === $current ? ' active' : '').'" title="'.$view['translator']->trans('admin.misc.sortDesc').'">↑</a>';
+					    }
 					    ?></th>
 					<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>

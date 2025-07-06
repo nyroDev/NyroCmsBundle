@@ -735,10 +735,12 @@ class NyroSelect extends HTMLElement {
 
         if (bottomPos > window.innerHeight && bounding.top - dropdownHeight > 0) {
             // Show on top
-            this._dropdown.style.top = bounding.top - dropdownHeight + "px";
+            this._dropdown.style.top = "auto";
+            this._dropdown.style.bottom = window.innerHeight - bounding.top + "px";
         } else {
             // Show on bottom
             this._dropdown.style.top = bounding.top + bounding.height + "px";
+            this._dropdown.style.bottom = "auto";
         }
     }
 

@@ -232,6 +232,9 @@ class ComposerService extends AbstractService
             $ret = $this->nyrodevService->generateUrl($cfg['cancel_url']['route'], $routePrm);
         }
 
+        $event = new ComposerConfigEvent($row, 'cancelUrl', $ret);
+        $this->eventDispatcher->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
+
         return $ret;
     }
 
