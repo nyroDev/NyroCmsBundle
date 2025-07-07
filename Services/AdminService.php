@@ -182,6 +182,7 @@ class AdminService extends NyroDevAbstractService
     public function canAdmin(Composable $row): bool
     {
         $canAdmin = false;
+        $checkComposerRole = false;
         if ($this->dbService->isA($row, 'content')) {
             $canAdmin = $this->canAdminContent($row);
         } elseif ($this->dbService->isA($row, 'content_spec')) {
@@ -191,11 +192,15 @@ class AdminService extends NyroDevAbstractService
             }
         } elseif ($this->dbService->isA($row, 'template')) {
             $canAdmin = $this->canAdminTemplate($row);
+            $checkComposerRole = true;
         } elseif ($row->getParent()) {
             $canAdmin = $this->canAdminContent($row->getParent());
+            $checkComposerRole = true;
+        } else {
+            $checkComposerRole = true;
         }
 
-        if ($canAdmin || !$row->getParent()) {
+        if ($canAdmin || $checkComposerRole) {
             $canAdmin = $this->hasRole(self::ROLE_COMPOSER, $row);
         }
 
