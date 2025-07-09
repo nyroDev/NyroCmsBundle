@@ -41,9 +41,6 @@ class NyroDevNyroCmsExtension extends Extension
 
         $container->setParameter('nyrocms.user_roles.maxlevel_content', $config['user_roles']['maxlevel_content']);
 
-        $container->setParameter('nyrocms.email.global_template', $config['email']['global_template']);
-        $container->setParameter('nyrocms.email.styles_template', $config['email']['styles_template']);
-        $container->setParameter('nyrocms.email.body_template', $config['email']['body_template']);
         $container->setParameter('nyrocms.email.router_scheme', $config['email']['router_scheme']);
         $container->setParameter('nyrocms.email.router_host', $config['email']['router_host']);
         $container->setParameter('nyrocms.email.router_base_url', $config['email']['router_base_url']);

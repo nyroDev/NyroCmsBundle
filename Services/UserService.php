@@ -10,6 +10,7 @@ use NyroDev\UtilityBundle\Services\AbstractService as NyroDevAbstractService;
 use NyroDev\UtilityBundle\Services\FormService;
 use NyroDev\UtilityBundle\Services\MemberService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -55,20 +56,38 @@ class UserService extends NyroDevAbstractService
         $user->setPasswordKeyEnd($end);
         $this->dbService->flush();
 
-        $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.welcome.email.subject'), nl2br($this->trans('nyrocms.welcome.email.content', [
-            '%name%' => $user->getFirstname().' '.$user->getLastName(),
-            '%url%' => $this->generateUrl($place.'_welcome', [
-                'id' => $user->getId(),
-                'key' => $user->getPasswordKey(),
-            ], true),
-        ])), null, $locale);
+        $subject = $this->trans('nyrocms.welcome.email.subject');
+        $email = (new TemplatedEmail())
+            ->textTemplate('@NyroDevNyroCms/email/welcome.text.php')
+            ->htmlTemplate('@NyroDevNyroCms/email/welcome.html.php')
+            ->to($user->getEmail())
+            ->subject($subject)
+            ->context([
+                'subject' => $subject,
+                'user' => $user,
+                'url' => $this->generateUrl($place.'_welcome', [
+                    'id' => $user->getId(),
+                    'key' => $user->getPasswordKey(),
+                ], true),
+            ]);
+
+        $this->nyroCmsService->sendEmail($email);
     }
 
     public function sendChangedPasswordEmail(User $user): void
     {
-        $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.changedPassword.email.subject'), nl2br($this->trans('nyrocms.changedPassword.email.content', [
-            '%name%' => $user->getFirstname().' '.$user->getLastName(),
-        ])));
+        $subject = $this->trans('nyrocms.changedPassword.email.subject');
+        $email = (new TemplatedEmail())
+            ->textTemplate('@NyroDevNyroCms/email/changedPassword.text.php')
+            ->htmlTemplate('@NyroDevNyroCms/email/changedPassword.html.php')
+            ->to($user->getEmail())
+            ->subject($subject)
+            ->context([
+                'subject' => $subject,
+                'user' => $user,
+            ]);
+
+        $this->nyroCmsService->sendEmail($email);
     }
 
     public function handleForgot(string $place, Request $request, ?string $id = null, ?string $key = null, bool $welcome = false): array
@@ -167,13 +186,22 @@ class UserService extends NyroDevAbstractService
                     $user->setPasswordKeyEnd($end);
                     $this->dbService->flush();
 
-                    $this->nyroCmsService->sendEmail($user->getEmail(), $this->trans('nyrocms.forgot.email.subject'), nl2br($this->trans('nyrocms.forgot.email.content', [
-                        '%name%' => $user->getFirstname().' '.$user->getLastName(),
-                        '%url%' => $this->generateUrl($place.'_forgot', [
-                            'id' => $user->getId(),
-                            'key' => $user->getPasswordKey(),
-                        ], true),
-                    ])));
+                    $subject = $this->trans('nyrocms.forgot.email.subject');
+                    $email = (new TemplatedEmail())
+                        ->textTemplate('@NyroDevNyroCms/email/forgot.text.php')
+                        ->htmlTemplate('@NyroDevNyroCms/email/forgot.html.php')
+                        ->to($user->getEmail())
+                        ->subject($subject)
+                        ->context([
+                            'subject' => $subject,
+                            'user' => $user,
+                            'url' => $this->generateUrl($place.'_forgot', [
+                                'id' => $user->getId(),
+                                'key' => $user->getPasswordKey(),
+                            ], true),
+                        ]);
+
+                    $this->nyroCmsService->sendEmail($email);
                     $ret['sent'] = true;
                 } else {
                     $ret['notFound'] = true;

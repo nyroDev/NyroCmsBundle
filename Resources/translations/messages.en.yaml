@@ -1,3 +1,5 @@
+public:
+  title: Website
 admin:
   misc:
     title: Administration
@@ -252,6 +254,9 @@ admin:
     
     export: Export
 nyrocms:
+  email:
+    headerColor: "#262524"
+    highlightColor: "#009ee0"
   header:
     menu: Menu
     search: Search
@@ -290,13 +295,10 @@ nyrocms:
         <strong>Hello %name%,</strong
         
         You have requested the recovery of your password.
-
-        To activate a new password, click on the following link:
-        <a href="%url%">%url%</a>
-
-        This link will be valid for 24 hours.
-        
-        If you didn't request anything, you can ignore this message.
+        To activate a new password, click on the following button.
+      cta: New password
+      contentFooter: |
+        PS: This link will be valid for 24 hours. If you didn't request anything, you can ignore this message.
   changedPassword:
     email:
       subject: Password modification
@@ -304,8 +306,8 @@ nyrocms:
         <strong>Hello %name%,</strong>
         
         Your password has just been modified.
-        <strong>If you are not the source of this modification,
-        please contact immediately the site administrator.</strong>
+        If you are not the source of this modification,
+        <strong>please contact immediately the site administrator</strong>.
   welcome:
     email:
       subject: Account creation
@@ -313,11 +315,10 @@ nyrocms:
         <strong>Hello %name%,</strong>
         
         Your account has been activated.
-        
-        To choose a password and be connected, click on the following link:
-        <a href="%url%">%url%</a>
-
-        This link will be valid for 1 week.
+        To choose a password and be connected, click on the following button.
+      cta: Choose a password
+      contentFooter: |
+        PS: This message will be valid for 1 week.
   handler:
     news:
       more: Learn more

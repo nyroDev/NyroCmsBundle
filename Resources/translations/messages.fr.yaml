@@ -1,3 +1,5 @@
+public:
+  title: Site web
 admin:
   misc:
     title: Administration
@@ -296,13 +298,10 @@ nyrocms:
         <strong>Bonjour %name%,</strong>
         
         Vous venez de demander la récupération de votre mot passe.
-
-        Pour en choisir un nouveau, cliquez sur le lien suivant :
-        <a href="%url%">%url%</a>
-
-        Ce lien sera valide pendant 24 heures.
-        
-        Si vous n'avez rien demandé, vous pouvez ignorer ce message.
+        Pour en choisir un nouveau, cliquez sur le bouton ci-dessous.
+      cta: Nouveau mot de passe
+      contentFooter: |
+        PS : Ce message reste valide pendant 24 heures. Si vous n’êtes pas à l’origine de cette demande, vous pouvez ignorer ce message.
   changedPassword:
     email:
       subject: "Modification de mot de passe"
@@ -310,20 +309,19 @@ nyrocms:
         <strong>Bonjour %name%,</strong>
         
         Votre mot de passe vient d'être modifié.
-        <strong>Si vous n'êtes pas à l'origine de cette modification,
-        contactez immédiatement l'administrateur du site.</strong>
+        Si vous n'êtes pas à l'origine de cette modification,
+        <strong>contactez immédiatement l'administrateur du site</strong>.
   welcome:
     email:
       subject: "Création de compte"
       content: |
         <strong>Bonjour %name%,</strong>
-        
-        Votre compte vient d'être activé.
 
-        Pour choisir un mot de passe et vous connecter, cliquez sur le lien suivant :
-        <a href="%url%">%url%</a>
-        
-        Ce lien sera valide pendant 1 semaine.
+        Votre compte vient d'être activé.
+        Pour choisir un mot de passe et vous connecter, cliquez sur le bouton suivant.
+      cta: Choisir un mot de passe
+      contentFooter: |
+        PS : Ce message reste valide pendant une semaine
   handler:
     news:
       more: En savoir plus

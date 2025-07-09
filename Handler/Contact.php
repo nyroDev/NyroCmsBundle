@@ -9,6 +9,7 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Services\FormService;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -271,6 +272,19 @@ class Contact extends AbstractHandler
 
     protected function sendEmail($to, $subject, $content, $from = null, $locale = null, ?Content $dbContent = null)
     {
-        return $this->get(NyroCmsService::class)->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
+        $email = (new TemplatedEmail())
+            ->textTemplate('@NyroDevNyroCms/email/contact.text.php')
+            ->htmlTemplate('@NyroDevNyroCms/email/contact.html.php')
+            ->to($to)
+            ->from($from)
+            ->subject($subject)
+            ->locale($locale)
+            ->context([
+                'subject' => $subject,
+                'content' => $content,
+                'dbContent' => $dbContent,
+            ]);
+
+        return $this->get(NyroCmsService::class)->sendEmail($email);
     }
 }

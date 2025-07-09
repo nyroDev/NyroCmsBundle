@@ -20,6 +20,7 @@ use NyroDev\UtilityBundle\Services\NyrodevService;
 use NyroDev\UtilityBundle\Services\Traits\MailerInterfaceServiceableTrait;
 use NyroDev\UtilityBundle\Services\Traits\TwigServiceableTrait;
 use RuntimeException;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -228,38 +229,19 @@ class NyroCmsService extends NyroDevAbstractService
         ];
     }
 
-    public function sendEmail(string|array $to, string $subject, string $content, ?string $from = null, ?string $locale = null, ?Content $dbContent = null): void
+    public function sendEmail(Email $email): void
     {
-        $html = $this->getTwig()->render($this->getParameter('nyrocms.email.global_template'), [
-            'stylesTemplate' => $this->getParameter('nyrocms.email.styles_template'),
-            'bodyTemplate' => $this->getParameter('nyrocms.email.body_template'),
-            'subject' => $subject,
-            'locale' => $locale ? $locale : $this->getLocale(),
-            'content' => $content,
-            'dbContent' => $dbContent,
-        ]);
-        $text = $this->nyrodevService->html2text($html);
-
-        if (!$from) {
-            $from = $this->getParameter('noreply_email');
+        if (!$email->getFrom()) {
+            $email->from($this->getParameter('noreply_email'));
         }
-
-        $email = new Email();
-
-        if (is_array($to)) {
-            foreach ($to as $toAddress) {
-                $email->addTo($toAddress);
+        if ($email instanceof TemplatedEmail) {
+            if (!$email->getLocale()) {
+                $email->locale($this->getLocale());
             }
-        } else {
-            $email->addTo($to);
+            $email->context(array_merge([
+                'locale' => $email->getLocale(),
+            ], $email->getContext()));
         }
-
-        $email
-            ->subject($subject)
-            ->from($from)
-            ->text($text)
-            ->html($html)
-        ;
 
         $this->getMailerInterface()->send($email);
     }
