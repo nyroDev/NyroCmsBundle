@@ -157,7 +157,7 @@ class NyroComposerInputFile extends HTMLElement {
 
         this._imagesCont.querySelectorAll("img").forEach((img) => {
             value.push({
-                src: img.getAttribute("src"),
+                src: this.composer.unresizeUrl(img.getAttribute("src")),
                 alt: img.getAttribute("alt"),
                 width: img.getAttribute("width"),
                 height: img.getAttribute("height"),
@@ -171,7 +171,7 @@ class NyroComposerInputFile extends HTMLElement {
         const imageCont = templateImg.content.cloneNode(true),
             img = imageCont.querySelector("img");
 
-        img.src = imgValue.src;
+        img.src = this.composer.getResizeUrl(imgValue.src, "110x110xfit");
         img.alt = imgValue.alt;
         img.width = imgValue.width;
         img.height = imgValue.height;

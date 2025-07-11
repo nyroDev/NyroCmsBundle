@@ -41,3 +41,7 @@ iframe.nyroComposerIframe {
 .nyroHr.spacer_space_big {
     padding: var(--composer-hr-space-big) 0;
 }
+
+.composerBlock nyro-swiper > img {
+    object-fit: contain;
+}

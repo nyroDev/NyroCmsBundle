@@ -51,7 +51,7 @@ class NyroComposer extends HTMLElement {
         });
 
         document.body.addEventListener("click", (e) => {
-            if (e.target.closest("nyro-composer-block, nyro-composer-side-panel, nyro-composer-workspace")) {
+            if (e.target.closest("nyro-composer-block, nyro-composer-side-panel, nyro-composer-workspace, nyro-composer-dialog")) {
                 return;
             }
             this.sidePanel.selected = false;
@@ -366,6 +366,34 @@ class NyroComposer extends HTMLElement {
             def = id;
         }
         return this._trans[id] ?? def;
+    }
+
+    unresizeUrl(path) {
+        if (!this.dataset.resizeUrl) {
+            return path;
+        }
+
+        const tmpPath = path.split("/resize/");
+        if (tmpPath.length === 2) {
+            const tmpPath2 = tmpPath[1].split("/");
+            tmpPath2.shift(); // Remove 'dims'
+            return "/" + tmpPath2.join("/");
+        }
+
+        return path;
+    }
+
+    getResizeUrl(path, dims) {
+        if (!this.dataset.resizeUrl) {
+            return path;
+        }
+
+        path = this.unresizeUrl(path);
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+
+        return this.dataset.resizeUrl.replace("--DIMS--", dims).replace("--PATH--", path);
     }
 
     getIcon(name) {

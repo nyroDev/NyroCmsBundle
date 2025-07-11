@@ -60,6 +60,9 @@ doctrine:
 
 config/routes/nyrocms.yaml
 ```yaml
+nyrodev_assets:
+    resource: "@NyroDevUtilityBundle/Resources/config/routingAssets.yaml"
+
 nyrocms_admin:
     resource: "@NyroDevNyroCmsBundle/Resources/config/routingAdmin.yaml"
     prefix:   /admin

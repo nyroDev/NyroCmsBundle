@@ -20,6 +20,10 @@ $prefixTinymceSimple = 'data-tinymcesimple_';
 
 $attrs = array_merge(
     [
+        'data-resize-url' => $view['router']->path('nyrodev_assets_resize', [
+            'dims' => '--DIMS--',
+            'path' => '--PATH--',
+        ]),
         'data-tinymceurl' => $view['assets']->getUrl('tinymce/tinymce.min.js'),
         $prefixTinymce.'inline' => 'true',
         $prefixTinymce.'language' => $view['request']->getLocale(),

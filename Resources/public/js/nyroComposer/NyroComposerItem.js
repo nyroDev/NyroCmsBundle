@@ -168,6 +168,9 @@ class NyroComposerItem extends HTMLElement {
                     break;
                 case "attr":
                     value[key] = element.getAttribute(key);
+                    if (key === "src" && cfg.dataType === "image") {
+                        value[key] = this.composer.unresizeUrl(value[key]);
+                    }
                     break;
                 case "dataAttr":
                     value[key] = element.dataset[key];
@@ -195,7 +198,7 @@ class NyroComposerItem extends HTMLElement {
                         value[key] = [];
                         element.querySelectorAll("img").forEach((img) => {
                             value[key].push({
-                                src: img.getAttribute("src"),
+                                src: this.composer.unresizeUrl(img.getAttribute("src")),
                                 alt: img.getAttribute("alt"),
                                 width: img.getAttribute("width"),
                                 height: img.getAttribute("height"),
@@ -395,6 +398,9 @@ class NyroComposerItem extends HTMLElement {
                 }
             }
             value = value.url;
+            if (editableCfg.dataType === "image") {
+                value = this.composer.getResizeUrl(value, "1200x1200");
+            }
         } else if (!direct && (editableCfg.dataType === "videoUrl" || editableCfg.dataType === "iframeUrl")) {
             this.setValue("src", value.src);
             if (this.cfg.editables.autoplay) {
@@ -457,7 +463,8 @@ class NyroComposerItem extends HTMLElement {
                             }
                             exsitingImgs.push(img);
                         }
-                        exsitingImgs[idx].src = imgValue.src;
+
+                        exsitingImgs[idx].src = this.composer.getResizeUrl(imgValue.src, "1200x1200");
                         exsitingImgs[idx].alt = imgValue.alt;
                         exsitingImgs[idx].width = imgValue.width;
                         exsitingImgs[idx].height = imgValue.height;
