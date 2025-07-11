@@ -1,4 +1,4 @@
-# <?php ?>
+# <?php echo $subject; ?>
 
 <?php echo strip_tags($view['translator']->trans('nyrocms.welcome.email.content', [
     '%name%' => $user->getFirstname().' '.$user->getLastName(),

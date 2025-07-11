@@ -1,3 +1,3 @@
-# <?php ?>
+# <?php echo $subject; ?>
 
-<?php echo nl2br($content); ?>
+<?php echo strip_tags($content); ?>
