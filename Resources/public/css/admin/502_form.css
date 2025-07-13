@@ -155,6 +155,7 @@ nyro-select-option[selected][focused] {
 
 .form_row input,
 .form_row select,
+.form_row nyro-file,
 .form_row nyro-select,
 .form_row nyro-password,
 .form_row nyro-select-autocomplete,
@@ -169,6 +170,59 @@ nyro-select-option[selected][focused] {
     width: 100%;
     box-sizing: border-box;
     outline: none;
+}
+
+.form_row nyro-file {
+    padding: 0;
+    height: 4.1rem;
+}
+
+nyro-file button[slot="choose"] {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+nyro-file a[slot="current"] {
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    color: var(--c-highlight);
+    padding: 0 0.8rem;
+    flex-grow: 1;
+    min-width: 0;
+    text-decoration: none;
+}
+nyro-file a[slot="current"] span {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+nyro-file a[slot="current"]:hover {
+    text-decoration: underline;
+}
+nyro-file a[slot="current"][href="#"] {
+    color: #767676;
+    pointer-events: none;
+}
+nyro-file a[slot="delete"] {
+    flex-shrink: 0;
+    color: var(--c-secondary);
+    border-left: 1px solid var(--c-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    --s-svg-size: 2rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+nyro-file a[slot="delete"]:hover {
+    color: var(--c-delete);
 }
 
 .form_row nyro-select[multiple],

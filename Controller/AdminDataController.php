@@ -212,7 +212,8 @@ class AdminDataController extends AbstractAdminController
                 ],
             ],
             'ogImage' => [
-                'showDelete' => 'ogImageDelete',
+                'wc' => true,
+                'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
             ],
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',

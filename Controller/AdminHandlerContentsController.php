@@ -8,6 +8,7 @@ use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\AdminService;
 use NyroDev\NyroCmsBundle\Services\Db\DbAbstractService;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
+use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -172,6 +173,10 @@ class AdminHandlerContentsController extends AbstractAdminController
         $row->setService($this->get(NyrodevService::class));
         $routePrm = ['chid' => $row->getContentHandler()->getId()];
         $moreOptions = [
+            'ogImage' => [
+                'wc' => true,
+                'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
+            ],
             'state' => [
                 'type' => ChoiceType::class,
                 'choices' => array_flip($this->get(AdminService::class)->getContentSpecStateChoices()),
@@ -250,6 +255,14 @@ class AdminHandlerContentsController extends AbstractAdminController
                 'type' => TextareaType::class,
                 'required' => false,
             ];
+        }
+
+        if ($row instanceof AbstractUploadable) {
+            $row->setService($this->get(NyrodevService::class));
+
+            if ($request->request->get('ogImageDelete')) {
+                $row->removeFile('ogImage');
+            }
         }
 
         $adminForm = $this->createAdminForm($request, 'contentSpec', $action, $row, $fields, 'nyrocms_admin_handler_contents', $routePrm, 'contentFormClb', 'contentFlush', null, $moreOptions, 'contentAfterFlush');

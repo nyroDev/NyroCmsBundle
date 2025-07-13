@@ -159,7 +159,11 @@ class NyroPassword extends HTMLElement {
             if (e.relatedTarget && e.relatedTarget.matches('[type="submit"]')) {
                 return;
             }
-            this._input.focus();
+            if (e.relatedTarget) {
+                this._input.select();
+            } else {
+                this._input.focus();
+            }
         });
 
         if (this._internals.form) {
