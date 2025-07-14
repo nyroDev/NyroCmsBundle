@@ -80,6 +80,7 @@ nyro-select-autocomplete {
 
 nyro-select,
 nyro-select-autocomplete {
+    overflow: hidden;
     --nyro-select-placeholder-color: var(--c-border);
     --nyro-select-dropdown-border-color: var(--c-border);
     --nyro-select-arrow-focused-opacity: 1;
