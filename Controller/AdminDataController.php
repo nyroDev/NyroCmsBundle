@@ -698,7 +698,6 @@ class AdminDataController extends AbstractAdminController
                         'composer' => [
                             'name' => $this->get(AdminService::class)->getIcon('composer'),
                             'attrs' => 'title="'.$this->trans('admin.content.actions.composer').'"',
-                            '_blank' => true,
                             'route' => 'nyrocms_admin_composer',
                             'routePrm' => [
                                 'type' => 'Template',

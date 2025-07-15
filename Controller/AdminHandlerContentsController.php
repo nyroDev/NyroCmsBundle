@@ -80,7 +80,6 @@ class AdminHandlerContentsController extends AbstractAdminController
                         'composer' => $handler->hasComposer() ? [
                             'name' => $this->get(AdminService::class)->getIcon('composer'),
                             'attrs' => 'title="'.$this->trans('admin.content.actions.composer').'"',
-                            '_blank' => true,
                             'route' => 'nyrocms_admin_composer',
                             'routePrm' => [
                                 'type' => 'ContentSpec',

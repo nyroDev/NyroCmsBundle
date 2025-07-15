@@ -38,7 +38,7 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 					<?php echo $view['nyrodev']->trans('admin.content.actions.show'); ?>
 				</a>
 				<?php if ($canEdit): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $content->getId()]); ?>" target="_blank">
+					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $content->getId()]); ?>">
 						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
 						<?php echo $view['nyrodev']->trans('admin.content.actions.composer'); ?>
 					</a>

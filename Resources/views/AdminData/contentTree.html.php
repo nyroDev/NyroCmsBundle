@@ -27,7 +27,7 @@ foreach ($introKeys as $introKey) {
 		<form action="" method="post" id="contentTree">
 			<nav class="toolbar">
 				<?php if ($canRootComposer && $view['nyrocms_admin']->canAdmin($parent)): ?>
-					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" target="_blank" class="btn btnLightGray">
+					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" class="btn btnLightGray">
 						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
 						<span><?php echo $view['nyrodev']->trans('admin.composer.rootEdit'); ?></span>
 					</a>
