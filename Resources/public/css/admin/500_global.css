@@ -258,14 +258,21 @@ nyro-cms-dialog .nyroCmsDialogClose:hover {
 }
 
 nyro-cms-dialog.nyroCmsDialogConfirm p {
+    max-width: 35rem;
+    line-height: 1.5;
+}
+
+nyro-cms-dialog.nyroCmsDialogConfirm p[slot="title"] {
     margin: 0;
     padding: 0 4rem;
-    max-width: 35rem;
     font-size: 2.1rem;
     font-weight: var(--font-bold-weight);
     text-align: center;
     text-wrap: balance;
-    line-height: 1.5;
+}
+
+nyro-cms-dialog.nyroCmsDialogConfirm p[slot="content"] {
+    margin-bottom: 2rem;
 }
 
 nyro-cms-dialog .actions {
