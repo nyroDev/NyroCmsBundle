@@ -225,6 +225,11 @@ nyro-toaster {
     text-align: center;
 }
 
+nyro-toaster.warningToaster {
+    --textColor: var(--c-warning-text);
+    background: var(--c-warning);
+}
+
 nyro-toaster.errorToaster,
 nyro-toaster.deleteToaster {
     --textColor: var(--c-delete-text);

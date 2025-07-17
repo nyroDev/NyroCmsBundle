@@ -77,10 +77,14 @@
 
 #contentTree .drag:hover,
 #contentTree .toggleSub:hover,
-#contentTree .menuToggleLabel:hover,
-#contentTree .menuToggle:checked ~ .menuToggleLabel {
+#contentTree .menuToggleLabel:hover {
     color: var(--c-highlight);
     background-color: var(--c-light-background);
+}
+
+#contentTree .menuToggle:checked ~ .menuToggleLabel {
+    color: var(--c-highlight-text);
+    background-color: var(--c-highlight);
 }
 
 #contentTree .drag {
@@ -105,8 +109,8 @@
 
 #contentTree .menuNode {
     position: absolute;
-    top: 100%;
-    right: calc(-1 * var(--s-padding));
+    top: 1rem;
+    right: calc(var(--s-svg-size) - 2px);
     display: flex;
     flex-direction: column;
     background: var(--c-white);
