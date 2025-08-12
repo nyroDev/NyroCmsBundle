@@ -101,6 +101,9 @@ import Sortable from "sortablejs";
                 onEnd: (e) => {
                     contentTreeSubmit.classList.remove("disabled");
                 },
+                /** fallback options needed only for Vivaldi */
+                forceFallback: true,
+                fallbackTolerance: 3,
             });
         });
     }
