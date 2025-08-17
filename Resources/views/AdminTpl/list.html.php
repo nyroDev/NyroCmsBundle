@@ -127,6 +127,9 @@ if ($intro && $intro != $introKey) {
 				        } else {
 				            echo nl2br($val);
 				        }
+				        if (isset($moreVal) && is_array($moreVal) && isset($moreVal[$f])) {
+				            echo $moreVal[$f]($r);
+				        }
 				        ?></td>
 						<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>

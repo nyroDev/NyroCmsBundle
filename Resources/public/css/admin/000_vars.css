@@ -25,7 +25,7 @@
     --c-error: var(--c-delete);
     --c-error-text: var(--c-delete-text);
     --c-alert: #fabb00;
-    --c-alert-text: #000;
+    --c-alert-text: #fff;
     --c-warning: var(--c-alert);
     --c-warning-text: var(--c-alert-text);
     --c-success: #a2c862;
