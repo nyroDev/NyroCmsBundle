@@ -310,6 +310,75 @@ nyro-cms-dialog .form form > div {
     margin-bottom: var(--s-padding);
 }
 
+.resultActions {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.resultActions > li:not(:first-child) {
+    margin-left: 1rem;
+}
+
+.resultActions .menu-has-childs {
+    position: relative;
+}
+
+.resultActions .menu-has-childs > input {
+    display: none;
+}
+
+.resultActions .menu-has-childs > label {
+    --c-btn-bg: var(--c-highlight-dark);
+    --c-btn-border: var(--c-highlight-dark);
+}
+
+.resultActions .menu-has-childs > ul {
+    position: absolute;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    z-index: 1;
+    border: 1px solid var(--c-border);
+    border-radius: var(--s-radius);
+    background-color: var(--c-white);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-time), visibility var(--transition-time);
+}
+.resultActions .menu-has-childs > input:checked ~ label {
+    --c-btn-text: var(--c-highlight);
+    --c-btn-bg: var(--c-highlight-text);
+}
+.resultActions .menu-has-childs > input:checked ~ ul {
+    opacity: 1;
+    visibility: visible;
+}
+
+.resultActions .menu-has-childs > ul a {
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 0;
+    white-space: nowrap;
+    font-weight: normal;
+}
+.resultActions .menu-has-childs > ul li:first-child a {
+    border-top-left-radius: var(--s-radius);
+    border-top-right-radius: var(--s-radius);
+}
+.resultActions .menu-has-childs > ul li:last-child a {
+    border-bottom-left-radius: var(--s-radius);
+    border-bottom-right-radius: var(--s-radius);
+}
+.resultActions .menu-has-childs > ul a .icon {
+    margin-right: 0.5rem;
+}
+
 .pagination {
     display: flex;
     flex-wrap: wrap;

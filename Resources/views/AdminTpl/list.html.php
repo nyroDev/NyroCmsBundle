@@ -86,16 +86,9 @@ if ($intro && $intro != $introKey) {
 				<?php foreach ($results as $r): ?>
 					<tr>
 						<?php
-                    $first = true;
-				    $canEdit = !isset($noEdit) || !$noEdit;
-				    $canDelete = !isset($noDelete) || !$noDelete;
-
-				    if ($canEdit && isset($editEnabled) && is_callable($editEnabled)) {
-				        $canEdit = $editEnabled($r);
-				    }
-				    if ($canDelete && isset($deleteEnabled) && is_callable($deleteEnabled)) {
-				        $canDelete = $deleteEnabled($r);
-				    }
+                    $curResultMenu = $resultMenuApply($resultMenu, $r);
+				    $first = true;
+				    $canEdit = $curResultMenu->hasChild('edit');
 
 				    foreach ($fields as $f): ?>
 							<td><?php
@@ -117,8 +110,8 @@ if ($intro && $intro != $introKey) {
 				            $val = $formatter[$f]($r);
 				        }
 				        if ($first) {
-				            if ($canEdit) {
-				                $urlEdit = $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()]));
+				            if ($curResultMenu->hasChild('edit')) {
+				                $urlEdit = $view['router']->path($curResultMenu->getChild('edit')->route, $curResultMenu->getChild('edit')->getRoutePrm());
 				                echo '<a href="'.$urlEdit.'" class="editLink">'.nl2br($val).'</a>';
 				            } else {
 				                echo nl2br($val);
@@ -134,29 +127,9 @@ if ($intro && $intro != $introKey) {
 						<?php endforeach; ?>
 						<?php if (!isset($noActions) || !$noActions): ?>
 						<td class="actions">
-							<?php if (isset($moreActions) && is_array($moreActions)): ?>
-								<?php foreach ($moreActions as $k => $action): ?>
-									<?php if (isset($action['enabled']) && is_callable($action['enabled'])): ?>
-										<?php if (!$action['enabled']($r)): ?>
-											<?php continue; ?>
-										<?php endif; ?>
-									<?php endif; ?>
-									<?php $actionRoutePrm = isset($action['routePrm']) && is_callable($action['routePrm']) ? $action['routePrm']($r) : array_merge(isset($action['routePrm']) ? $action['routePrm'] : [], ['id' => $r->getId()]); ?>
-									<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], $actionRoutePrm); ?>" class="btn btnSmall <?php echo $k; ?>"<?php echo isset($action['_blank']) && $action['_blank'] ? ' target="_blank"' : ''; ?><?php echo isset($action['attrs']) && $action['attrs'] ? ' '.$action['attrs'] : ''; ?>>
-										<?php echo $view['nyrocms_admin']->getIcon($k); ?>
-									</a>
-								<?php endforeach; ?>
-							<?php endif; ?>
-							<?php if ($canEdit): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', array_merge(isset($routePrmEdit) ? $routePrmEdit : [], ['id' => $r->getId()])); ?>" class="btn btnSmall edit" title="<?php echo $view['translator']->trans('admin.misc.edit'); ?>">
-									<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
-								</a>
-							<?php endif; ?>
-							<?php if ($canDelete): ?>
-								<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', array_merge(isset($routePrmDelete) ? $routePrmDelete : [], ['id' => $r->getId()])); ?>" class="btn btnSmall btnDelete delete" title="<?php echo $view['translator']->trans('admin.misc.delete'); ?>">
-									<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
-								</a>
-							<?php endif; ?>
+							<?php
+				            echo $view->render($curResultMenu->getTemplate(), ['menu' => $curResultMenu]);
+						    ?>
 						</td>
 						<?php endif; ?>
 					</tr>

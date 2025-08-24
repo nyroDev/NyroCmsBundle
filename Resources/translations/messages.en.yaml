@@ -204,6 +204,9 @@ admin:
     ogImage: Share image
     inserted: Added on
     updated: Updated on
+    actions:
+      up: Move up
+      down: Move down
   user:
     viewTitle: Users
     id: ID

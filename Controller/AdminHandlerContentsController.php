@@ -11,6 +11,7 @@ use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Utility\Menu\LinkRoute;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -51,6 +52,58 @@ class AdminHandlerContentsController extends AbstractAdminController
 
         $orderField = $handler->orderField();
 
+        $listPrm = $this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb);
+
+        $resultMenuOrder = [];
+        if ($handler->hasMoveActions()) {
+            $resultMenuOrder[] = 'up';
+            $resultMenuOrder[] = 'down';
+            $listPrm['resultMenu']->addChild('up', new LinkRoute(
+                route: 'nyrocms_admin_handler_contents_up',
+                routePrm: array_merge($routePrm, [
+                    'id' => self::LINK_ID_REPLACE,
+                ]),
+                label: '↑',
+                attrs: [
+                    'class' => 'btn btnSmall btnUp',
+                    'title' => $this->trans('admin.contentSpec.actions.up'),
+                ],
+            ));
+            $listPrm['resultMenu']->addChild('down', new LinkRoute(
+                route: 'nyrocms_admin_handler_contents_down',
+                routePrm: array_merge($routePrm, [
+                    'id' => self::LINK_ID_REPLACE,
+                ]),
+                label: '↓',
+                attrs: [
+                    'class' => 'btn btnSmall btnDown',
+                    'title' => $this->trans('admin.contentSpec.actions.down'),
+                ],
+            ));
+        }
+
+        if ($handler->hasComposer()) {
+            $resultMenuOrder[] = 'composer';
+            $listPrm['resultMenu']->addChild('composer', new LinkRoute(
+                route: 'nyrocms_admin_composer',
+                routePrm: [
+                    'type' => 'ContentSpec',
+                    'id' => self::LINK_ID_REPLACE,
+                ],
+                label: '',
+                attrs: [
+                    'class' => 'btn btnSmall btnComposer',
+                    'title' => $this->trans('admin.content.actions.composer'),
+                ],
+                icon: 'composer',
+            ));
+        }
+
+        $resultMenuOrder[] = self::EDIT;
+        $resultMenuOrder[] = self::DELETE;
+
+        $listPrm['resultMenu']->reorderChilds($resultMenuOrder);
+
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
             array_merge(
                 [
@@ -66,28 +119,8 @@ class AdminHandlerContentsController extends AbstractAdminController
                         $orderField,
                         'updated',
                     ])),
-                    'moreActions' => array_filter([
-                        'up' => $handler->hasMoveActions() ? [
-                            'name' => '↑',
-                            'route' => 'nyrocms_admin_handler_contents_up',
-                            'routePrm' => $routePrm,
-                        ] : false,
-                        'down' => $handler->hasMoveActions() ? [
-                            'name' => '↓',
-                            'route' => 'nyrocms_admin_handler_contents_down',
-                            'routePrm' => $routePrm,
-                        ] : false,
-                        'composer' => $handler->hasComposer() ? [
-                            'name' => $this->get(AdminService::class)->getIcon('composer'),
-                            'attrs' => 'title="'.$this->trans('admin.content.actions.composer').'"',
-                            'route' => 'nyrocms_admin_composer',
-                            'routePrm' => [
-                                'type' => 'ContentSpec',
-                            ],
-                        ] : false,
-                    ]),
                 ],
-                $this->createList($request, $repo, $route, $routePrm, $orderField, $handler->isReversePositionOrder() ? 'desc' : 'asc', null, $qb)
+                $listPrm
             ));
     }
 

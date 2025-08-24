@@ -22,6 +22,7 @@ use NyroDev\NyroCmsBundle\Services\UserService;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Services\Db\DbAbstractService as nyroDevDbService;
 use NyroDev\UtilityBundle\Services\NyrodevService;
+use NyroDev\UtilityBundle\Utility\Menu\LinkRoute;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -684,6 +685,27 @@ class AdminDataController extends AbstractAdminController
 
         $route = 'nyrocms_admin_data_template';
 
+        $listPrm = $this->createList($request, $repo, $route, [], 'title', 'asc');
+        $listPrm['resultMenu']->addChild('composer', new LinkRoute(
+            route: 'nyrocms_admin_composer',
+            routePrm: [
+                'type' => 'Template',
+                'id' => self::LINK_ID_REPLACE,
+            ],
+            label: '',
+            attrs: [
+                'class' => 'btn btnSmall btnComposer',
+                'title' => $this->trans('admin.content.actions.composer'),
+            ],
+            icon: 'composer',
+        ));
+
+        $listPrm['resultMenu']->reorderChilds([
+            'composer',
+            self::EDIT,
+            self::DELETE,
+        ]);
+
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
             array_merge(
                 [
@@ -694,18 +716,8 @@ class AdminDataController extends AbstractAdminController
                         'templateCategory',
                         'updated',
                     ],
-                    'moreActions' => [
-                        'composer' => [
-                            'name' => $this->get(AdminService::class)->getIcon('composer'),
-                            'attrs' => 'title="'.$this->trans('admin.content.actions.composer').'"',
-                            'route' => 'nyrocms_admin_composer',
-                            'routePrm' => [
-                                'type' => 'Template',
-                            ],
-                        ],
-                    ],
                 ],
-                $this->createList($request, $repo, $route, [], 'title', 'asc')
+                $listPrm
             ));
     }
 
@@ -857,6 +869,26 @@ class AdminDataController extends AbstractAdminController
         $repo = $this->get(DbAbstractService::class)->getUserRepository();
         $filter = UserFilterType::class;
 
+        $listPrm = $this->createList($request, $repo, $route, [], 'id', 'desc', $filter);
+        $listPrm['resultMenu']->addChild('welcome', new LinkRoute(
+            route: 'nyrocms_admin_data_user_welcome',
+            routePrm: [
+                'id' => self::LINK_ID_REPLACE,
+            ],
+            label: '',
+            attrs: [
+                'class' => 'btn btnSmall btnWelcome',
+                'title' => $this->trans('admin.user.resendWelcome'),
+            ],
+            icon: 'mailOut',
+        ));
+
+        $listPrm['resultMenu']->reorderChilds([
+            'welcome',
+            self::EDIT,
+            self::DELETE,
+        ]);
+
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
             array_merge(
                 [
@@ -870,15 +902,8 @@ class AdminDataController extends AbstractAdminController
                         'valid',
                         'updated',
                     ],
-                    'moreActions' => [
-                        'mailOut' => [
-                            'name' => $this->get(AdminService::class)->getIcon('misc'),
-                            'route' => 'nyrocms_admin_data_user_welcome',
-                            'attrs' => 'title="'.$this->trans('admin.user.resendWelcome').'"',
-                        ],
-                    ],
                 ],
-                $this->createList($request, $repo, $route, [], 'id', 'desc', $filter)
+                $listPrm
             ));
     }
 

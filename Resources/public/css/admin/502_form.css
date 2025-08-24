@@ -17,7 +17,7 @@
     text-align: right;
 }
 
-.form_button:has(.cancel) {
+.form_button:has(.cancel, .closeDialog) {
     display: flex;
     justify-content: space-between;
 }

@@ -24,3 +24,11 @@ nyro-cms-dialog .data {
 nyro-cms-dialog .filter form > div {
     grid-template-columns: repeat(2, 1fr);
 }
+
+.resultActions .menu-has-childs > ul {
+    left: auto;
+    right: 100%;
+    top: 0;
+    margin-top: 0;
+    margin-right: 0.5rem;
+}

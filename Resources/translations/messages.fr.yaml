@@ -206,6 +206,9 @@ admin:
     ogImage: Image de partage
     inserted: Ajouté le
     updated: Mis à jour le
+    actions:
+      up: Monter
+      down: Descendre
   user:
     viewTitle: Utilisateurs
     id: ID

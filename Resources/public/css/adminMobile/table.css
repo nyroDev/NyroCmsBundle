@@ -56,7 +56,3 @@ table tr .actions {
     border-top: 1px solid var(--c-border);
     --s-svg-size: 2rem;
 }
-
-table tr .actions > a {
-    margin-left: 1rem;
-}
