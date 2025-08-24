@@ -79,9 +79,6 @@ nyro-composer-top-panel {
     height: var(--composer-size-panel-top-height);
     color: var(--composer-color-panel-top-text);
     background: var(--composer-color-panel-top-bg);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
     padding: 0 var(--composer-panel-space);
 }
 
@@ -178,6 +175,23 @@ nyro-composer.sideToggled nyro-composer-side-panel {
 ::part(nyroComposerBtnDelete):hover {
     color: var(--composer-color-error);
     background-color: var(--composer-color-error-text);
+}
+
+#convertToTemplateBtn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    background-color: var(--composer-color-alert);
+    border-color: var(--composer-color-alert);
+    color: var(--composer-color-alert-text);
+    margin-right: 2rem;
+    transition: background-color var(--composer-transition-time), color var(--composer-transition-time), border-color var(--composer-transition-time);
+}
+
+#convertToTemplateBtn:hover {
+    color: var(--composer-color-info-text);
+    background-color: var(--composer-color-info);
+    border-color: var(--composer-color-info);
 }
 
 nyro-composer-block {

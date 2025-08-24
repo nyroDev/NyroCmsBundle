@@ -1,0 +1,170 @@
+
+.btn,
+.button,
+button {
+    --c-btn-text: var(--c-highlight-text);
+    --c-btn-bg: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
+    --c-btn-text-hover: var(--c-highlight);
+    --c-btn-bg-hover: var(--c-highlight-text);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--s-svg-size);
+    font-family: var(--font);
+    font-weight: var(--font-bold-weight);
+    font-size: 1.4rem;
+    color: var(--c-btn-text);
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--c-btn-border);
+    border-color: var(--c-btn-border);
+    border-radius: var(--s-radius);
+    background-color: var(--c-btn-bg);
+    transition: background-color var(--transition-time), color var(--transition-time);
+    cursor: pointer;
+}
+
+.btn.disabled,
+.button.disabled,
+button.disabled,
+button[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.btnDelete {
+    --c-btn-border: var(--c-delete);
+    --c-btn-text: var(--c-delete-text);
+    --c-btn-bg: var(--c-delete);
+    --c-btn-text-hover: var(--c-delete);
+}
+
+.btnGray {
+    --c-btn-border: var(--c-light-background2);
+    --c-btn-text: var(--c-white);
+    --c-btn-bg: var(--c-light-background2);
+    --c-btn-text-hover: var(--c-highlight-text);
+    --c-btn-bg-hover: var(--c-highlight);
+}
+
+.btnLightGray {
+    --c-btn-border: var(--c-white);
+    --c-btn-text: var(--c-text);
+    --c-btn-bg: var(--c-light-background);
+    --c-btn-text-hover: var(--c-text);
+    --c-btn-bg-hover: var(--c-white);
+}
+
+.btnLightWhite {
+    border: none;
+    --c-btn-text: var(--c-text);
+    --c-btn-bg: var(--c-white);
+    --c-btn-text-hover: var(--c-text);
+    --c-btn-bg-hover: var(--c-light-background);
+}
+
+.btn:hover,
+.button:hover,
+button:hover {
+    text-decoration: none;
+    color: var(--c-btn-text-hover);
+    background-color: var(--c-btn-bg-hover);
+}
+
+.btn.cancel,
+.button.cancel,
+.btnLight {
+    --c-btn-text: var(--c-highlight);
+    --c-btn-bg: var(--c-highlight-text);
+    --c-btn-text-hover: var(--c-highlight-text);
+    --c-btn-bg-hover: var(--c-highlight);
+    --c-btn-border: var(--c-highlight);
+}
+
+.btn:has(.icon),
+.button:has(.icon),
+button:has(.icon),
+.btnWithIcon {
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn .icon + span,
+.button .icon + span,
+button .icon + span,
+.btnWithIcon .icon + span,
+.btn span + .icon,
+.button span + .icon,
+button span + .icon,
+.btnWithIcon span + .icon {
+    margin-left: 1rem;
+}
+
+.btnSmall.btnSmall {
+    display: inline-flex;
+    padding: 0.6rem;
+}
+
+
+nyro-cms-dialog .nyroCmsDialogClose {
+    position: absolute;
+    top: calc(var(--s-padding) / 1);
+    right: calc(var(--s-padding) / 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--c-secondary);
+    --s-svg-size: 2.4rem;
+    transition: color var(--transition-time);
+}
+nyro-cms-dialog .nyroCmsDialogClose:hover {
+    color: var(--c-delete);
+}
+
+nyro-cms-dialog.nyroCmsDialogConfirm p {
+    max-width: 35rem;
+    line-height: 1.5;
+}
+
+nyro-cms-dialog.nyroCmsDialogConfirm p[slot="title"] {
+    margin: 0;
+    padding: 0 4rem;
+    font-size: 2.1rem;
+    font-weight: var(--font-bold-weight);
+    text-align: center;
+    text-wrap: balance;
+}
+
+nyro-cms-dialog.nyroCmsDialogConfirm p[slot="content"] {
+    margin-bottom: 2rem;
+}
+
+nyro-cms-dialog h1 {
+    font-size: 2.8rem;
+    margin: 0;
+    text-align: left;
+}
+
+nyro-cms-dialog .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 20rem;
+}
+
+nyro-cms-dialog .actions * + * {
+    margin-left: var(--s-padding);
+}
+
+nyro-cms-dialog .data {
+    width: 100%;
+    margin: 0;
+    margin-top: var(--s-padding);
+    min-width: calc(100vw - 5 * var(--s-padding));
+}
+
+nyro-cms-dialog .form form,
+nyro-cms-dialog .form form > div {
+    padding: 0;
+    background: none;
+}

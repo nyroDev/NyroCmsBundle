@@ -130,6 +130,21 @@ foreach ($attrs as $k => $v) {
 			</span>
 		<?php endif; ?>
 
+		<?php if ($canConvertIntoTemplate): ?>
+			<a href="<?php echo $view['router']->path('nyrocms_admin_data_template_add', [
+			    'convertType' => $type,
+			    'convertId' => $id,
+			    'convertLang' => $lang,
+			]); ?>"
+				id="convertToTemplateBtn"
+				class="nyroComposerBtn"
+				slot="convertToTemplate"
+				title="<?php echo $view->escape($view['translator']->trans('admin.composer.convertToTemplate.title')); ?>">
+				<?php echo $view['nyrocms_composer']->getIcon('arrowUpRight'); ?>
+				<?php echo $view['nyrocms_composer']->getIcon('tpl'); ?>
+			</a>
+		<?php endif; ?>
+
 		<span slot="title"><?php echo $row; ?></span>
 	</nyro-composer-top-panel>
 

@@ -10,6 +10,23 @@ template.innerHTML = `
 <slot></slot>
 `;
 
+const fetchOptions = (options = {}) => {
+    return Object.assign(
+        {
+            method: "GET",
+            mode: "cors",
+            credentials: "same-origin",
+            cache: "no-cache",
+            redirect: "follow",
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+                "X-JS-FETCH": 1,
+            },
+        },
+        options
+    );
+};
+
 const iconsCache = new Map();
 class NyroComposer extends HTMLElement {
     constructor() {
@@ -180,10 +197,13 @@ class NyroComposer extends HTMLElement {
         const formData = new FormData(this.form);
         formData.append("template", id);
 
-        fetch(document.location.href, {
-            method: "POST",
-            body: formData,
-        })
+        fetch(
+            document.location.href,
+            fetchOptions({
+                method: "POST",
+                body: formData,
+            })
+        )
             .then((response) => {
                 return response.text();
             })
@@ -191,6 +211,18 @@ class NyroComposer extends HTMLElement {
                 this.workspace.innerHTML = response;
                 this.workspace.initBlocks();
             });
+    }
+
+    convertToTemplate(url) {
+        const dialog = document.createElement("nyro-cms-dialog");
+
+        dialog.appendChild(this.getTemplate("ui", "closeTpl").content.cloneNode(true));
+
+        dialog.addEventListener("nyroCmsDialogFetched", (e) => {});
+
+        document.body.appendChild(dialog);
+        dialog.open();
+        dialog.loadUrl(url);
     }
 
     getPanelConfig(init) {

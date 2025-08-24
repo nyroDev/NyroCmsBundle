@@ -59,7 +59,7 @@ class TemplateRepository extends EntityRepository implements TemplateRepositoryI
         return null;
     }
 
-    private function isMatchingFor(Composable $row, string $matchingFor): bool
+    public function isMatchingFor(Composable $row, string $matchingFor): bool
     {
         $class = '\\'.get_class($row);
 

@@ -5,9 +5,8 @@
     <title><?php $view['slots']->output('title', $view['nyrodev']->trans('admin.misc.title')); ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-	<?php echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCms', 'type="text/css" media="screen"'); ?>
-
 	<?php
+    echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCms', 'type="text/css" media="screen"');
     // 56.25em = 900px based on regular 16px default font-size
     echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCmsMobile', 'type="text/css" media="all and (max-width: 56.25em)"');
     echo $view['nyrodev_tagRenderer']->renderWebpackLinkTags('css/admin/nyroCmsTablet', 'type="text/css" media="all and (min-width: 56.25em), print"');

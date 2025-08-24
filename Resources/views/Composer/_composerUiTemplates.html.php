@@ -46,3 +46,9 @@
 <template class="ui" data-id="iconAdmin">
     <?php echo $view['nyrocms_admin']->getIcon('IDENT'); ?>
 </template>
+
+<template class="ui" data-id="closeTpl">
+    <a href="#" class="nyroCmsDialogClose" slot="close">
+        <?php echo $view['nyrocms_admin']->getIcon('closeCircle'); ?>
+    </a>
+</template>

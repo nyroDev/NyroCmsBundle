@@ -112,6 +112,11 @@ admin:
         <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       shortText: |
         <p>Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    convertToTemplate:
+      title: Convertir en modèle
+      done: |
+        Votre modèle a été créé.
+      close: Fermer
   userTypes:
     admin: Admin
     superadmin: Superadmin

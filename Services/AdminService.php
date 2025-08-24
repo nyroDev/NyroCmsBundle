@@ -26,6 +26,7 @@ class AdminService extends NyroDevAbstractService
     use AssetsPackagesServiceableTrait;
 
     public const ROLE_COMPOSER = 'NYROCMS_COMPOSER';
+    public const ROLE_TEMPLATE = 'NYROCMS_TEMPLATE';
 
     public const SESSION_ROOT_NAME = 'rootContent';
 
@@ -219,6 +220,9 @@ class AdminService extends NyroDevAbstractService
 
     private function canAdminTemplate(Template $template): bool
     {
+        if (!$this->hasRole(self::ROLE_TEMPLATE, $template)) {
+            return false;
+        }
         if ($this->isSuperAdmin()) {
             return true;
         }

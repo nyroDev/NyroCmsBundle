@@ -13,20 +13,26 @@
 	    'title' => $view['translator']->trans('admin.misc.'.$action),
 	]); ?>
 <?php endif; ?>
-	<article id="<?php echo $name; ?>" class="form">
-		<h1><?php echo $title; ?></h1>
+<?php if ($view['nyrodev']->isAjax()): ?>
+	<h1 slot="title"><?php echo $title; ?></h1>
+<?php endif; ?>
+	<article id="<?php echo $name; ?>" class="form"<?php echo $view['nyrodev']->isAjax() ? ' slot="content"' : ''; ?>>
+		<?php if (!$view['nyrodev']->isAjax()): ?>
+			<h1><?php echo $title; ?></h1>
+		<?php endif; ?>
 
 		<?php if (isset($intro) && $intro): ?>
 			<?php echo $intro; ?>
 		<?php endif; ?>
-		
-		<?php echo $view['form']->form($form); ?>
+
+		<?php if (isset($form) && $form): ?>
+			<?php echo $view['form']->form($form); ?>
+		<?php endif; ?>
 
 		<?php if (isset($outro) && $outro): ?>
 			<?php echo $outro; ?>
 		<?php endif; ?>
 	</article>
-
 <?php if (!$view['nyrodev']->isAjax()): ?>
 <?php $view['slots']->stop(); ?>
 <?php endif; ?>

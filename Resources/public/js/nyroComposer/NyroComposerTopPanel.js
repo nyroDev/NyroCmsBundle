@@ -1,19 +1,36 @@
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
+:host {
+    display: flex;
+    align-items: center;
+}
 :host > * {
     margin-left: var(--composer-panel-space);
+}
+#sideNav {
+    width: var(--composer-size-panel-side-width);
+}
+#centerPanel {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 .flexSpacer {
     flex-grow: 1;
 }
 </style>
-<slot name="nav"></slot>
-<span class="flexSpacer"></span>
-<slot name="title"></slot>
-<span class="flexSpacer"></span>
-<a href="#" part="nyroComposerBtn nyroComposerBtnCancel" class="cancel">Cancel</a>
-<a href="#" part="nyroComposerBtn nyroComposerBtnDisabled" class="submit">Save</a>
+<div id="sideNav"><slot name="nav"></slot></div>
+<div id="centerPanel">
+    <span class="flexSpacer"></span>
+    <slot name="convertToTemplate"></slot>
+    <slot name="title"></slot>
+    <span class="flexSpacer"></span>
+    <nav>
+        <a href="#" part="nyroComposerBtn nyroComposerBtnCancel" class="cancel">Cancel</a>
+        <a href="#" part="nyroComposerBtn nyroComposerBtnDisabled" class="submit">Save</a>
+    </nav>
+</div>
 `;
 
 class NyroComposerTopPanel extends HTMLElement {
@@ -70,6 +87,14 @@ class NyroComposerTopPanel extends HTMLElement {
 
             document.location.href = autoLocation.value;
         });
+
+        const convertToTemplateBtn = this.querySelector("#convertToTemplateBtn");
+        if (convertToTemplateBtn) {
+            convertToTemplateBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                this.composer.convertToTemplate(convertToTemplateBtn.href);
+            });
+        }
     }
 
     set changed(changed) {

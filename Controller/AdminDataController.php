@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
+use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\Template;
@@ -608,6 +609,8 @@ class AdminDataController extends AbstractAdminController
 
     public function templateCategoryAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $repo = $this->get(DbAbstractService::class)->getTemplateCategoryRepository();
 
         $route = 'nyrocms_admin_data_templateCategory';
@@ -627,6 +630,8 @@ class AdminDataController extends AbstractAdminController
 
     public function templateCategoryDeleteAction(string $id): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $row = $this->get(DbAbstractService::class)->getTemplateCategoryRepository()->find($id);
         if ($row) {
             $this->get(DbAbstractService::class)->remove($row);
@@ -638,6 +643,8 @@ class AdminDataController extends AbstractAdminController
 
     public function templateCategoryAddAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $row = $this->get(DbAbstractService::class)->getNew('template_category', false);
 
         return $this->templateCategoryForm($request, self::ADD, $row);
@@ -645,6 +652,8 @@ class AdminDataController extends AbstractAdminController
 
     public function templateCategoryEditAction(Request $request, string $id): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $row = $this->get(DbAbstractService::class)->getTemplateCategoryRepository()->find($id);
         if (!$row) {
             throw $this->createNotFoundException();
@@ -681,6 +690,8 @@ class AdminDataController extends AbstractAdminController
 
     public function templateAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $repo = $this->get(DbAbstractService::class)->getTemplateRepository();
 
         $route = 'nyrocms_admin_data_template';
@@ -724,6 +735,9 @@ class AdminDataController extends AbstractAdminController
     public function templateDeleteAction(string $id): Response
     {
         $row = $this->get(DbAbstractService::class)->getTemplateRepository()->find($id);
+
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE, $row);
+
         if ($row) {
             $this->get(DbAbstractService::class)->remove($row);
             $this->get(DbAbstractService::class)->flush();
@@ -734,9 +748,56 @@ class AdminDataController extends AbstractAdminController
 
     public function templateAddAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE);
+
         $row = $this->get(DbAbstractService::class)->getNew('template', false);
 
-        return $this->templateForm($request, self::ADD, $row);
+        $routePrm = [];
+
+        if ($request->query->has('convertType') && $request->query->has('convertId')) {
+            $routePrm = [
+                'convertType' => $request->query->get('convertType'),
+                'convertId' => $request->query->get('convertId'),
+                'convertLang' => $request->query->get('convertLang'),
+            ];
+
+            $convertFrom = $this->get(DbAbstractService::class)->getRepository($routePrm['convertType'])->find($routePrm['convertId']);
+            if (!$convertFrom || !($convertFrom instanceof Composable)) {
+                throw $this->createNotFoundException();
+            }
+
+            if (!$this->get(AdminService::class)->canAdmin($row)) {
+                throw $this->createAccessDeniedException();
+            }
+
+            $locale = $this->get(NyroCmsService::class)->getDefaultLocale($row);
+
+            $composerService = $this->get(ComposerService::class);
+            $canChangeLang = $composerService->canChangeLang($convertFrom);
+
+            if ($canChangeLang) {
+                if ($routePrm['convertLang'] != $locale) {
+                    $row->setTranslatableLocale($routePrm['convertLang']);
+                    $this->get(DbAbstractService::class)->refresh($row);
+                }
+            }
+
+            $enabledFor = [];
+            $templateRepo = $this->get(DbAbstractService::class)->getTemplateRepository();
+            foreach ($this->get(NyroCmsService::class)->getFoundComposables() as $foundComposable) {
+                if ($templateRepo->isMatchingFor($convertFrom, $foundComposable)) {
+                    $enabledFor[] = $foundComposable;
+                }
+            }
+
+            $row
+                ->setTitle($convertFrom->getTitle())
+                ->setEnabledFor($enabledFor)
+                ->setContent($convertFrom->getContent())
+            ;
+        }
+
+        return $this->templateForm($request, self::ADD, $row, $routePrm);
     }
 
     public function templateEditAction(Request $request, string $id): Response
@@ -746,10 +807,14 @@ class AdminDataController extends AbstractAdminController
             throw $this->createNotFoundException();
         }
 
-        return $this->templateForm($request, self::EDIT, $row);
+        $this->denyAccessUnlessGranted(AdminService::ROLE_TEMPLATE, $row);
+
+        return $this->templateForm($request, self::EDIT, $row, [
+            'id' => $id,
+        ]);
     }
 
-    public function templateForm(Request $request, string $action, Template $row): Response
+    public function templateForm(Request $request, string $action, Template $row, array $routePrm = []): Response
     {
         $defaultForChoices = [];
 
@@ -802,8 +867,21 @@ class AdminDataController extends AbstractAdminController
             count($themes) > 1 ? 'theme' : null,
         ]);
 
-        $adminForm = $this->createAdminForm($request, 'template', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions);
+        $adminForm = $this->createAdminForm($request, 'template', $action, $row, $fields, 'nyrocms_admin_data_template', [], null, null, null, $moreOptions, moreFormOptions: [
+            'action' => $this->generateUrl('nyrocms_admin_data_template_'.$action, $routePrm),
+        ]);
         if (!is_array($adminForm)) {
+            if ($this->get(NyrodevService::class)->isAjax()) {
+                return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', [
+                    'name' => 'template',
+                    'action' => $action,
+                    'row' => $row,
+                    'route' => 'nyrocms_admin_data_template',
+                    'routePrm' => [],
+                    'intro' => $this->renderView('@NyroDevNyroCms/AdminTpl/_templateConverted.html.php'),
+                ]);
+            }
+
             return $adminForm;
         }
 

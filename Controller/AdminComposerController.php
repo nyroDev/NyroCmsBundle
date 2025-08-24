@@ -41,6 +41,7 @@ class AdminComposerController extends AbstractAdminController
         $sameLangStructure = $composerService->isSameLangStructure($row);
         $sameLangMedia = $composerService->isSameLangMedia($row);
         $canChangeTheme = $composerService->canChangeTheme($row);
+        $canConvertIntoTemplate = $this->isGranted(AdminService::ROLE_TEMPLATE);
         $availableTemplates = $composerService->getAvailableTemplates($row);
 
         $isDefaultLocale = true;
@@ -188,6 +189,7 @@ class AdminComposerController extends AbstractAdminController
             'availableItems' => $availableItems,
             'canChangeTheme' => $canChangeTheme,
             'canChangeLang' => $canChangeLang,
+            'canConvertIntoTemplate' => $canConvertIntoTemplate,
             'canChangeStructure' => $canChangeStructure,
             'canChangeMedia' => $canChangeMedia,
             'themes' => $themes,
