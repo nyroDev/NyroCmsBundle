@@ -19,6 +19,7 @@ abstract class Tooltip
     #[Gedmo\Versioned]
     protected ?string $title = null;
 
+    #[Assert\NotBlank]
     #[Gedmo\Versioned]
     protected ?string $content = null;
 

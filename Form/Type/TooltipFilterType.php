@@ -13,8 +13,8 @@ class TooltipFilterType extends Type\AbstractFilterType
     {
         $builder
             ->setAction($this->generateUrl('nyrocms_admin_data_tooltip'))
-            ->add('ident', Type\FilterType::class, ['label' => $this->trans('admin.tooltip.ident')])
             ->add('title', Type\FilterType::class, ['label' => $this->trans('admin.tooltip.title')])
+            ->add('ident', Type\FilterType::class, ['label' => $this->trans('admin.tooltip.ident')])
             ->add('content', Type\FilterType::class, ['label' => $this->trans('admin.tooltip.content')])
         ;
         parent::buildForm($builder, $options);

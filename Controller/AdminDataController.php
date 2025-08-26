@@ -12,6 +12,7 @@ use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
 use NyroDev\NyroCmsBundle\Model\Template;
 use NyroDev\NyroCmsBundle\Model\TemplateCategory;
+use NyroDev\NyroCmsBundle\Model\Tooltip;
 use NyroDev\NyroCmsBundle\Model\User;
 use NyroDev\NyroCmsBundle\Model\UserRole;
 use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
@@ -910,8 +911,8 @@ class AdminDataController extends AbstractAdminController
                     'name' => 'tooltip',
                     'route' => $route,
                     'fields' => [
-                        'ident',
                         'title',
+                        'ident',
                     ],
                 ],
                 $this->createList($request, $repo, $route, [], 'title', 'asc', $filter)

@@ -16,6 +16,12 @@ services:
           - [setContainerInterface, ['@service_container']]
         tags:
           - { name: form.type }
+
+    NyroDev\NyroCmsBundle\Form\Type\TooltipFilterType:
+        calls:
+          - [setContainerInterface, ['@service_container']]
+        tags:
+          - { name: form.type }
     
     NyroDev\NyroCmsBundle\Form\Type\ContactMessageFilterType:
         calls:
