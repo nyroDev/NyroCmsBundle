@@ -154,6 +154,26 @@ nyrocms_admin_data_template:
         page: \d+
 
 
+nyrocms_admin_data_tooltip_add:
+    path:  /tooltip/add
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::tooltipAddAction }
+nyrocms_admin_data_tooltip_edit:
+    path:  /tooltip/edit/{id}
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::tooltipEditAction }
+    requirements:
+        id: \d+
+nyrocms_admin_data_tooltip_delete:
+    path:  /tooltip/delete/{id}
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::tooltipDeleteAction }
+    requirements:
+        id: \d+
+nyrocms_admin_data_tooltip:
+    path:  /tooltip
+    defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::tooltipAction }
+    requirements:
+        page: \d+
+
+
 nyrocms_admin_data_contactMessage:
     path:  /contactMessage/{chid}
     defaults: { _controller: NyroDev\NyroCmsBundle\Controller\AdminDataController::contactMessageAction }

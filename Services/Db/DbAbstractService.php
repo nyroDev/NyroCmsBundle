@@ -9,6 +9,7 @@ use NyroDev\NyroCmsBundle\Repository\ContentRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\ContentSpecRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\TemplateCategoryRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\TemplateRepositoryInterface;
+use NyroDev\NyroCmsBundle\Repository\TooltipRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use NyroDev\NyroCmsBundle\Repository\UserRoleRepositoryInterface;
 use NyroDev\UtilityBundle\Services\AbstractService as AbstractServiceSrc;
@@ -81,6 +82,11 @@ abstract class DbAbstractService extends AbstractServiceSrc
     public function getTemplateCategoryRepository(): TemplateCategoryRepositoryInterface
     {
         return $this->getRepository('template_category');
+    }
+
+    public function getTooltipRepository(): TooltipRepositoryInterface
+    {
+        return $this->getRepository('tooltip');
     }
 
     public function getRepository(object|string $name): ObjectRepository

@@ -523,6 +523,13 @@ class AdminService extends NyroDevAbstractService
                     icon: 'composer'
                 ));
 
+                $contentsMenu->addChild('tooltip', new Link(
+                    $this->generateUrl('nyrocms_admin_data_tooltip'),
+                    $this->trans('admin.tooltip.viewTitle'),
+                    'tooltip' == $tmpUri[0],
+                    icon: 'infos'
+                ));
+
                 $accessMenu = new Text($this->trans('admin.menu.access'), icon: 'rights');
                 $rootMenu->addChild('access', $accessMenu);
                 $accessMenu->addChild('user', new Link(

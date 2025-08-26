@@ -70,6 +70,18 @@ services:
     nyrocms_composer:
         alias: NyroDev\NyroCmsBundle\Services\ComposerService
         public: true
+
+    NyroDev\NyroCmsBundle\Services\TooltipService:
+        public: true
+        arguments:
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+        calls:
+            - [setTwig, ['@twig']]
+        tags:
+          - { name: templating.helper, alias: nyrocms_tooltip }
+    nyrocms_tooltip:
+        alias: NyroDev\NyroCmsBundle\Services\TooltipService
+        public: true
     
     NyroDev\NyroCmsBundle\Routing\NyroCmsLoader:
         calls:

@@ -8,8 +8,11 @@
 	]); ?>
 <?php endif; ?>
 	<article id="<?php echo $name; ?>" class="list">
-		<h1><?php echo isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'); ?></h1>
-		
+		<h1>
+			<?php echo isset($title) ? $title : $view['translator']->trans($prefix.'.'.$name.'.viewTitle'); ?>
+			<?php echo $view['nyrocms_tooltip']->renderIdent(isset($tooltipIdent) ? $tooltipIdent : $name.'/list'); ?>
+		</h1>
+
 		<?php
         $introKey = $prefix.'.'.$name.'.introList';
 $intro = $view['translator']->trans($introKey);

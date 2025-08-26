@@ -320,6 +320,8 @@ class Configuration implements ConfigurationInterface
                                 ->stringNode('template_category')->defaultValue('TemplateCategory')->end()
                                 ->stringNode('template')->defaultValue('Template')->end()
                                 ->stringNode('template_log')->defaultValue('Log\\TemplateLog')->end()
+                                ->stringNode('tooltip')->defaultValue('Tooltip')->end()
+                                ->stringNode('tooltip_log')->defaultValue('Log\\TooltipLog')->end()
                                 ->stringNode('translation')->defaultValue('Translation')->end()
                                 ->stringNode('contact_message')->defaultValue('ContactMessage')->end()
                             ->end()

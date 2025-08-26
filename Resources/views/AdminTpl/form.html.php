@@ -14,11 +14,17 @@
 	]); ?>
 <?php endif; ?>
 <?php if ($view['nyrodev']->isAjax()): ?>
-	<h1 slot="title"><?php echo $title; ?></h1>
+	<h1 slot="title">
+		<?php echo $title; ?>
+		<?php echo $view['nyrocms_tooltip']->renderIdent(isset($tooltipIdent) ? $tooltipIdent : $name.'/form'); ?>
+	</h1>
 <?php endif; ?>
 	<article id="<?php echo $name; ?>" class="form"<?php echo $view['nyrodev']->isAjax() ? ' slot="content"' : ''; ?>>
 		<?php if (!$view['nyrodev']->isAjax()): ?>
-			<h1><?php echo $title; ?></h1>
+			<h1>
+				<?php echo $title; ?>
+				<?php echo $view['nyrocms_tooltip']->renderIdent(isset($tooltipIdent) ? $tooltipIdent : $name.'/form'); ?>
+			</h1>
 		<?php endif; ?>
 
 		<?php if (isset($intro) && $intro): ?>

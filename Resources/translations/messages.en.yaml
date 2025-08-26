@@ -191,6 +191,14 @@ admin:
     state: State
     inserted: Added on
     updated: Updated on
+  tooltip:
+    viewTitle: Tooltips
+    id: ID
+    ident: Identifier
+    title: Title
+    content: Content
+    inserted: Added on
+    updated: Updated on
   contentSpec:
     viewTitle: Specific contents
     id: ID

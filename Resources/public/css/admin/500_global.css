@@ -97,6 +97,18 @@ main > article > h1:has(strong) {
     font-weight: normal;
 }
 
+main > article > h1:has(nyro-tooltip) {
+    position: relative;
+    padding-right: calc(var(--s-padding) + var(--s-svg-size));
+}
+
+main > article > h1 > nyro-tooltip {
+    position: absolute;
+    right: var(--s-padding);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 nyro-toaster-stack {
     top: calc(var(--s-header-height) + var(--s-padding));
     bottom: auto;

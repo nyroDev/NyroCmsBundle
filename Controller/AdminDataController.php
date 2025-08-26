@@ -5,6 +5,7 @@ namespace NyroDev\NyroCmsBundle\Controller;
 use InvalidArgumentException;
 use NyroDev\NyroCmsBundle\Event\AdminFormEvent;
 use NyroDev\NyroCmsBundle\Form\Type\ContentHandlerFilterType;
+use NyroDev\NyroCmsBundle\Form\Type\TooltipFilterType;
 use NyroDev\NyroCmsBundle\Form\Type\UserFilterType;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
@@ -856,6 +857,10 @@ class AdminDataController extends AbstractAdminController
             ],
         ];
 
+        if ($this->get(NyrodevService::class)->isAjax()) {
+            $moreOptions['submit']['cancelClass'] = 'btnLight closeDialog';
+        }
+
         $fields = array_filter([
             'title',
             'templateCategory',
@@ -882,6 +887,88 @@ class AdminDataController extends AbstractAdminController
                 ]);
             }
 
+            return $adminForm;
+        }
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/form.html.php', $adminForm);
+    }
+
+    // /////////////////////////////////////////////////////////////
+    // tooltips
+
+    public function tooltipAction(Request $request): Response
+    {
+        $repo = $this->get(DbAbstractService::class)->getTooltipRepository();
+
+        $route = 'nyrocms_admin_data_tooltip';
+
+        $filter = TooltipFilterType::class;
+
+        return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
+            array_merge(
+                [
+                    'name' => 'tooltip',
+                    'route' => $route,
+                    'fields' => [
+                        'ident',
+                        'title',
+                    ],
+                ],
+                $this->createList($request, $repo, $route, [], 'title', 'asc', $filter)
+            ));
+    }
+
+    public function tooltipDeleteAction(string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTooltipRepository()->find($id);
+        if ($row) {
+            $this->get(DbAbstractService::class)->remove($row);
+            $this->get(DbAbstractService::class)->flush();
+        }
+
+        return $this->redirect($this->generateUrl('nyrocms_admin_data_tooltip'));
+    }
+
+    public function tooltipAddAction(Request $request): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getNew('tooltip', false);
+
+        return $this->tooltipForm($request, self::ADD, $row);
+    }
+
+    public function tooltipEditAction(Request $request, string $id): Response
+    {
+        $row = $this->get(DbAbstractService::class)->getTooltipRepository()->find($id);
+        if (!$row) {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->tooltipForm($request, self::EDIT, $row);
+    }
+
+    public function tooltipForm(Request $request, string $action, Tooltip $row): Response
+    {
+        $moreOptions = [
+            'content' => [
+                'row_attr' => [
+                    'class' => 'form_row_100',
+                ],
+            ],
+            'submit' => [
+                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_tooltip'),
+                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+            ],
+        ];
+
+        $fields = array_filter([
+            'ident',
+            'title',
+            'content',
+        ]);
+
+        $adminForm = $this->createAdminForm($request, 'tooltip', $action, $row, $fields, 'nyrocms_admin_data_tooltip', [], null, null, null, $moreOptions);
+        if (!is_array($adminForm)) {
             return $adminForm;
         }
 

@@ -192,6 +192,14 @@ admin:
     state: État
     inserted: Ajouté le
     updated: Mis à jour le
+  tooltip:
+    viewTitle: Infobulles
+    id: ID
+    ident: Identifiant
+    title: Titre
+    content: Contenu
+    inserted: Ajouté le
+    updated: Mis à jour le
   contentSpec:
     viewTitle: Contenus spécifiques
     id: ID
