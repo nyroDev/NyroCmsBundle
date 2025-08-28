@@ -192,6 +192,10 @@ class AdminDataController extends AbstractAdminController
             ],
             'state' => [
                 'type' => ChoiceType::class,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'radioList radioListFull',
+                ],
                 'choices' => array_flip($this->get(AdminService::class)->getContentStateChoices()),
             ],
             'goUrl' => [
@@ -199,6 +203,8 @@ class AdminDataController extends AbstractAdminController
                     'class' => 'form_row_100',
                 ],
             ],
+            'goBlank' => AdminService::getBoolFieldAsRadioListOptions(),
+            'redirectToChildren' => AdminService::getBoolFieldAsRadioListOptions(),
             'relateds' => [
                 'wc' => true,
                 'expanded' => true,
@@ -486,6 +492,7 @@ class AdminDataController extends AbstractAdminController
                 ],
                 $this->get(AdminService::class)->getContentsChoiceTypeOptions($this->getParameter('nyrocms.user_roles.maxlevel_content'))
             ),
+            'internal' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
@@ -581,6 +588,7 @@ class AdminDataController extends AbstractAdminController
                     ]),
                 ],
             ],
+            'hasAdmin' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_contentHandler'),
@@ -849,8 +857,13 @@ class AdminDataController extends AbstractAdminController
             ],
             'state' => [
                 'type' => ChoiceType::class,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'radioList radioListFull',
+                ],
                 'choices' => array_flip($this->get(AdminService::class)->getTemplateStateChoices()),
             ],
+            'custom' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
                 'icon' => NyroCmsService::ICON_PATH.'#save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_template'),
@@ -1133,16 +1146,16 @@ class AdminDataController extends AbstractAdminController
                     'class' => 'form_row_25',
                 ],
             ],
-            'valid' => [
+            'valid' => array_merge(AdminService::getBoolFieldAsRadioListOptions(), [
                 'row_attr' => [
                     'class' => 'form_row_25',
                 ],
-            ],
-            'developper' => [
+            ]),
+            'developper' => array_merge(AdminService::getBoolFieldAsRadioListOptions(), [
                 'row_attr' => [
                     'class' => 'form_row_25',
                 ],
-            ],
+            ]),
             'userType' => [
                 'type' => ChoiceType::class,
                 'placeholder' => '',

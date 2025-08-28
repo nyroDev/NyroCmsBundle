@@ -241,6 +241,7 @@ nyro-toaster .close:hover {
     padding: 0.8rem 0;
     font-weight: 300;
     line-height: 1em;
+    min-height: 0;
     width: 3.6rem;
     text-align: center;
     margin: 0.5rem;

@@ -209,8 +209,13 @@ class AdminHandlerContentsController extends AbstractAdminController
                 'wc' => true,
                 'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
             ],
+            'featured' => AdminService::getBoolFieldAsRadioListOptions(),
             'state' => [
                 'type' => ChoiceType::class,
+                'expanded' => true,
+                'attr' => [
+                    'class' => 'radioList radioListFull',
+                ],
                 'choices' => array_flip($this->get(AdminService::class)->getContentSpecStateChoices()),
             ],
             'submit' => [

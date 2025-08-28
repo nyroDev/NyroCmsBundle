@@ -19,6 +19,7 @@ use NyroDev\UtilityBundle\Utility\Menu\RootMenu;
 use NyroDev\UtilityBundle\Utility\Menu\Separator;
 use NyroDev\UtilityBundle\Utility\Menu\Text;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\HttpFoundation\Response;
 
 class AdminService extends NyroDevAbstractService
@@ -565,5 +566,26 @@ class AdminService extends NyroDevAbstractService
         string $text,
     ): Response {
         return new Response('<a href="'.$redirectUrl.'" class="goToUrl">'.$text.'</a>');
+    }
+
+    public static function getBoolFieldAsRadioListOptions(bool $setType = true): array
+    {
+        $ret = [
+            'expanded' => true,
+            'attr' => [
+                'class' => 'radioList radioListFull radioListBool radioList50',
+            ],
+            'placeholder' => false,
+            'choices' => [
+                'admin.misc.yes' => true,
+                'admin.misc.no' => false,
+            ],
+        ];
+
+        if ($setType) {
+            $ret['type'] = ChoiceType::class;
+        }
+
+        return $ret;
     }
 }
