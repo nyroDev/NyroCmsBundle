@@ -42,6 +42,10 @@ abstract class Content extends AbstractUploadable implements ContentRootable, Co
 
     #[Gedmo\Translatable]
     #[Gedmo\Versioned]
+    protected ?string $contentReadableText = null;
+
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
     protected ?string $firstImage = null;
 
     #[Assert\Url]
@@ -195,6 +199,18 @@ abstract class Content extends AbstractUploadable implements ContentRootable, Co
     public function getContentText(): ?string
     {
         return $this->contentText;
+    }
+
+    public function setContentReadableText(?string $contentReadableText): self
+    {
+        $this->contentReadableText = $contentReadableText;
+
+        return $this;
+    }
+
+    public function getContentReadableText(): ?string
+    {
+        return $this->contentReadableText;
     }
 
     public function setFirstImage(?string $firstImage): self
@@ -520,7 +536,7 @@ abstract class Content extends AbstractUploadable implements ContentRootable, Co
 
     public function getSummary(int $limit = 250): string
     {
-        $text = str_replace('&rsquo;', "'", $this->getContentText());
+        $text = str_replace('&rsquo;', "'", $this->getContentReadableText());
         if (mb_strlen($text) > $limit) {
             $text = mb_substr($text, 0, $limit).'...';
         }

@@ -12,6 +12,7 @@ class TooltipService extends NyroDevAbstractService
 
     public function __construct(
         private readonly DbAbstractService $dbService,
+        private readonly AdminService $adminService,
     ) {
     }
 
@@ -22,13 +23,19 @@ class TooltipService extends NyroDevAbstractService
             return null;
         }
 
-        return $this->renderContent($tooltip->getContent());
+        $editUrl = null;
+        if ($this->adminService->isSuperAdmin()) {
+            $editUrl = $this->adminService->generateUrl('nyrocms_admin_data_tooltip_edit', ['id' => $tooltip->getId()]);
+        }
+
+        return $this->renderContent($tooltip->getContent(), $editUrl);
     }
 
-    public function renderContent(string $content): ?string
+    public function renderContent(string $content, ?string $editUrl): ?string
     {
         return $this->getTwig()->render('@NyroDevNyroCms/AdminTpl/_tooltip.html.php', [
             'content' => nl2br($content),
+            'editUrl' => $editUrl,
         ]);
     }
 }

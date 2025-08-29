@@ -701,13 +701,14 @@ class NyroComposerSidePanel extends HTMLElement {
                 const label = document.createElement("label");
                 label.classList.add("button");
                 label.setAttribute("for", templateForId);
-                label.innerHTML = this.composer.getIconAdmin(category.icon || "tpl") + category.title;
+                label.innerHTML = (category.icon ? this.composer.getIconAdmin(category.icon) : this.composer.getIcon("tpl")) + category.title;
 
                 rootbuttons.appendChild(label);
 
                 categoryDiv.appendChild(
                     this._handlePanelIcon({
-                        iconAdmin: category.icon || "tpl",
+                        iconAdmin: category.icon,
+                        icon: "tpl",
                     })
                 );
 

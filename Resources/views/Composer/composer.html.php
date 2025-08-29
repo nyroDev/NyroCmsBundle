@@ -77,6 +77,11 @@ foreach ($attrs as $k => $v) {
 	<nyro-composer-top-panel
 		cancel-url="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>"
 	>
+		<a href="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>" id="backBtn" class="nyroComposerBtn" slot="nav"
+			title="<?php echo $view->escape($view['nyrodev']->trans('admin.content.themeSelectInput')); ?>">
+			<?php echo $view['nyrocms_composer']->getIcon('arrowUpRight'); ?>
+			<?php echo $view['nyrocms_composer']->getIcon('menu'); ?>
+		</a>
 		<?php if ($canChangeTheme && count($themes) > 1): // @todo need implement and integration?>
 			<span slot="nav">
 				<label for="themeChoose"><?php echo $view['nyrodev']->trans('admin.content.themeSelectInput'); ?></label>

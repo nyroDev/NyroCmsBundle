@@ -513,6 +513,8 @@ class NyroComposerItem extends HTMLElement {
             if (cfg.dataType === "image" && !element.getAttribute("src")) {
                 element.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
                 needContentPlaceholder = element;
+            } else if (cfg.dataType === "image" && element.getAttribute("src").startsWith("data:")) {
+                needContentPlaceholder = element;
             } else if (cfg.dataType === "images" && !element.querySelector("img")) {
                 needContentPlaceholder = element;
             } else if ((cfg.dataType === "videoUrl" || cfg.dataType === "iframeUrl") && !element.getAttribute("src")) {

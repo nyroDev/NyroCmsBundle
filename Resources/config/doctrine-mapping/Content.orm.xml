@@ -15,6 +15,7 @@
 		<field name="theme" type="string" nullable="true" />
 		<field name="content" type="json" nullable="true" />
 		<field name="contentText" type="text" nullable="true" />
+		<field name="contentReadableText" type="text" nullable="true" />
 		<field name="firstImage" type="string" nullable="true" />
 		<field name="goUrl" type="string" nullable="true" />
 		<field name="goBlank" type="boolean" nullable="true" />

@@ -218,15 +218,17 @@ class ComposerService extends AbstractService
     public function cancelUrl(Composable $row): string
     {
         $ret = '#';
-        if ($row instanceof ContentSpec) {
+        if ($row instanceof Template) {
+            $ret = $this->nyrodevService->generateUrl('nyrocms_admin_data_template');
+        } elseif ($row instanceof ContentSpec) {
             $handler = $this->nyroCmsService->getHandler($row->getContentHandler());
             $ret = $this->nyrodevService->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm());
         } else {
             $cfg = $this->getConfig($row);
             $routePrm = isset($cfg['cancel_url']['route_prm']) && is_array($cfg['cancel_url']['route_prm']) ? $cfg['cancel_url']['route_prm'] : [];
-            if ($cfg['cancel_url']['need_id']) {
+            if (isset($cfg['cancel_url']['need_id']) && $cfg['cancel_url']['need_id']) {
                 $routePrm['id'] = $row->getId();
-            } elseif ($cfg['cancel_url']['need_veryParent_id'] && $row instanceof ContentRootable) {
+            } elseif (isset($cfg['cancel_url']['need_veryParent_id']) && $cfg['cancel_url']['need_veryParent_id'] && $row instanceof ContentRootable) {
                 $routePrm['id'] = $row->getVeryParent()->getId();
             }
             $ret = $this->nyrodevService->generateUrl($cfg['cancel_url']['route'], $routePrm);
@@ -235,7 +237,7 @@ class ComposerService extends AbstractService
         $event = new ComposerConfigEvent($row, 'cancelUrl', $ret);
         $this->eventDispatcher->dispatch($event, ComposerConfigEvent::COMPOSER_CONFIG);
 
-        return $ret;
+        return $event->getConfig();
     }
 
     public function getThemes(Composable $row): array
@@ -538,6 +540,7 @@ class ComposerService extends AbstractService
         $newTexts = [
             $row->getTitle(),
         ];
+        $newReadableTexts = [];
 
         foreach ($content as $block) {
             if (isset($block['conts'])) {
@@ -549,9 +552,15 @@ class ComposerService extends AbstractService
                             if (null === $value) {
                                 continue;
                             }
+                            switch ($editable['type']) {
+                                case self::EDITABLE_TYPE_SIMPLE_TEXT:
+                                case self::EDITABLE_TYPE_TEXT:
+                                    $newReadableTexts[] = html_entity_decode(strip_tags($value));
+                                    break;
+                            }
                             switch ($editable['dataType']) {
                                 case self::EDITABLE_DATATYPE_TEXT:
-                                    $newTexts[] = $value;
+                                    $newTexts[] = html_entity_decode(strip_tags($value));
                                     break;
                                 case self::EDITABLE_DATATYPE_IMAGE:
                                     if (!$firstImage) {
@@ -568,6 +577,7 @@ class ComposerService extends AbstractService
         $row->setContent($content);
         if ($row instanceof ComposableContentSummary) {
             $row->setContentText(implode(PHP_EOL, $newTexts));
+            $row->setContentReadableText(implode(PHP_EOL, $newReadableTexts));
             $row->setFirstImage($firstImage);
         }
     }
@@ -742,6 +752,7 @@ class ComposerService extends AbstractService
                         $row->setContent($newConts);
                         if ($row instanceof ComposableContentSummary) {
                             $row->setContentText(implode("\n", $newTexts));
+                            $row->setContentReadableText(implode("\n", $newTexts));
                             $row->setFirstImage($firstImage);
                         }
 

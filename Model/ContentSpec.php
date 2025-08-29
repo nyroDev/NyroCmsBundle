@@ -38,6 +38,10 @@ abstract class ContentSpec extends AbstractUploadable implements ContentRootable
 
     #[Gedmo\Translatable]
     #[Gedmo\Versioned]
+    protected ?string $contentReadableText = null;
+
+    #[Gedmo\Translatable]
+    #[Gedmo\Versioned]
     protected ?array $data = null;
 
     #[Gedmo\Translatable]
@@ -150,6 +154,18 @@ abstract class ContentSpec extends AbstractUploadable implements ContentRootable
     public function getContentText(): ?string
     {
         return $this->contentText;
+    }
+
+    public function setContentReadableText(?string $contentReadableText): self
+    {
+        $this->contentReadableText = $contentReadableText;
+
+        return $this;
+    }
+
+    public function getContentReadableText(): ?string
+    {
+        return $this->contentReadableText;
     }
 
     public function setData(?array $data): self
@@ -341,7 +357,7 @@ abstract class ContentSpec extends AbstractUploadable implements ContentRootable
 
     public function getSummary($limit = 200): ?string
     {
-        $text = $this->getIntro() ? $this->getIntro() : str_replace('&rsquo;', "'", $this->getContentText());
+        $text = $this->getIntro() ? $this->getIntro() : str_replace('&rsquo;', "'", $this->getContentReadableText());
         if (mb_strlen($text) > $limit) {
             $text = mb_substr($text, 0, $limit).'...';
         }

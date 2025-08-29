@@ -75,6 +75,7 @@ services:
         public: true
         arguments:
             - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+            - '@NyroDev\NyroCmsBundle\Services\AdminService'
         calls:
             - [setTwig, ['@twig']]
         tags:

@@ -361,6 +361,7 @@ abstract class AbstractHandler
         } else {
             $row->setContent($newContents);
             $row->setContentText(implode("\n", array_filter($newContentTexts)));
+            $row->setContentReadableText(implode("\n", array_filter($newContentTexts)));
         }
     }
 
@@ -414,6 +415,7 @@ abstract class AbstractHandler
         } else {
             $row->setContent($newContents);
             $row->setContentText(implode("\n", array_filter($newContentTexts)));
+            $row->setContentReadableText(implode("\n", array_filter($newContentTexts)));
         }
     }
 
