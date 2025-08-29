@@ -20,7 +20,14 @@ template.innerHTML = `
     height: 0;
     min-height: 300px;
 }
+input.hidden {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+}
 </style>
+<input type="text" tabindex="0" aria-hidden="true" class="hidden" />
 `;
 
 const libraries = {};
@@ -67,6 +74,8 @@ class NyroFormMap extends HTMLElement {
             mode: "open",
         });
         this.shadowRoot.append(template.content.cloneNode(true));
+
+        this._hiddenInput = this.shadowRoot.querySelector("input.hidden");
 
         this.value = this.hasAttribute("value") ? this.getAttribute("value") : undefined;
 
@@ -164,7 +173,7 @@ class NyroFormMap extends HTMLElement {
                 .then((response) => {
                     if (response.results.length) {
                         this._mapEl.innerMap.fitBounds(response.results[0].geometry.viewport);
-                        this._marker.setPosition(response.results[0].geometry.location);
+                        this._marker.position = response.results[0].geometry.location;
                         this._updateValue();
                     }
                 });
@@ -212,7 +221,8 @@ class NyroFormMap extends HTMLElement {
                 {
                     valueMissing: true,
                 },
-                valueMissingMessage
+                valueMissingMessage,
+                this._hiddenInput ?? undefined
             );
         } else {
             this._internals.setValidity({});
