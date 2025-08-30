@@ -23,6 +23,10 @@ template.innerHTML = `
     border-radius: 2px;
     padding: 1px 2px;
 }
+:host([disabled]) {
+    pointer-events: none;
+    opacity: 0.7;
+}
 :host(:focus) {
     outline: 2px solid #000;
 }
