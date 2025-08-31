@@ -271,6 +271,7 @@ admin:
     export: Export
 nyrocms:
   email:
+    bodyColor: "#EDEEEF"
     headerColor: "#262524"
     highlightColor: "#009ee0"
   header:
