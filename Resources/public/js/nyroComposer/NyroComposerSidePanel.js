@@ -225,20 +225,21 @@ label {
     display: block !important;
 }
 
-.templates .templateBack {
+.templateCategory .templateBack {
     color: var(--composer-color-secondary);
     display: flex;
     align-items: center;
     position: absolute;
     left: 10px;
     top: 25px;
+    font-size: 12px;
     cursor: pointer;
     transition: color var(--composer-transition-time);
 }
-.templates .templateBack:hover {
+.templateCategory .templateBack:hover {
     color: var(--composer-color);
 }
-.templates .templateBack .icon {
+.templateCategory .templateBack .icon {
     width: 16px;
     height: 16px;
 }
@@ -286,7 +287,9 @@ const templateTemplates = document.createElement("template");
 templateTemplates.innerHTML = `
 <div class="templates">
     <input type="radio" id="template_category_empty" name="template_category" class="templateCategorySelector" checked />
-    <div class="templateCategory templateCategoryRoot"></div>
+    <div class="templateCategory templateCategoryRoot">
+        <a class="templateBack">Back</a>
+    </div>
 </div>
 `;
 
@@ -653,7 +656,15 @@ class NyroComposerSidePanel extends HTMLElement {
 
         const templatesCont = templateTemplates.content.cloneNode(true),
             div = templatesCont.querySelector("div.templates"),
-            templateCategoryRoot = templatesCont.querySelector(".templateCategoryRoot");
+            templateCategoryRoot = templatesCont.querySelector(".templateCategoryRoot"),
+            backGeneralLink = templatesCont.querySelector(".templateBack"),
+            backLabel = this.composer.getIcon("back") + this.composer.trans("back");
+
+        backGeneralLink.innerHTML = backLabel;
+        backGeneralLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.selected = false;
+        });
 
         if (panelCfg.conditional) {
             div.classList.add("conditional");
@@ -695,7 +706,7 @@ class NyroComposerSidePanel extends HTMLElement {
                     templateForId = "template_category_" + categoryId,
                     categoryDiv = templateCategory.querySelector("div");
 
-                templateCategory.querySelector("label").innerHTML = this.composer.getIcon("back") + this.composer.trans("back");
+                templateCategory.querySelector(".templateBack").innerHTML = backLabel;
                 templateCategory.querySelector("input").setAttribute("id", templateForId);
 
                 const label = document.createElement("label");
