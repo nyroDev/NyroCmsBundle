@@ -84,6 +84,43 @@ class ComposerService extends AbstractService
         self::EDITABLE_DATATYPE_IFRAME_EMBED,
     ];
 
+    // List from https://developer.mozilla.org/en-US/docs/Glossary/Block-level_content
+    public const HTML_BLOCK_TYPES = [
+        'address',
+        'article',
+        'aside',
+        'blockquote',
+        'details',
+        'dialog',
+        'dd',
+        'div',
+        'dl',
+        'dt',
+        'fieldset',
+        'figcaption',
+        'figure',
+        'footer',
+        'form',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'header',
+        'hgroup',
+        'hr',
+        'li',
+        'main',
+        'nav',
+        'ol',
+        'p',
+        'pre',
+        'section',
+        'table',
+        'ul',
+    ];
+
     public function __construct(
         private readonly NyrodevService $nyrodevService,
         private readonly ImageService $imageService,
@@ -555,12 +592,12 @@ class ComposerService extends AbstractService
                             switch ($editable['type']) {
                                 case self::EDITABLE_TYPE_SIMPLE_TEXT:
                                 case self::EDITABLE_TYPE_TEXT:
-                                    $newReadableTexts[] = html_entity_decode(strip_tags($value));
+                                    $newReadableTexts[] = $this->extractHtmlText($value);
                                     break;
                             }
                             switch ($editable['dataType']) {
                                 case self::EDITABLE_DATATYPE_TEXT:
-                                    $newTexts[] = html_entity_decode(strip_tags($value));
+                                    $newTexts[] = $this->extractHtmlText($value);
                                     break;
                                 case self::EDITABLE_DATATYPE_IMAGE:
                                     if (!$firstImage) {
@@ -580,6 +617,29 @@ class ComposerService extends AbstractService
             $row->setContentReadableText(implode(PHP_EOL, $newReadableTexts));
             $row->setFirstImage($firstImage);
         }
+    }
+
+    public function extractHtmlText(string $html): string
+    {
+        static $pattern = '/<(\/?('.implode('|', self::HTML_BLOCK_TYPES).')[^>]*)>/i';
+
+        // Replace <br> and <br/> tags with a newline
+        $html = preg_replace('/<br\s*\/?>/i', "\n", $html);
+
+        // Replace block-level tags with a space
+        $html = preg_replace($pattern, "\n", $html);
+
+        // Remove all other HTML tags
+        $text = strip_tags($html);
+
+        // Decode HTML entities to their corresponding characters
+        $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+        // Replace multiple whitespace (spaces, tabs, newlines) with a single newline
+        $text = preg_replace('/[\s]*\n[\s]*/', "\n", $text);
+
+        // Trim leading and trailing spaces
+        return trim($text);
     }
 
     public function afterComposerEdition(Composable $row): void
