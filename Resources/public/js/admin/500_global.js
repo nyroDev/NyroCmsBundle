@@ -79,6 +79,35 @@ import Sortable from "sortablejs";
         }
     });
 
+    window.startEndFields = (startInput, endInput) => {
+        startInput.addEventListener("change", (e) => {
+            if (startInput.type === "date") {
+                const startDate = new Date(e.target.value);
+                if (startDate && !isNaN(startDate.getTime())) {
+                    // Set end date to the same date by default
+                    endInput.min = startDate.toISOString().split("T")[0];
+                }
+                return;
+            }
+
+            endInput.min = startInput.value;
+        });
+
+        endInput.addEventListener("change", (e) => {
+            if (endInput.type === "date") {
+                const endDate = new Date(e.target.value);
+                if (endDate && !isNaN(endDate.getTime())) {
+                    startInput.max = endDate.toISOString().split("T")[0];
+                }
+            }
+            startInput.max = endInput.value;
+        });
+    };
+
+    document.querySelectorAll(".filterFormRange").forEach((filterFormRange) => {
+        window.startEndFields(filterFormRange.querySelector('input[name*="[start]"'), filterFormRange.querySelector('input[name*="[end]"'));
+    });
+
     if (contentTree) {
         const contentTreeSubmit = contentTree.querySelector('button[type="submit"]');
         contentTree.addEventListener("click", function (e) {
