@@ -208,6 +208,9 @@ class AdminHandlerContentsController extends AbstractAdminController
             'ogImage' => [
                 'wc' => true,
                 'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
+                'attr' => [
+                    'name-delete' => 'ogImageDelete',
+                ],
             ],
             'featured' => AdminService::getBoolFieldAsRadioListOptions(),
             'state' => [

@@ -6,7 +6,6 @@ use Composer\Autoload\ClassLoader;
 use NyroDev\NyroCmsBundle\Event\CmsFoundClassesEvent;
 use NyroDev\NyroCmsBundle\Event\UrlGenerationEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
-use NyroDev\NyroCmsBundle\Handler\Sitemap;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentHandler;
@@ -502,14 +501,6 @@ class NyroCmsService extends NyroDevAbstractService
                 $event->setResponse($response);
 
                 return;
-            }
-        }
-
-        $sitemapHandler = $repo->findOneByContentHandlerClass(Sitemap::class, $rootContent);
-        if ($sitemapHandler) {
-            $response = $this->forwardTo($request, $event->getKernel(), $sitemapHandler, $code);
-            if ($response) {
-                $event->setResponse($response);
             }
         }
     }
