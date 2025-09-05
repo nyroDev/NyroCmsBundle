@@ -13,19 +13,30 @@
 				<p class="form_errors"><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.notFoundKey')); ?></p>
 			<?php else: ?>
 				<?php if ($sent): ?>
-					<p><strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.saved')); ?></strong></p>
-					<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('nyrocms.forgot.back'); ?></a>
+					<p>
+						<strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.saved')); ?></strong>
+						<br />
+						<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="btn btnLight">
+							<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+							<span><?php echo $view['nyrodev']->trans('nyrocms.forgot.back'); ?></span>
+						</a>
+					</p>
 				<?php else: ?>
 					<p><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.introPassword')); ?></p>
 
 					<?php echo $view['form']->form($form); ?>
-					
-					<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('nyrocms.forgot.cancel'); ?></a>
 				<?php endif; ?>
 			<?php endif; ?>
 		<?php else: ?>
 			<?php if ($sent): ?>
-				<p><strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.sent')); ?></strong></p>
+				<p>
+					<strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.sent')); ?></strong>
+					<br />
+					<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="btn btnLight">
+						<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+						<span><?php echo $view['nyrodev']->trans('nyrocms.forgot.back'); ?></span>
+					</a>
+				</p>
 			<?php else: ?>
 				<p><?php echo nl2br($view['nyrodev']->trans('nyrocms.forgot.intro')); ?></p>
 
@@ -34,8 +45,6 @@
 				<?php endif; ?>
 
 				<?php echo $view['form']->form($form); ?>
-
-				<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="forgotLink"><?php echo $view['nyrodev']->trans('nyrocms.forgot.cancel'); ?></a>
 			<?php endif; ?>
 		<?php endif; ?>
 	</article>

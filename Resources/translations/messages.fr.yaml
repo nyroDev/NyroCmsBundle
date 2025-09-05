@@ -293,8 +293,7 @@ nyrocms:
       Pour récupérer votre mot de passe,
       renseignez votre email.
     notFound: |
-      L'email renseigné n'existe pas
-      ou n'est pas valide.
+      L'email renseigné n'existe pas ou n'est pas valide.
     submit: Envoyer
     cancel: Annuler
     back: Retour

@@ -292,8 +292,7 @@ nyrocms:
       To retrieve your password,
       enter your email.
     notFound: |
-      This email address is not
-      registered or is not valid.
+      This email address is not registered or is not valid.
     submit: Send
     cancel: Cancel
     back: Back
