@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Handler;
 
+use NyroDev\NyroCmsBundle\Event\SitemapEvent;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
 use NyroDev\NyroCmsBundle\Services\NyroCmsService;
@@ -12,11 +13,19 @@ class Sitemap extends AbstractHandler
     {
         $root = $this->getContentById($content->getRoot());
 
+        $hierarchy = $this->getHierarchy($root);
+
+        $sitemapEvent = new SitemapEvent(
+            $root,
+            $hierarchy,
+        );
+        $this->get('event_dispatcher')->dispatch($sitemapEvent, SitemapEvent::SITEMAP_EVENT);
+
         return [
             'view' => '@NyroDevNyroCms/Handler/sitemap.html.php',
             'vars' => [
                 'content' => $content,
-                'contents' => $this->getHierarchy($root),
+                'contents' => $sitemapEvent->urls,
                 'isRoot' => true,
             ],
         ];

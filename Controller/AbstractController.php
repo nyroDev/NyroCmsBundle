@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Controller;
 
+use NyroDev\NyroCmsBundle\Event\SitemapEvent;
 use NyroDev\NyroCmsBundle\Handler\AbstractHandler;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -328,12 +329,19 @@ abstract class AbstractController extends NyroDevAbstractController
             }
         }
 
+        $sitemapEvent = new SitemapEvent(
+            $this->getRootContent(),
+            $urls,
+            true
+        );
+        $this->get('event_dispatcher')->dispatch($sitemapEvent, SitemapEvent::SITEMAP_EVENT);
+
         $response = new Response();
         $response->setPublic();
         $response->setSharedMaxAge(60 * 60);
 
         return $this->render('@NyroDevNyroCms/Default/sitemap.xml.php', [
-            'urls' => $urls,
+            'urls' => $sitemapEvent->urls,
         ], $response);
     }
 
