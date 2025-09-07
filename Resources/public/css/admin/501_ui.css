@@ -173,12 +173,12 @@ nyro-tooltip {
     --nyro-tooltip-move: calc(-1 * var(--s-padding) / 2);
     --nyro-tooltip-arrow-move: calc(var(--s-padding) / 4 + 3px);
     --nyro-tooltip-border-radius: var(--s-radius);
-    z-index: 99998;
+    z-index: 800;
 }
 
 nyro-tooltip:hover,
 nyro-tooltip[open] {
-    z-index: 99999;
+    z-index: 801;
 }
 
 nyro-tooltip > .icon {
