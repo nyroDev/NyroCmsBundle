@@ -32,3 +32,13 @@ nyro-cms-dialog .filter form > div {
     margin-top: 0;
     margin-right: 0.5rem;
 }
+
+
+nyro-tooltip {
+    z-index: 1800;
+}
+
+nyro-tooltip:hover,
+nyro-tooltip[open] {
+    z-index: 1801;
+}

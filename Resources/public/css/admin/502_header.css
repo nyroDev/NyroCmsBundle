@@ -7,7 +7,7 @@ aside {
     position: fixed;
     left: 0;
     box-sizing: border-box;
-    z-index: 99998;
+    z-index: 999;
 }
 
 #switch_adminMenu {
@@ -24,7 +24,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 0 var(--s-header-padding);
-    z-index: 99999;
+    z-index: 1000;
 }
 
 header label[for="switch_adminMenu"] {
