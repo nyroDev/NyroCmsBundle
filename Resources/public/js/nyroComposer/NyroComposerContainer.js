@@ -89,6 +89,18 @@ class NyroComposerContainer extends HTMLElement {
         this._setChildParentReadonly();
     }
 
+    get widthContainer() {
+        const attr = this.getAttribute("width-container");
+        if (attr) {
+            try {
+                return JSON.parse(attr);
+            } catch (e) {
+                console.error("Error while parsing widthContainer", e);
+            }
+        }
+        return null;
+    }
+
     get items() {
         return this.querySelectorAll("nyro-composer-item");
     }

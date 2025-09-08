@@ -417,17 +417,31 @@ class ComposerService extends AbstractService
         $readonlyAttr = (isset($cont[ComposerService::READONLY]) && $cont[ComposerService::READONLY] ? ' readonly' : '');
 
         $renderedConts = [];
-        foreach ($conts as $cont) {
+        foreach ($conts as $i => $cont) {
             $itemsCont = [];
 
+            $widthContainer = null;
+            if (isset($config['widthContainers'])) {
+                if (isset($config['widthContainers'][$i])) {
+                    $widthContainer = $config['widthContainers'][$i];
+                } elseif (count($config['widthContainers']) === $config['nb_containers']) {
+                    $widthContainer = $config['widthContainers'][0];
+                }
+            }
+
             foreach ($cont as $contItem) {
-                $itemsCont[] = $this->renderItem($row, $contItem['_type'], $contItem, $admin);
+                $itemsCont[] = $this->renderItem($row, $contItem['_type'], $contItem, $admin, $widthContainer);
             }
 
             $renderedCont = implode(PHP_EOL, $itemsCont);
 
             if ($admin) {
-                $renderedCont = '<nyro-composer-container'.$readonlyAttr.'>'.$renderedCont.'</nyro-composer-container>';
+                $renderedCont = '<nyro-composer-container'
+                    .$readonlyAttr
+                    .($widthContainer ? ' width-container="'.htmlspecialchars(json_encode($widthContainer), ENT_QUOTES | ENT_HTML5).'"' : '')
+                    .'>'
+                    .$renderedCont
+                    .'</nyro-composer-container>';
             }
 
             $renderedConts[] = $renderedCont;
@@ -459,7 +473,7 @@ class ComposerService extends AbstractService
         ]).PHP_EOL.PHP_EOL;
     }
 
-    private function renderItem(Composable $row, string $itemName, ?array $values = [], bool $admin = false): string
+    private function renderItem(Composable $row, string $itemName, ?array $values = [], bool $admin = false, ?array $widthContainer = null): string
     {
         $config = $this->getComposableConfig('items', $itemName);
 
@@ -486,6 +500,7 @@ class ComposerService extends AbstractService
 
         $values['row'] = $row;
         $values['admin'] = $admin;
+        $values['widthContainer'] = $widthContainer;
 
         $ret = $this->getTwig()->render($template, $values);
 

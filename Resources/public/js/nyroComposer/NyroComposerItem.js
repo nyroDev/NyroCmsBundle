@@ -399,7 +399,14 @@ class NyroComposerItem extends HTMLElement {
             }
             value = value.url;
             if (editableCfg.dataType === "image") {
-                value = this.composer.getResizeUrl(value, "1200x1200");
+                const imageAttrs = this._computeImageAttrs(value);
+                Object.keys(imageAttrs).forEach((attr) => {
+                    if (attr === "src") {
+                        value = imageAttrs.src;
+                    } else {
+                        element.setAttribute(attr, imageAttrs[attr]);
+                    }
+                });
             }
         } else if (!direct && (editableCfg.dataType === "videoUrl" || editableCfg.dataType === "iframeUrl")) {
             this.setValue("src", value.src);
@@ -464,7 +471,11 @@ class NyroComposerItem extends HTMLElement {
                             exsitingImgs.push(img);
                         }
 
-                        exsitingImgs[idx].src = this.composer.getResizeUrl(imgValue.src, "1200x1200");
+                        const imageAttrs = this._computeImageAttrs(imgValue.src);
+                        Object.keys(imageAttrs).forEach((attr) => {
+                            exsitingImgs[idx].setAttribute(attr, imageAttrs[attr]);
+                        });
+
                         exsitingImgs[idx].alt = imgValue.alt;
                         exsitingImgs[idx].width = imgValue.width;
                         exsitingImgs[idx].height = imgValue.height;
@@ -481,6 +492,31 @@ class NyroComposerItem extends HTMLElement {
                 break;
         }
         this._dispatchChange();
+    }
+
+    _computeImageAttrs(path) {
+        const attrs = {
+            src: "",
+            srcset: "",
+            sizes: "",
+        };
+
+        const widthContainer = this.container.widthContainer;
+        if (widthContainer) {
+            attrs.src = this.composer.getResizeUrl(path, widthContainer.dims);
+            attrs.sizes = widthContainer.sizes;
+            if (widthContainer.srcset) {
+                const srcset = [];
+                widthContainer.srcset.forEach((srcsetCfg) => {
+                    srcset.push(this.composer.getResizeUrl(path, srcsetCfg.dims) + " " + srcsetCfg.width);
+                });
+                attrs.srcset = srcset.join(", ");
+            }
+        } else {
+            attrs.src = this.composer.getResizeUrl(path, "1200x1200");
+        }
+
+        return attrs;
     }
 
     select() {

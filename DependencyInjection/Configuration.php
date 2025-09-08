@@ -27,30 +27,188 @@ class Configuration implements ConfigurationInterface
                 'icon' => 'block_full',
                 'nb_containers' => 1,
                 'addable' => true,
+                'widthContainers' => [
+                    [
+                        'dims' => '1300x1300',
+                        'sizes' => '(min-width: 1300px) 1300px, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '1300x1300',
+                                'width' => '1300w',
+                            ],
+                            [
+                                'dims' => '800x800',
+                                'width' => '800w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'two' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two.html.php',
                 'icon' => 'block_two',
                 'nb_containers' => 2,
                 'addable' => true,
+                'widthContainers' => [
+                    // Defiing only 1 containers meeans all containers will have the same width
+                    [
+                        'dims' => '650x650',
+                        'sizes' => '(min-width: 1300px) 650px, (min-width: 900px) 50vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '800x800',
+                                'width' => '800w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'two_1_2' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two_1_2.html.php',
                 'icon' => 'block_two_1_2',
                 'nb_containers' => 2,
                 'addable' => true,
+                'widthContainers' => [
+                    [
+                        'dims' => '433x433',
+                        'sizes' => '(min-width: 1300px) 433px, (min-width: 900px) 33vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '800x800',
+                                'width' => '800w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                            [
+                                'dims' => '320x320',
+                                'width' => '320w',
+                            ],
+                        ],
+                    ],
+                    [
+                        'dims' => '866x866',
+                        'sizes' => '(min-width: 1300px) 866px, (min-width: 900px) 66vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '866x866',
+                                'width' => '866w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                            [
+                                'dims' => '320x320',
+                                'width' => '320w',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'two_2_1' => [
                 'template' => '@NyroDevNyroCms/Composer/block/two_2_1.html.php',
                 'icon' => 'block_two_2_1',
                 'nb_containers' => 2,
                 'addable' => true,
+                'widthContainers' => [
+                    [
+                        'dims' => '866x866',
+                        'sizes' => '(min-width: 1300px) 866px, (min-width: 900px) 66vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '866x866',
+                                'width' => '866w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                            [
+                                'dims' => '320x320',
+                                'width' => '320w',
+                            ],
+                        ],
+                    ],
+                    [
+                        'dims' => '433x433',
+                        'sizes' => '(min-width: 1300px) 433px, (min-width: 900px) 33vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '800x800',
+                                'width' => '800w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                            [
+                                'dims' => '320x320',
+                                'width' => '320w',
+                            ],
+                        ],
+                    ],
+                ],
             ],
             'three' => [
                 'template' => '@NyroDevNyroCms/Composer/block/three.html.php',
                 'icon' => 'block_three',
                 'nb_containers' => 3,
                 'addable' => true,
+                'widthContainers' => [
+                    // Defiing only 1 containers meeans all containers will have the same width
+                    [
+                        'dims' => '433x433',
+                        'sizes' => '(min-width: 1300px) 433px, (min-width: 900px) 33vw, 100vw',
+                        'srcset' => [
+                            [
+                                'dims' => '800x800',
+                                'width' => '800w',
+                            ],
+                            [
+                                'dims' => '650x650',
+                                'width' => '650w',
+                            ],
+                            [
+                                'dims' => '400x400',
+                                'width' => '400w',
+                            ],
+                            [
+                                'dims' => '320x320',
+                                'width' => '320w',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ];
 
@@ -373,6 +531,22 @@ class Configuration implements ConfigurationInterface
                             ->stringNode('icon')->isRequired()->end()
                             ->booleanNode('addable')->defaultTrue()->end()
                             ->integerNode('nb_containers')->defaultValue(0)->min(0)->end()
+                            ->arrayNode('widthContainers')
+                                ->arrayPrototype()
+                                    ->children()
+                                        ->stringNode('dims')->isRequired()->cannotBeEmpty()->end()
+                                        ->stringNode('sizes')->defaultNull()->end()
+                                        ->arrayNode('srcset')
+                                            ->arrayPrototype()
+                                                ->children()
+                                                    ->stringNode('dims')->isRequired()->cannotBeEmpty()->end()
+                                                    ->stringNode('width')->isRequired()->cannotBeEmpty()->end()
+                                                ->end()
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
