@@ -424,7 +424,7 @@ class ComposerService extends AbstractService
             if (isset($config['widthContainers'])) {
                 if (isset($config['widthContainers'][$i])) {
                     $widthContainer = $config['widthContainers'][$i];
-                } elseif (count($config['widthContainers']) === $config['nb_containers']) {
+                } elseif (1 === count($config['widthContainers'])) {
                     $widthContainer = $config['widthContainers'][0];
                 }
             }
