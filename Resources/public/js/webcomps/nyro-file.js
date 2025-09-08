@@ -31,7 +31,20 @@ div {
     height: 100%;
 }
 input {
-    display: none;
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    z-index: 1;
+}
+input::-webkit-file-upload-button {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+:host(:hover) input {
+    visibility: hidden;
 }
 </style>
 <input type="file" />
