@@ -314,7 +314,7 @@ abstract class AbstractController extends NyroDevAbstractController
         ];
 
         foreach ($this->getContentRepo()->childrenForMenu($this->getRootContent(), false) as $content) {
-            if (!$content->getGoUrl() && !$content->getRedirectToChildren()) {
+            if (!$content->getGoUrl() && !$content->getRedirectToChildren() && ($content->getContent() || $content->getContentHandler() || count($content->getChildren()) === 0)) {
                 $urls[] = $this->get(NyroCmsService::class)->getUrlFor($content, true);
             }
             if ($content->getContentHandler()) {
