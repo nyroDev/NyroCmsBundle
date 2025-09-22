@@ -143,14 +143,14 @@ nyro-cms-dialog h1 {
     text-align: left;
 }
 
-nyro-cms-dialog .actions {
+nyro-cms-dialog .actions:not(th, td) {
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-width: 20rem;
 }
 
-nyro-cms-dialog .actions * + * {
+nyro-cms-dialog .actions:not(th, td) * + * {
     margin-left: var(--s-padding);
 }
 
