@@ -795,6 +795,7 @@ class NyroComposerSidePanel extends HTMLElement {
 
             button.classList.add("active");
             this.composer.chooseTemplate(button.dataset.id);
+            active = button;
         });
 
         return templatesCont;

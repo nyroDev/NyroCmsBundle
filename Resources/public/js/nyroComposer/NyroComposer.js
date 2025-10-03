@@ -210,6 +210,7 @@ class NyroComposer extends HTMLElement {
             .then((response) => {
                 this.workspace.innerHTML = response;
                 this.workspace.initBlocks();
+                this._choosingTemplate = false;
             });
     }
 

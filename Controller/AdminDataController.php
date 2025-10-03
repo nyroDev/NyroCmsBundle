@@ -730,6 +730,11 @@ class AdminDataController extends AbstractAdminController
             self::DELETE,
         ]);
 
+        $defaultForChoices = [];
+        foreach ($this->get(NyroCmsService::class)->getFoundComposables() as $foundComposable) {
+            $defaultForChoices[$foundComposable] = $this->trans('admin.template.defaultForComposables.'.$foundComposable);
+        }
+
         return $this->render('@NyroDevNyroCms/AdminTpl/list.html.php',
             array_merge(
                 [
@@ -738,7 +743,11 @@ class AdminDataController extends AbstractAdminController
                     'fields' => [
                         'title',
                         'templateCategory',
+                        'defaultFor',
                         'updated',
+                    ],
+                    'choices' => [
+                        'defaultFor' => $defaultForChoices,
                     ],
                 ],
                 $listPrm

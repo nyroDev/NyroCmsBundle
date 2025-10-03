@@ -320,7 +320,16 @@ class ComposerService extends AbstractService
 
     public function getDefaultTemplateFor(Composable $row): ?Template
     {
-        return $this->dbService->getTemplateRepository()->getDefaultTemplateFor($row);
+        $availableTemplates = $this->getAvailableTemplates($row);
+
+        $templateRepo = $this->dbService->getTemplateRepository();
+        foreach ($availableTemplates as $template) {
+            if ($template->getDefaultFor() && $templateRepo->isMatchingFor($row, $template->getDefaultFor())) {
+                return $template;
+            }
+        }
+
+        return null;
     }
 
     public function getAvailableBlocks(Composable $row): array
