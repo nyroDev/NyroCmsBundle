@@ -247,7 +247,7 @@ class NyroCmsService extends NyroDevAbstractService
 
     public function getLocale(): string
     {
-        return $this->getRequest()->getLocale();
+        return $this->getRequest()?->getLocale() ?? $this->getDefaultLocale();
     }
 
     public function getDefaultLocale(?Composable $rootContent = null): string
@@ -475,7 +475,8 @@ class NyroCmsService extends NyroDevAbstractService
     {
         $request = $event->getRequest();
         if (
-            $request->server->get('APP_DEBUG')
+            !$request
+            || $request->server->get('APP_DEBUG')
             || 'html' !== $request->getRequestFormat()
         ) {
             return;
