@@ -2,6 +2,7 @@
 
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
@@ -236,5 +237,10 @@ class ContentRepository extends NestedTreeRepository implements ContentRepositor
         }
 
         return $qb;
+    }
+
+    public function getClassMetadata(): ClassMetadata
+    {
+        return parent::getClassMetadata();
     }
 }

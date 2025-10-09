@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use NyroDev\NyroCmsBundle\Model\Composable;
 use NyroDev\NyroCmsBundle\Model\Template;
 use NyroDev\NyroCmsBundle\Repository\TemplateRepositoryInterface;
@@ -64,5 +65,10 @@ class TemplateRepository extends EntityRepository implements TemplateRepositoryI
         $propertyAccess = PropertyAccess::createPropertyAccessor();
 
         return $propertyAccess->getValue($row, $fieldFilter[0]) === $fieldFilter[1];
+    }
+
+    public function getClassMetadata(): ClassMetadata
+    {
+        return parent::getClassMetadata();
     }
 }

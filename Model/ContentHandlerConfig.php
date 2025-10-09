@@ -11,9 +11,8 @@ use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class ContentHandlerConfig extends AbstractUploadable  implements StringablePropertyable
+abstract class ContentHandlerConfig extends AbstractUploadable implements StringablePropertyable
 {
-
     public const TYPE_STRING = 'string';
     public const TYPE_TEXT = 'text';
     public const TYPE_DATE = 'date';
@@ -21,8 +20,8 @@ abstract class ContentHandlerConfig extends AbstractUploadable  implements Strin
     public const TYPE_NUMBER = 'number';
     public const TYPE_BOOL = 'number';
 
-
-    public static function getStringableProperty(): string {
+    public static function getStringableProperty(): string
+    {
         return 'name';
     }
 

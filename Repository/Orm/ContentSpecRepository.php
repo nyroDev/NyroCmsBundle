@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use DateTime;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Gedmo\Sortable\Entity\Repository\SortableRepository;
 use NyroDev\NyroCmsBundle\Model\Content;
 use NyroDev\NyroCmsBundle\Model\ContentSpec;
@@ -163,5 +164,10 @@ class ContentSpecRepository extends SortableRepository implements ContentSpecRep
         $this->setHint($q);
 
         return $q->getResult();
+    }
+
+    public function getClassMetadata(): ClassMetadata
+    {
+        return parent::getClassMetadata();
     }
 }

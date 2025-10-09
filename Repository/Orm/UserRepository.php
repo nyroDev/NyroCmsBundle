@@ -4,6 +4,7 @@ namespace NyroDev\NyroCmsBundle\Repository\Orm;
 
 use DateTime;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use NyroDev\NyroCmsBundle\Repository\UserRepositoryInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -38,5 +39,10 @@ class UserRepository extends EntityRepository implements UserRepositoryInterface
                             ->setParameter('today', date('Y-m-d').'%')
                         ->getQuery()
                         ->execute();
+    }
+
+    public function getClassMetadata(): ClassMetadata
+    {
+        return parent::getClassMetadata();
     }
 }
