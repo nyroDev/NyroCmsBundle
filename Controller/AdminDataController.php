@@ -1104,10 +1104,10 @@ class AdminDataController extends AbstractAdminController
         if ($row) {
             // Email should remain unique, so update it to something unique just before it's deletion.
             $row->setEmail('deleted_'.uniqid().'_'.$row->getEmail());
-            $this->getDoctrine()->getManager()->flush();
+            $this->get(DbAbstractService::class)->flush();
 
-            $this->getDoctrine()->getManager()->remove($row);
-            $this->getDoctrine()->getManager()->flush();
+            $this->get(DbAbstractService::class)->remove($row);
+            $this->get(DbAbstractService::class)->flush();
         }
 
         return $this->redirect($this->generateUrl('nyrocms_admin_data_user'));
