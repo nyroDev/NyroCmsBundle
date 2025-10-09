@@ -8,14 +8,20 @@ use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
 use NyroDev\UtilityBundle\Model\Sharable;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class ContentSpec extends AbstractUploadable implements ContentRootable, ComposableTranslatable, ComposableContentSummary, Sharable
+abstract class ContentSpec extends AbstractUploadable implements ContentRootable, ComposableTranslatable, ComposableContentSummary, Sharable, StringablePropertyable
 {
     public const STATE_DISABLED = 0;
     public const STATE_ACTIVE = 1;
     public const STATE_INVISIBLE = 2;
+
+    public static function getStringableProperty(): string
+    {
+        return 'title';
+    }
 
     protected $id;
 

@@ -5,13 +5,19 @@ namespace NyroDev\NyroCmsBundle\Model;
 use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JsonSerializable;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class Template implements Composable, JsonSerializable
+abstract class Template implements Composable, JsonSerializable, StringablePropertyable
 {
     public const STATE_DISABLED = 0;
     public const STATE_ACTIVE = 1;
+
+    public static function getStringableProperty(): string
+    {
+        return 'title';
+    }
 
     protected $id;
 

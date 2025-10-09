@@ -7,14 +7,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use NyroDev\UtilityBundle\Model\AbstractUploadable;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface
+abstract class User extends AbstractUploadable implements UserInterface, EquatableInterface, PasswordAuthenticatedUserInterface, StringablePropertyable
 {
+    public static function getStringableProperty(): array
+    {
+        return ['firstname', 'lastname', 'email'];
+    }
+
     protected $id;
 
     #[Assert\NotBlank]

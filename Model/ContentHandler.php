@@ -6,10 +6,16 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-abstract class ContentHandler
+abstract class ContentHandler implements StringablePropertyable
 {
+    public static function getStringableProperty(): string
+    {
+        return 'name';
+    }
+
     protected $id;
 
     #[Assert\NotBlank]

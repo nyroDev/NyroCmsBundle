@@ -7,11 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;
 use JsonSerializable;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class TemplateCategory implements JsonSerializable
+abstract class TemplateCategory implements JsonSerializable, StringablePropertyable
 {
+    public static function getStringableProperty(): string
+    {
+        return 'title';
+    }
     protected $id;
 
     #[Assert\NotBlank]

@@ -4,11 +4,17 @@ namespace NyroDev\NyroCmsBundle\Model;
 
 use DateTimeInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
+use NyroDev\UtilityBundle\Model\StringablePropertyable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[Gedmo\SoftDeleteable(fieldName: 'deleted', timeAware: false)]
-abstract class Tooltip
+abstract class Tooltip implements StringablePropertyable
 {
+    public static function getStringableProperty(): string
+    {
+        return 'title';
+    }
+
     protected $id;
 
     #[Assert\NotBlank]
