@@ -109,8 +109,28 @@ import Sortable from "sortablejs";
     });
 
     if (contentTree) {
-        const contentTreeSubmit = contentTree.querySelector('button[type="submit"]');
-        contentTree.addEventListener("click", function (e) {
+        const contentTreeSubmit = contentTree.querySelector('button[type="submit"]'),
+            parents = (el, selector) => {
+                const parents = [];
+                while ((el = el.parentNode) && el !== document) {
+                    if (!selector || el.matches(selector)) parents.push(el);
+                }
+                return parents;
+            },
+            getLevel = (elt) => {
+                return parents(elt, "ul").length;
+            },
+            updateLevels = (elt) => {
+                if (elt.classList.contains("empty")) {
+                    return;
+                }
+                elt.querySelector('input[name^="treeLevel"]').value = getLevel(elt);
+                elt.querySelector('input[name^="treeChanged"]').value = 1;
+                elt.querySelectorAll("ul .node").forEach((node) => {
+                    updateLevels(node);
+                });
+            };
+        contentTree.addEventListener("click", (e) => {
             const expandReduceAll = e.target.closest(".expandAll, .reduceAll");
             if (expandReduceAll) {
                 e.preventDefault();
@@ -128,6 +148,7 @@ import Sortable from "sortablejs";
                 handle: ".dragHandle",
                 animation: 150,
                 onEnd: (e) => {
+                    updateLevels(e.item);
                     contentTreeSubmit.classList.remove("disabled");
                 },
                 /** fallback options needed only for Vivaldi */
