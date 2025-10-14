@@ -3,6 +3,7 @@
 namespace NyroDev\NyroCmsBundle\Services;
 
 use App\Entity\Template;
+use NyroDev\NyroCmsBundle\Event\AdminAdministrableContentIds;
 use NyroDev\NyroCmsBundle\Event\AdminContentTreeConfigEvent;
 use NyroDev\NyroCmsBundle\Event\AdminMenuEvent;
 use NyroDev\NyroCmsBundle\Model\Composable;
@@ -110,6 +111,13 @@ class AdminService extends NyroDevAbstractService
                         }
                     }
                 }
+
+                $event = new AdminAdministrableContentIds(
+                    $user,
+                    $this->administrableContentIds,
+                );
+                $this->eventDispatcher->dispatch($event, AdminAdministrableContentIds::ADMIN_ADMINISTRABLE_CONTENT_IDS);
+                $this->administrableContentIds = $event->administrableContentIds;
             }
         }
 
