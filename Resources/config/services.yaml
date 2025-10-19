@@ -84,6 +84,12 @@ services:
         alias: NyroDev\NyroCmsBundle\Services\TooltipService
         public: true
     
+    NyroDev\NyroCmsBundle\EventListener\LoginSubscriber:
+        arguments:
+            - '@NyroDev\NyroCmsBundle\Services\Db\DbAbstractService'
+        tags:
+            - { name: kernel.event_subscriber }
+    
     NyroDev\NyroCmsBundle\Routing\NyroCmsLoader:
         calls:
             - [setContainerInterface, ['@service_container']]
