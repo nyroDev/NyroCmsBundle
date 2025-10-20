@@ -484,7 +484,10 @@ class NyroComposerSidePanel extends HTMLElement {
                     this._form.appendChild(this._handlePanelInput(panelCfg));
                     break;
                 case "template":
-                    this._form.appendChild(this._handlePanelTemplate(panelCfg));
+                    const template = this._handlePanelTemplate(panelCfg);
+                    if (template) {
+                        this._form.appendChild(template);
+                    }
                     break;
             }
         });

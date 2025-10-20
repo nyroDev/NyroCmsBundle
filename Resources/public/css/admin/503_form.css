@@ -154,6 +154,8 @@ nyro-select-option[selected][focused] {
     margin-bottom: 1rem;
 }
 
+select,
+nyro-select,
 .form_row input,
 .form_row select,
 .form_row nyro-file,
