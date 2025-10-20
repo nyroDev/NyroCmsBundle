@@ -175,6 +175,11 @@ nyro-select,
     outline: none;
 }
 
+select,
+nyro-select {
+    width: auto;
+}
+
 .form_row nyro-file {
     padding: 0;
     height: 4.1rem;
