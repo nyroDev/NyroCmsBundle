@@ -119,7 +119,7 @@ class NyroCmsDialog extends HTMLElement {
             if (!closeDialog) {
                 if (this.keepInDialog) {
                     const link = e.target.closest("a");
-                    if (link) {
+                    if (link && link.target !== "_blank") {
                         e.preventDefault();
                         this.loadUrl(link.href);
                     }
