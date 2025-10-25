@@ -83,7 +83,7 @@ class NyroComposerInputFile extends HTMLElement {
         openBtn.innerHTML = this.composer.trans("inputFile.choose." + this.fileType + (this.multiple ? "s" : ""));
         openBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            this.composer.selectMedia(this.fileType, (imageData) => {
+            this.composer.selectMedia(this.fileType, this.multiple, (imageData) => {
                 this._handleImageData(imageData);
             });
         });

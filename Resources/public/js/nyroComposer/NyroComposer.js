@@ -358,17 +358,33 @@ class NyroComposer extends HTMLElement {
         dialog.open();
     }
 
-    selectMedia(type, clb) {
+    selectMedia(type, multiple, clb) {
         const dialog = new NyroComposerDialog();
         const iframe = document.createElement("iframe");
         iframe.name = "";
-        iframe.src = this.dataset.tinymce_external_filemanager_path.replace("_TYPE_", type);
+        const url = new URL(
+            `${window.location.protocol}//${window.location.host}` + this.dataset.tinymce_external_filemanager_path.replace("_TYPE_", type)
+        );
+        const multipleParam = multiple ? "mul-" + Date.now() : false;
+        if (multiple) {
+            url.searchParams.set("multiple", multipleParam);
+        }
+        iframe.src = url.toString();
         dialog.setContent(iframe);
 
         const messageListener = (e) => {
-            if (e.source === iframe.contentWindow && e.data && e.data.mceAction === "customAction") {
-                clb(e.data.data);
-                dialog.close();
+            if (e.source === iframe.contentWindow && e.data) {
+                if (e.data.mceAction === "customAction") {
+                    clb(e.data.data);
+                    dialog.close();
+                } else if (e.data.mceAction === "multipleSelection") {
+                    if (e.data.multiple === multipleParam) {
+                        e.data.datas.forEach((data) => {
+                            clb(data);
+                        });
+                        dialog.close();
+                    }
+                }
             }
         };
         window.addEventListener("message", messageListener);
@@ -417,7 +433,7 @@ class NyroComposer extends HTMLElement {
     }
 
     getResizeUrl(path, dims) {
-        if (!this.dataset.resizeUrl) {
+        if (!this.dataset.resizeUrl || path.endsWith(".svg")) {
             return path;
         }
 

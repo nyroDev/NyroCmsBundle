@@ -1,7 +1,7 @@
 <?php
 
 $attrs = [];
-if ($src && !str_starts_with($src, 'data:')) {
+if ($src && !str_starts_with($src, 'data:') && !str_ends_with($src, '.svg')) {
     $path = substr($src, 1);
     if (isset($widthContainer) && is_array($widthContainer)) {
         $attrs['src'] = $view['router']->path('nyrodev_assets_resize', [
