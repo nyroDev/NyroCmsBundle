@@ -20,6 +20,7 @@ dialog header {
     min-height: var(--s-svg-size);
     border-radius: var(--s-radius) var(--s-radius) 0 0;
     padding: var(--s-padding);
+    margin-right: calc(var(--s-padding) + var(--s-svg-size))
 }
 
 dialog main {

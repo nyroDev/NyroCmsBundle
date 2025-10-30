@@ -194,7 +194,7 @@ nyro-tooltip > div[slot="content"] {
     max-height: min(20vh, 20rem);
     overflow: auto;
     text-align: left;
-    color: var(--c-tooltip-text);
+    color: var(--c-text);
     font-size: 1.4rem;
     font-weight: normal;
     font-style: italic;

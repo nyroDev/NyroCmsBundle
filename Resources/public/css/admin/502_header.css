@@ -102,6 +102,10 @@ header label[for="switch_adminMenu"]:after {
     font-size: 1.4rem;
 }
 
+#adminNav ul ul a {
+    padding-left: calc(var(--s-padding) / 2);
+}
+
 #adminNav li {
     position: relative;
     display: block;
@@ -122,7 +126,7 @@ header label[for="switch_adminMenu"]:after {
 }
 
 #adminNav li .icon {
-    margin-right: 1rem;
+    margin-right: 0.8rem;
 }
 
 #adminNav li.menu-separator,
