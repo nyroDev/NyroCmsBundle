@@ -242,6 +242,33 @@ class NyroCmsService extends NyroDevAbstractService
             ], $email->getContext()));
         }
 
+        $forceTo = $this->getParameter('nyrocms.email.force_to');
+        $forceCc = $this->getParameter('nyrocms.email.force_cc');
+        $forceBcc = $this->getParameter('nyrocms.email.force_bcc');
+        if (null !== $forceTo) {
+            if ($forceTo) {
+                $email->to($forceTo);
+            } else {
+                $email->to();
+            }
+            $email->cc();
+            $email->bcc();
+        }
+        if (null !== $forceCc) {
+            if ($forceCc) {
+                $email->cc($forceCc);
+            } else {
+                $email->cc();
+            }
+        }
+        if (null !== $forceBcc) {
+            if ($forceBcc) {
+                $email->bcc($forceBcc);
+            } else {
+                $email->bcc();
+            }
+        }
+
         $this->getMailerInterface()->send($email);
     }
 

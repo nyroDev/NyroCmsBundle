@@ -43,6 +43,9 @@ class NyroDevNyroCmsExtension extends Extension
         $container->setParameter('nyrocms.email.router_scheme', $config['email']['router_scheme']);
         $container->setParameter('nyrocms.email.router_host', $config['email']['router_host']);
         $container->setParameter('nyrocms.email.router_base_url', $config['email']['router_base_url']);
+        $container->setParameter('nyrocms.email.force_to', $config['email']['force_to']);
+        $container->setParameter('nyrocms.email.force_cc', $config['email']['force_cc']);
+        $container->setParameter('nyrocms.email.force_bcc', $config['email']['force_bcc']);
 
         $container->setParameter('nyrocms.composable_blocks', $config['composable_blocks']);
         $container->setParameter('nyrocms.composable_items', $config['composable_items']);
