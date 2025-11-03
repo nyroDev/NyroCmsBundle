@@ -272,6 +272,8 @@ abstract class User extends AbstractUploadable implements UserInterface, Equatab
         'email',
         'password',
         'userType',
+        'firstname',
+        'lastname',
     ];
 
     public function eraseCredentials(): void
