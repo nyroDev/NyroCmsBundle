@@ -288,6 +288,7 @@ nyrocms:
     results: '%total% résultats.'
     resultsContents: 'Contenus (%nb%)'
   forgot:
+    title: Mot de passe oublié
     link: Mot de passe oublié ?
     intro: |
       Pour récupérer votre mot de passe,
@@ -327,6 +328,26 @@ nyrocms:
         Si vous n'êtes pas à l'origine de cette modification,
         <strong>contactez immédiatement l'administrateur du site</strong>.
   welcome:
+    title: Créer votre compte
+    link: Créer votre compte
+    intro: |
+      Pour créer votre compte,
+      renseignez votre email.
+    notFound: |
+      L'email renseigné n'existe pas ou n'est pas valide.
+    submit: Envoyer
+    cancel: Annuler
+    back: Retour
+    sent: |
+      Un email vous a été envoyé
+      avec les instructions de création de votre mot de passe.
+    notFoundKey: |
+      Le lien utilisé n'est pas valide.
+    introPassword: |
+      Choisissez votre mot de passe ci-dessous :
+    saved: |
+      Votre mot de passe a bien été enregistré.
+      Vous pouvez l'utiliser dès maintenant.
     email:
       subject: "Création de compte"
       content: |

@@ -287,6 +287,7 @@ nyrocms:
     results: '%total% results'
     resultsContents: 'Contents (%nb%)'
   forgot:
+    title: Password forgotten
     link: Forgot your password?
     intro: |
       To retrieve your password,
@@ -298,7 +299,7 @@ nyrocms:
     back: Back
     sent: |
       An email has been sent to you
-      with your password recovery instructions
+      with your password recovery instructions.
     notFoundKey: The link is not valid
     introPassword: |
       Choose your new password below:
@@ -325,6 +326,25 @@ nyrocms:
         If you are not the source of this modification,
         <strong>please contact immediately the site administrator</strong>.
   welcome:
+    title: Create your account
+    link: Create your account
+    intro: |
+      To create your account,
+      enter your email.
+    notFound: |
+      This email address is not registered or is not valid.
+    submit: Send
+    cancel: Cancel
+    back: Back
+    sent: |
+      An email has been sent to you
+      with your password creation instructions.
+    notFoundKey: The link is not valid
+    introPassword: |
+      Choose your password below:
+    saved: |
+      Your password has been registered.
+      You can use it right now.
     email:
       subject: Account creation
       content: |

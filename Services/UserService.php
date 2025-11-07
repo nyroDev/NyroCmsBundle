@@ -98,6 +98,7 @@ class UserService extends NyroDevAbstractService
             'sent' => false,
             'form' => null,
             'welcome' => $welcome,
+            'trKey' => $welcome ? 'welcome' : 'forgot',
         ];
         $repo = $this->dbService->getUserRepository();
 
