@@ -38,15 +38,15 @@ table td:not(:last-child) {
 
 table td:first-child {
     min-height: 2.4rem;
-    font-size: 1.6rem;
     font-style: normal;
     font-weight: var(--font-bold-weight);
     line-height: 150%;
     border-bottom: 2px solid var(--c-border);
 }
 
-table td:first-child > a:not(.btn) {
-    color: var(--c-text);
+table td:first-child > span.moreVal {
+    font-size: 1.4rem;
+    font-weight: normal;
 }
 
 table tr .actions {

@@ -59,12 +59,14 @@ if ($intro && $intro != $introKey) {
 			<table class="data">
 				<thead>
 					<tr>
+					<?php $_labels = []; ?>
 					<?php foreach ($fields as $field): ?>
 						<?php
                         $label = $view['translator']->trans($prefix.'.'.$name.'.'.$field);
 					    if ($label === $prefix.'.'.$name.'.'.$field) {
 					        $label = $view['translator']->trans('admin._global.'.$field);
 					    }
+					    $_labels[$field] = $label;
 					    $prm = $routePrm;
 					    $prm['page'] = 1;
 					    $prm['sort'] = $field;
@@ -121,10 +123,11 @@ if ($intro && $intro != $introKey) {
 				            }
 				            $first = false;
 				        } else {
-				            echo nl2br($val);
+				            echo '<span class="mobileOnly">'.$_labels[$f].$view['translator']->trans('admin.misc.labelSpacer').': </span>';
+				            echo $val ? nl2br($val) : '-';
 				        }
 				        if (isset($moreVal) && is_array($moreVal) && isset($moreVal[$f])) {
-				            echo $moreVal[$f]($r);
+				            echo '<span class="moreVal">'.$moreVal[$f]($r).'</span>';
 				        }
 				        ?></td>
 						<?php endforeach; ?>

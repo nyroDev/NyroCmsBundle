@@ -23,6 +23,7 @@ admin:
     deleteConfirm: Are you sure you want to delete this item?
     cancel: Cancel
     delete: Delete
+    labelSpacer: ''
   menu:
     home: Home
     account: My account
