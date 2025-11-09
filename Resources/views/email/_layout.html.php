@@ -57,9 +57,9 @@
                 <td aria-hidden="true" align="left" valign="top" style="font-size:50px;line-height:50px;mso-line-height-rule: exactly;">&nbsp;</td>
               </tr>
             </table>
-            </td>
+        </td>
         </tr>
-        <td aria-hidden="true" align="left" valign="top" style="font-size:50px;line-height:50px;mso-line-height-rule: exactly;">&nbsp;</td>
+        <tr><td aria-hidden="true" align="left" valign="top" style="font-size:50px;line-height:50px;mso-line-height-rule: exactly;">&nbsp;</td></tr>
         <?php if ($view['slots']->has('footer')): ?>
             <?php $view['slots']->output('footer'); ?>
         <?php endif; ?>
