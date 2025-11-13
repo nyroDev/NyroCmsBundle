@@ -159,6 +159,10 @@ nyro-toaster .close:hover {
     margin-bottom: var(--s-padding);
 }
 
+.listButtons > .btn {
+    margin: 0 0 0.5rem 0.5rem;
+}
+
 .resultActions {
     margin: 0;
     padding: 0;
