@@ -575,13 +575,19 @@ class NyroComposerItem extends HTMLElement {
                     tinymceOptions.fixed_toolbar_container_target = cont;
                 }
 
+                const jqElement = jQuery(element);
                 tinymceOptions.setup = (ed) => {
                     ed.on("change", () => {
                         this._dispatchChange();
                     });
+                    ed.on("blur", () => {
+                        jqElement.tinymce().execCommand("mceCleanup");
+                        jqElement.tinymce().save();
+                        this._dispatchChange();
+                    });
                 };
 
-                jQuery(element).myTinymce(tinymceOptions, this.composer.tinymceUrl);
+                jqElement.myTinymce(tinymceOptions, this.composer.tinymceUrl);
                 listenInput = true;
             }
         }
