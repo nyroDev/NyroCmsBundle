@@ -410,6 +410,18 @@ const normalizeText = (text) => {
     return text.normalize("NFD").replace(normalizeTextReg, "").toLowerCase().trim();
 };
 
+const readyWithWebComponents = (fn, target) => {
+    const undefinedElements = (target ? target : document).querySelectorAll(":not(:defined)");
+    if (undefinedElements.length) {
+        const promises = [...undefinedElements].map((elm) => customElements.whenDefined(elm.localName));
+        Promise.all(promises).then(() => {
+            fn();
+        });
+    } else {
+        fn();
+    }
+};
+
 class NyroSelect extends HTMLElement {
     static get formAssociated() {
         return true;
@@ -602,13 +614,16 @@ class NyroSelect extends HTMLElement {
         if (this._defaultOption) {
             //this._defaultOption.hidden = true;
         }
-        this._search.placeholder = this.hasAttribute("placeholder")
-            ? this.getAttribute("placeholder")
-            : this._defaultOption
-            ? this._defaultOption.textLabel
-            : "";
 
-        this._parseSelected(true);
+        readyWithWebComponents(() => {
+            this._search.placeholder = this.hasAttribute("placeholder")
+                ? this.getAttribute("placeholder")
+                : this._defaultOption
+                ? this._defaultOption.textLabel
+                : "";
+
+            this._parseSelected(true);
+        }, this);
     }
 
     disconnectedCallback() {
