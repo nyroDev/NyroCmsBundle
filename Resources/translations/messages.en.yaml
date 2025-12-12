@@ -139,7 +139,7 @@ admin:
     state: State
     goUrl: URL redirection
     goBlank: New tab
-    redirectToChildren: Redirect to children
+    redirectToChildren: Redirect to first children content
     relateds: Associated content
     relatedsPlaceholder: Enter the page title
     handler: Handler

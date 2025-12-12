@@ -140,7 +140,7 @@ admin:
     state: État
     goUrl: Redirection URL
     goBlank: Nouvel onglet
-    redirectToChildren: Rediriger vers l'enfant
+    redirectToChildren: Rediriger vers le premier contenu enfant
     relateds: Contenus associés
     relatedsPlaceholder: Entrer le titre de la page
     handler: Handler
