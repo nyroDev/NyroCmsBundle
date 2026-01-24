@@ -22,6 +22,7 @@ nav {
     align-items: flex-start;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
 }
 :host(:hover) nav,
 :host(.composerSelected) nav {
@@ -35,6 +36,7 @@ nav > div {
     display: flex;
     flex-direction: column;
     align-items: center;
+    pointer-events: auto;
 }
 nav a,
 nav .title {
@@ -47,7 +49,9 @@ nav .title {
     border: 1px solid var(--composer-elt-color);
     text-decoration: none;
     color: var(--composer-color);
-    transition: color var(--composer-transition-time), background-color var(--composer-transition-time);
+    transition:
+        color var(--composer-transition-time),
+        background-color var(--composer-transition-time);
 }
 nav a:hover {
     color: var(--composer-color-bg-nav);
