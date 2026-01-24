@@ -3,6 +3,20 @@ import Sortable from "sortablejs";
 const template = document.createElement("template");
 template.innerHTML = `
 <style>
+.fileInfo {
+    display: none;
+    font-size: 12px;
+    padding-top: 1em;
+}
+.fileInfo.hasInfo {
+    display: block;
+}
+.filename {
+    display: block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 .images {
     margin-top: 10px;
     display: flex;
@@ -57,6 +71,10 @@ template.innerHTML = `
 }
 </style>
 <a href="#" part="nyroComposerBtn nyroComposerBtnUi" class="open">Choose file...</a>
+<div class="fileInfo">
+    <span class="label">Selected file:</span><br />
+    <a href="#" class="filename" target="_blank"></a>
+</div>
 <div class="images"></div>
 `;
 
@@ -77,6 +95,11 @@ class NyroComposerInputFile extends HTMLElement {
         this.shadowRoot.append(template.content.cloneNode(true));
 
         this._value = {};
+
+        this._fileInfo = this.shadowRoot.querySelector(".fileInfo");
+        this._fileInfoFilename = this._fileInfo.querySelector(".filename");
+
+        this._fileInfo.querySelector(".label").innerText = this.composer.trans("inputFile.selectedFile." + this.fileType);
 
         const openBtn = this.shadowRoot.querySelector(".open");
 
@@ -108,6 +131,7 @@ class NyroComposerInputFile extends HTMLElement {
     set value(value) {
         if (!this.multiple) {
             this._value.url = value;
+            this._showFileName();
             return;
         }
 
@@ -167,6 +191,18 @@ class NyroComposerInputFile extends HTMLElement {
         return value;
     }
 
+    _showFileName() {
+        if (this.multiple) {
+            return;
+        }
+
+        const url = this._value && this._value.url ? this._value.url : "#";
+
+        this._fileInfo.classList.toggle("hasInfo", url && url !== "#");
+        this._fileInfoFilename.href = url;
+        this._fileInfoFilename.innerText = url.split("/").pop().trim();
+    }
+
     _apendImage(imgValue) {
         const imageCont = templateImg.content.cloneNode(true),
             img = imageCont.querySelector("img");
@@ -193,6 +229,7 @@ class NyroComposerInputFile extends HTMLElement {
     _handleImageData(imageData) {
         if (!this.multiple) {
             this._value = imageData;
+            this._showFileName();
             this._dispatchChange();
             return;
         }
