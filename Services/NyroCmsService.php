@@ -290,9 +290,9 @@ class NyroCmsService extends NyroDevAbstractService
             $tmp = explode('|', $rootContent->getLocales());
 
             return $tmp[0];
-        } else {
-            return $this->getParameter('locale');
         }
+
+        return $this->getParameter('locale');
     }
 
     public function getLocales(?Composable $rootContent = null, bool $asString = false): string|array

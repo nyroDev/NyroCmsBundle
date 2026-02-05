@@ -61,10 +61,9 @@ class SendDeferredWelcomeCommand extends Command
             $lock->release();
 
             return Command::SUCCESS;
-        } else {
-            $output->writeln('sendDeferredWelcome command is locked.');
-
-            return Command::INVALID;
         }
+        $output->writeln('sendDeferredWelcome command is locked.');
+
+        return Command::INVALID;
     }
 }

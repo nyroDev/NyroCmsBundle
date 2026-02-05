@@ -125,10 +125,9 @@ class CreateDbClassesCommand extends Command
             }
 
             return Command::SUCCESS;
-        } else {
-            $output->writeln($db_driver.' is not supported.');
-
-            return Command::INVALID;
         }
+        $output->writeln($db_driver.' is not supported.');
+
+        return Command::INVALID;
     }
 }

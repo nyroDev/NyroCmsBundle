@@ -186,7 +186,7 @@ class ComposerService extends AbstractService
 
     public function canChangeStructure(Composable $row): bool
     {
-        if (!($row instanceof ComposableTranslatable)) {
+        if (!$row instanceof ComposableTranslatable) {
             return false;
         }
 
@@ -202,7 +202,7 @@ class ComposerService extends AbstractService
 
     public function canChangeMedia(Composable $row): bool
     {
-        if (!($row instanceof ComposableTranslatable)) {
+        if (!$row instanceof ComposableTranslatable) {
             return true;
         }
 
