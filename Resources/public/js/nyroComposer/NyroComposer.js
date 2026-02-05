@@ -211,6 +211,7 @@ class NyroComposer extends HTMLElement {
                 this.workspace.innerHTML = response;
                 this.workspace.initBlocks();
                 this._choosingTemplate = false;
+                this.topPanel.changed = true;
             });
     }
 
