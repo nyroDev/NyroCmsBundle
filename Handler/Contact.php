@@ -276,7 +276,7 @@ class Contact extends AbstractHandler
             ->textTemplate('@NyroDevNyroCms/email/contact.text.php')
             ->htmlTemplate('@NyroDevNyroCms/email/contact.html.php')
             ->to($to)
-            ->from($from)
+            ->replyTo($from)
             ->subject($subject)
             ->locale($locale)
             ->context([
