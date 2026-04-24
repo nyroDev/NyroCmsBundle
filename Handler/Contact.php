@@ -270,6 +270,6 @@ class Contact extends AbstractHandler
 
     protected function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
     {
-        return $this->get(NyroCmsService::class)->sendEmail($to, $subject, $content, $from, $locale, $dbContent);
+        return $this->get(NyroCmsService::class)->sendEmail($to, $subject, $content, null, $locale, $dbContent, $from);
     }
 }
