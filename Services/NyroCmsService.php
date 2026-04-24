@@ -203,7 +203,7 @@ class NyroCmsService extends nyroDevAbstractService
         ];
     }
 
-    public function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null)
+    public function sendEmail($to, $subject, $content, $from = null, $locale = null, Content $dbContent = null, $replyTo = null)
     {
         $html = $this->getTwig()->render($this->getParameter('nyrocms.email.global_template'), [
             'stylesTemplate' => $this->getParameter('nyrocms.email.styles_template'),
@@ -227,6 +227,10 @@ class NyroCmsService extends nyroDevAbstractService
             }
         } else {
             $email->addTo($to);
+        }
+
+        if ($replyTo) {
+            $email->replyTo($replyTo);
         }
 
         $email
