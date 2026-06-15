@@ -101,7 +101,7 @@ if ($intro && $intro != $introKey) {
 				        $val = $r->{$fct}();
 				        if (is_object($val)) {
 				            if ($val instanceof DateTimeInterface) {
-				                $val = strftime($view['translator']->trans(isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short'), $val->getTimestamp());
+				                $val = $view['nyrodev_date']->format($val, isset($dateFormats) && isset($dateFormats[$f]) ? $dateFormats[$f] : 'date.short');
 				            } elseif ($val instanceof Doctrine\Common\Collections\Collection) {
 				                $tmpVal = [];
 				                foreach ($val as $v) {
