@@ -113,6 +113,9 @@ class NyroCmsDialog extends HTMLElement {
         });
 
         this.addEventListener("click", (e) => {
+            if (e.target.closest(".outsideDialog")) {
+                return;
+            }
             let closeDialog = e.target.closest(".cancel, .closeDialog, .nyroCmsDialogClose, .closeDialogAfterClick");
             if (closeDialog && closeDialog.classList.contains("cancel") && closeDialog.closest(".form_button")) {
                 closeDialog = false;
@@ -144,9 +147,10 @@ class NyroCmsDialog extends HTMLElement {
             }
 
             const form = e.target.closest("form");
-            if (!form) {
+            if (!form || form.closest(".outsideDialog")) {
                 return;
             }
+
             e.preventDefault();
 
             const url = new URL(form.action || document.location.href),
