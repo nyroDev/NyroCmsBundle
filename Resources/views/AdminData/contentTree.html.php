@@ -6,7 +6,7 @@
 		    'title' => $parent->getTitle(),
 		]); ?>
 		<h1>
-			<?php echo $view['nyrocms_admin']->getIcon('tree'); ?>
+			<?php echo $view['nyrodev_icon']->getIcon('tree'); ?>
 			<?php echo $parent->getTitle(); ?>
 		</h1>
 		
@@ -28,32 +28,32 @@ foreach ($introKeys as $introKey) {
 			<nav class="toolbar">
 				<?php if ($canRootComposer && $view['nyrocms_admin']->canAdmin($parent)): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $parent->getId()]); ?>" class="btn btnLightGray">
-						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('composer'); ?>
 						<span><?php echo $view['nyrodev']->trans('admin.composer.rootEdit'); ?></span>
 					</a>
 				<?php endif; ?>
 
 				<a href="#" class="btn btnLightGray expandAll">
-					<?php echo $view['nyrocms_admin']->getIcon('treeExpand'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('treeExpand'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.content.expandAll'); ?></span>
 				</a>
 				<a href="#" class="btn btnLightGray reduceAll">
-					<?php echo $view['nyrocms_admin']->getIcon('treeReduce'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('treeReduce'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.content.reduceAll'); ?></span>
 				</a>
 
 				<a href="" class="btn cancel">
-					<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('reset'); ?>
 					<span><?php echo $view['translator']->trans('admin.misc.cancel'); ?></span>
 				</a>
 				<?php if ($candDirectAdd): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_data_content_add', ['pid' => $parent->getId()]); ?>" class="btn add">
-						<?php echo $view['nyrocms_admin']->getIcon('add'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('add'); ?>
 						<span><?php echo $view['translator']->trans('admin.misc.add'); ?></span>
 					</a>
 				<?php endif; ?>
 				<button type="submit" class="button disabled">
-					<?php echo $view['nyrocms_admin']->getIcon('save'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('save'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.misc.send'); ?></span>
 				</button>
 			</nav>

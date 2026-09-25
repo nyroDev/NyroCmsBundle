@@ -457,22 +457,6 @@ class NyroComposer extends HTMLElement {
 
         return icon;
     }
-
-    getIconAdmin(name, iconFallback) {
-        if (!name) {
-            return this.getIcon(iconFallback);
-        }
-        const cacheKey = "admin_" + name;
-        if (iconsCache.has(cacheKey)) {
-            return iconsCache.get(cacheKey);
-        }
-
-        const icon = this.getTemplate("ui", "iconAdmin").innerHTML.replaceAll("IDENT", name);
-
-        iconsCache.set(cacheKey, icon);
-
-        return icon;
-    }
 }
 
 window.customElements.define("nyro-composer", NyroComposer);

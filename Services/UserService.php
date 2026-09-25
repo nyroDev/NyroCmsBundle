@@ -114,12 +114,12 @@ class UserService extends NyroDevAbstractService
             if ($user && $user->getPasswordKey() == $key && $user->getPasswordKeyEnd() >= $now) {
                 $passwordOptions = [
                     'wc' => 'nyro-password',
-                    'icon' => NyroCmsService::ICON_PATH.'#password',
+                    'icon' => 'password',
                     'constraints' => [
                         new NotBlank(),
                     ],
-                    'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#hide').'</span>'.
-                        '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#show').'</span>',
+                    'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon('hide').'</span>'.
+                        '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon('show').'</span>',
                 ];
 
                 $form = $this->formService->getFormFactory()->createBuilder()
@@ -140,9 +140,9 @@ class UserService extends NyroDevAbstractService
                     ])
                     ->add('submit', SubmitType::class, [
                         'label' => $this->trans('admin.misc.send'),
-                        'icon' => NyroCmsService::ICON_PATH.'#password',
+                        'icon' => 'password',
                         'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl($place.'_login'),
-                        'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                        'cancelIcon' => 'reset',
                     ])
                     ->getForm();
 
@@ -173,16 +173,16 @@ class UserService extends NyroDevAbstractService
                         new NotBlank(),
                         new Email(),
                     ],
-                    'icon' => NyroCmsService::ICON_PATH.'#email',
+                    'icon' => 'email',
                     'attr' => [
                         'placeholder' => $this->trans('admin.user.email'),
                     ],
                 ])
                 ->add('submit', SubmitType::class, [
                     'label' => $this->trans('admin.misc.send'),
-                    'icon' => NyroCmsService::ICON_PATH.'#mailOut',
+                    'icon' => 'mailOut',
                     'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl($place.'_login'),
-                    'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                    'cancelIcon' => 'reset',
                 ])
                 ->getForm();
 
@@ -255,25 +255,25 @@ class UserService extends NyroDevAbstractService
                 ],
             ];
             if ('email' === $f) {
-                $options['icon'] = NyroCmsService::ICON_PATH.'#email';
+                $options['icon'] = 'email';
             }
             $form->add($f, null, $options);
         }
         $form->add('submit', SubmitType::class, [
             'label' => $this->trans('admin.misc.send'),
-            'icon' => NyroCmsService::ICON_PATH.'#save',
+            'icon' => 'save',
         ]);
 
         $formFields = $form->getForm();
 
         $passwordOptions = [
             'wc' => 'nyro-password',
-            'icon' => NyroCmsService::ICON_PATH.'#password',
+            'icon' => 'password',
             'row_attr' => [
                 'class' => 'form_row_100',
             ],
-            'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#hide').'</span>'.
-                '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#show').'</span>',
+            'wcHtml' => '<span slot="show">'.$this->nyrodevService->getIconHelper()->getIcon('hide').'</span>'.
+                '<span slot="hide">'.$this->nyrodevService->getIconHelper()->getIcon('show').'</span>',
         ];
 
         $formPassword = $this->formService->getFormFactory()->createNamedBuilder('password', FormType::class, $user)
@@ -310,7 +310,7 @@ class UserService extends NyroDevAbstractService
             ])
             ->add('submit', SubmitType::class, [
                 'label' => $this->trans('admin.misc.send'),
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
             ])
             ->getForm();
 

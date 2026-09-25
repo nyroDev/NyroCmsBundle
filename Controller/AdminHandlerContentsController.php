@@ -207,7 +207,7 @@ class AdminHandlerContentsController extends AbstractAdminController
         $moreOptions = [
             'ogImage' => [
                 'wc' => true,
-                'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
+                'wcDeleteIcon' => 'delete',
                 'attr' => [
                     'name-delete' => 'ogImageDelete',
                 ],
@@ -222,9 +222,9 @@ class AdminHandlerContentsController extends AbstractAdminController
                 'choices' => array_flip($this->get(AdminService::class)->getContentSpecStateChoices()),
             ],
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_handler_contents', $routePrm),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 

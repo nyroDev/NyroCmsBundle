@@ -496,9 +496,7 @@ class NyroComposerSidePanel extends HTMLElement {
     _handlePanelIcon(panelCfg) {
         const iconCont = templateIcon.content.cloneNode(true);
 
-        iconCont.querySelector("div").innerHTML = panelCfg.iconAdmin
-            ? this.composer.getIconAdmin(panelCfg.iconAdmin)
-            : this.composer.getIcon(panelCfg.icon);
+        iconCont.querySelector("div").innerHTML = this.composer.getIcon(panelCfg.icon);
 
         return iconCont;
     }
@@ -715,13 +713,12 @@ class NyroComposerSidePanel extends HTMLElement {
                 const label = document.createElement("label");
                 label.classList.add("button");
                 label.setAttribute("for", templateForId);
-                label.innerHTML = (category.icon ? this.composer.getIconAdmin(category.icon) : this.composer.getIcon("tpl")) + category.title;
+                label.innerHTML = (category.icon ? this.composer.getIcon(category.icon) : this.composer.getIcon("tpl")) + category.title;
 
                 rootbuttons.appendChild(label);
 
                 categoryDiv.appendChild(
                     this._handlePanelIcon({
-                        iconAdmin: category.icon,
                         icon: "tpl",
                     })
                 );
@@ -821,7 +818,7 @@ class NyroComposerSidePanel extends HTMLElement {
             const button = document.createElement("a");
             button.href = "#";
             button.className = "button";
-            button.innerHTML = this.composer.getIconAdmin(template.icon, "templates") + template.title;
+            button.innerHTML = this.composer.getIcon(template.icon, "templates") + template.title;
             button.dataset.id = template.id;
 
             if (template.id == templateSelected) {

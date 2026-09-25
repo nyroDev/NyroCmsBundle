@@ -79,8 +79,8 @@ foreach ($attrs as $k => $v) {
 	>
 		<a href="<?php echo $view['nyrocms_composer']->cancelUrl($row); ?>" id="backBtn" class="nyroComposerBtn" slot="nav"
 			title="<?php echo $view->escape($view['nyrodev']->trans('admin.content.themeSelectInput')); ?>">
-			<?php echo $view['nyrocms_composer']->getIcon('arrowUpRight'); ?>
-			<?php echo $view['nyrocms_composer']->getIcon('menu'); ?>
+			<?php echo $view['nyrodev_icon']->getIcon('arrowUpRight'); ?>
+			<?php echo $view['nyrodev_icon']->getIcon('menu'); ?>
 		</a>
 		<?php if ($canChangeTheme && count($themes) > 1): // @todo need implement and integration?>
 			<span slot="nav">
@@ -145,8 +145,8 @@ foreach ($attrs as $k => $v) {
 				class="nyroComposerBtn"
 				slot="convertToTemplate"
 				title="<?php echo $view->escape($view['translator']->trans('admin.composer.convertToTemplate.title')); ?>">
-				<?php echo $view['nyrocms_composer']->getIcon('arrowUpRight'); ?>
-				<?php echo $view['nyrocms_composer']->getIcon('tpl'); ?>
+				<?php echo $view['nyrodev_icon']->getIcon('arrowUpRight'); ?>
+				<?php echo $view['nyrodev_icon']->getIcon('tpl'); ?>
 			</a>
 		<?php endif; ?>
 

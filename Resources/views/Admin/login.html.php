@@ -23,7 +23,7 @@
 			<div class="form_row form_row_email form_required">
 				<label for="username"><?php echo $view['nyrodev']->trans('admin.user.email'); ?> <span class="formIndicator">*</span></label>
 				<div class="iconWidget emailWidget">
-					<?php echo $view['nyrocms_admin']->getIcon('email'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('email'); ?>
 					<input type="email" id="username" name="_username" value="<?php echo $last_username; ?>" required placeholder="<?php echo $view['nyrodev']->trans('admin.user.email'); ?>" />
 				</div>
 			</div>
@@ -31,10 +31,10 @@
 			<div class="form_row form_row_password form_required">
 				<label for="password"><?php echo $view['nyrodev']->trans('admin.user.password'); ?> <span class="formIndicator">*</span></label>
 				<div class="iconWidget emailWidget">
-					<?php echo $view['nyrocms_admin']->getIcon('password'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('password'); ?>
 					<nyro-password type="password" id="password" name="_password" required placeholder="<?php echo $view['nyrodev']->trans('admin.user.password'); ?>">
-						<span slot="show"><?php echo $view['nyrocms_admin']->getIcon('hide'); ?></span>
-						<span slot="hide"><?php echo $view['nyrocms_admin']->getIcon('show'); ?></span>
+						<span slot="show"><?php echo $view['nyrodev_icon']->getIcon('hide'); ?></span>
+						<span slot="hide"><?php echo $view['nyrodev_icon']->getIcon('show'); ?></span>
 					</nyro-password>
 				</div>
 				<span class="forgotCont">
@@ -46,7 +46,7 @@
 
 			<div class="form_button">
 				<button type="submit">
-					<?php echo $view['nyrocms_admin']->getIcon('send'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('send'); ?>
 					<span><?php echo $view['nyrodev']->trans('admin.misc.login'); ?></span>
 				</button>
 			</div>

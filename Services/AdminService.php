@@ -421,7 +421,7 @@ class AdminService extends NyroDevAbstractService
                 attrs: [
                     'class' => 'confirmLink',
                     'data-confirmtxt' => $this->trans('admin.menu.logoutConfirm'),
-                    'data-confirmbtntxt' => $this->getIcon('logout').'<span>'.$this->trans('admin.menu.logout').'</span>',
+                    'data-confirmbtntxt' => $this->nyrodevService->getIconHelper()->getIcon('logout').'<span>'.$this->trans('admin.menu.logout').'</span>',
                 ],
                 icon: 'logout'
             ));
@@ -562,11 +562,6 @@ class AdminService extends NyroDevAbstractService
         $vars = $adminMenuEvent->vars;
 
         return $vars;
-    }
-
-    public function getIcon(string $name, ?string $class = null, ?string $attrs = null): string
-    {
-        return $this->nyrodevService->getIconHelper()->getIcon(NyroCmsService::ICON_PATH.'#'.$name, $class, $attrs);
     }
 
     public function goToUrlDialogResponse(

@@ -223,15 +223,15 @@ class AdminDataController extends AbstractAdminController
             ],
             'ogImage' => [
                 'wc' => true,
-                'wcDeleteIcon' => NyroCmsService::ICON_PATH.'#delete',
+                'wcDeleteIcon' => 'delete',
                 'attr' => [
                     'name-delete' => 'ogImageDelete',
                 ],
             ],
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_content_tree', $routePrm),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
                 'fieldset' => [
                     'name' => 'actions',
                     'attr' => [
@@ -270,10 +270,10 @@ class AdminDataController extends AbstractAdminController
             $isInMeta = $isInMeta || 'ogTitle' === $field;
             $moreOptions[$field]['fieldset'] = $isInMeta ? [
                 'name' => 'metadata',
-                'label' => $this->get(AdminService::class)->getIcon('seo').$this->trans('admin.content.metadataFieldset'),
+                'label' => $this->container->get(NyrodevService::class)->getIconHelper()->getIcon('seo').$this->trans('admin.content.metadataFieldset'),
             ] : [
                 'name' => 'content',
-                'label' => $this->get(AdminService::class)->getIcon('tab').$this->trans('admin.content.contentFieldset'),
+                'label' => $this->container->get(NyrodevService::class)->getIcon('tab').$this->trans('admin.content.contentFieldset'),
             ];
         }
 
@@ -497,9 +497,9 @@ class AdminDataController extends AbstractAdminController
             ),
             'internal' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_userRole'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 
@@ -593,9 +593,9 @@ class AdminDataController extends AbstractAdminController
             ],
             'hasAdmin' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_contentHandler'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 
@@ -679,9 +679,9 @@ class AdminDataController extends AbstractAdminController
     {
         $moreOptions = [
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_templateCategory'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 
@@ -877,9 +877,9 @@ class AdminDataController extends AbstractAdminController
             ],
             'custom' => AdminService::getBoolFieldAsRadioListOptions(),
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_template'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 
@@ -981,9 +981,9 @@ class AdminDataController extends AbstractAdminController
                 ],
             ],
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_tooltip'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 
@@ -1144,16 +1144,16 @@ class AdminDataController extends AbstractAdminController
     {
         $moreOptions = [
             'email' => [
-                'icon' => NyroCmsService::ICON_PATH.'#email',
+                'icon' => 'email',
             ],
             'validStart' => [
-                'icon' => NyroCmsService::ICON_PATH.'#calendar',
+                'icon' => 'calendar',
                 'row_attr' => [
                     'class' => 'form_row_25',
                 ],
             ],
             'validEnd' => [
-                'icon' => NyroCmsService::ICON_PATH.'#calendar',
+                'icon' => 'calendar',
                 'row_attr' => [
                     'class' => 'form_row_25',
                 ],
@@ -1183,9 +1183,9 @@ class AdminDataController extends AbstractAdminController
                 ],
             ],
             'submit' => [
-                'icon' => NyroCmsService::ICON_PATH.'#save',
+                'icon' => 'save',
                 'cancelUrl' => $this->container->get(NyrodevService::class)->generateUrl('nyrocms_admin_data_user'),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
             ],
         ];
 

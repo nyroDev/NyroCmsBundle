@@ -17,7 +17,7 @@
 						<strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.'.$trKey.'.saved')); ?></strong>
 						<br />
 						<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="btn btnLight">
-							<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+							<?php echo $view['nyrodev_icon']->getIcon('reset'); ?>
 							<span><?php echo $view['nyrodev']->trans('nyrocms.'.$trKey.'.back'); ?></span>
 						</a>
 					</p>
@@ -33,7 +33,7 @@
 					<strong><?php echo nl2br($view['nyrodev']->trans('nyrocms.'.$trKey.'.sent')); ?></strong>
 					<br />
 					<a href="<?php echo $view['router']->path('nyrocms_admin_login'); ?>" class="btn btnLight">
-						<?php echo $view['nyrocms_admin']->getIcon('reset'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('reset'); ?>
 						<span><?php echo $view['nyrodev']->trans('nyrocms.'.$trKey.'.back'); ?></span>
 					</a>
 				</p>

@@ -3,7 +3,6 @@
 namespace NyroDev\NyroCmsBundle\Form\Type;
 
 use NyroDev\NyroCmsBundle\Services\AdminService;
-use NyroDev\NyroCmsBundle\Services\NyroCmsService;
 use NyroDev\UtilityBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -33,9 +32,9 @@ class UserFilterType extends Type\AbstractFilterType
     {
         $resolver->setDefaults([
             'submitOptions' => [
-                'icon' => NyroCmsService::ICON_PATH.'#filter',
+                'icon' => 'filter',
                 'cancelUrl' => $this->generateUrl('nyrocms_admin_data_user', ['clearFilter' => 1]),
-                'cancelIcon' => NyroCmsService::ICON_PATH.'#reset',
+                'cancelIcon' => 'reset',
                 'cancelText' => $this->trans('admin.misc.clearFilter'),
             ],
         ]);

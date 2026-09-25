@@ -1,6 +1,6 @@
 <nav id="breadcrumbs">
     <a href="<?php echo $view['router']->path('nyrocms_admin_homepage'); ?>" rel="home">
-        <?php echo $view['nyrocms_admin']->getIcon('home'); ?>
+        <?php echo $view['nyrodev_icon']->getIcon('home'); ?>
         <span><?php echo $view['translator']->trans('admin.menu.home'); ?></span>
     </a>
     /

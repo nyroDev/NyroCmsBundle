@@ -27,7 +27,7 @@ if ($intro && $intro != $introKey) {
 					<?php foreach ($moreGlobalActions as $k => $action): ?>
 						<a href="<?php echo $view['nyrodev']->generateUrl($action['route'], isset($action['routePrm']) ? $action['routePrm'] : []); ?>" class="btn <?php echo $k; ?> <?php echo isset($action['class']) ? $action['class'] : null; ?>" <?php echo isset($action['attrs']) ? $action['attrs'] : null; ?>>
 							<?php if (isset($action['icon']) && $action['icon']): ?>
-								<?php echo $view['nyrocms_admin']->getIcon($action['icon']); ?>
+								<?php echo $view['nyrodev_icon']->getIcon($action['icon']); ?>
 							<?php endif; ?>
 							<span><?php echo $action['name']; ?></span>
 						</a>
@@ -35,7 +35,7 @@ if ($intro && $intro != $introKey) {
 				<?php endif; ?>
 				<?php if (!isset($noAdd) || !$noAdd): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', isset($routePrmAdd) ? $routePrmAdd : []); ?>" class="btn add">
-						<?php echo $view['nyrocms_admin']->getIcon('addCircle'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('addCircle'); ?>
 						<span><?php echo $view['translator']->trans('admin.misc.add'); ?></span>
 					</a>
 				<?php endif; ?>
@@ -46,10 +46,10 @@ if ($intro && $intro != $introKey) {
 			<div class="filter<?php echo $filterFilled ? ' filterFilled' : ''; ?>">
 				<input type="checkbox" id="filterSwitch_<?php echo $name; ?>" value="1" <?php echo $filterFilled ? 'checked' : ''; ?> />
 				<label for="filterSwitch_<?php echo $name; ?>">
-					<?php echo $view['nyrocms_admin']->getIcon('filter'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('filter'); ?>
 					<?php echo $view['translator']->trans('admin.misc.filters'); ?>
 					<span class="flexSpacer"></span>
-					<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('chevron'); ?>
 				</label>
 				<?php echo $view['form']->form($filter); ?>
 			</div>
@@ -145,9 +145,9 @@ if ($intro && $intro != $introKey) {
 			<?php if ($pager->hasToPaginate()): ?>
 				<br />
 				<nav class="pagination">
-					<?php /* <a href="<?php echo $pager->hasPrevious() ? $pager->getFirstUrl() : '#'; ?>" class="prev first" title="<?php echo $view['translator']->trans('admin.pager.first'); ?>"><?php echo $view['nyrocms_admin']->getIcon('doubleChevron'); ?></a> */ ?>
+					<?php /* <a href="<?php echo $pager->hasPrevious() ? $pager->getFirstUrl() : '#'; ?>" class="prev first" title="<?php echo $view['translator']->trans('admin.pager.first'); ?>"><?php echo $view['nyrodev_icon']->getIcon('doubleChevron'); ?></a> */ ?>
 					<a href="<?php echo $pager->hasPrevious() ? $pager->getPreviousUrl() : '#'; ?>" class="btn btnLightWhite prev" title="<?php echo $view['translator']->trans('admin.pager.prev'); ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('chevron'); ?>
 					</a>
 					<span>
 						<?php foreach ($pager->getPagesIndex() as $i => $page): ?>
@@ -159,9 +159,9 @@ if ($intro && $intro != $introKey) {
 						<?php endforeach; ?>
 					</span>
 					<a href="<?php echo $pager->hasNext() ? $pager->getNextUrl() : '#'; ?>" class="btn btnLightWhite next" title="<?php echo $view['translator']->trans('admin.pager.next'); ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('chevron'); ?>
 					</a>
-					<?php /* <a href="<?php echo $pager->hasNext() ? $pager->getLastUrl() : '#'; ?>" class="next last" title="<?php echo $view['translator']->trans('admin.pager.last'); ?>"><?php echo $view['nyrocms_admin']->getIcon('doubleChevron'); ?></a> */ ?>
+					<?php /* <a href="<?php echo $pager->hasNext() ? $pager->getLastUrl() : '#'; ?>" class="next last" title="<?php echo $view['translator']->trans('admin.pager.last'); ?>"><?php echo $view['nyrodev_icon']->getIcon('doubleChevron'); ?></a> */ ?>
 				</nav>
 			<?php endif; ?>
 

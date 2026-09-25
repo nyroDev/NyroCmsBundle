@@ -20,35 +20,31 @@
 
 <template class="ui" data-id="elementNav">
     <div class="sort">
-        <a href="#" class="dragHandle"><?php echo $view['nyrocms_composer']->getIcon('drag'); ?></a>
-        <a href="#" data-action="moveBottom"><?php echo $view['nyrocms_composer']->getIcon('moveBottom'); ?></a>
-        <a href="#" data-action="moveTop"><?php echo $view['nyrocms_composer']->getIcon('moveTop'); ?></a>
-        <a href="#" data-action="moveDown"><?php echo $view['nyrocms_composer']->getIcon('moveDown'); ?></a>
-        <a href="#" data-action="moveUp"><?php echo $view['nyrocms_composer']->getIcon('moveUp'); ?></a>
+        <a href="#" class="dragHandle"><?php echo $view['nyrodev_icon']->getIcon('drag'); ?></a>
+        <a href="#" data-action="moveBottom"><?php echo $view['nyrodev_icon']->getIcon('moveBottom'); ?></a>
+        <a href="#" data-action="moveTop"><?php echo $view['nyrodev_icon']->getIcon('moveTop'); ?></a>
+        <a href="#" data-action="moveDown"><?php echo $view['nyrodev_icon']->getIcon('moveDown'); ?></a>
+        <a href="#" data-action="moveUp"><?php echo $view['nyrodev_icon']->getIcon('moveUp'); ?></a>
     </div>
     <div class="actions">
-        <a href="#" data-action="delete"><?php echo $view['nyrocms_composer']->getIcon('delete'); ?></a>
-        <a href="#" data-action="duplicate"><?php echo $view['nyrocms_composer']->getIcon('duplicate'); ?></a>
-        <a href="#" data-action="edit"><?php echo $view['nyrocms_composer']->getIcon('edit'); ?></a>
+        <a href="#" data-action="delete"><?php echo $view['nyrodev_icon']->getIcon('delete'); ?></a>
+        <a href="#" data-action="duplicate"><?php echo $view['nyrodev_icon']->getIcon('duplicate'); ?></a>
+        <a href="#" data-action="edit"><?php echo $view['nyrodev_icon']->getIcon('edit'); ?></a>
         <span class="title"></span>
     </div>
 </template>
 
 <template class="ui" data-id="multipleFilesNav">
-    <a href="#" class="dragHandle"><?php echo $view['nyrocms_composer']->getIcon('drag'); ?></a>
-    <a href="#" data-action="delete"><?php echo $view['nyrocms_composer']->getIcon('delete'); ?></a>
+    <a href="#" class="dragHandle"><?php echo $view['nyrodev_icon']->getIcon('drag'); ?></a>
+    <a href="#" data-action="delete"><?php echo $view['nyrodev_icon']->getIcon('delete'); ?></a>
 </template>
 
 <template class="ui" data-id="icon">
-    <?php echo $view['nyrocms_composer']->getIcon('IDENT'); ?>
-</template>
-
-<template class="ui" data-id="iconAdmin">
-    <?php echo $view['nyrocms_admin']->getIcon('IDENT'); ?>
+    <?php echo $view['nyrodev_icon']->getIcon('IDENT'); ?>
 </template>
 
 <template class="ui" data-id="closeTpl">
     <a href="#" class="nyroCmsDialogClose" slot="close">
-        <?php echo $view['nyrocms_admin']->getIcon('closeCircle'); ?>
+        <?php echo $view['nyrodev_icon']->getIcon('closeCircle'); ?>
     </a>
 </template>

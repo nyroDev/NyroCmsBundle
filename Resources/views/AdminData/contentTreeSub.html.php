@@ -18,37 +18,37 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 		<input type="checkbox" id="expandToggle_<?php echo $content->getId(); ?>" class="expandToggle" />
 		<span class="nodeCont">
 			<a href="#" class="drag <?php echo $canEdit ? 'dragHandle' : 'disabled'; ?>" title="<?php echo $view['nyrodev']->trans('admin.content.drag'); ?>">
-				<?php echo $view['nyrocms_admin']->getIcon('drag'); ?>
+				<?php echo $view['nyrodev_icon']->getIcon('drag'); ?>
 			</a>
 			<strong><?php echo $content->getTitle(); ?></strong>
 			<span class="flexSpacer"></span>
 			<?php if ($curCanHavSub): ?>
 				<label for="expandToggle_<?php echo $content->getId(); ?>" class="toggleSub">
-					<?php echo $view['nyrocms_admin']->getIcon('chevron'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('chevron'); ?>
 				</label>
 			<?php endif; ?>
 
 			<input type="checkbox" id="menuToggle_<?php echo $content->getId(); ?>" class="menuToggle" />
 			<label for="menuToggle_<?php echo $content->getId(); ?>" class="menuToggleLabel">
-				<?php echo $view['nyrocms_admin']->getIcon('dots'); ?>
+				<?php echo $view['nyrodev_icon']->getIcon('dots'); ?>
 			</label>
 			<nav class="menuNode">
 				<a href="<?php echo $view['nyrocms']->getUrlFor($content, true, ['_locale' => $view['nyrocms']->getDefaultLocale($content)]); ?>" target="_blank">
-					<?php echo $view['nyrocms_admin']->getIcon('show'); ?>
+					<?php echo $view['nyrodev_icon']->getIcon('show'); ?>
 					<?php echo $view['nyrodev']->trans('admin.content.actions.show'); ?>
 				</a>
 				<?php if ($canEdit): ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl('nyrocms_admin_composer', ['type' => 'Content', 'id' => $content->getId()]); ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('composer'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('composer'); ?>
 						<?php echo $view['nyrodev']->trans('admin.content.actions.composer'); ?>
 					</a>
 					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_edit', ['id' => $content->getId()]); ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('edit'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('edit'); ?>
 						<?php echo $view['translator']->trans('admin.content.actions.edit'); ?>
 					</a>
 					<?php if ($curCanHavSub): ?>
 						<a href="<?php echo $view['nyrodev']->generateUrl($route.'_add', ['pid' => $content->getId()]); ?>">
-							<?php echo $view['nyrocms_admin']->getIcon('treeAdd'); ?>
+							<?php echo $view['nyrodev_icon']->getIcon('treeAdd'); ?>
 							<?php echo $view['translator']->trans('admin.content.actions.addSub'); ?>
 						</a>
 					<?php endif; ?>
@@ -56,14 +56,14 @@ $contents = $view['nyrocms_admin']->getTreeChildren($parent, true);
 						<?php $handler = $view['nyrocms']->getHandler($content->getContentHandler()); ?>
 						<?php if ($handler->hasAdminTreeLink()): ?>
 							<a href="<?php echo $view['nyrodev']->generateUrl($handler->getAdminRouteName(), $handler->getAdminRoutePrm()); ?>">
-								<?php echo $view['nyrocms_admin']->getIcon('misc'); ?>
+								<?php echo $view['nyrodev_icon']->getIcon('misc'); ?>
 								<?php echo $view['nyrodev']->trans('admin.misc.handlerContents'); ?>
 							</a>
 						<?php endif; ?>
 					<?php endif; ?>
 					<a href="<?php echo $view['nyrodev']->generateUrl($route.'_delete', ['id' => $content->getId()]); ?>" class="delete"
 						data-deletetxt="<?php echo $view->escape($view['translator']->trans('admin.content.actions.deleteConfirm')); ?>">
-						<?php echo $view['nyrocms_admin']->getIcon('delete'); ?>
+						<?php echo $view['nyrodev_icon']->getIcon('delete'); ?>
 						<?php echo $view['translator']->trans('admin.content.actions.delete'); ?>
 					</a>
 				<?php endif; ?>
